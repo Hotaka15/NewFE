@@ -15,6 +15,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { BsBriefcase, BsFacebook, BsInstagram } from "react-icons/bs";
 import { FaTwitterSquare } from "react-icons/fa";
 import moment from "moment";
+import Cookies from "js-cookie";
 import { UpdateProfile } from "../redux/userSlice";
 import { usergetUserInfo, usersendFriendRequest } from "../until/user";
 import {
@@ -32,7 +33,7 @@ const ProfileFix = () => {
   const uri = "" + id;
   const [userInfor, setUserInfor] = useState(user);
   const [banner, setBanner] = useState(user?.profileUrl ?? NoProfile);
-
+  const navigate = useNavigate();
   const handlebg = (e) => {
     console.log(e.target.files[0]);
     const reader = new FileReader();

@@ -61,7 +61,7 @@ import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
   const { user, edit, notification, post } = useSelector((state) => state.user);
-  const [friendRequest, setfriendRequest] = useState();
+  const [friendRequest, setfriendRequest] = useState([]);
   const [notifications, setNotifications] = useState();
   const [suggestedFriends, setsuggestedFriends] = useState();
   const [errMsg, seterrMsg] = useState("");
