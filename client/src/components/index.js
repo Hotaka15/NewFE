@@ -25,6 +25,8 @@ import PieChartRp from "./PieChartRp";
 import BarRp from "./BarRp";
 import RecentRp from "./RecentRp";
 import ReportCard from "./ReportCard";
+import UserTiitle from "./UserTiitle";
+import Inbox from "./Inbox";
 export {
   TextInput,
   Loading,
@@ -53,4 +55,6 @@ export {
   BarRp,
   RecentRp,
   ReportCard,
+  UserTiitle,
+  Inbox,
 };

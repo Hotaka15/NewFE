@@ -60,12 +60,17 @@ import {
 import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
+  console.log(typeof posts);
+  console.log(posts);
+
+  // const [postlist, setPostlist] = useState();
+
   const { user, edit, notification, post } = useSelector((state) => state.user);
   const [friendRequest, setfriendRequest] = useState([]);
   const [notifications, setNotifications] = useState();
   const [suggestedFriends, setsuggestedFriends] = useState();
   const [errMsg, seterrMsg] = useState("");
-
+  const [limit, setLimit] = useState(10);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(false);
   const [search, setSearch] = useState("");
@@ -136,6 +141,14 @@ const Home = () => {
   //console.log(user);
 
   const fetchPost = async () => {
+    try {
+      await postfetchPosts(user?.token, dispatch, limit);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchPostpage = async () => {
     try {
       await postfetchPosts(user?.token, dispatch);
       setLoading(false);
@@ -284,6 +297,64 @@ const Home = () => {
       }
     }
   };
+  const handleScroll = () => {
+    const postrange = document.getElementById("post_range");
+    const refresh = (e) => {
+      // console.log(e);
+      // console.log(window.innerHeight);
+      // console.log("current" + postrange.scrollHeight);
+      // console.log("offsetHeight" + postrange.scrollTop);
+      postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
+        console.log((postrange.scrollHeight * 4) / 5);
+      setLimit(limit + 10);
+      // fetchPostpage();
+      // postrange.scrollTop = 0;
+    };
+    postrange.addEventListener("scroll", refresh);
+
+    console.log(postrange.scrollHeight);
+
+    // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
+  };
+
+  // useEffect(() => {
+  //   // const postrange = document.getElementById("post_range");
+  //   // const handleScroll = () => {
+  //   //   const refresh = (e) => {
+  //   //     const postrange = document.getElementById("post_range");
+  //   //     // console.log(e);
+  //   //     // console.log(window.innerHeight);
+  //   //     // console.log("current" + postrange.scrollHeight);
+  //   //     // console.log("offsetHeight" + postrange.scrollTop);
+  //   //     postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
+  //   //       console.log((postrange.scrollHeight * 4) / 5);
+  //   //     setPage(page + 1);
+  //   //     // fetchPostpage();
+  //   //     postrange.scrollTop = 0;
+  //   //   };
+  //   //   postrange.addEventListener("scroll", refresh);
+
+  //   //   console.log(postrange.scrollHeight);
+
+  //   //   // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
+  //   // };
+  //   const postrange = document.getElementById("post_range");
+  //   const refresh = (e) => {
+  //     const postrange = document.getElementById("post_range");
+  //     // console.log(e);
+  //     // console.log(window.innerHeight);
+  //     // console.log("current" + postrange.scrollHeight);
+  //     // console.log("offsetHeight" + postrange.scrollTop);
+  //     postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
+  //       console.log((postrange.scrollHeight * 4) / 5);
+  //     setPage(page + 1);
+  //     // fetchPostpage();
+  //     postrange.scrollTop = 0;
+  //   };
+
+  //   postrange.addEventListener("scroll", refresh);
+  //   return postrange.removeEventListener("scroll", refresh);
+  // }, [page]);
 
   useEffect(() => {
     setLoading(true);
@@ -411,7 +482,10 @@ const Home = () => {
             })}
           </div>
           {/* {CENTTER} bg-primary */}
-          <div className="no-scrollbar h-full flex-initial w-2/5  px-4 flex flex-col gap-6 overflow-y-auto rounded-lg ">
+          <div
+            id="post_range"
+            className="no-scrollbar h-full flex-initial w-2/5  px-4 flex flex-col gap-6 overflow-y-auto rounded-lg "
+          >
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
               className="bg-primary px-4 rounded-lg"

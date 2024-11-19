@@ -5,11 +5,17 @@ import {
   TextInput,
   TopBar,
   ImageCheck,
+  UserTiitle,
+  CustomButton,
 } from "../components";
+import { SlOptionsVertical } from "react-icons/sl";
+import { IoIosAddCircle } from "react-icons/io";
 import { IoIosContact } from "react-icons/io";
 import { useSelector } from "react-redux";
+import { MdClose } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
+import { CiCircleCheck } from "react-icons/ci";
 import { BsBriefcase } from "react-icons/bs";
 import { FaVideo } from "react-icons/fa";
 import { IoIosChatbubbles, IoIosSettings, IoMdContact } from "react-icons/io";
@@ -64,10 +70,13 @@ const Pagechat_1 = () => {
   return (
     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
             Chào anh/chị, em có thể giúp gì cho anh/chị?
           </p>
+          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+            9AM
+          </div>
         </div>
       </div>
 
@@ -77,65 +86,81 @@ const Pagechat_1 = () => {
       <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-end">
         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
+          <p className="text-justify text-white px-2 py-1">
             Dạ, anh/chị quan tâm đến dòng nào ạ? Hiện tại bên em có rất nhiều
             mẫu điện thoại với camera chất lượng cao như Samsung Galaxy S23,
             iPhone 14 Pro Max,...
           </p>
+          <div className="flex justify-end w-full text-white text-xs pt-1 py-2 ">
+            9AM
+          </div>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
             Em giới thiệu cho anh chiếc nào pin trâu với, anh hay đi công tác.
           </p>
+          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+            9AM
+          </div>
         </div>
       </div>
 
       <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-end">
         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
+          <p className="text-justify text-white px-2 py-1">
             Chào em, em tư vấn cho anh một chiếc điện thoại chụp hình đẹp với.
           </p>
         </div>
       </div>
 
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
             Dạ, với nhu cầu của anh thì em khuyên anh nên tham khảo dòng Samsung
             Galaxy A series hoặc iPhone 13. Hai dòng này đều có pin rất tốt và
             nhiều tính năng hữu ích.
           </p>
+          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+            9AM
+          </div>
         </div>
       </div>
 
       <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-end">
         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
+          <p className="text-justify text-white px-2 py-1">
             Vậy em cho anh so sánh hai dòng này với nhau được không?
           </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
             Dạ được ạ, Samsung Galaxy A series thường có giá thành phải chăng
             hơn, trong khi iPhone 13 thì hệ điều hành ổn định và bảo mật cao
             hơn.
           </p>
+          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+            9AM
+          </div>
         </div>
       </div>
 
       <div className="w-full flex justify-center"></div>
       <div className="w-full flex justify-end">
         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
+          <p className="text-justify text-white px-2 py-1">
             Vậy anh sẽ cân nhắc thêm. Cảm ơn em.
           </p>
         </div>
+      </div>
+      <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+        <CiCircleCheck />
+        Seen
       </div>
     </div>
   );
@@ -145,7 +170,7 @@ const Pagechat_2 = () => {
   return (
     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Mình nghĩ chúng ta nên có một cuộc họp để bàn về dự án X. Bạn có
             rảnh vào thứ Tư tuần sau không? Cụ thể là tầm 2h chiều thì sao?
@@ -153,7 +178,7 @@ const Pagechat_2 = () => {
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Thứ Tư tuần sau thì mình hơi bận rồi. Thứ Hai lúc 10h sáng hoặc thứ
             Ba lúc 14h chiều thì mình đều có thể sắp xếp.
@@ -190,14 +215,14 @@ const Pagechat_3 = () => {
   return (
     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Này Bình, mình rảnh trưa nay nè. Đi ăn trưa không?
           </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Có chỗ mới khai trương gần công ty mình, nghe nói đồ ăn ngon lắm!
           </p>
@@ -231,21 +256,21 @@ const Pagechat_3 = () => {
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Ok, mình không kén ăn đâu. Bạn quyết định đi.
           </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Nhưng mà mình thích ăn đồ Nhật lắm đấy.
           </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Nếu có sushi hoặc ramen thì tuyệt vời luôn.💕
           </p>
@@ -266,14 +291,14 @@ const Pagechat_3 = () => {
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             Ok, hẹn gặp bạn lúc 12h.
           </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="bg-ascent-3/10 p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
             À, nhớ mang theo ví đấy nhé, kẻo lại tranh nhau trả tiền.
           </p>
@@ -305,6 +330,9 @@ const Chat = () => {
   const [reviewcheck, setReviewcheck] = useState(false);
   const myDivRef = useRef(null);
   const [page, setPage] = useState(1);
+  const [createg, setCreatg] = useState(false);
+  const [manageru, setManageru] = useState(false);
+  const [block, setBlock] = useState(false);
   const [listmanager, setListmanager] = useState([
     {
       createdAt: "2024-09-14T06:57:38.122Z",
@@ -372,6 +400,8 @@ const Chat = () => {
       time: "9AM",
     },
   ]);
+  const [addu, setAddu] = useState(false);
+  const [roleo, setRoleo] = useState(false);
   const [userinfo, setUserinfo] = useState(listmanager[0]);
 
   const userChat = (user) => {
@@ -428,7 +458,7 @@ const Chat = () => {
     fetchList();
   }, []);
   return (
-    <div>
+    <div className="flex">
       <div
         className="flex flex-col home w-full px-0 lg:px-10  2xl-40 bg-bgColor 
     lg:rounded-lg h-screen overflow-hidden"
@@ -470,9 +500,17 @@ const Chat = () => {
                   type="text"
                   className="px-5 bg-secondary text-ascent-2 rounded-full w-full border border-[#66666690] 
             outline-none text-sm  
-             py-3 placeholder:text-ascent-2"
+             py-2 placeholder:text-ascent-2"
                   placeholder="Search"
                 />
+              </div>
+            </div>
+            <div className="w-full h-fit flex gap-2 mx-4 mt-2">
+              <div className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer">
+                Inbox
+              </div>
+              <div className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer">
+                Group
               </div>
             </div>
 
@@ -490,16 +528,6 @@ const Chat = () => {
                   />
                 );
               })}
-
-              {/* <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} />
-              <UserCard user={user} /> */}
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>
@@ -520,8 +548,35 @@ const Chat = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center items-center">
-                <IoCallSharp className="text-ascent-1 " size={25} />
+              <div className="flex relative justify-center items-center text-ascent-1 gap-2">
+                <IoCallSharp size={25} />
+                <SlOptionsVertical size={25} className="cursor-pointer" />
+                <div className="absolute w-40 h-40 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+                  <div
+                    onClick={() => {
+                      setCreatg(!createg);
+                    }}
+                    className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                  >
+                    Create Group
+                  </div>
+                  <div
+                    onClick={() => {
+                      setRoleo(!roleo);
+                    }}
+                    className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                  >
+                    Manager
+                  </div>
+                  <div
+                    onClick={() => {
+                      setAddu(!addu);
+                    }}
+                    className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                  >
+                    Add User
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -626,6 +681,502 @@ const Chat = () => {
           />
         )}
       </div>
+      {/* CREATGROUP */}
+      {createg && (
+        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[60%] rounded-2xl">
+              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+                  Create Group
+                  <div
+                    className="text-ascent-1 h-full flex items-center cursor-pointer"
+                    onClick={() => {
+                      setCreatg(!createg);
+                    }}
+                  >
+                    <MdClose size={25} />
+                  </div>
+                </span>
+              </div>
+
+              <div className="flex w-full justify-start items-center gap-3">
+                <span className="text-ascent-1">Name </span>
+                <input
+                  type="text"
+                  className="bg-secondary px-2 py-2 rounded-2xl w-full"
+                  placeholder="Name"
+                />
+              </div>
+              <div className="flex w-full justify-start items-center gap-3">
+                <span className="text-ascent-1">Description </span>
+                <input
+                  type="text"
+                  className="bg-secondary px-2 py-2 rounded-2xl w-full"
+                  placeholder="Description"
+                />
+              </div>
+
+              <span className="text-ascent-1">Member</span>
+              <input
+                type="text"
+                className="bg-secondary px-2 py-2 rounded-2xl"
+                placeholder="Search"
+              />
+              <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+              </div>
+              <div className="h-1/4 flex flex-wrap gap-2 overflow-y-auto content-start">
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+              </div>
+
+              <div className="w-full flex justify-end">
+                <CustomButton
+                  tittle="Submit"
+                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ADD member */}
+      {addu && (
+        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[40%] rounded-2xl">
+              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+                  Add member
+                  <div
+                    className="text-ascent-1 h-full flex items-center cursor-pointer"
+                    onClick={() => {
+                      setAddu(!addu);
+                    }}
+                  >
+                    <MdClose size={25} />
+                  </div>
+                </span>
+              </div>
+
+              <input
+                type="text"
+                className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
+                placeholder="Search"
+              />
+              <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+                  <img
+                    src={user?.profileUrl}
+                    alt=""
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  {user?.firstName}
+                  <IoIosAddCircle />
+                </div>
+              </div>
+              <div className="h-1/4 flex flex-wrap items-start gap-2 overflow-y-auto content-start">
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+                <UserTiitle />
+              </div>
+
+              <div className="w-full flex justify-end items-end">
+                <CustomButton
+                  tittle="Submit"
+                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Manager member */}
+      {/* <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+        <div className="w-full h-full flex justify-center items-center">
+          <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
+            <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+              <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+                Manager member
+                <div className="text-ascent-1 h-full flex items-center cursor-pointer">
+                  <MdClose size={25} />
+                </div>
+              </span>
+            </div>
+
+            <input
+              type="text"
+              className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
+              placeholder="Search"
+            />
+            <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
+              <div className="w-full relative h-fit bg-secondary px-2 py-2 text-ascent-1 flex gap-2 justify-between items-center rounded-3xl">
+                <div className="flex justify-center items-center gap-3">
+                  <img
+                    src={user?.profileUrl ? user?.profileUrl : NoProfile}
+                    alt=""
+                    className="h-16 w-16 rounded-full object-cover"
+                  />
+                  {user?.firstName} {user?.lastName}
+                </div>
+
+                <SlOptionsVertical className="mr-2" />
+                <div className="absolute w-40 h-20 top-[80%] right-6 z-50 select-none">
+                  <div className="w-full h-full bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+                    <div
+                      onClick={() => {}}
+                      className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                    >
+                      Change Role
+                    </div>
+                    <div className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30">
+                      Delete
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full flex justify-end">
+              <CustomButton
+                tittle="Close"
+                containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+              />
+            </div>
+          </div>
+        </div>
+      </div> */}
+      {/*ROLE*/}
+      {roleo && (
+        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
+              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+                  Manager member
+                  <div
+                    className="text-ascent-1 h-full flex items-center cursor-pointer"
+                    onClick={() => {
+                      setRoleo(!roleo);
+                    }}
+                  >
+                    <MdClose size={25} />
+                  </div>
+                </span>
+              </div>
+
+              <input
+                type="text"
+                className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
+                placeholder="Search"
+              />
+              <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
+                <div className="w-full relative h-fit bg-secondary px-2 py-2 text-ascent-1 flex gap-2 justify-between items-center rounded-3xl">
+                  <div className="flex justify-center items-center gap-3">
+                    <img
+                      src={user?.profileUrl ? user?.profileUrl : NoProfile}
+                      alt=""
+                      className="h-16 w-16 rounded-full object-cover"
+                    />
+                    {user?.firstName} {user?.lastName}
+                  </div>
+
+                  <SlOptionsVertical className="mr-2" />
+                  <div className="absolute w-40 h-20 top-[80%] right-6 z-50 select-none">
+                    <div className="w-full h-full bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+                      <div
+                        onClick={() => {}}
+                        className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                      >
+                        Change Role
+                      </div>
+                      <div className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30">
+                        Delete
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="w-full flex justify-end"
+                onClick={() => {
+                  setRoleo(!roleo);
+                }}
+              >
+                <CustomButton
+                  tittle="Close"
+                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Ratio */}
+      {/* {addu && (
+        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+          <div className="w-full h-full flex justify-center items-center">
+            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/3 rounded-2xl">
+              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+                  Role
+                  <div
+                    className="text-ascent-1 h-full flex items-center cursor-pointer"
+                    onClick={() => {
+                      setAddu(!addu);
+                    }}
+                  >
+                    <MdClose size={25} />
+                  </div>
+                </span>
+              </div>
+
+              <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
+                <label
+                  htmlFor="admin"
+                  className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+                >
+                  <input
+                    type="radio"
+                    id="admin"
+                    name="role"
+                    value="Admin"
+                    checked
+                  />
+                  <label htmlFor="admin">Admin</label>
+                </label>
+                <label
+                  htmlFor="member"
+                  className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+                >
+                  <input type="radio" id="member" name="role" value="Member" />
+                  <label htmlFor="member">Member</label>
+                </label>
+              </div>
+
+              <div className="w-full flex justify-end">
+                <CustomButton
+                  tittle="Close"
+                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 };

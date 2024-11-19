@@ -44,51 +44,55 @@ const EditFix = () => {
     reader.readAsDataURL(e.target.files[0]);
     setPreview(true);
   };
-  const partialEmail = user?.email.replace(
-    /(\w{3})[\w.-]+@([\w.]+\w)/,
-    "$1***@$2"
-  );
+  // const partialEmail = user?.email.replace(
+  //   /(\w{3})[\w.-]+@([\w.]+\w)/,
+  //   "$1***@$2"
+  // );
   // console.log(partialEmail);
   const onSubmit = async (data) => {
-    setisSubmitting(true);
-    seterrMsg("");
-    try {
-      const uri = picture && (await handFileUpload(picture));
-      const { firstName, lastName, location, profession } = data;
+    // setisSubmitting(true);
+    // seterrMsg("");
+    // try {
+    //   const uri = picture && (await handFileUpload(picture));
+    //   const { firstName, lastName, location, profession } = data;
 
-      const res = await userapiRequest({
-        url: "",
-        data: {
-          firstName,
-          lastName,
-          location,
-          profileUrl: uri ? uri : user?.profileUrl,
-          profession,
-        },
-        method: "PUT",
-        token: user?.token,
-      });
+    //   const res = await userapiRequest({
+    //     url: "",
+    //     data: {
+    //       firstName,
+    //       lastName,
+    //       location,
+    //       profileUrl: uri ? uri : user?.profileUrl,
+    //       profession,
+    //     },
+    //     method: "PUT",
+    //     token: user?.token,
+    //   });
 
-      console.log(res);
-      if (res?.status === "failed") {
-        seterrMsg(res);
-      } else {
-        seterrMsg(res);
+    //   console.log(res);
+    //   if (res?.status === "failed") {
+    //     seterrMsg(res);
+    //   } else {
+    //     seterrMsg(res);
 
-        const newUser = { token: user?.token, ...res };
+    //     const newUser = { token: user?.token, ...res };
 
-        dispatch(UserLogin(newUser));
+    //     dispatch(UserLogin(newUser));
 
-        setTimeout(() => {
-          dispatch(UpdateProfile(false));
-        }, 3000);
-      }
-      setisSubmitting(false);
-      // window.location.reload();
-    } catch (error) {
-      console.log(error);
-      setisSubmitting(false);
-    }
+    //     setTimeout(() => {
+    //       dispatch(UpdateProfile(false));
+    //     }, 3000);
+    //   }
+    //   setisSubmitting(false);
+    //   // window.location.reload();
+    // } catch (error) {
+    //   console.log(error);
+    //   setisSubmitting(false);
+    // }
+    // const { firstName, lastName, location, profession } = data;
+    console.log("submits");
+    window.location.reload();
+    console.log(data);
   };
 
   // const handleresetSubmit = async (data) => {
@@ -129,27 +133,32 @@ const EditFix = () => {
   //   }
   // };
   const validateemail = (email) => {};
-
-  const handleresetSubmit = async (data) => {
-    // console.log(data);
-    setisSubmitting(true);
-    try {
-      const res = await apiRequest({
-        url: "/users/request-passwordreset",
-        data: data,
-        method: "POST",
-      });
-      if (res?.status === "FAILED") {
-        seterrMsg(res);
-      } else {
-        seterrMsg(res);
-      }
-      setisSubmitting(false);
-    } catch (error) {
-      console.log(error);
-      setisSubmitting(false);
-    }
+  const handlerechangePass = async (data) => {
+    console.log("submits");
+    setisSubmitting(false);
+    console.log(data);
   };
+
+  // const handleresetSubmit = async (data) => {
+  //   // console.log(data);
+  //   setisSubmitting(true);
+  //   try {
+  //     const res = await apiRequest({
+  //       url: "/users/request-passwordreset",
+  //       data: data,
+  //       method: "POST",
+  //     });
+  //     if (res?.status === "FAILED") {
+  //       seterrMsg(res);
+  //     } else {
+  //       seterrMsg(res);
+  //     }
+  //     setisSubmitting(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     setisSubmitting(false);
+  //   }
+  // };
 
   const handleClose = () => {
     dispatch(UpdateProfile(false));
@@ -202,7 +211,7 @@ const EditFix = () => {
               >
                 Profile
               </span>
-              <span
+              {/* <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
                   editor == 2
                     ? "bg-blue text-ascent-1"
@@ -231,7 +240,7 @@ const EditFix = () => {
                 onClick={() => setEditor(4)}
               >
                 Experience
-              </span>
+              </span> */}
               <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
                   editor == 5
@@ -248,28 +257,55 @@ const EditFix = () => {
                 className="px-4 sm:px-6 flex flex-col gap-3 2xl:gap-6"
                 onSubmit={handleSubmit(onSubmit)}
               >
+                <div className="flex gap-4">
+                  <TextInput
+                    label="First Name"
+                    placeholder="First Name"
+                    type="text"
+                    styles="w-full"
+                    register={register("firstName", {
+                      required: "First name is required",
+                    })}
+                    error={errors.firstName ? errors.firstName?.message : ""}
+                  />
+                  <TextInput
+                    label="Last Name"
+                    placeholder="Last Name"
+                    type="text"
+                    styles="w-full"
+                    register={register("lastName", {
+                      required: "Last name is required!",
+                    })}
+                    error={errors.lastName ? errors.lastName?.message : ""}
+                  />
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <p className={`text-ascent-2 text-sm mb-2`}>Gender</p>
+                    <select
+                      {...register("gender")}
+                      className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
+                    >
+                      <option selected value="Male">
+                        Male
+                      </option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div className="w-1/2">
+                    <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                    <input
+                      type="date"
+                      className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
+                      onClick={(e) => {
+                        console.log(e.target.value);
+                      }}
+                    />
+                  </div>
+                </div>
+
                 <TextInput
-                  label="First Name"
-                  placeholder="First Name"
-                  type="text"
-                  styles="w-full"
-                  register={register("firstName", {
-                    required: "First name is required",
-                  })}
-                  error={errors.firstName ? errors.firstName?.message : ""}
-                />
-                <TextInput
-                  label="Last Name"
-                  placeholder="Last Name"
-                  type="text"
-                  styles="w-full"
-                  register={register("lastName", {
-                    required: "Last name is required!",
-                  })}
-                  error={errors.lastName ? errors.lastName?.message : ""}
-                />
-                <TextInput
-                  label="profession"
+                  label="Profession"
                   placeholder="Profession"
                   type="text"
                   styles="w-full"
@@ -358,38 +394,53 @@ const EditFix = () => {
             ) : editor == 5 ? (
               <div className="bg-primary w-ful px-6 py-8 shadow-md rounded-lg">
                 <p className="text-ascent-1 text-lg font-semibold">
-                  Email Address
+                  Change Password
                 </p>
-
-                <span className="text-sm text-ascent-2">
-                  {/* Enter email address used during registration */}
+                {/* Enter email address used during registration */}
+                {/* <span className="text-sm text-ascent-2">
+                  
                   {partialEmail}
-                </span>
+                </span> */}
 
                 <form
-                  onSubmit={handleSubmit(handleresetSubmit)}
+                  onSubmit={handleSubmit(handlerechangePass)}
                   className="py-4 flex flex-col gap-5"
                 >
-                  <TextInput
-                    name="email"
-                    placeholder="email@example.com"
-                    type="email"
-                    register={register("validate_email", {
-                      // required: "Email Address is required!",
-                      validate: (value) => {
-                        const { email } = getValues();
+                  <div className="w-full flex flex-col lg:flex-col gap-1 md:gap-2">
+                    <TextInput
+                      name="password"
+                      label="Password"
+                      placeholder="Password"
+                      type="password"
+                      styles="w-full"
+                      register={register("password", {
+                        required: "Password is required!",
+                      })}
+                      error={errors.password ? errors.password?.message : ""}
+                    />
 
-                        if (email != value) {
-                          return "Email do no match";
-                        }
-                      },
-                    })}
-                    styles="w-full rounded-lg"
-                    labelStyles="ml-2"
-                    error={
-                      errors.validate_email ? errors.validate_email.message : ""
-                    }
-                  />
+                    <TextInput
+                      label="Confirm Password"
+                      placeholder="Password"
+                      type="password"
+                      styles="w-full"
+                      register={register("cPassword", {
+                        validate: (value) => {
+                          const { password } = getValues();
+
+                          if (password != value) {
+                            return "Passwords do no match";
+                          }
+                        },
+                      })}
+                      error={
+                        errors.cPassword && errors.cPassword.type === "validate"
+                          ? errors.cPassword?.message
+                          : ""
+                      }
+                    />
+                  </div>
+
                   {errMsg?.message && (
                     <span
                       role="alert"

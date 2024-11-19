@@ -157,9 +157,9 @@ const TopBar = ({ user, setKey }) => {
 
         <div className="flex gap-4 items-center text-ascent-1 text-md md:text-xl">
           {user?.role === "Admin" && (
-            <div className="hidden lg:flex cursor-pointer">
+            <div className="px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70">
               <Link to={`/admin`}>
-                <FaTools />
+                <FaTools size={25} />
               </Link>
             </div>
           )}

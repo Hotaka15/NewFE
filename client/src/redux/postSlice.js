@@ -10,6 +10,9 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     getPosts(state, action) {
+      // const newPost = action.payload;
+      console.log(typeof action.payload);
+
       state.posts = action.payload;
     },
     updateEditp(state, action) {

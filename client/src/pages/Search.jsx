@@ -76,6 +76,19 @@ const Search = () => {
     // setLoading(true);
     handleSearch(keyword);
     // fetchPost();
+
+    const loop = (iteration) => {
+      // if (iteration >= 10) return;
+      // Dừng sau 10 lần (10 giây)
+
+      setTimeout(() => {
+        keyword && handleSearch(keyword);
+
+        loop(iteration + 1); // Gọi lại loop với lần lặp tiếp theo
+      }, 10000); // Thực hiện mỗi giây
+    };
+
+    loop(0);
   }, []);
 
   return (

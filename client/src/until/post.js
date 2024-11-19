@@ -31,16 +31,20 @@ export const postapiRequest = async ({ url, token, data, method }) => {
   }
 };
 
-export const postfetchPosts = async (token, dispatch, uri, data) => {
+export const postfetchPosts = async (token, dispatch, limit) => {
   // console.log("Data: " + data);
+  console.log(limit);
+
   try {
     const res = await postapiRequest({
-      url: uri || "/newsfeed",
+      // url: limit ? "/newsfeed?page=1&limit=" + limit : "/newsfeed",
+      url: "/newsfeed",
       token: token,
       method: "GET",
-      data: data || {},
     });
-    // console.log(res);
+    console.log(res);
+    console.log(typeof res?.data?.latestPosts);
+
     dispatch(SetPosts(res?.data?.latestPosts));
     return;
   } catch (error) {
