@@ -380,7 +380,7 @@ const Home = () => {
     setLoading(true);
     // test();
     // getUser();
-    fetchPost();
+    // fetchPost();
     fetchFriendRequest();
 
     // fetchNotification();

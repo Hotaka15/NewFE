@@ -8,6 +8,8 @@ export const API = axios.create({
 });
 
 export const chatapiRequest = async ({ url, token, data, method }) => {
+  console.log(data);
+
   try {
     console.log(url, token, data, method);
     const result = await API(url, {
@@ -57,7 +59,7 @@ export const fetchChat = async (token, id, page) => {
       method: "GET",
     });
     console.log(res);
-    //   dispatch(SetPosts(res?.data?.latestPosts));
+
     return res;
   } catch (error) {
     console.log(error);
@@ -68,12 +70,12 @@ export const fetchConversations = async (token, id) => {
   console.log(id);
   try {
     const res = await chatapiRequest({
-      url: `/conversations/${id}`,
+      url: `/chat/users/${id}/conversations`,
       token: token,
       method: "GET",
     });
     console.log(res);
-    //   dispatch(SetPosts(res?.data?.latestPosts));
+
     return res;
   } catch (error) {
     console.log(error);

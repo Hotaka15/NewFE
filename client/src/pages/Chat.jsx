@@ -27,11 +27,14 @@ import Picker from "emoji-picker-react";
 import { BgImage, NoProfile } from "../assets";
 
 import { io } from "socket.io-client";
-import { chatfetchListpersonal } from "../until/chat";
+import { chatfetchListpersonal, sendMessage } from "../until/chat";
 import { searchUserName, userfriendSuggest } from "../until/user";
 
 const RangeChat = ({
   user,
+  userinfo,
+  newChat,
+  setNewChat,
   reviewcheck,
   setReviewcheck,
   review,
@@ -41,6 +44,8 @@ const RangeChat = ({
   const [chat, setChat] = useState("");
   const { theme } = useSelector((state) => state.theme);
   console.log(user);
+  const id_1 = user?._id;
+  const id_2 = userinfo?._id;
   const handlebg = (e) => {
     console.log(e.target.files[0]);
     const reader = new FileReader();
@@ -67,6 +72,16 @@ const RangeChat = ({
       console.log(error);
     }
   };
+  const test = (e) => {
+    e.preventDefault();
+    console.log("submit");
+  };
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const res = await sendMessage(user?.token, id_1, id_2);
+    console.log(res);
+  };
 
   useEffect(() => {
     position();
@@ -78,13 +93,13 @@ const RangeChat = ({
         <div className="text-ascent-1 font-bold text-3xl">
           <div className=" flex text-ascent-1 text-sm items-center gap-1">
             <img
-              src={user?.profileUrl ?? NoProfile}
+              src={userinfo?.profileUrl ?? NoProfile}
               alt="post image"
               className="w-14 h-14 shrink-0 object-cover rounded-full "
             ></img>
             <div className="flex items-center w-full h-full">
               <span className="align-middle">
-                {user?.firstName} {user?.lastName}
+                {userinfo?.firstName} {userinfo?.lastName}
               </span>
             </div>
           </div>
@@ -131,7 +146,14 @@ const RangeChat = ({
             {/* {page == 1 && <Pagechat_1 />}
             {page == 2 && <Pagechat_2 />}
             {page == 3 && <Pagechat_3 />} */}
-            <Pagechat_1 />
+            {/* <Pagechat_1 /> */}
+            {newChat ? (
+              <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
+                New Conversation
+              </div>
+            ) : (
+              <Pagechat_1 />
+            )}
           </div>
         </div>
       </div>
@@ -184,30 +206,34 @@ const RangeChat = ({
               />
             </label>
           </div>
-
-          <div className=" overflow-hidden w-full h-full flex justify-center items-center border bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
-            <input
-              type="text"
-              value={chat}
-              // onChange={(e) => {
-              //   setChat(e.target.value);
-              // }}
-              placeholder="Type your message..."
-              className="w-full flex-1 py-2 px-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
-            />
-            <div
-              className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center  "
-              // onClick={() => {
-              //   setShowPicker(!showPicker);
-              // }}
-            >
-              <MdEmojiEmotions size={35} />
+          <form className="w-full flex" onSubmit={(e) => handleSend(e)}>
+            <div className=" overflow-hidden w-full h-full flex justify-center items-center border bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
+              <input
+                type="text"
+                value={chat}
+                onChange={(e) => {
+                  setChat(e.target.value);
+                }}
+                placeholder="Type your message..."
+                className="w-full flex-1 py-2 px-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
+              />
+              <div
+                className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center  "
+                onClick={() => {
+                  setShowPicker(!showPicker);
+                }}
+              >
+                <MdEmojiEmotions size={35} />
+              </div>
             </div>
-          </div>
 
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 bg-blue ">
-            Send
-          </button>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 bg-blue "
+            >
+              Send
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -597,6 +623,7 @@ const Chat = () => {
   const [userinfo, setUserinfo] = useState(listmanager[0]);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [newChat, setNewChat] = useState(false);
   const userChat = (user) => {
     setUserinfo(user);
   };
@@ -652,6 +679,16 @@ const Chat = () => {
       setListsuggest(res?.suggestedFriends);
     } catch (error) {
       console.log(error);
+    }
+  };
+  const hanldeUserchat = (user) => {
+    userChat(user);
+    for (const item of listchat) {
+      if (item.members && item.members.includes(user?._id)) {
+        log("true");
+        setNewChat(true);
+        break;
+      }
     }
   };
 
@@ -730,7 +767,7 @@ const Chat = () => {
             </div>
 
             <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
-              {listchat.length ? (
+              {listchat && listchat.length ? (
                 listchat.map((user) => {
                   return (
                     <UserCard
@@ -740,7 +777,7 @@ const Chat = () => {
                       //   onchangepage(user?.page);
                       // }}
                       onUser={() => {
-                        userChat(user);
+                        hanldeUserchat(user);
                       }}
                     />
                   );
@@ -760,7 +797,7 @@ const Chat = () => {
                         key={user?._id}
                         user={user}
                         onUser={() => {
-                          userChat(user);
+                          hanldeUserchat(user);
                         }}
                       />
                     );
@@ -770,7 +807,10 @@ const Chat = () => {
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>
           <RangeChat
-            user={userinfo}
+            user={user}
+            userinfo={userinfo}
+            newChat={newChat}
+            setNewChat={setNewChat}
             reviewcheck={reviewcheck}
             setReviewcheck={setReviewcheck}
             review={review}

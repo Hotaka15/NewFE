@@ -18,13 +18,13 @@ export const userapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    // console.log(result);
+    console.log(result);
 
     return result?.data;
   } catch (error) {
     const err = error.response.data;
 
-    // console.log(err);
+    console.log(err);
 
     return { status: err.status, message: err.message };
   }
