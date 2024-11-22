@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  posts: {},
+  posts: [],
   editp: false,
 };
 
@@ -11,9 +11,16 @@ const postSlice = createSlice({
   reducers: {
     getPosts(state, action) {
       // const newPost = action.payload;
-      console.log(typeof action.payload);
+      // console.log(typeof action.payload);
+      let item = [...state.posts];
+      const list = action.payload;
+      item = item.concat(list);
+      // item.push(list[0]);
+      console.log(list[0]);
+      console.log(item);
 
-      state.posts = action.payload;
+      state.posts = item;
+      // state.posts = action.payload;
     },
     updateEditp(state, action) {
       state.editp = action.payload;

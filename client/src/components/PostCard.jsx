@@ -16,7 +16,7 @@ import { SlOptions } from "react-icons/sl";
 import { GoBookmarkSlashFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Editpost from "./Editpost";
-import { postapiRequest } from "../until/post";
+import { postapiRequest, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
 
@@ -185,7 +185,7 @@ const ReplyCard = ({ reply, user, handleLike }) => {
           <p
             className="flex gap-2 items-center text-base text-ascent-2
             cursor-pointer"
-            onClick={handleLike}
+            // onClick={handleLike}
           >
             {reply?.likes?.includes(user?._id) ? (
               <BiSolidLike size={20} color="blue" />
@@ -281,32 +281,37 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
   const dispatch = useDispatch();
   const [reportdetail, setReportdetail] = useState(false);
   const [upost, setUpost] = useState();
+  const [isLiking, setIsLiking] = useState(false);
   const handleupdatepost = (res) => {
     setPost(res);
   };
-  // console.log(post);
-  // const getComments = async (id) => {
-  //   console.log(id);
 
-  //   setReplyComments(0);
-  //   const result = await getPostComments(id, user);
-  //   setComments(result);
-  //   setLoading(false);
-  // };
+  const getPost = async () => {
+    try {
+      const res = await postapiRequest({
+        url: `/${posts?._id}`,
+        token: user?.token,
+        method: "GET",
+      });
+      // console.log(res);
+
+      setPost(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handlerpdetail = () => {
     setReportdetail(!reportdetail);
   };
 
   const getComments = async (id) => {
-    // console.log(id);
-
     setReplyComments(0);
     try {
       const result = await postapiRequest({
         url: `/${id}/comments`,
         token: user?.token,
       });
-      console.log(result);
 
       setComments(result?.comments);
       setLoading(false);
@@ -315,8 +320,17 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
     }
   };
   const handleLike = async (uri) => {
-    await likePost(uri);
-    await getComments(post?._id);
+    try {
+      if (isLiking) return; // Nếu đang trong quá trình "like", không làm gì
+      setIsLiking(true);
+      await likePost(uri);
+      await getComments(post?._id);
+      await getPost();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLiking(false);
+    }
   };
   const report = () => {
     setOption(!option);
@@ -333,14 +347,9 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
       console.log(error);
     }
   };
-
-  // const fetchPost = async () => {
-  //   try {
-  //     await fetchPosts(user?.token, dispatch);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  useEffect(() => {
+    getPost();
+  }, []);
   useEffect(() => {
     getUser();
   }, []);
@@ -441,7 +450,10 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
         >
           <p
             className="flex gap-2 items-center text-base cursor-pointer select-none hover:bg-ascent-3/10 px-3 py-2 rounded-lg"
-            onClick={() => handleLike(post?._id + "/like")}
+            onClick={() => {
+              handleLike(post?._id + "/like");
+              // getPost();
+            }}
           >
             {post?.likes?.includes(user?._id) ? (
               <BiSolidLike size={20} color="blue" />
@@ -565,13 +577,14 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
                           reply={reply}
                           user={user}
                           key={reply?._id}
-                          handleLike={() =>
-                            handleLike(
-                              "/posts/like-comment/" +
-                                comment?._id +
-                                "/" +
-                                reply?._id
-                            )
+                          handleLike={
+                            () => {}
+                            // handleLike(
+                            //   "/posts/like-comment/" +
+                            //     comment?._id +
+                            //     "/" +
+                            //     reply?._id
+                            // )
                           }
                         />
                       ))}

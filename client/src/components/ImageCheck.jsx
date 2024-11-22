@@ -4,6 +4,8 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 import { CiImageOff } from "react-icons/ci";
 const ImageCheck = ({ img, review, setReview }) => {
+  console.log(img);
+
   //   const [temp, setTemp] = useState(img);
   return (
     <div className="z-50 w-full h-full bg-bgColor/70">

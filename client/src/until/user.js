@@ -18,13 +18,13 @@ export const userapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
+    // console.log(result);
 
     return result?.data;
   } catch (error) {
     const err = error.response.data;
 
-    console.log(err);
+    // console.log(err);
 
     return { status: err.status, message: err.message };
   }
@@ -74,7 +74,7 @@ export const usergetUserpInfo = async (token, id) => {
       window.alert("User session expired .Login again");
       window.location.replace("/login");
     }
-    console.log(res);
+    // console.log(res);
 
     return res;
   } catch (error) {
@@ -110,7 +110,7 @@ export const searchUserName = async (token, search) => {
       method: "GET",
     });
 
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -127,7 +127,7 @@ export const usergetFriends = async (token) => {
       method: "POST",
     });
 
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -151,7 +151,7 @@ export const useracceptFriendRequest = async (
       data: newdata,
       method: "PUT",
     });
-    console.log(res);
+    // console.log(res);
     return;
   } catch (error) {
     console.log(error);
@@ -165,7 +165,7 @@ export const usersendFriendRequest = async (token, id) => {
       token: token,
       method: "POST",
     });
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);

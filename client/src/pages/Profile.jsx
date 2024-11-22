@@ -99,7 +99,7 @@ const Profile = () => {
     setLoading(true);
     getUser();
     getPosts();
-    test();
+    // test();
     setLoading(false);
   }, [id]);
   return (

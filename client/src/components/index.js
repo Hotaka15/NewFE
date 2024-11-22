@@ -27,6 +27,7 @@ import RecentRp from "./RecentRp";
 import ReportCard from "./ReportCard";
 import UserTiitle from "./UserTiitle";
 import Inbox from "./Inbox";
+import Postrange from "./Postrange";
 export {
   TextInput,
   Loading,
@@ -57,4 +58,5 @@ export {
   ReportCard,
   UserTiitle,
   Inbox,
+  Postrange,
 };

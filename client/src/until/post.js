@@ -31,14 +31,14 @@ export const postapiRequest = async ({ url, token, data, method }) => {
   }
 };
 
-export const postfetchPosts = async (token, dispatch, limit) => {
+export const postfetchPosts = async (token, dispatch, page) => {
   // console.log("Data: " + data);
-  console.log(limit);
+  console.log(page);
 
   try {
     const res = await postapiRequest({
-      // url: limit ? "/newsfeed?page=1&limit=" + limit : "/newsfeed",
-      url: "/newsfeed",
+      url: page ? "/newsfeed?page=" + page : "/newsfeed",
+      // url: "/newsfeed",
       token: token,
       method: "GET",
     });
@@ -46,7 +46,7 @@ export const postfetchPosts = async (token, dispatch, limit) => {
     console.log(typeof res?.data?.latestPosts);
 
     dispatch(SetPosts(res?.data?.latestPosts));
-    return;
+    res?.data?.return;
   } catch (error) {
     console.log(error);
   }
@@ -145,6 +145,23 @@ export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
     });
     console.log(res);
     dispatch(SetPosts(res?.posts));
+    return;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postfetchId = async (token, dispatch, postId, data) => {
+  // console.log("Data: " + data);
+  try {
+    const res = await postapiRequest({
+      url: postId,
+      token: token,
+      method: "GET",
+      data: data || {},
+    });
+    console.log(res);
+    // dispatch(SetPosts(res?.posts));
     return;
   } catch (error) {
     console.log(error);

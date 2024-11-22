@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import Cookies from "js-cookie";
 import { FaUserFriends } from "react-icons/fa";
@@ -24,6 +24,7 @@ import {
   ImageCheck,
   Editpost,
   Lastactive,
+  Postrange,
 } from "../components";
 import Profile from "./Profile";
 // import { requests, suggest } from "../assets/data";
@@ -58,10 +59,9 @@ import {
   usersendFriendRequest,
 } from "../until/user";
 import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
+import { debounce } from "lodash";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
-  console.log(typeof posts);
-  console.log(posts);
 
   // const [postlist, setPostlist] = useState();
 
@@ -70,18 +70,19 @@ const Home = () => {
   const [notifications, setNotifications] = useState();
   const [suggestedFriends, setsuggestedFriends] = useState();
   const [errMsg, seterrMsg] = useState("");
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(false);
   const [search, setSearch] = useState("");
   const [posting, setPosting] = useState(false);
   const [picreview, setPicreview] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const videoRef = useRef(null);
   // console.log(user);
-
+  let pages = 1;
   const {
     register,
     handleSubmit,
@@ -142,24 +143,26 @@ const Home = () => {
 
   const fetchPost = async () => {
     try {
-      await postfetchPosts(user?.token, dispatch, limit);
+      setIsFetching(true);
+      await postfetchPosts(user?.token, dispatch, page);
       setLoading(false);
+      setIsFetching(false);
     } catch (error) {
       console.log(error);
     }
   };
-  const fetchPostpage = async () => {
-    try {
-      await postfetchPosts(user?.token, dispatch);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchPostpage = async () => {
+  //   try {
+  //     await postfetchPosts(user?.token, dispatch);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
-    await fetchPost();
+    // await fetchPost();
   };
   const handleDeletePost = async (id) => {
     await postdeletePost(id, user?.token);
@@ -297,64 +300,81 @@ const Home = () => {
       }
     }
   };
-  const handleScroll = () => {
-    const postrange = document.getElementById("post_range");
-    const refresh = (e) => {
-      // console.log(e);
-      // console.log(window.innerHeight);
-      // console.log("current" + postrange.scrollHeight);
-      // console.log("offsetHeight" + postrange.scrollTop);
-      postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
-        console.log((postrange.scrollHeight * 4) / 5);
-      setLimit(limit + 10);
-      // fetchPostpage();
-      // postrange.scrollTop = 0;
-    };
-    postrange.addEventListener("scroll", refresh);
-
-    console.log(postrange.scrollHeight);
-
-    // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
-  };
-
-  // useEffect(() => {
-  //   // const postrange = document.getElementById("post_range");
-  //   // const handleScroll = () => {
-  //   //   const refresh = (e) => {
-  //   //     const postrange = document.getElementById("post_range");
-  //   //     // console.log(e);
-  //   //     // console.log(window.innerHeight);
-  //   //     // console.log("current" + postrange.scrollHeight);
-  //   //     // console.log("offsetHeight" + postrange.scrollTop);
-  //   //     postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
-  //   //       console.log((postrange.scrollHeight * 4) / 5);
-  //   //     setPage(page + 1);
-  //   //     // fetchPostpage();
-  //   //     postrange.scrollTop = 0;
-  //   //   };
-  //   //   postrange.addEventListener("scroll", refresh);
-
-  //   //   console.log(postrange.scrollHeight);
-
-  //   //   // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
-  //   // };
+  // const handleScroll = () => {
   //   const postrange = document.getElementById("post_range");
+  //   const handlepage = () => {
+  //     setPage(page + 1);
+  //   };
+  //   const handdle = () => {
+  //     // console.log((postrange.scrollHeight * 4) / 5);
+  //     console.log(123123);
+
+  //     // page++;
+  //     handlepage();
+  //     // pages++;
+  //     fetchPost();
+  //   };
   //   const refresh = (e) => {
-  //     const postrange = document.getElementById("post_range");
   //     // console.log(e);
   //     // console.log(window.innerHeight);
   //     // console.log("current" + postrange.scrollHeight);
   //     // console.log("offsetHeight" + postrange.scrollTop);
-  //     postrange.scrollTop > (postrange.scrollHeight * 4) / 5 &&
-  //       console.log((postrange.scrollHeight * 4) / 5);
-  //     setPage(page + 1);
-  //     // fetchPostpage();
-  //     postrange.scrollTop = 0;
-  //   };
+  //     // console.log(postrange.scrollTop > postrange.scrollHeight / 3);
 
+  //     postrange.scrollTop > (postrange.scrollHeight * 3) / 5 && handdle();
+
+  //     // postrange.scrollTop = 0;
+  //   };
   //   postrange.addEventListener("scroll", refresh);
-  //   return postrange.removeEventListener("scroll", refresh);
+
+  //   console.log(postrange.scrollHeight);
+
+  //   // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
+  // };
+
+  useEffect(() => {
+    fetchPost();
+  }, [page]);
+
+  const handleScroll = useCallback(
+    debounce((e) => {
+      const target = e.target;
+
+      if (
+        target.scrollTop + target.clientHeight >= target.scrollHeight * 0.8 &&
+        !isFetching
+      ) {
+        setPage((prevPage) => prevPage + 1);
+        console.log(page);
+        console.log(posts);
+      }
+    }, 500),
+    [isFetching]
+  );
+
+  // useEffect(() => {
+  //   const postrange = document.getElementById("post_range");
+  //   const refresh = (e) => {
+  //     // console.log(e);
+  //     // console.log(window.innerHeight);
+  //     // console.log("current" + e.target.scrollHeight);
+  //     // console.log("offsetHeight" + e.target.scrollTop);
+  //     e.target.scrollTop >= e.target.scrollHeight - 1000 && setPage(page + 1);
+  //   };
+  //   postrange.addEventListener("scroll", refresh);
+
+  //   return () => {
+  //     postrange.removeEventListener("scroll", refresh);
+  //   };
   // }, [page]);
+  useEffect(() => {
+    const postRange = document.getElementById("post_range");
+    postRange.addEventListener("scroll", handleScroll);
+
+    return () => {
+      postRange.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
   useEffect(() => {
     setLoading(true);
@@ -362,6 +382,7 @@ const Home = () => {
     // getUser();
     fetchPost();
     fetchFriendRequest();
+
     // fetchNotification();
     fetchSuggestFriends();
   }, []);
@@ -652,9 +673,9 @@ const Home = () => {
             {loading ? (
               <Loading />
             ) : posts?.length > 0 ? (
-              posts?.map((post) => (
+              posts?.map((post, index) => (
                 <PostCard
-                  key={post._id}
+                  key={index}
                   posts={post}
                   user={user}
                   deletePost={handleDeletePost}
@@ -662,6 +683,7 @@ const Home = () => {
                 />
               ))
             ) : (
+              // <Postrange />
               <div className="flex w-full h-full items-center justify-center">
                 <p className="text-lg text-ascent-2">No Post Available</p>
               </div>
