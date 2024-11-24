@@ -14,8 +14,14 @@ import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
-import { postapiRequest } from "../until/post";
-const Post = ({ onEvent }) => {
+import { CiVideoOn } from "react-icons/ci";
+import ReactPlayer from "react-player";
+import {
+  postapiRequest,
+  postfetchPosts,
+  postrenewfetchPosts,
+} from "../until/post";
+const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [errMsg, seterrMsg] = useState("");
@@ -33,7 +39,8 @@ const Post = ({ onEvent }) => {
   const [tem, setTem] = useState();
   const [lists, setLists] = useState([]);
   const [option, setOption] = useState("public");
-
+  const [videoFile, setVideoFile] = useState(null);
+  const [videoUpload, setVideoUpload] = useState(null);
   const handlebg = (e) => {
     // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
@@ -86,6 +93,18 @@ const Post = ({ onEvent }) => {
 
     lists.includes(id) ? (check = true) : (check = false);
   };
+
+  const handleFileChange = (e) => {
+    console.log(e.target.files[0]);
+
+    const filevideo = e.target.files[0];
+    if (filevideo) {
+      setVideoUpload(filevideo);
+
+      setVideoFile(URL.createObjectURL(filevideo));
+    }
+  };
+
   const handlePostSubmit = async (data) => {
     setPosting(true);
     setPreview(false);
@@ -95,8 +114,12 @@ const Post = ({ onEvent }) => {
 
     try {
       const uri = file && (await handFileUpload(file));
-
-      const newData = uri ? { ...data, image: uri } : data;
+      const uriv = videoUpload && (await handFileUpload(videoUpload));
+      const newData = uri
+        ? { ...data, image: uri }
+        : uriv
+        ? { ...data, urlVideo: uriv }
+        : data;
       const res = await postapiRequest({
         url: "",
         data: newData,
@@ -113,7 +136,8 @@ const Post = ({ onEvent }) => {
         });
         setFile(null);
         seterrMsg("");
-        await onEvent();
+        // await postrenewfetchPosts(user?.token, dispatch, 1);
+        await setPage();
       }
       setPosting(false);
       setFile(null);
@@ -223,8 +247,26 @@ const Post = ({ onEvent }) => {
                               </div>
                             </div>
                           )}
+                          {videoFile && (
+                            <div className="relative">
+                              <video controls width="400">
+                                {/* <ReactPlayer controls={true} url={videoFile} /> */}
+                                <source src={videoFile} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                              <div
+                                onClick={() => {
+                                  // setPreview(false);
+                                  setVideoFile(null);
+                                }}
+                                className="rotate-45 cursor-pointer absolute right-2 top-2 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
+                              >
+                                <AiOutlinePlus />
+                              </div>
+                            </div>
+                          )}
                           {!posting && (
-                            <div className="flex gap-3">
+                            <div className="flex gap-3 mt-2">
                               <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
                                 <CiShoppingTag />
                                 <div className="hover:text-ascent-1">Tags</div>
@@ -247,6 +289,26 @@ const Post = ({ onEvent }) => {
                                   />
                                   <CiImageOn />
                                   Image
+                                </label>
+                              </div>
+
+                              <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
+                                <label
+                                  htmlFor="videoUpload"
+                                  className="flex items-center gap-1 text-base text-[#e30b65] hover:text-ascent-1 cursor-pointer"
+                                >
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      e.target.files[0] && handleFileChange(e);
+                                    }}
+                                    className="hidden"
+                                    id="videoUpload"
+                                    data-max-size="5120"
+                                    accept="video/*"
+                                  />
+                                  <CiVideoOn />
+                                  Video
                                 </label>
                               </div>
                             </div>

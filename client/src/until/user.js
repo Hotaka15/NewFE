@@ -32,8 +32,8 @@ export const userapiRequest = async ({ url, token, data, method }) => {
 
 export const usergetUserInfo = async (token, id) => {
   try {
-    //console.log(id);
-    //console.log(token);
+    console.log(id);
+    console.log(token);
     // const uri = id === undefined ? "/users/get-user" : "/users/get-user/" + id;
     const uri = id;
     // console.log(token);

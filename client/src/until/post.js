@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SetPosts } from "../redux/postSlice";
+import { SetPosts, UpdatePosts } from "../redux/postSlice";
 
 const API_URL = "http://localhost:3002/api/posts";
 
@@ -43,10 +43,30 @@ export const postfetchPosts = async (token, dispatch, page) => {
       method: "GET",
     });
     console.log(res);
-    console.log(typeof res?.data?.latestPosts);
 
     dispatch(SetPosts(res?.data?.latestPosts));
-    res?.data?.return;
+    // res?.data?.return;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postrenewfetchPosts = async (token, dispatch, page) => {
+  // console.log("Data: " + data);
+  console.log(page);
+
+  try {
+    const res = await postapiRequest({
+      url: page ? "/newsfeed?page=" + page : "/newsfeed",
+      // url: "/newsfeed",
+      token: token,
+      method: "GET",
+    });
+    console.log(res);
+
+    dispatch(UpdatePosts(res?.data?.latestPosts));
+    // dispatch(SetPosts(res?.data?.latestPosts));
+    // res?.data?.return;
   } catch (error) {
     console.log(error);
   }
@@ -98,7 +118,7 @@ export const postfetchuserPosts = async (token, user, dispatch, uri, data) => {
       data: data || {},
     });
     console.log(res);
-    dispatch(SetPosts(res));
+    dispatch(UpdatePosts(res));
     return;
   } catch (error) {
     console.log(error);
@@ -144,7 +164,7 @@ export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
       data: data || {},
     });
     console.log(res);
-    dispatch(SetPosts(res?.posts));
+    dispatch(UpdatePosts(res?.posts));
     return;
   } catch (error) {
     console.log(error);

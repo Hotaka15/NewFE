@@ -55,6 +55,7 @@ import {
 import { debounce } from "lodash";
 import { forwardRef } from "react";
 import { handFileUpload } from "../until";
+import CreateGroup from "../components/CreateGroup";
 
 const RangeChat = forwardRef(
   (
@@ -987,6 +988,7 @@ const Chat = () => {
   const [newChat, setNewChat] = useState(false);
   const [idroom, setIdroom] = useState();
   const childRef = useRef();
+  const [type, setType] = useState("inbox");
   const userChat = (user) => {
     setUserinfo(user);
   };
@@ -1163,7 +1165,7 @@ const Chat = () => {
           </div>
           <div
             className="w-1/5 lg:w-1/5 h-full bg-primary md:flex flex-col gap-1
-        overflow-y-auto rounded-xl grow-0"
+        overflow-y-auto overflow-x-hidden rounded-xl grow-0"
           >
             <div>
               <div className="w-full font-bold text-ascent-1 text-3xl px-5 py-5">
@@ -1186,13 +1188,35 @@ const Chat = () => {
               </div>
             </div>
             <div className="w-full h-fit flex gap-2 mx-4 mt-2">
-              <div className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer">
+              <div
+                className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
+                onClick={() => {
+                  setType("inbox");
+                }}
+              >
                 Inbox
               </div>
-              <div className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer">
+              <div
+                className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
+                onClick={() => {
+                  setType("group");
+                }}
+              >
                 Group
               </div>
             </div>
+            {type == "group" && (
+              <div className="w-full flex justify-center items-center  px-4 pt-2 cursor-pointer">
+                <div
+                  className="bg-blue text-white w-full flex justify-center items-center py-2 rounded-xl cursor-pointer"
+                  onClick={() => {
+                    setCreatg(true);
+                  }}
+                >
+                  Create Group
+                </div>
+              </div>
+            )}
 
             <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
               {listchat && listchat.length > 0 ? (
@@ -1268,139 +1292,7 @@ const Chat = () => {
         </div>
       )}
       {/* CREATGROUP */}
-      {createg && (
-        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[60%] rounded-2xl">
-              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-                  Create Group
-                  <div
-                    className="text-ascent-1 h-full flex items-center cursor-pointer"
-                    onClick={() => {
-                      setCreatg(!createg);
-                    }}
-                  >
-                    <MdClose size={25} />
-                  </div>
-                </span>
-              </div>
-
-              <div className="flex w-full justify-start items-center gap-3">
-                <span className="text-ascent-1">Name </span>
-                <input
-                  type="text"
-                  className="bg-secondary px-2 py-2 rounded-2xl w-full"
-                  placeholder="Name"
-                />
-              </div>
-              <div className="flex w-full justify-start items-center gap-3">
-                <span className="text-ascent-1">Description </span>
-                <input
-                  type="text"
-                  className="bg-secondary px-2 py-2 rounded-2xl w-full"
-                  placeholder="Description"
-                />
-              </div>
-
-              <span className="text-ascent-1">Member</span>
-              <input
-                type="text"
-                className="bg-secondary px-2 py-2 rounded-2xl"
-                placeholder="Search"
-              />
-              <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-              </div>
-              <div className="h-1/4 flex flex-wrap gap-2 overflow-y-auto content-start">
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-              </div>
-
-              <div className="w-full flex justify-end">
-                <CustomButton
-                  tittle="Submit"
-                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {createg && <CreateGroup setCreatg={setCreatg} />}
       {/* ADD member */}
       {addu && (
         <div className="absolute w-full h-full bg-secondary/30 z-50 ">

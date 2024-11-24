@@ -394,7 +394,7 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
               <SlOptions size={20} />
             </div>
             {option && (
-              <div className="absolute right-0 top-10 rounded-2xl overflow-hidden border border-[#66666645] shadow-xl">
+              <div className="absolute right-0 top-10 rounded-2xl overflow-hidden border border-[#66666645] shadow-xl z-50">
                 <Opt
                   post={post}
                   onClick={() => {

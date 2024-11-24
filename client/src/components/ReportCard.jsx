@@ -28,6 +28,7 @@ const ReportCard = ({ post, handlerp }) => {
     } catch (error) {
       console.log(error);
     }
+    handlerp();
   };
   // post?.image && setPreview(true);
 
@@ -35,20 +36,134 @@ const ReportCard = ({ post, handlerp }) => {
     <div>
       <div className="fixed z-50 inset-0 overflow-y-auto">
         <div className="w-full h-full bg-primary/30 flex  justify-center items-center">
-          <div className="w-fit h-fit bg-primary rounded-xl px-4 py-5 flex gap-3 flex-col">
+          <div className="w-1/4 h-fit bg-primary rounded-xl px-4 py-5 flex gap-3 flex-col">
             <span className="text-ascent-1 font-medium text-2xl flex justify-between">
               Report
               <button className="text-ascent-1" onClick={handlerp}>
                 <MdClose size={22} />
               </button>
             </span>
-            <input
+            {/* <input
               className="bg-secondary outline-none text-ascent-1 px-2 rounded-xl py-2"
               type="text"
               placeholder="Detail"
               value={info}
               onChange={(e) => setInfo(e.target.value)}
-            />
+            /> */}
+            <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
+              <label
+                htmlFor="Offensive"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Offensive"
+                  name="report"
+                  value="Offensive Language"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Offensive">Offensive Language</label>
+              </label>
+              <label
+                htmlFor="Misinformation"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Misinformation"
+                  name="report"
+                  value="Misinformation"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Misinformation">Misinformation</label>
+              </label>
+              <label
+                htmlFor="Harassment"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Harassment"
+                  name="report"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                  value="Harassment"
+                />
+                <label htmlFor="Harassment">Harassment</label>
+              </label>
+              <label
+                htmlFor="Violence"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Violence"
+                  name="report"
+                  value="Violence"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Violence">Violence</label>
+              </label>
+              <label
+                htmlFor="Nudity"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Nudity"
+                  name="report"
+                  value="Nudity"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Nudity">Nudity</label>
+              </label>
+              <label
+                htmlFor="Hate_Speech"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Hate_Speech"
+                  name="report"
+                  value="Hate Speech"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Hate_Speech">Hate Speech</label>
+              </label>
+              <label
+                htmlFor="Illegal_Content"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input
+                  type="radio"
+                  id="Illegal_Content"
+                  name="report"
+                  value="Illegal Content"
+                  onChange={(e) => {
+                    setInfo(e.target.value);
+                  }}
+                />
+                <label htmlFor="Illegal_Content">Illegal Content</label>
+              </label>
+              <label
+                htmlFor="Other"
+                className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
+              >
+                <input type="radio" id="Other" name="report" value="Other" />
+                <label htmlFor="Other">Other</label>
+              </label>
+            </div>
             <div className="w-full flex items-end justify-end">
               <CustomButton
                 tittle={"Submit"}

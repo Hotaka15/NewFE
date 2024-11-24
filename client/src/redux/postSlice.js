@@ -22,6 +22,11 @@ const postSlice = createSlice({
       state.posts = item;
       // state.posts = action.payload;
     },
+    updatePosts(state, action) {
+      console.log(action.payload);
+
+      state.posts = action.payload;
+    },
     updateEditp(state, action) {
       state.editp = action.payload;
     },
@@ -33,6 +38,12 @@ export default postSlice.reducer;
 export function SetPosts(post) {
   return (dispatch, getState) => {
     dispatch(postSlice.actions.getPosts(post));
+  };
+}
+
+export function UpdatePosts(post) {
+  return (dispatch, getState) => {
+    dispatch(postSlice.actions.updatePosts(post));
   };
 }
 

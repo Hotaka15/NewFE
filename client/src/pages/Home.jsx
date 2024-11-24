@@ -58,8 +58,14 @@ import {
   usergetUserInfo,
   usersendFriendRequest,
 } from "../until/user";
-import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
+import {
+  postdeletePost,
+  postfetchPosts,
+  postlikePost,
+  postrenewfetchPosts,
+} from "../until/post";
 import { debounce } from "lodash";
+import { SetPosts, UpdatePosts } from "../redux/postSlice";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -80,6 +86,7 @@ const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [trigger, setTrigger] = useState(false);
   const videoRef = useRef(null);
   // console.log(user);
   let pages = 1;
@@ -166,7 +173,10 @@ const Home = () => {
   };
   const handleDeletePost = async (id) => {
     await postdeletePost(id, user?.token);
-    await fetchPost();
+    setLoading(true);
+    setPage(1);
+    setTrigger(!trigger);
+    // await fetchPost();
   };
   const fetchNotification = async () => {
     try {
@@ -300,48 +310,24 @@ const Home = () => {
       }
     }
   };
-  // const handleScroll = () => {
-  //   const postrange = document.getElementById("post_range");
-  //   const handlepage = () => {
-  //     setPage(page + 1);
-  //   };
-  //   const handdle = () => {
-  //     // console.log((postrange.scrollHeight * 4) / 5);
-  //     console.log(123123);
-
-  //     // page++;
-  //     handlepage();
-  //     // pages++;
-  //     fetchPost();
-  //   };
-  //   const refresh = (e) => {
-  //     // console.log(e);
-  //     // console.log(window.innerHeight);
-  //     // console.log("current" + postrange.scrollHeight);
-  //     // console.log("offsetHeight" + postrange.scrollTop);
-  //     // console.log(postrange.scrollTop > postrange.scrollHeight / 3);
-
-  //     postrange.scrollTop > (postrange.scrollHeight * 3) / 5 && handdle();
-
-  //     // postrange.scrollTop = 0;
-  //   };
-  //   postrange.addEventListener("scroll", refresh);
-
-  //   console.log(postrange.scrollHeight);
-
-  //   // constcurrentHeight = e.target.scrollHeight.documentElement.scrollHeight
-  // };
 
   useEffect(() => {
-    fetchPost();
-  }, [page]);
+    if (page) {
+      if (page == 1) {
+        console.log("hey");
+        dispatch(UpdatePosts([]));
+        fetchPost();
+      } else fetchPost();
+    } else fetchPost();
+    // fetchPost();
+  }, [page, trigger]);
 
   const handleScroll = useCallback(
     debounce((e) => {
       const target = e.target;
 
       if (
-        target.scrollTop + target.clientHeight >= target.scrollHeight * 0.8 &&
+        target.scrollTop + target.clientHeight >= target.scrollHeight * 0.7 &&
         !isFetching
       ) {
         setPage((prevPage) => prevPage + 1);
@@ -352,21 +338,14 @@ const Home = () => {
     [isFetching]
   );
 
-  // useEffect(() => {
-  //   const postrange = document.getElementById("post_range");
-  //   const refresh = (e) => {
-  //     // console.log(e);
-  //     // console.log(window.innerHeight);
-  //     // console.log("current" + e.target.scrollHeight);
-  //     // console.log("offsetHeight" + e.target.scrollTop);
-  //     e.target.scrollTop >= e.target.scrollHeight - 1000 && setPage(page + 1);
-  //   };
-  //   postrange.addEventListener("scroll", refresh);
+  const handlePage = async () => {
+    console.log();
+    setLoading(true);
+    setPage(1);
+    setTrigger(!trigger);
+  };
+  // await postrenewfetchPosts(user?.token, dispatch, 1);
 
-  //   return () => {
-  //     postrange.removeEventListener("scroll", refresh);
-  //   };
-  // }, [page]);
   useEffect(() => {
     const postRange = document.getElementById("post_range");
     postRange.addEventListener("scroll", handleScroll);
@@ -377,6 +356,7 @@ const Home = () => {
   }, [handleScroll]);
 
   useEffect(() => {
+    dispatch(UpdatePosts([]));
     setLoading(true);
     // test();
     // getUser();
@@ -835,7 +815,7 @@ const Home = () => {
       </div>
 
       {edit && <EditFix />}
-      {post && <Post onEvent={fetchPost} />}
+      {post && <Post setPage={handlePage} />}
 
       {/* {picreview && <ImageCheck />} */}
     </div>
