@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import {
   FriendsCard,
   ProfileCard,
@@ -7,6 +13,7 @@ import {
   ImageCheck,
   UserTiitle,
   CustomButton,
+  Loading,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -18,6 +25,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
 import { BsBriefcase } from "react-icons/bs";
+import {
+  formatDistanceToNow,
+  differenceInHours,
+  parseISO,
+  differenceInMinutes,
+  differenceInDays,
+} from "date-fns";
 import { FaVideo } from "react-icons/fa";
 import { IoIosChatbubbles, IoIosSettings, IoMdContact } from "react-icons/io";
 import { IoCallSharp } from "react-icons/io5";
@@ -27,87 +41,200 @@ import Picker from "emoji-picker-react";
 import { BgImage, NoProfile } from "../assets";
 
 import { io } from "socket.io-client";
-import { chatfetchListpersonal, sendMessage } from "../until/chat";
-import { searchUserName, userfriendSuggest } from "../until/user";
+import {
+  chatfetchListpersonal,
+  createConversations,
+  fetchChat,
+  sendMessage,
+} from "../until/chat";
+import {
+  searchUserName,
+  userfriendSuggest,
+  usergetUserpInfo,
+} from "../until/user";
+import { debounce } from "lodash";
+import { forwardRef } from "react";
+import { handFileUpload } from "../until";
 
-const RangeChat = ({
-  user,
-  userinfo,
-  newChat,
-  setNewChat,
-  reviewcheck,
-  setReviewcheck,
-  review,
-  setReview,
-}) => {
-  const [showPicker, setShowPicker] = useState(false);
-  const [chat, setChat] = useState("");
-  const { theme } = useSelector((state) => state.theme);
-  console.log(user);
-  const id_1 = user?._id;
-  const id_2 = userinfo?._id;
-  const handlebg = (e) => {
-    console.log(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setReview(reader.result);
+const RangeChat = forwardRef(
+  (
+    {
+      user,
+      userinfo,
+      newChat,
+      setNewChat,
+      reviewcheck,
+      setReviewcheck,
+      review,
+      setReview,
+      idroom,
+      socket,
+      fetchList,
+      fetchchatforchild,
+    },
+    ref
+  ) => {
+    const [showPicker, setShowPicker] = useState(false);
+    const [listchat, setListchat] = useState([]);
+    const [chat, setChat] = useState("");
+    const [loading, setLoading] = useState(false);
+    const { theme } = useSelector((state) => state.theme);
+    const [page, setPage] = useState(1);
+    const [file, setFile] = useState(null);
+    console.log(user);
+    console.log(idroom);
+    console.log(userinfo);
+
+    const id_1 = user?._id;
+    const id_2 = userinfo?._id;
+    const handlebg = (e) => {
+      setFile(e.target.files[0]);
+      console.log(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setReview(reader.result);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+      // setPreview(true);
     };
-    reader.readAsDataURL(e.target.files[0]);
-    // setPreview(true);
-  };
-  const onEmojiClick = (e) => {
-    setChat((prevInput) => prevInput + e.emoji);
-    setShowPicker(false);
-  };
-  const position = () => {
-    let position = document.getElementById("window_chat");
-    console.log(position.scrollTop);
-    console.log(position.scrollHeight);
-    position.scrollTop = position.scrollHeight;
-  };
-  const fetchchat = async () => {
-    try {
-      // const res = await
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const test = (e) => {
-    e.preventDefault();
-    console.log("submit");
-  };
+    const onEmojiClick = (e) => {
+      setChat((prevInput) => prevInput + e.emoji);
+      setShowPicker(false);
+    };
+    // const position = () => {
+    //   let position = document.getElementById("window_chat");
+    //   console.log(position.scrollTop);
+    //   console.log(position.scrollHeight);
+    //   position.scrollTop = position.scrollHeight;
+    // };
+    const fetchchat = async (idroom) => {
+      try {
+        // const res = await
+        const res = await fetchChat(user?.token, idroom, page);
+        console.log(res);
+        setListchat(res?.data?.messages);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    const res = await sendMessage(user?.token, id_1, id_2);
-    console.log(res);
-  };
+    const handlesend = async (id_2, chat) => {
+      const recipientId = id_2; // ID người nhận tin nhắn
+      const privateMessage = chat;
+      console.log(socket);
 
-  useEffect(() => {
-    position();
-  }, []);
-  return (
-    <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-lg justify-between">
-      {/* Phần tiêu đề của khung chat */}
-      <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
-        <div className="text-ascent-1 font-bold text-3xl">
-          <div className=" flex text-ascent-1 text-sm items-center gap-1">
-            <img
-              src={userinfo?.profileUrl ?? NoProfile}
-              alt="post image"
-              className="w-14 h-14 shrink-0 object-cover rounded-full "
-            ></img>
-            <div className="flex items-center w-full h-full">
-              <span className="align-middle">
-                {userinfo?.firstName} {userinfo?.lastName}
-              </span>
+      await socket.emit("sendMessage", {
+        idConversation: idroom,
+        message: privateMessage,
+      });
+      fetchList();
+    };
+
+    const handleSend = async (e) => {
+      try {
+        e.preventDefault();
+        console.log(file);
+
+        const uri = file && (await handFileUpload(file));
+        const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
+        handlesend(id_2, chat);
+        console.log(res);
+        handlePr();
+        setChat("");
+        await fetchchat(idroom);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const position = () => {
+      let position = document.getElementById("listchat");
+      // let position1 = document.getElementById("window_chatlist");
+      if (position) {
+        console.log(position.offsetHeight);
+        console.log(position.scrollHeight);
+        // console.log(position.scrollHeight);
+        position.scrollTo({
+          top: position.scrollHeight,
+          behavior: "smooth", // Cuộn mượt
+        });
+      }
+    };
+
+    const handlepre = useCallback(
+      debounce((e) => {
+        const position = e.target;
+        console.log(12312312);
+
+        position.scrollTop < position.scrollHeight * 0.4 &&
+          setPage((pre) => pre + 1);
+      }, 500),
+      []
+    );
+    const handlePr = () => {
+      console.log(review, file);
+
+      setReview(null);
+      setFile(null);
+    };
+
+    useImperativeHandle(ref, () => ({
+      fetchchat,
+      position,
+    }));
+    useEffect(() => {
+      setLoading(true);
+      fetchchat(idroom);
+
+      // fetchData();
+    }, [idroom]);
+    useEffect(() => {
+      position();
+    }, [loading]);
+
+    // nhận tin nhắn
+    useEffect(() => {
+      // socket.on("receivePrivateMessage", (data) => {
+      //   console.log(
+      //     `Received private message from ${data.from}: ${data.message}`
+      //   );
+      //   fetchchat(idroom);
+      // });
+
+      // socket.reconnection;
+      if (socket && idroom) {
+        socket.on("receiveMessage", (data) => {
+          console.log(data);
+          fetchList();
+          fetchchat(idroom);
+          // fetchchatforchild(idroom);
+        });
+      }
+      // console.log(socket);
+    }, [socket, idroom]);
+    return (
+      <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-lg justify-between">
+        {/* Phần tiêu đề của khung chat */}
+        <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
+          <div className="text-ascent-1 font-bold text-3xl">
+            <div className=" flex text-ascent-1 text-sm items-center gap-1">
+              <img
+                src={userinfo?.profileUrl ?? NoProfile}
+                alt="post image"
+                className="w-14 h-14 shrink-0 object-cover rounded-full "
+              ></img>
+              <div className="flex items-center w-full h-full">
+                <span className="align-middle">
+                  {userinfo?.firstName} {userinfo?.lastName}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex relative justify-center items-center text-ascent-1 gap-2">
-          <IoCallSharp size={25} />
-          <SlOptionsVertical size={25} className="cursor-pointer" />
-          {/* <div className="absolute w-40 h-40 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+          <div className="flex relative justify-center items-center text-ascent-1 gap-2">
+            <IoCallSharp size={25} />
+            <SlOptionsVertical size={25} className="cursor-pointer" />
+            {/* <div className="absolute w-40 h-40 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
             <div
               // onClick={() => {
               //   setCreatg(!createg);
@@ -133,152 +260,384 @@ const RangeChat = ({
               Add User
             </div>
           </div> */}
+          </div>
         </div>
-      </div>
 
-      {/* Phần nội dung của khung chat */}
-      <div id="window_chat" className="flex-1 h-3/4 overflow-auto">
-        {/* Danh sách tin nhắn */}
-        <div className="flex flex-col gap-2 h-full">
-          <div className="flex items-center w-full">
-            {/* ref={myDivRef} */}
-            {/* <div className="bg-gray-300 rounded-full h-8 w-8 flex items-center justify-between text-ascent-2"></div> */}
-            {/* {page == 1 && <Pagechat_1 />}
+        {/* Phần nội dung của khung chat */}
+        <div id="listchat" className="flex w-full h-3/4 overflow-y-auto">
+          {/* Danh sách tin nhắn */}
+          <div className="flex flex-col gap-2 h-full w-full">
+            <div className="flex items-center w-full">
+              {/* ref={myDivRef} */}
+              {/* <div className="bg-gray-300 rounded-full h-8 w-8 flex items-center justify-between text-ascent-2"></div> */}
+              {/* {page == 1 && <Pagechat_1 />}
             {page == 2 && <Pagechat_2 />}
             {page == 3 && <Pagechat_3 />} */}
-            {/* <Pagechat_1 /> */}
-            {newChat ? (
-              <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
-                New Conversation
-              </div>
-            ) : (
-              <Pagechat_1 />
+              {/* <Pagechat_1 /> */}
+              {loading ? (
+                <div className=" w-full h-full flex justify-center items-start">
+                  <Loading />
+                </div>
+              ) : idroom ? (
+                <PageChat listchat={listchat} socket={socket} />
+              ) : (
+                <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
+                  Select Conversation
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Phần nhập tin nhắn */}
+        <div className="relative flex flex-col items-start">
+          <div className="absolute bottom-20 right-20">
+            {showPicker && (
+              <Picker className="" theme={theme} onEmojiClick={onEmojiClick} />
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Phần nhập tin nhắn */}
-      <div className="relative flex flex-col items-start">
-        <div className="absolute bottom-20 right-20">
-          {showPicker && (
-            <Picker className="" theme={theme} onEmojiClick={onEmojiClick} />
-          )}
-        </div>
-        {review && (
-          <div className="relative flex h-20 w-20 bg-bgColor rounded-2xl overflow-hidden mx-2 my-2">
-            <div className="overflow-hidden ">
-              <img
-                src={review}
-                className="h-20 w-20 object-contain cursor-pointer"
-                onClick={() => {
-                  setReviewcheck(!reviewcheck);
-                  setReview(review);
-                }}
-              />
-            </div>
-            <div
-              onClick={() => {
-                setReview(null);
-                // setTemp(null);
-              }}
-              className="rotate-45 cursor-pointer absolute right-1 top-1 bg-[#000000] rounded-full opacity-70 w-1/3 h-1/3 text-white flex justify-center items-center"
-            >
-              <AiOutlinePlus size={15} className="font-thin" />
-            </div>
-          </div>
-        )}
-
-        <div className="flex w-full mb-3 justify-center items-center">
-          <div
-            className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center"
-            onClick={() => {}}
-          >
-            <label className="bg-primary rounded-xl cursor-pointer">
-              <CiCirclePlus size={35} />
-              <input
-                type="file"
-                className="hidden"
-                accept=".jpg, .png, .jpeg"
-                onInput={(e) => {
-                  e.target.files[0] && handlebg(e);
-                }}
-              />
-            </label>
-          </div>
-          <form className="w-full flex" onSubmit={(e) => handleSend(e)}>
-            <div className=" overflow-hidden w-full h-full flex justify-center items-center border bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
-              <input
-                type="text"
-                value={chat}
-                onChange={(e) => {
-                  setChat(e.target.value);
-                }}
-                placeholder="Type your message..."
-                className="w-full flex-1 py-2 px-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
-              />
+          {review && (
+            <div className="relative flex h-20 w-20 bg-bgColor rounded-2xl overflow-hidden mx-2 my-2">
+              <div className="overflow-hidden ">
+                <img
+                  src={review}
+                  className="h-20 w-20 object-contain cursor-pointer"
+                  onClick={() => {
+                    setReviewcheck(!reviewcheck);
+                    setReview(review);
+                  }}
+                />
+              </div>
               <div
-                className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center  "
                 onClick={() => {
-                  setShowPicker(!showPicker);
+                  // setReview(null);
+                  handlePr();
+                  // setTemp(null);
                 }}
+                className="rotate-45 cursor-pointer absolute right-1 top-1 bg-[#000000] rounded-full opacity-70 w-1/3 h-1/3 text-white flex justify-center items-center"
               >
-                <MdEmojiEmotions size={35} />
+                <AiOutlinePlus size={15} className="font-thin" />
               </div>
             </div>
+          )}
 
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 bg-blue "
+          <div className="flex w-full mb-3 justify-center items-center">
+            <div
+              className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center"
+              onClick={() => {}}
             >
-              Send
-            </button>
-          </form>
+              <label className="bg-primary rounded-xl cursor-pointer">
+                <CiCirclePlus size={35} />
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".jpg, .png, .jpeg"
+                  onInput={(e) => {
+                    e.target.files[0] && handlebg(e);
+                  }}
+                />
+              </label>
+            </div>
+            <form className="w-full flex" onSubmit={(e) => handleSend(e)}>
+              <div className=" overflow-hidden w-full h-full flex justify-center items-center border bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
+                <input
+                  type="text"
+                  value={chat}
+                  onChange={(e) => {
+                    setChat(e.target.value);
+                  }}
+                  placeholder="Type your message..."
+                  className="w-full flex-1 py-2 px-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
+                />
+                <div
+                  className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center  "
+                  onClick={() => {
+                    setShowPicker(!showPicker);
+                  }}
+                >
+                  <MdEmojiEmotions size={35} />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 bg-blue "
+              >
+                Send
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
-const UserCard = ({ user, event, onUser }) => {
-  // console.log(12313141413);
-  // const eventc = event;
-  const changec = onUser;
-  const handle = () => {
-    // eventc();
-    console.log(user);
+const UserCard = forwardRef(
+  (
+    {
+      user,
+      event,
+      itemchat,
+      hanldeUserchat,
+      socket,
+      conversationId,
+      fetchList,
+      fetchchats,
+    },
+    ref
+  ) => {
+    const [avatar, setAvatar] = useState();
+    console.log("UserCard");
+    const userId = user?._id;
+    const [time, setTime] = useState("");
+    console.log(itemchat);
+    const id = itemchat?.members
+      ? itemchat.members.find((member) => member !== user?._id)
+      : itemchat?._id;
+    // const eventc = event;
 
-    changec();
+    const joinroom = async (userId, conversationId) => {
+      console.log(conversationId);
+      await socket.emit("joinGroup", { userId, groupId: conversationId });
+      // socket.on("receiveMessage", (data) => {
+      //   console.log(data);
+      //   fetchList();
+      //   ref.current.fetchchat(conversationId);
+      //   ref.current.position();
+      // });
+    };
+
+    // useEffect(() => {
+    //   return () => {
+    //     socket.emit("leaveGroup", { userId, groupId: conversationId });
+    //     console.log(
+    //       `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
+    //     );
+    //   };
+    // }, [conversationId]);
+    useEffect(() => {
+      joinroom(userId, conversationId);
+      return () => {
+        socket.emit("leaveGroup", { userId, groupId: conversationId });
+        console.log(
+          `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
+        );
+      };
+    }, [conversationId]);
+
+    const handleTime = () => {
+      if (itemchat?.lastMessage?.timestamp) {
+        const date = parseISO(itemchat.lastMessage.timestamp);
+        const now = new Date();
+
+        // Tính tổng số phút giữa hai thời điểm
+        const totalMinutesDifference = differenceInMinutes(now, date);
+        if (totalMinutesDifference < 60) {
+          // Nếu dưới 1 giờ, hiển thị số phút
+          setTime(`${totalMinutesDifference}m`);
+        } else if (totalMinutesDifference < 1440) {
+          // 1440 phút = 24 giờ
+          // Nếu dưới 24 giờ, hiển thị giờ và phút
+          const hours = Math.floor(totalMinutesDifference / 60);
+          const minutes = totalMinutesDifference % 60;
+
+          setTime(`${hours}h`);
+        } else {
+          // Nếu trên 24 giờ, hiển thị số ngày
+          // const daysDifference = formatDistanceToNow(date, { addSuffix: true });
+          // setTime(`${daysDifference}d`);
+          const daysDifference = differenceInDays(now, date);
+          setTime(`${daysDifference} day${daysDifference > 1 ? "s" : ""}`);
+        }
+      } else {
+        return;
+      }
+    };
+
+    const handle = () => {
+      // eventc();
+      console.log(user);
+
+      hanldeUserchat(avatar);
+    };
+    const getUser = async () => {
+      try {
+        const res = await usergetUserpInfo(user?.token, id);
+        console.log(res);
+
+        setAvatar(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    useEffect(() => {
+      getUser();
+      handleTime();
+    }, []);
+    // console.log(user);
+    return (
+      <div
+        className="w-full gap-4 flex py-5 px-5  hover:bg-ascent-3/30 items-center"
+        onClick={() => {
+          handle();
+        }}
+      >
+        <img
+          src={avatar?.profileUrl ?? NoProfile}
+          alt={avatar?.firstName}
+          className="w-14 h-14 object-cover rounded-full"
+        />
+        <div className="flex-col w-full flex h-full justify-center">
+          <div className="flex justify-between">
+            <span className="text-ascent-1">
+              {avatar?.firstName} {avatar?.lastName}
+            </span>
+            <span className="text-ascent-2 ">{time}</span>
+          </div>
+          <span className="text-ascent-2">
+            {itemchat?.lastMessage
+              ? itemchat?.lastMessage?.content?.length > 30
+                ? itemchat?.lastMessage?.content.slice(0, 30) + "..."
+                : itemchat?.lastMessage?.content
+              : "New chat"}
+          </span>
+        </div>
+      </div>
+    );
+  }
+);
+
+const PageChat = ({ listchat, socket }) => {
+  const { user } = useSelector((state) => state.user);
+
+  console.log(listchat);
+  {
+    /* <div className="w-full flex justify-center">
+        <span className="text-ascent-1 ">20/10/2024</span>
+      </div> */
+  }
+  const handleTime = (timestamp) => {
+    // console.log(timestamp);
+
+    if (timestamp) {
+      const date = parseISO(timestamp);
+      const now = new Date();
+
+      // Tính tổng số phút giữa hai thời điểm
+      const totalMinutesDifference = differenceInMinutes(now, date);
+      if (totalMinutesDifference < 60) {
+        // Nếu dưới 1 giờ, hiển thị số phút
+        return `${totalMinutesDifference}m`;
+      } else if (totalMinutesDifference < 1440) {
+        // 1440 phút = 24 giờ
+        // Nếu dưới 24 giờ, hiển thị giờ và phút
+        const hours = Math.floor(totalMinutesDifference / 60);
+        const minutes = totalMinutesDifference % 60;
+
+        return `${hours}h`;
+      } else {
+        // Nếu trên 24 giờ, hiển thị số ngày
+        // const daysDifference = formatDistanceToNow(date, { addSuffix: true });
+        // setTime(`${daysDifference}d`);
+        const daysDifference = differenceInDays(now, date);
+        return `${daysDifference} day${daysDifference > 1 ? "s" : ""}`;
+      }
+    } else {
+      return "Error";
+    }
   };
 
-  // console.log(user);
+  const handlescroll = () => {
+    let position = document.getElementById("window_chat");
+    let position1 = document.getElementById("window_chatlist");
+    if (position) {
+      console.log(position);
+
+      console.log(position.scrollTop);
+      console.log(position.scrollHeight);
+      console.log("offsetHeight:", position.offsetHeight);
+      // position1.scrollTo({
+      //   top: 500,
+      //   behavior: "smooth", // Cuộn mượt
+      // });
+      position.scrollTop = position.scrollHeight;
+      setTimeout(() => {
+        console.log(position.scrollTop);
+      }, 100);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      handlescroll(); // Đảm bảo cuộn sau khi DOM được render đầy đủ
+    }, 1000);
+  }, []);
+
   return (
     <div
-      className="w-full gap-4 flex py-5 px-5  hover:bg-ascent-3/30 items-center"
-      onClick={() => {
-        handle();
-      }}
+      id="window_chatlist"
+      className="w-full h-full flex justify-center items-start grow-0"
     >
-      <img
-        src={user?.profileUrl ?? NoProfile}
-        alt={user?.firstName}
-        className="w-14 h-14 object-cover rounded-full"
-      />
-      <div className="flex-col w-full flex h-full justify-center">
-        <div className="flex justify-between">
-          <span className="text-ascent-1">
-            {user.firstName} {user.lastName}
-          </span>
-          <span className="text-ascent-2 ">{user.time}</span>
+      {listchat?.length > 0 ? (
+        <div id="window_chat" className="flex flex-col gap-2 w-full ">
+          {listchat
+            ?.slice() // Tạo một bản sao của mảng
+            .reverse()
+            ?.map((chat) => {
+              return chat?.senderId == user?._id ? (
+                <div className="w-full flex  justify-end">
+                  <div className="flex flex-col items-end">
+                    <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+                      <p className="text-justify text-white px-2 py-1">
+                        {chat?.text}
+                      </p>
+                      <div className="flex justify-end w-full text-white text-xs pt-1 py-2 ">
+                        {handleTime(chat?.timestamp)}
+                      </div>
+                    </div>
+                    {chat?.file_url && (
+                      <img
+                        src={chat?.file_url}
+                        alt=""
+                        className="w-1/3 p-2 ml-2 rounded-3xl"
+                      />
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full">
+                  <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+                    <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+                      {chat?.text}
+                    </p>
+                    <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+                      {handleTime(chat?.timestamp)}
+                    </div>
+                  </div>
+                  {chat?.file_url && (
+                    <img
+                      src={chat?.file_url}
+                      alt="chat?.file_url"
+                      className="w-1/3 p-2 ml-2 rounded-3xl"
+                    />
+                  )}
+                </div>
+              );
+            })}
+
+          <div className="w-full flex justify-center"></div>
+
+          <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+            <CiCircleCheck />
+            Seen
+          </div>
         </div>
-        <span className="text-ascent-2">
-          {user?.chat
-            ? user?.chat?.length > 30
-              ? user?.chat.slice(0, 30) + "..."
-              : user?.chat
-            : "New chat"}
-        </span>
-      </div>
+      ) : (
+        <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
+          New Conversation
+        </div>
+      )}
     </div>
   );
 };
@@ -617,16 +976,21 @@ const Chat = () => {
     },
   ]);
   const [listsuggest, setListsuggest] = useState();
+  const [socket, setSocket] = useState();
   const [listchat, setListchat] = useState([]);
   const [addu, setAddu] = useState(false);
   const [roleo, setRoleo] = useState(false);
-  const [userinfo, setUserinfo] = useState(listmanager[0]);
+  const [userinfo, setUserinfo] = useState();
   const navigate = useNavigate();
+  const [fetchchats, setFetchchats] = useState();
   const [search, setSearch] = useState("");
   const [newChat, setNewChat] = useState(false);
+  const [idroom, setIdroom] = useState();
+  const childRef = useRef();
   const userChat = (user) => {
     setUserinfo(user);
   };
+  const id_1 = user?._id;
 
   // console.log(user);
 
@@ -645,7 +1009,7 @@ const Chat = () => {
       const res = await chatfetchListpersonal(user?.token, userId);
       res?.message == "Conversation not found"
         ? setListchat([])
-        : setListchat(res);
+        : setListchat(res?.data);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -654,7 +1018,8 @@ const Chat = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (search === "") {
-      // fetchSuggestFriends();
+      fetchList();
+      fetchSuggestFriends();
     } else {
       try {
         console.log(`/users/search/${search}`);
@@ -681,15 +1046,38 @@ const Chat = () => {
       console.log(error);
     }
   };
-  const hanldeUserchat = (user) => {
+  const hanldeUserchat = async (user) => {
+    console.log(user);
     userChat(user);
-    for (const item of listchat) {
-      if (item.members && item.members.includes(user?._id)) {
-        log("true");
-        setNewChat(true);
-        break;
-      }
+
+    console.log(id_1);
+
+    const id_2 = user?._id;
+    try {
+      const res = await createConversations(user?.token, id_1, id_2);
+      console.log(res);
+      setIdroom(res);
+    } catch (error) {
+      console.log(error);
     }
+
+    // for (const item of listchat) {
+    //   if (item.members && item.members.includes(user?._id)) {
+    //     log("true");
+
+    //     // setNewChat(true);
+    //     break;
+    //   } else {
+    //     try {
+    //       console.log(id_2);
+
+    //       const res = await createConversations(user?.token, id_1, id_2);
+    //       console.log(res);
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   }
+    //}
   };
 
   // useEffect(() => {
@@ -698,11 +1086,51 @@ const Chat = () => {
   //   });
   //   return socketConnect.disconnect();
   // }, []);
+
+  const fetchchatforchild = async (idroom) => {
+    await childRef.current.fetchchat(idroom);
+    console.log(idroom);
+    childRef.current.position();
+  };
+
+  // const newSocket = io("ws://localhost:3005", {
+  //   reconnection: true,
+  //   transports: ["websocket"],
+  // });
   useEffect(() => {
     // position();
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+    setSocket(newSocket);
+    let userId = id_1;
+    newSocket.emit("userOnline", { userId });
+
     fetchList();
     fetchSuggestFriends();
+
+    // newSocket.on("receiveMessage", (data) => {
+    //   console.log(data);
+    //   fetchList();
+    //   fetchchatforchild();
+
+    // });
+
+    return () => {
+      newSocket.emit("userOffline", { id_1 });
+      newSocket.disconnect();
+    };
   }, []);
+  useEffect(() => {
+    console.log("trigger");
+    console.log(idroom);
+    // newSocket.on("receiveMessage", (data) => {
+    //   console.log(data);
+    //   fetchList();
+    //   fetchchatforchild(idroom);
+    // });
+  }, [idroom]);
   return (
     <div className="flex">
       <div
@@ -767,18 +1195,24 @@ const Chat = () => {
             </div>
 
             <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
-              {listchat && listchat.length ? (
-                listchat.map((user) => {
+              {listchat && listchat.length > 0 ? (
+                listchat.map((itemchat) => {
                   return (
                     <UserCard
-                      key={user?._id}
+                      key={itemchat?._id}
                       user={user}
+                      socket={socket}
+                      itemchat={itemchat}
+                      conversationId={itemchat?._id}
+                      fetchList={fetchList}
+                      ref={childRef}
                       // event={() => {
                       //   onchangepage(user?.page);
                       // }}
-                      onUser={() => {
-                        hanldeUserchat(user);
-                      }}
+                      hanldeUserchat={hanldeUserchat}
+                      // onUser={() => {
+                      //   hanldeUserchat(user);
+                      // }}
                     />
                   );
                 })
@@ -789,7 +1223,7 @@ const Chat = () => {
               )}
               <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
                 <div className="w-full px-5 text-xl">Suggest</div>
-                {listsuggest &&
+                {/* {listsuggest &&
                   listsuggest?.length > 0 &&
                   listsuggest?.map((user) => {
                     return (
@@ -801,7 +1235,7 @@ const Chat = () => {
                         }}
                       />
                     );
-                  })}
+                  })} */}
               </div>
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
@@ -815,6 +1249,11 @@ const Chat = () => {
             setReviewcheck={setReviewcheck}
             review={review}
             setReview={setReview}
+            idroom={idroom}
+            fetchList={fetchList}
+            socket={socket}
+            ref={childRef}
+            fetchchatforchild={fetchchatforchild}
           />
         </div>
       </div>

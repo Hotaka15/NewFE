@@ -38,7 +38,7 @@ export const chatfetchListpersonal = async (token, userId) => {
   console.log(token, userId);
   try {
     const res = await chatapiRequest({
-      url: "/conversations/" + userId,
+      url: `/users/${userId}/conversations/`,
       token: token,
       method: "GET",
     });
@@ -50,11 +50,11 @@ export const chatfetchListpersonal = async (token, userId) => {
   }
 };
 
-export const fetchChat = async (token, id, page) => {
-  console.log(id);
+export const fetchChat = async (token, idroom, page) => {
+  console.log(idroom);
   try {
     const res = await chatapiRequest({
-      url: `/conversations/${id}/messages?limit=20&page=${page}`,
+      url: `/conversation/${idroom}/messages?limit=20&page=${page}`,
       token: token,
       method: "GET",
     });
@@ -84,32 +84,33 @@ export const fetchConversations = async (token, id) => {
 
 export const createConversations = async (token, id_1, id_2) => {
   try {
+    console.log(id_1, id_2);
+
     const res = await chatapiRequest({
       url: "/message/create",
       token: token,
       data: {
-        userIds: `${id_1},${id_2}`,
+        userIds: [`${id_1}`, `${id_2}`],
       },
       method: "POST",
     });
     console.log(res);
-    //   dispatch(SetPosts(res?.data?.latestPosts));
-    return res;
+    return res?.data?._id;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const sendMessage = async (token, id_1, id_2) => {
+export const sendMessage = async (token, idroom, id_1, chat, uri) => {
   try {
     const res = await chatapiRequest({
       url: "/message/send",
       token: token,
       data: {
-        conversationId: "6734929e6630bd00b48b0916",
-        senderId: "63c1b5f1e4b0d7ef9a7f3c0d",
-        text: "Hello, this is a test message",
-        fileUrl: "https://example.com/testfile.png",
+        conversationId: idroom,
+        senderId: id_1,
+        text: chat,
+        fileUrl: uri || "",
       },
       method: "POST",
     });
