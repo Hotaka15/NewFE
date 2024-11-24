@@ -600,7 +600,7 @@ const PageChat = ({ listchat, socket }) => {
                       <img
                         src={chat?.file_url}
                         alt=""
-                        className="w-1/3 p-2 ml-2 rounded-3xl"
+                        className="w-96 p-2 ml-2 rounded-3xl object-cover"
                       />
                     )}
                   </div>
@@ -619,7 +619,7 @@ const PageChat = ({ listchat, socket }) => {
                     <img
                       src={chat?.file_url}
                       alt="chat?.file_url"
-                      className="w-1/3 p-2 ml-2 rounded-3xl"
+                      className="w-96 p-2 ml-2 rounded-3xl object-cover"
                     />
                   )}
                 </div>
