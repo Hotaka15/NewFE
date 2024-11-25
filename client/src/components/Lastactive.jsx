@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotifications } from "../until";
+
 import { NoProfile } from "../assets";
 import moment from "moment";
 import { notifetchNotifications } from "../until/noti";

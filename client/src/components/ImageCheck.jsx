@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+
 import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 import { CiImageOff } from "react-icons/ci";

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+
 import { NoProfile } from "../assets";
 import CustomButton from "./CustomButton";
-import { apiRequest } from "../until";
+
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { sendFriendRequest } from "../until";
+
 import { usersendFriendRequest } from "../until/user";
 const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
   console.log(friend);

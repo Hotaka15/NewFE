@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import FriendsCard from "./FriendsCard";
+
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import { apiRequest } from "../until";

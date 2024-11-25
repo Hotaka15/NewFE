@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import RecentRp from "./RecentRp";
 import UserTiitle from "./UserTiitle";
 import CustomButton from "./CustomButton";
 import { IoIosAddCircle } from "react-icons/io";

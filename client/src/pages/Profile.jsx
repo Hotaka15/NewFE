@@ -10,14 +10,7 @@ import {
   ProfileCard,
   TopBar,
 } from "../components";
-import {
-  checktoken,
-  deletePost,
-  fetchPosts,
-  getUserInfo,
-  likePost,
-  viewUserProfile,
-} from "../until";
+import { checktoken } from "../until";
 import Cookies from "js-cookie";
 import { usergetUserInfo } from "../until/user";
 import {

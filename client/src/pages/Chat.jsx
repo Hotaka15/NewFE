@@ -6,9 +6,6 @@ import React, {
   useState,
 } from "react";
 import {
-  FriendsCard,
-  ProfileCard,
-  TextInput,
   TopBar,
   ImageCheck,
   UserTiitle,
@@ -280,7 +277,11 @@ const RangeChat = forwardRef(
                   <Loading />
                 </div>
               ) : idroom ? (
-                <PageChat listchat={listchat} socket={socket} />
+                <PageChat
+                  listchat={listchat}
+                  socket={socket}
+                  userinfo={userinfo}
+                />
               ) : (
                 <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
                   Select Conversation
@@ -509,9 +510,9 @@ const UserCard = forwardRef(
   }
 );
 
-const PageChat = ({ listchat, socket }) => {
+const PageChat = ({ listchat, socket, userinfo }) => {
   const { user } = useSelector((state) => state.user);
-
+  const [isme, setisme] = useState(true);
   console.log(listchat);
   {
     /* <div className="w-full flex justify-center">
@@ -608,6 +609,14 @@ const PageChat = ({ listchat, socket }) => {
                 </div>
               ) : (
                 <div className="w-full">
+                  <div>
+                    <img
+                      src={userinfo?.profileUrl || NoProfile}
+                      className="w-10 h-10 object-cover rounded-lg"
+                      alt=""
+                    />
+                    <span className="text-ascent-2">{userinfo?.lastName}</span>
+                  </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
                     <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
                       {chat?.text}

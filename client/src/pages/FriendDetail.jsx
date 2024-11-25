@@ -9,15 +9,7 @@ import {
 } from "../components";
 import { NoProfile } from "../assets";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  checktoken,
-  deletePost,
-  fetchPosts,
-  getUserInfo,
-  likePost,
-  apiRequest,
-  viewUserProfile,
-} from "../until";
+import { deletePost, likePost, apiRequest } from "../until";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { BsBriefcase, BsFacebook, BsInstagram } from "react-icons/bs";

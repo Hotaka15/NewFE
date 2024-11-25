@@ -15,18 +15,11 @@ import {
   FriendsCard,
   Loading,
   PostCard,
-  ProfileCard,
-  TextInput,
   TopBar,
-  Notification,
   Post,
-  ChatCard,
-  ImageCheck,
-  Editpost,
   Lastactive,
-  Postrange,
 } from "../components";
-import Profile from "./Profile";
+
 // import { requests, suggest } from "../assets/data";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";

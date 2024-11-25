@@ -3,14 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EditProfile, Loading, PostCard, TopBar } from "../components";
 import { NoProfile } from "../assets";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  checktoken,
-  deletePost,
-  fetchPosts,
-  getUserInfo,
-  likePost,
-  viewUserProfile,
-} from "../until";
+
 import { CiLocationOn } from "react-icons/ci";
 import { BsBriefcase, BsFacebook, BsInstagram } from "react-icons/bs";
 import { FaTwitterSquare } from "react-icons/fa";

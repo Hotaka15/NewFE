@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  EditProfile,
-  Notification,
-  ProfileCard,
-  TopBarAdmin,
-  Reportlist,
-} from "../components/index";
+import { EditProfile, TopBarAdmin, Reportlist } from "../components/index";
 import { ListUser } from "../components/index";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest, fetchNotifications } from "../until";

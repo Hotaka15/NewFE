@@ -7,18 +7,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { FaAngleRight } from "react-icons/fa";
 import { MdFeed } from "react-icons/md";
-import {
-  apiRequest,
-  checktoken,
-  deletePost,
-  fetchNotifications,
-  fetchPosts,
-  getUserInfo,
-  handFileUpload,
-  likePost,
-  sendFriendRequest,
-  uploadVideo,
-} from "../until";
+
 import { Loading, PostCard } from "../components/index";
 import { useDispatch } from "react-redux";
 import {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+
 import { NoProfile } from "../assets";
 import CustomButton from "./CustomButton";
-import { apiRequest } from "../until";
+
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useracceptFriendRequest, usergetUserpInfo } from "../until/user";

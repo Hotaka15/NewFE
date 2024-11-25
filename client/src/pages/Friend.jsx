@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  FriendCard,
-  FriendCardSuggest,
-  FriendMain,
-  TopBar,
-} from "../components";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { FriendCardSuggest, TopBar } from "../components";
+import { Link, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
@@ -13,7 +8,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { GiHidden, GiThreeFriends } from "react-icons/gi";
 import { FaAngleRight } from "react-icons/fa";
 import { apiRequest, sendFriendRequest } from "../until";
-import { friends } from "../assets/data";
+
 import FriendCardRequest from "../components/FriendCardRequest";
 import {
   useracceptFriendRequest,
