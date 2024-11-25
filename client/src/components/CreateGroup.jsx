@@ -7,13 +7,17 @@ import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { MdClose } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { userfriendSuggest } from "../until/user";
+import { searchUserName, userfriendSuggest } from "../until/user";
 import { NoProfile } from "../assets";
+import { createGroup } from "../until/group";
 const CreateGroup = ({ setCreatg }) => {
   const { user } = useSelector((state) => state.user);
   const [listsuggest, setListsuggest] = useState([]);
   const [listAdd, setListAdd] = useState([]);
   const navigate = useNavigate();
+  const [name, setName] = useState();
+  const [search, setSearch] = useState("");
+  const [description, setDescription] = useState("");
   const fetchSuggestFriends = async () => {
     try {
       const res = await userfriendSuggest(user?.token, user);
@@ -27,11 +31,47 @@ const CreateGroup = ({ setCreatg }) => {
       console.log(error);
     }
   };
+  const handledelete = (id) => {
+    console.log(id);
+
+    const array = [...listAdd];
+    let newarray = array.filter((item) => item !== id);
+    setListAdd(newarray);
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    console.log(e);
+
+    if (search === "") {
+      fetchSuggestFriends();
+    } else {
+      try {
+        const res = await searchUserName(user?.token, search);
+        console.log(res);
+        setListsuggest(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  const creatGrp = async () => {
+    const userId = user?._id;
+    if (userId) {
+      if (name) {
+        if (description) {
+          if (listAdd.length > 1) {
+            await createGroup(user?.token, userId, name, description, listAdd);
+          }
+        }
+      }
+    }
+  };
 
   const handdlelistadd = (id) => {
     console.log(listAdd);
     const lista = [...listAdd];
-    lista.push(id);
+    !lista?.includes(id) && lista.push(id);
     console.log(id);
 
     setListAdd(lista);
@@ -61,7 +101,10 @@ const CreateGroup = ({ setCreatg }) => {
             <span className="text-ascent-1">Name </span>
             <input
               type="text"
-              className="bg-secondary px-2 py-2 rounded-2xl w-full"
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
               placeholder="Name"
             />
           </div>
@@ -69,17 +112,26 @@ const CreateGroup = ({ setCreatg }) => {
             <span className="text-ascent-1">Description </span>
             <input
               type="text"
-              className="bg-secondary px-2 py-2 rounded-2xl w-full"
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
               placeholder="Description"
             />
           </div>
 
           <span className="text-ascent-1">Member</span>
-          <input
-            type="text"
-            className="bg-secondary px-2 py-2 rounded-2xl"
-            placeholder="Search"
-          />
+          <form onSubmit={(e) => handleSearch(e)}>
+            <input
+              type="text"
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              className="bg-secondary px-2 py-2 rounded-2xl text-ascent-1"
+              placeholder="Search"
+            />
+          </form>
+
           <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap justify-center ">
             {listsuggest &&
               listsuggest.map((suggest) => {
@@ -104,10 +156,18 @@ const CreateGroup = ({ setCreatg }) => {
                 );
               })}
           </div>
-          <div className="h-1/4 flex flex-wrap gap-2 overflow-y-auto content-start">
+          <div className="h-1/4 flex flex-wrap gap-2 overflow-y-auto content-start justify-center">
             {listAdd &&
               listAdd.map((useradd) => {
-                return <UserTiitle useradd={useradd} />;
+                return (
+                  <div
+                    onClick={() => {
+                      handledelete(useradd);
+                    }}
+                  >
+                    <UserTiitle useradd={useradd} />
+                  </div>
+                );
               })}
           </div>
 
@@ -115,6 +175,7 @@ const CreateGroup = ({ setCreatg }) => {
             <CustomButton
               tittle="Submit"
               containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+              onClick={creatGrp}
             />
           </div>
         </div>

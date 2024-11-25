@@ -6,15 +6,15 @@ import { AiOutlineDown } from "react-icons/ai";
 import Loading from "./Loading";
 import CustomButton from "./CustomButton";
 import { UpdatePost, UpdateProfile, UserLogin } from "../redux/userSlice";
-import { apiRequest, fetchPosts, handFileUpload } from "../until";
+import { handFileUpload } from "../until";
 import { FaEarthAfrica } from "react-icons/fa6";
-import { TiDeleteOutline } from "react-icons/ti";
+
 import { CiImageOn, CiShoppingTag } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
-import ListCard from "./ListCard";
-import { postapiRequest, postedit, postfetchPosts } from "../until/post";
+
+import { postedit, postfetchPosts } from "../until/post";
 const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();

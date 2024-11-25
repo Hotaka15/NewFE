@@ -290,10 +290,10 @@ const RangeChat = forwardRef(
             </div>
           </div>
         </div>
-        <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+        {/* <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
           <CiCircleCheck />
           Seen
-        </div>
+        </div> */}
 
         {/* Phần nhập tin nhắn */}
         <div className="relative flex flex-col items-start">
@@ -388,15 +388,18 @@ const UserCard = forwardRef(
       hanldeUserchat,
       socket,
       conversationId,
+      hanldeGroupchat,
+
       fetchList,
       fetchchats,
     },
     ref
   ) => {
     const [avatar, setAvatar] = useState();
-    console.log("UserCard");
+
     const userId = user?._id;
     const [time, setTime] = useState("");
+    const [idroom, setIdroom] = useState("");
     console.log(itemchat);
     const id = itemchat?.members
       ? itemchat.members.find((member) => member !== user?._id)
@@ -424,13 +427,35 @@ const UserCard = forwardRef(
     // }, [conversationId]);
     useEffect(() => {
       joinroom(userId, conversationId);
-      return () => {
+      console.log(conversationId, idroom);
+
+      // return () => {
+      //   if (idroom != conversationId) {
+      //     console.log(idroom);
+
+      //     socket.emit("leaveGroup", { userId, groupId: conversationId });
+      //     console.log(
+      //       `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
+      //     );
+      //   }
+      // };
+    }, [conversationId]);
+
+    const outRoom = async () => {
+      if (idroom != conversationId) {
+        console.log(idroom);
+        console.log(conversationId);
         socket.emit("leaveGroup", { userId, groupId: conversationId });
         console.log(
           `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
         );
+      }
+    };
+    useEffect(() => {
+      return () => {
+        // outRoom();
       };
-    }, [conversationId]);
+    }, []);
 
     const handleTime = () => {
       if (itemchat?.lastMessage?.timestamp) {
@@ -460,14 +485,17 @@ const UserCard = forwardRef(
         return;
       }
     };
+    const handleroom = async () => {
+      await setIdroom(conversationId);
+    };
 
     const handle = () => {
       // eventc();
       console.log(user);
-
-      hanldeUserchat(avatar);
+      setIdroom(conversationId);
+      itemchat?.type == "group" ? hanldeGroupchat() : hanldeUserchat(avatar);
     };
-    const getUser = async () => {
+    const getAvatar = async () => {
       try {
         const res = await usergetUserpInfo(user?.token, id);
         console.log(res);
@@ -478,7 +506,7 @@ const UserCard = forwardRef(
       }
     };
     useEffect(() => {
-      getUser();
+      getAvatar();
       handleTime();
     }, []);
     // console.log(user);
@@ -502,6 +530,7 @@ const UserCard = forwardRef(
             <span className="text-ascent-2 ">{time}</span>
           </div>
           <span className="text-ascent-2">
+            {idroom}
             {itemchat?.lastMessage
               ? itemchat?.lastMessage?.content?.length > 30
                 ? itemchat?.lastMessage?.content.slice(0, 30) + "..."
@@ -614,18 +643,20 @@ const PageChat = ({ listchat, socket, userinfo }) => {
               ) : (
                 <div className="w-full">
                   <div>
-                    {
-                      <div className="flex items-center justify-center w-fit gap-2 mb-2">
-                        <img
-                          src={userinfo?.profileUrl || NoProfile}
-                          className="w-7 h-7 object-cover rounded-lg"
-                          alt=""
-                        />
-                        <span className="text-ascent-2">
-                          {userinfo?.firstName}
-                        </span>
-                      </div>
-                    }
+                    {index < listchat.length &&
+                      listchat[index]?.senderId !=
+                        listchat[index + 1]?.senderId && (
+                        <div className="flex items-center justify-center w-fit gap-2 mb-2">
+                          <img
+                            src={userinfo?.profileUrl || NoProfile}
+                            className="w-7 h-7 object-cover rounded-lg"
+                            alt=""
+                          />
+                          <span className="text-ascent-2">
+                            {userinfo?.firstName}
+                          </span>
+                        </div>
+                      )}
                   </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
                     <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
@@ -648,10 +679,10 @@ const PageChat = ({ listchat, socket, userinfo }) => {
 
           <div className="w-full flex justify-center"></div>
 
-          {/* <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+          <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
             <CiCircleCheck />
             Seen
-          </div> */}
+          </div>
         </div>
       ) : (
         <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
@@ -998,6 +1029,7 @@ const Chat = () => {
   const [listsuggest, setListsuggest] = useState();
   const [socket, setSocket] = useState();
   const [listchat, setListchat] = useState([]);
+  const [listgroup, setListgroup] = useState([]);
   const [addu, setAddu] = useState(false);
   const [roleo, setRoleo] = useState(false);
   const [userinfo, setUserinfo] = useState();
@@ -1028,9 +1060,18 @@ const Chat = () => {
     try {
       const userId = user?._id;
       const res = await chatfetchListpersonal(user?.token, userId);
-      res?.message == "Conversation not found"
-        ? setListchat([])
-        : setListchat(res?.data);
+      if (res?.message == "Conversation not found") {
+        setListchat([]);
+      } else {
+        const lists = [...res?.data];
+        const listPersonal = [];
+        const listGroup = [];
+        listGroup.push(...lists.filter((list) => list?.type === "group"));
+        listPersonal.push(...lists.filter((list) => list?.type === "personal"));
+        setListchat(listPersonal);
+        setListgroup(listGroup);
+      }
+
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -1081,24 +1122,20 @@ const Chat = () => {
     } catch (error) {
       console.log(error);
     }
+  };
 
-    // for (const item of listchat) {
-    //   if (item.members && item.members.includes(user?._id)) {
-    //     log("true");
+  const hanldeGroupchat = async (itemchat) => {
+    console.log(itemchat);
+    userChat(itemchat);
 
-    //     // setNewChat(true);
-    //     break;
-    //   } else {
-    //     try {
-    //       console.log(id_2);
+    try {
+      // const res = await createConversations(user?.token, id_1, id_2);
 
-    //       const res = await createConversations(user?.token, id_1, id_2);
-    //       console.log(res);
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    //}
+      console.log(123);
+      setIdroom(itemchat?._id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // useEffect(() => {
@@ -1238,7 +1275,9 @@ const Chat = () => {
             )}
 
             <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
-              {listchat && listchat.length > 0 ? (
+              {type == "inbox" &&
+                listchat &&
+                listchat.length > 0 &&
                 listchat.map((itemchat) => {
                   return (
                     <UserCard
@@ -1258,12 +1297,33 @@ const Chat = () => {
                       // }}
                     />
                   );
-                })
-              ) : (
-                <div className="w-full text-ascent-2 h-1/3 flex justify-center items-center text-xl ">
-                  Conversation not found
-                </div>
-              )}
+                })}
+
+              {type == "group" &&
+                listgroup &&
+                listgroup.length > 0 &&
+                listgroup.map((itemchat) => {
+                  return (
+                    <UserCard
+                      key={itemchat?._id}
+                      user={user}
+                      socket={socket}
+                      itemchat={itemchat}
+                      conversationId={itemchat?._id}
+                      fetchList={fetchList}
+                      ref={childRef}
+                      // event={() => {
+                      //   onchangepage(user?.page);
+                      // }}
+                      hanldeGroupchat={() => {
+                        hanldeGroupchat(itemchat);
+                      }}
+                      // onUser={() => {
+                      //   hanldeUserchat(user);
+                      // }}
+                    />
+                  );
+                })}
               {/* <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
                 <div className="w-full px-5 text-xl">Suggest</div>
                 {listsuggest &&
@@ -1283,6 +1343,7 @@ const Chat = () => {
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>
+
           <RangeChat
             user={user}
             userinfo={userinfo}

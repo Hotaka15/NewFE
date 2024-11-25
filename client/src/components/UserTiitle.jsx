@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { IoMdCloseCircle } from "react-icons/io";
 import { usergetUserInfo } from "../until/user";
+import { NoProfile } from "../assets";
 const UserTiitle = ({ useradd }) => {
   const { user } = useSelector((state) => state.user);
   const [avatar, setAvatar] = useState();
@@ -20,7 +21,7 @@ const UserTiitle = ({ useradd }) => {
   return (
     <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
       <img
-        src={avatar?.profileUrl}
+        src={avatar?.profileUrl || NoProfile}
         alt=""
         className="h-5 w-5 object-cover rounded-full"
       />
