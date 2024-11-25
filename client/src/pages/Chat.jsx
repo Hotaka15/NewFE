@@ -290,6 +290,10 @@ const RangeChat = forwardRef(
             </div>
           </div>
         </div>
+        <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+          <CiCircleCheck />
+          Seen
+        </div>
 
         {/* Phần nhập tin nhắn */}
         <div className="relative flex flex-col items-start">
@@ -512,7 +516,7 @@ const UserCard = forwardRef(
 
 const PageChat = ({ listchat, socket, userinfo }) => {
   const { user } = useSelector((state) => state.user);
-  const [isme, setisme] = useState(true);
+  const [isme, setIsme] = useState(true);
   console.log(listchat);
   {
     /* <div className="w-full flex justify-center">
@@ -581,12 +585,12 @@ const PageChat = ({ listchat, socket, userinfo }) => {
       id="window_chatlist"
       className="w-full h-full flex justify-center items-start grow-0"
     >
-      {listchat?.length > 0 ? (
-        <div id="window_chat" className="flex flex-col gap-2 w-full ">
+      {listchat && listchat?.length > 0 ? (
+        <div id="window_chat" className="flex flex-col gap-2 w-full h-full">
           {listchat
             ?.slice() // Tạo một bản sao của mảng
             .reverse()
-            ?.map((chat) => {
+            ?.map((chat, index, listchat) => {
               return chat?.senderId == user?._id ? (
                 <div className="w-full flex  justify-end">
                   <div className="flex flex-col items-end">
@@ -610,12 +614,18 @@ const PageChat = ({ listchat, socket, userinfo }) => {
               ) : (
                 <div className="w-full">
                   <div>
-                    <img
-                      src={userinfo?.profileUrl || NoProfile}
-                      className="w-10 h-10 object-cover rounded-lg"
-                      alt=""
-                    />
-                    <span className="text-ascent-2">{userinfo?.lastName}</span>
+                    {
+                      <div className="flex items-center justify-center w-fit gap-2 mb-2">
+                        <img
+                          src={userinfo?.profileUrl || NoProfile}
+                          className="w-7 h-7 object-cover rounded-lg"
+                          alt=""
+                        />
+                        <span className="text-ascent-2">
+                          {userinfo?.firstName}
+                        </span>
+                      </div>
+                    }
                   </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
                     <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
@@ -638,10 +648,10 @@ const PageChat = ({ listchat, socket, userinfo }) => {
 
           <div className="w-full flex justify-center"></div>
 
-          <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+          {/* <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
             <CiCircleCheck />
             Seen
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
@@ -652,259 +662,259 @@ const PageChat = ({ listchat, socket, userinfo }) => {
   );
 };
 
-const Pagechat_1 = () => {
-  return (
-    <div className="flex flex-col gap-2 w-full overflow-auto h-full">
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
-            Chào anh/chị, em có thể giúp gì cho anh/chị?
-          </p>
-          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
-            9AM
-          </div>
-        </div>
-      </div>
+// const Pagechat_1 = () => {
+//   return (
+//     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+//             Chào anh/chị, em có thể giúp gì cho anh/chị?
+//           </p>
+//           <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+//             9AM
+//           </div>
+//         </div>
+//       </div>
 
-      {/* <div className="w-full flex justify-center">
-        <span className="text-ascent-1 ">20/10/2024</span>
-      </div> */}
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-1">
-            Dạ, anh/chị quan tâm đến dòng nào ạ? Hiện tại bên em có rất nhiều
-            mẫu điện thoại với camera chất lượng cao như Samsung Galaxy S23,
-            iPhone 14 Pro Max,...
-          </p>
-          <div className="flex justify-end w-full text-white text-xs pt-1 py-2 ">
-            9AM
-          </div>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
-            Em giới thiệu cho anh chiếc nào pin trâu với, anh hay đi công tác.
-          </p>
-          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
-            9AM
-          </div>
-        </div>
-      </div>
+//       {/* <div className="w-full flex justify-center">
+//         <span className="text-ascent-1 ">20/10/2024</span>
+//       </div> */}
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-1">
+//             Dạ, anh/chị quan tâm đến dòng nào ạ? Hiện tại bên em có rất nhiều
+//             mẫu điện thoại với camera chất lượng cao như Samsung Galaxy S23,
+//             iPhone 14 Pro Max,...
+//           </p>
+//           <div className="flex justify-end w-full text-white text-xs pt-1 py-2 ">
+//             9AM
+//           </div>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+//             Em giới thiệu cho anh chiếc nào pin trâu với, anh hay đi công tác.
+//           </p>
+//           <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+//             9AM
+//           </div>
+//         </div>
+//       </div>
 
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-1">
-            Chào em, em tư vấn cho anh một chiếc điện thoại chụp hình đẹp với.
-          </p>
-        </div>
-      </div>
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-1">
+//             Chào em, em tư vấn cho anh một chiếc điện thoại chụp hình đẹp với.
+//           </p>
+//         </div>
+//       </div>
 
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
-            Dạ, với nhu cầu của anh thì em khuyên anh nên tham khảo dòng Samsung
-            Galaxy A series hoặc iPhone 13. Hai dòng này đều có pin rất tốt và
-            nhiều tính năng hữu ích.
-          </p>
-          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
-            9AM
-          </div>
-        </div>
-      </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+//             Dạ, với nhu cầu của anh thì em khuyên anh nên tham khảo dòng Samsung
+//             Galaxy A series hoặc iPhone 13. Hai dòng này đều có pin rất tốt và
+//             nhiều tính năng hữu ích.
+//           </p>
+//           <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+//             9AM
+//           </div>
+//         </div>
+//       </div>
 
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-1">
-            Vậy em cho anh so sánh hai dòng này với nhau được không?
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
-            Dạ được ạ, Samsung Galaxy A series thường có giá thành phải chăng
-            hơn, trong khi iPhone 13 thì hệ điều hành ổn định và bảo mật cao
-            hơn.
-          </p>
-          <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
-            9AM
-          </div>
-        </div>
-      </div>
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-1">
+//             Vậy em cho anh so sánh hai dòng này với nhau được không?
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+//             Dạ được ạ, Samsung Galaxy A series thường có giá thành phải chăng
+//             hơn, trong khi iPhone 13 thì hệ điều hành ổn định và bảo mật cao
+//             hơn.
+//           </p>
+//           <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+//             9AM
+//           </div>
+//         </div>
+//       </div>
 
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-1">
-            Vậy anh sẽ cân nhắc thêm. Cảm ơn em.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
-        <CiCircleCheck />
-        Seen
-      </div>
-    </div>
-  );
-};
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-1">
+//             Vậy anh sẽ cân nhắc thêm. Cảm ơn em.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+//         <CiCircleCheck />
+//         Seen
+//       </div>
+//     </div>
+//   );
+// };
 
-const Pagechat_2 = () => {
-  return (
-    <div className="flex flex-col gap-2 w-full overflow-auto h-full">
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Mình nghĩ chúng ta nên có một cuộc họp để bàn về dự án X. Bạn có
-            rảnh vào thứ Tư tuần sau không? Cụ thể là tầm 2h chiều thì sao?
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Thứ Tư tuần sau thì mình hơi bận rồi. Thứ Hai lúc 10h sáng hoặc thứ
-            Ba lúc 14h chiều thì mình đều có thể sắp xếp.
-          </p>
-        </div>
-        {/* <img src={BgImage} alt="" className="w-1/3 p-2 ml-2 rounded-3xl" /> */}
-      </div>
+// const Pagechat_2 = () => {
+//   return (
+//     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Mình nghĩ chúng ta nên có một cuộc họp để bàn về dự án X. Bạn có
+//             rảnh vào thứ Tư tuần sau không? Cụ thể là tầm 2h chiều thì sao?
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Thứ Tư tuần sau thì mình hơi bận rồi. Thứ Hai lúc 10h sáng hoặc thứ
+//             Ba lúc 14h chiều thì mình đều có thể sắp xếp.
+//           </p>
+//         </div>
+//         {/* <img src={BgImage} alt="" className="w-1/3 p-2 ml-2 rounded-3xl" /> */}
+//       </div>
 
-      <div className="w-full flex justify-center">
-        <span className="text-ascent-1 ">20/10/2024</span>
-      </div>
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Thứ Hai lúc 10h sáng nghe ổn đó. Phòng họp 3 có sẵn không nhỉ? Phòng
-            đó khá yên tĩnh và đầy đủ tiện nghi.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Ok, phòng họp 3 rất phù hợp. Vậy là mình sẽ họp vào thứ Hai lúc 10h
-            sáng tại phòng họp 3 nhé.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
+//       <div className="w-full flex justify-center">
+//         <span className="text-ascent-1 ">20/10/2024</span>
+//       </div>
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Thứ Hai lúc 10h sáng nghe ổn đó. Phòng họp 3 có sẵn không nhỉ? Phòng
+//             đó khá yên tĩnh và đầy đủ tiện nghi.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Ok, phòng họp 3 rất phù hợp. Vậy là mình sẽ họp vào thứ Hai lúc 10h
+//             sáng tại phòng họp 3 nhé.
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-const Pagechat_3 = () => {
-  return (
-    <div className="flex flex-col gap-2 w-full overflow-auto h-full">
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Này Bình, mình rảnh trưa nay nè. Đi ăn trưa không?
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Có chỗ mới khai trương gần công ty mình, nghe nói đồ ăn ngon lắm!
-          </p>
-        </div>
-        <img src={BgImage} alt="" className="w-1/3 p-2 ml-2 rounded-3xl" />
-      </div>
+// const Pagechat_3 = () => {
+//   return (
+//     <div className="flex flex-col gap-2 w-full overflow-auto h-full">
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Này Bình, mình rảnh trưa nay nè. Đi ăn trưa không?
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Có chỗ mới khai trương gần công ty mình, nghe nói đồ ăn ngon lắm!
+//           </p>
+//         </div>
+//         <img src={BgImage} alt="" className="w-1/3 p-2 ml-2 rounded-3xl" />
+//       </div>
 
-      <div className="w-full flex justify-center">
-        <span className="text-ascent-1 ">20/10/2024</span>
-      </div>
-      <div className="w-full flex justify-center"></div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Uh, hay quá đi! Mình cũng đói meo rồi.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Mình đi nhé! Khoảng 12h mình qua đón bạn.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            À, bạn muốn ăn gì đặc biệt không? Mình đặt trước luôn.
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Ok, mình không kén ăn đâu. Bạn quyết định đi.
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Nhưng mà mình thích ăn đồ Nhật lắm đấy.
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Nếu có sushi hoặc ramen thì tuyệt vời luôn.💕
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Yên tâm, mình nhớ rồi. Mình sẽ đặt một bàn ở quán sushi đó.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Gặp bạn lúc 12h nhé!
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            Ok, hẹn gặp bạn lúc 12h.
-          </p>
-        </div>
-      </div>
-      <div className="w-full">
-        <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-          <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
-            À, nhớ mang theo ví đấy nhé, kẻo lại tranh nhau trả tiền.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">
-            Haha, yên tâm đi. Mình mang theo đủ rồi.
-          </p>
-        </div>
-      </div>
-      <div className="w-full flex justify-end">
-        <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-          <p className="text-justify text-white px-2 py-2">See you soon!</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+//       <div className="w-full flex justify-center">
+//         <span className="text-ascent-1 ">20/10/2024</span>
+//       </div>
+//       <div className="w-full flex justify-center"></div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Uh, hay quá đi! Mình cũng đói meo rồi.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Mình đi nhé! Khoảng 12h mình qua đón bạn.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             À, bạn muốn ăn gì đặc biệt không? Mình đặt trước luôn.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Ok, mình không kén ăn đâu. Bạn quyết định đi.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Nhưng mà mình thích ăn đồ Nhật lắm đấy.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Nếu có sushi hoặc ramen thì tuyệt vời luôn.💕
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Yên tâm, mình nhớ rồi. Mình sẽ đặt một bàn ở quán sushi đó.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Gặp bạn lúc 12h nhé!
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             Ok, hẹn gặp bạn lúc 12h.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full">
+//         <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+//           <p className="text-justify text-ascent-1 px-2 py-2 w-fit">
+//             À, nhớ mang theo ví đấy nhé, kẻo lại tranh nhau trả tiền.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">
+//             Haha, yên tâm đi. Mình mang theo đủ rồi.
+//           </p>
+//         </div>
+//       </div>
+//       <div className="w-full flex justify-end">
+//         <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
+//           <p className="text-justify text-white px-2 py-2">See you soon!</p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const Chat = () => {
   const { user, edit } = useSelector((state) => state.user);
@@ -1254,9 +1264,9 @@ const Chat = () => {
                   Conversation not found
                 </div>
               )}
-              <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
+              {/* <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
                 <div className="w-full px-5 text-xl">Suggest</div>
-                {/* {listsuggest &&
+                {listsuggest &&
                   listsuggest?.length > 0 &&
                   listsuggest?.map((user) => {
                     return (
@@ -1268,8 +1278,8 @@ const Chat = () => {
                         }}
                       />
                     );
-                  })} */}
-              </div>
+                  })}
+              </div> */}
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>

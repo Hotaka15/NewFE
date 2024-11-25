@@ -19,6 +19,7 @@ import Editpost from "./Editpost";
 import { postapiRequest, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
+import VideoPlayer from "./VideoPlayer";
 
 const getPostComments = async (id, user) => {
   console.log(user?.token);
@@ -300,6 +301,16 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
       console.log(error);
     }
   };
+  const videoJsOptions = {
+    controls: true, // Hiển thị điều khiển
+    autoplay: false, // Không tự động phát
+    preload: "auto", // Tự động tải
+    sources: [
+      {
+        src: "https://vjs.zencdn.net/v/oceans.mp4", // Đường dẫn video
+      },
+    ],
+  };
 
   const handlerpdetail = () => {
     setReportdetail(!reportdetail);
@@ -432,7 +443,15 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
                 ))}
             </p>
           </Link>
-
+          {post?.urlVideo && (
+            <div className="h-full flex justify-center items-center">
+              <video controls width="650px">
+                <source src={post?.urlVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              {/* <VideoPlayer options={videoJsOptions} /> */}
+            </div>
+          )}
           {post?.image && (
             <div className="h-full flex justify-center items-center">
               <img
