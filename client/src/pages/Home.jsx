@@ -668,6 +668,7 @@ const Home = () => {
                 <p className="text-lg text-ascent-2">No Post Available</p>
               </div>
             )}
+            {!loading && <Loading />}
           </div>
           {/* {RIGHT} */}
           <div className="hidden w-1/5 h-full lg:flex flex-col gap-6 overflow-y-auto flex-initial">

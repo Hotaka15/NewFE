@@ -58,7 +58,12 @@ const FriendCardRequest = ({
           className="w-44 h-44  object-cover"
         />
         <div className="w-full h-full py-3 flex flex-col justify-center items-center font-bold gap-5">
-          <span className="text-ascent-1 ">
+          <span
+            className="text-ascent-1 cursor-pointer"
+            onClick={() => {
+              navigate("/profilefix/" + userr?._id);
+            }}
+          >
             {userr?.firstName} {userr?.lastName}
           </span>
           <div className="w-4/5">

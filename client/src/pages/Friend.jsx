@@ -306,7 +306,7 @@ lg:rounded-lg h-screen overflow-hidden"
 
                 <div className="flex justify-center items-center flex-col">
                   <div className="w-2/3 h-fit flex gap-4 flex-wrap">
-                    {suggestedFriends.length > 0 ? (
+                    {suggestedFriends && suggestedFriends.length > 0 ? (
                       suggestedFriends.map((friend) => {
                         console.log(friend);
 
