@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPostcardHeartFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
@@ -7,21 +7,26 @@ import PieChartRp from "./PieChartRp";
 import BarRp from "./BarRp";
 import RecentRp from "./RecentRp";
 import {
-  dayreportDashboard,
-  reportsbypostDashboard,
-  reportsbyreasonDashboard,
+  ageDashboard,
+  genderDashboard,
+  monthregisterDashboard,
+  userDashboard,
 } from "../until/dashboard";
-const Chart = () => {
-  const fetchdashboard = async () => {
-    const byreason = await reportsbyreasonDashboard();
-    console.log(byreason);
-    const bypost = await reportsbypostDashboard();
-    console.log(bypost);
-    const report = await dayreportDashboard();
-    console.log(report);
+const UserChart = () => {
+  const [genders, setGenders] = useState([]);
+  const fetchuserdashboard = async () => {
+    const age = await ageDashboard();
+    console.log(age);
+    const gender = await genderDashboard();
+    setGenders(gender);
+    console.log(gender);
+    const monthly = await monthregisterDashboard();
+    console.log(monthly);
+    const getuser = await userDashboard();
+    console.log(getuser);
   };
-  useState(() => {
-    fetchdashboard();
+  useEffect(() => {
+    fetchuserdashboard();
   }, []);
   return (
     <div className="w-full h-full bg-primary py-4 ga">
@@ -57,7 +62,7 @@ const Chart = () => {
       </div>
       <div className="w-full flex gap-4 mb-4">
         <BarRp />
-        <PieChartRp />
+        <PieChartRp genders={genders} />
       </div>
       <div className="w-full ">
         <RecentRp />
@@ -66,4 +71,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default UserChart;

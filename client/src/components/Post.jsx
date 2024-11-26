@@ -21,6 +21,7 @@ import {
   postfetchPosts,
   postrenewfetchPosts,
 } from "../until/post";
+import { aicheckpost } from "../until/ai";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Post = ({ setPage }) => {
   const [option, setOption] = useState("public");
   const [videoFile, setVideoFile] = useState(null);
   const [videoUpload, setVideoUpload] = useState(null);
+  const [err, setErr] = useState("");
   const handlebg = (e) => {
     // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
@@ -94,23 +96,41 @@ const Post = ({ setPage }) => {
     lists.includes(id) ? (check = true) : (check = false);
   };
 
+  const checkpost = async (data) => {
+    console.log(data);
+
+    try {
+      const res = await aicheckpost(data);
+      console.log(res);
+      return res?.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleFileChange = (e) => {
+    const maxFileSize = 50 * 1024 * 1024;
     console.log(e.target.files[0]);
+    console.log(e.target.files[0].size);
 
     const filevideo = e.target.files[0];
     if (filevideo) {
-      setVideoUpload(filevideo);
-
-      setVideoFile(URL.createObjectURL(filevideo));
+      if (filevideo.size > maxFileSize) {
+        setErr("Video must be under 50mb");
+      } else {
+        setVideoUpload(filevideo);
+        setVideoFile(URL.createObjectURL(filevideo));
+        setErr("");
+      }
     }
   };
 
   const handlePostSubmit = async (data) => {
     setPosting(true);
-    setPreview(false);
-    seterrMsg("");
+
     data.visibility = option;
-    // console.log(data);
+    console.log(data);
+    checkpost(data);
 
     try {
       const uri = file && (await handFileUpload(file));
@@ -120,29 +140,39 @@ const Post = ({ setPage }) => {
         : uriv
         ? { ...data, urlVideo: uriv }
         : data;
-      const res = await postapiRequest({
-        url: "",
-        data: newData,
-        token: user?.token,
-        method: "POST",
-      });
-      console.log(res);
+      const checked = await checkpost(newData);
+      console.log(checked);
 
-      if (res?.status === "failed") {
-        seterrMsg(res);
-      } else {
-        reset({
-          description: "",
+      if (checked && checked?.sensitive == false) {
+        setErr("");
+        setPreview(false);
+        const res = await postapiRequest({
+          url: "",
+          data: newData,
+          token: user?.token,
+          method: "POST",
         });
+        console.log(res);
+
+        if (res?.status === "failed") {
+          seterrMsg(res);
+        } else {
+          reset({
+            description: "",
+          });
+          setFile(null);
+          seterrMsg("");
+          // await postrenewfetchPosts(user?.token, dispatch, 1);
+          await setPage();
+        }
+        setPosting(false);
         setFile(null);
-        seterrMsg("");
-        // await postrenewfetchPosts(user?.token, dispatch, 1);
-        await setPage();
+        setPreview(false);
+        handleClose();
+      } else {
+        setPosting(false);
+        setErr("Sensitive content");
       }
-      setPosting(false);
-      setFile(null);
-      setPreview(false);
-      handleClose();
     } catch (error) {
       console.log(error);
       setPosting(false);
@@ -269,13 +299,13 @@ const Post = ({ setPage }) => {
                             <div className="flex gap-3 mt-2">
                               <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
                                 <CiShoppingTag />
-                                <div className="hover:text-ascent-1">Tags</div>
+                                <div className="">Tags</div>
                               </div>
 
                               <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
                                 <label
                                   htmlFor="imgUpload"
-                                  className="flex items-center gap-1 text-base text-[#345cd9] hover:text-ascent-1 cursor-pointer"
+                                  className="flex items-center gap-1 text-base text-[#345cd9]  cursor-pointer"
                                 >
                                   <input
                                     type="file"
@@ -295,7 +325,7 @@ const Post = ({ setPage }) => {
                               <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
                                 <label
                                   htmlFor="videoUpload"
-                                  className="flex items-center gap-1 text-base text-[#e30b65] hover:text-ascent-1 cursor-pointer"
+                                  className="flex items-center gap-1 text-base text-[#e30b65]  cursor-pointer"
                                 >
                                   <input
                                     type="file"
@@ -315,6 +345,11 @@ const Post = ({ setPage }) => {
                           )}
 
                           <div className="w-full flex justify-end">
+                            {err && (
+                              <div className="w-full flex justify-center items-center text-[#f64949fe]">
+                                {err}
+                              </div>
+                            )}
                             {posting ? (
                               <div className="w-full flex justify-center items-center mx-2">
                                 <Loading />
@@ -405,7 +440,7 @@ const Post = ({ setPage }) => {
                             >
                               Friend
                               <br />
-                              <span className="text-ascent-3 text-base">
+                              <span className="text-ascent-2 text-base">
                                 Your friends
                               </span>
                             </label>

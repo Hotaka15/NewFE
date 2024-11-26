@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { EditProfile, TopBarAdmin, Reportlist } from "../components/index";
+import {
+  EditProfile,
+  TopBarAdmin,
+  Reportlist,
+  UserChart,
+} from "../components/index";
 import { ListUser } from "../components/index";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRequest, fetchNotifications } from "../until";
@@ -93,7 +98,15 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              DashBoard
+              DashBoard User
+            </div>
+            <div
+              onClick={() => {
+                setPage(4);
+              }}
+              className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
+            >
+              DashBoard Report
             </div>
             <div
               onClick={() => {
@@ -123,8 +136,10 @@ lg:rounded-lg h-screen overflow-hidden"
                 fetchUser={fetchUser}
                 setListUser={setListUser}
               />
-            ) : (
+            ) : page == 3 ? (
               <Reportlist user={user} />
+            ) : (
+              <UserChart />
             )}
           </div>
         </div>

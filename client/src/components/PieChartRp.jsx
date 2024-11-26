@@ -2,13 +2,21 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
 const data = [
-  { name: "Active", value: 540 },
-  { name: "InActive", value: 620 },
-  // { name: "Other", value: 210 },
+  { name: "null", value: 8 },
+  { name: "female", value: 15 },
+  { name: "male", value: 23 },
+  { name: "other", value: 27 },
+  { name: "prefer_not_to_say", value: 43 },
 ];
-
+// const data = [
+//   { count: 8, gender: null },
+//   { count: 15, gender: "female" },
+//   { count: 23, gender: "male" },
+//   { count: 27, gender: "other" },
+//   { count: 43, gender: "prefer_not_to_say" },
+// ];
 const RADIAN = Math.PI / 180;
-const COLORS = ["#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#00C49F", "#FFBB28", "#FF8042", "#cb4335", "#2874a6 "];
 
 const renderCustomizedLabel = ({
   cx,
@@ -35,7 +43,7 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function PieChartRp() {
+export default function PieChartRp({ genders }) {
   return (
     <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
       <strong className="text-gray-700 font-medium text-ascent-1">

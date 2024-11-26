@@ -28,6 +28,7 @@ import ReportCard from "./ReportCard";
 import UserTiitle from "./UserTiitle";
 import Inbox from "./Inbox";
 import Postrange from "./Postrange";
+import UserChart from "./UserChart";
 export {
   TextInput,
   Loading,
@@ -59,4 +60,5 @@ export {
   UserTiitle,
   Inbox,
   Postrange,
+  UserChart,
 };

@@ -20,11 +20,11 @@ import { CiSettings } from "react-icons/ci";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { UpdateProfile } from "../redux/userSlice";
 import { GoSun } from "react-icons/go";
-
+import { IoMdSettings } from "react-icons/io";
 import { NoProfile } from "../assets";
 import { notifetchNotifications } from "../until/noti";
 import { postsearchfetchPosts } from "../until/post";
-
+import { IoLogOut } from "react-icons/io5";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -238,7 +238,7 @@ const TopBar = ({ user, setKey }) => {
               onClick={() => dispatch(UpdateProfile(true))}
             >
               <div className="flex justify-center items-center">
-                <CiSettings size={30} />
+                <IoMdSettings size={25} />
                 Setting
               </div>
             </div>
@@ -247,7 +247,7 @@ const TopBar = ({ user, setKey }) => {
               onClick={() => handleLogout()}
             >
               <div className="flex justify-center items-center ">
-                <PiSignOut size={30} />
+                <IoLogOut size={25} />
                 Logout
               </div>
             </div>
