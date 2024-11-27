@@ -20,26 +20,13 @@ import { sendFriendRequest } from "../until";
 import Cookies from "js-cookie";
 
 const ProfileCard = ({ user }) => {
-  const { user: data, edit } = useSelector((state) => state.user);
+  // const { user: data, edit } = useSelector((state) => state.user);
   const token = useSelector((state) => state.user);
   // console.log(token?.user?.token);
   const dispatch = useDispatch();
   // console.log(user);
   const navigate = useNavigate();
-  const handleFriendRequest = async (id) => {
-    try {
-      const res = await sendFriendRequest(token?.user?.token, id);
 
-      if (res?.status === "failed") {
-        console.print(res);
-        Cookies.set("message", res?.message, { expires: 7 });
-        navigate("/error");
-      }
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <div>
       <div

@@ -530,7 +530,6 @@ const UserCard = forwardRef(
             <span className="text-ascent-2 ">{time}</span>
           </div>
           <span className="text-ascent-2">
-            {idroom}
             {itemchat?.lastMessage
               ? itemchat?.lastMessage?.content?.length > 30
                 ? itemchat?.lastMessage?.content.slice(0, 30) + "..."

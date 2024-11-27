@@ -92,7 +92,7 @@ const Profile = () => {
     setLoading(true);
     getUser();
     getPosts();
-    // test();
+
     setLoading(false);
   }, [id]);
   return (
@@ -108,7 +108,8 @@ const Profile = () => {
             className="hidden w-1/3 lg:w-1/4 h-full md:flex flex-col gap-6
         overflow-y-auto"
           >
-            <ProfileCard user={userInfor} />
+            {loading ? <Loading /> : <ProfileCard user={userInfor} />}
+
             <div className="block lg:hidden">
               {/* <FriendsCard friends={userInfor?.friends} /> */}
             </div>

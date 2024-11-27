@@ -39,12 +39,57 @@ const EditProfile = () => {
     defaultValues: { ...user },
   });
 
+  // const onSubmit = async (data) => {
+  //   setisSubmitting(true);
+  //   seterrMsg("");
+  //   try {
+  //     const uri = picture && (await handFileUpload(picture));
+  //     const { firstName, lastName, location, profession } = data;
+
+  //     const res = await userapiRequest({
+  //       url: "",
+  //       data: {
+  //         firstName,
+  //         lastName,
+  //         location,
+  //         profileUrl: uri ? uri : user?.profileUrl,
+  //         profession,
+  //       },
+  //       method: "PUT",
+  //       token: user?.token,
+  //     });
+
+  //     console.log(res);
+  //     if (res?.status === "failed") {
+  //       seterrMsg(res);
+  //     } else {
+  //       seterrMsg(res);
+
+  //       // const newUser = { token: res?.token, ...res?.user };
+  //       const newUser = { token: user?.token, ...res };
+
+  //       dispatch(UserLogin(newUser));
+
+  //       setTimeout(() => {
+  //         dispatch(UpdateProfile(false));
+  //       }, 3000);
+  //     }
+  //     setisSubmitting(false);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     // console.log(error);
+  //     setisSubmitting(false);
+  //   }
+  // };
   const onSubmit = async (data) => {
+    console.log(data);
+
     setisSubmitting(true);
     seterrMsg("");
     try {
       const uri = picture && (await handFileUpload(picture));
-      const { firstName, lastName, location, profession } = data;
+      const { firstName, lastName, location, profession, gender, birthDate } =
+        data;
 
       const res = await userapiRequest({
         url: "",
@@ -54,6 +99,8 @@ const EditProfile = () => {
           location,
           profileUrl: uri ? uri : user?.profileUrl,
           profession,
+          gender,
+          birthDate,
         },
         method: "PUT",
         token: user?.token,
@@ -65,7 +112,6 @@ const EditProfile = () => {
       } else {
         seterrMsg(res);
 
-        // const newUser = { token: res?.token, ...res?.user };
         const newUser = { token: user?.token, ...res };
 
         dispatch(UserLogin(newUser));
@@ -75,11 +121,16 @@ const EditProfile = () => {
         }, 3000);
       }
       setisSubmitting(false);
+
       window.location.reload();
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       setisSubmitting(false);
     }
+    // const { firstName, lastName, location, profession } = data;
+    console.log("submits");
+
+    console.log(data);
   };
 
   const handleClose = () => {
@@ -127,26 +178,54 @@ const EditProfile = () => {
               className="px-4 sm:px-6 flex flex-col gap-3 2xl:gap-6"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <TextInput
-                label="First Name"
-                placeholder="First Name"
-                type="text"
-                styles="w-full"
-                register={register("firstName", {
-                  required: "First name is required",
-                })}
-                error={errors.firstName ? errors.firstName?.message : ""}
-              />
-              <TextInput
-                label="Last Name"
-                placeholder="Last Name"
-                type="text"
-                styles="w-full"
-                register={register("lastName", {
-                  required: "Last name is required!",
-                })}
-                error={errors.lastName ? errors.lastName?.message : ""}
-              />
+              <div className="flex gap-4">
+                <TextInput
+                  label="First Name"
+                  placeholder="First Name"
+                  type="text"
+                  styles="w-full"
+                  register={register("firstName", {
+                    required: "First name is required",
+                  })}
+                  error={errors.firstName ? errors.firstName?.message : ""}
+                />
+                <TextInput
+                  label="Last Name"
+                  placeholder="Last Name"
+                  type="text"
+                  styles="w-full"
+                  register={register("lastName", {
+                    required: "Last name is required!",
+                  })}
+                  error={errors.lastName ? errors.lastName?.message : ""}
+                />
+              </div>
+              <div className="flex gap-4">
+                <div className="w-1/2">
+                  <p className={`text-ascent-2 text-sm mb-2`}>Gender</p>
+                  <select
+                    {...register("gender")}
+                    className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
+                  >
+                    <option selected value="male">
+                      Male
+                    </option>
+                    <option value="female">Female</option>
+                    <option value="other">Orther</option>
+                  </select>
+                </div>
+                <div className="w-1/2">
+                  <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                  <input
+                    {...register("birthDate")}
+                    type="date"
+                    className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
+                    // onClick={(e) => {
+                    //   console.log(e.target.value);
+                    // }}
+                  />
+                </div>
+              </div>
               <TextInput
                 label="profession"
                 placeholder="Profession"

@@ -50,48 +50,54 @@ const EditFix = () => {
   // );
   // console.log(partialEmail);
   const onSubmit = async (data) => {
-    // setisSubmitting(true);
-    // seterrMsg("");
-    // try {
-    //   const uri = picture && (await handFileUpload(picture));
-    //   const { firstName, lastName, location, profession } = data;
+    console.log(data);
 
-    //   const res = await userapiRequest({
-    //     url: "",
-    //     data: {
-    //       firstName,
-    //       lastName,
-    //       location,
-    //       profileUrl: uri ? uri : user?.profileUrl,
-    //       profession,
-    //     },
-    //     method: "PUT",
-    //     token: user?.token,
-    //   });
+    setisSubmitting(true);
+    seterrMsg("");
+    try {
+      const uri = picture && (await handFileUpload(picture));
+      const { firstName, lastName, location, profession, gender, birthDate } =
+        data;
 
-    //   console.log(res);
-    //   if (res?.status === "failed") {
-    //     seterrMsg(res);
-    //   } else {
-    //     seterrMsg(res);
+      const res = await userapiRequest({
+        url: "",
+        data: {
+          firstName,
+          lastName,
+          location,
+          profileUrl: uri ? uri : user?.profileUrl,
+          profession,
+          gender,
+          birthDate,
+        },
+        method: "PUT",
+        token: user?.token,
+      });
 
-    //     const newUser = { token: user?.token, ...res };
+      console.log(res);
+      if (res?.status === "failed") {
+        seterrMsg(res);
+      } else {
+        seterrMsg(res);
 
-    //     dispatch(UserLogin(newUser));
+        const newUser = { token: user?.token, ...res };
 
-    //     setTimeout(() => {
-    //       dispatch(UpdateProfile(false));
-    //     }, 3000);
-    //   }
-    //   setisSubmitting(false);
-    //   // window.location.reload();
-    // } catch (error) {
-    //   console.log(error);
-    //   setisSubmitting(false);
-    // }
+        dispatch(UserLogin(newUser));
+
+        setTimeout(() => {
+          dispatch(UpdateProfile(false));
+        }, 3000);
+      }
+      setisSubmitting(false);
+
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      setisSubmitting(false);
+    }
     // const { firstName, lastName, location, profession } = data;
     console.log("submits");
-    window.location.reload();
+
     console.log(data);
   };
 
@@ -286,20 +292,22 @@ const EditFix = () => {
                       {...register("gender")}
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
                     >
-                      <option selected value="Male">
+                      <option selected value="male">
                         Male
                       </option>
-                      <option value="Female">Female</option>
+                      <option value="female">Female</option>
+                      <option value="other">Orther</option>
                     </select>
                   </div>
                   <div className="w-1/2">
                     <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
                     <input
+                      {...register("birthDate")}
                       type="date"
                       className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
-                      onClick={(e) => {
-                        console.log(e.target.value);
-                      }}
+                      // onClick={(e) => {
+                      //   console.log(e.target.value);
+                      // }}
                     />
                   </div>
                 </div>
@@ -325,23 +333,9 @@ const EditFix = () => {
                   })}
                   error={errors.location ? errors.location?.message : ""}
                 />
-
-                {/* <label
-                  className="flex items-center gap-1 text-base text-ascent-2
-              hover:text-ascent cursor-pointer my-4"
-                  htmlFor="imgUpload"
-                >
-                  <input
-                    type="file"
-                    className=""
-                    id="imgUpload"
-                    onChange={(e) => handleSelect(e)}
-                    accept=".jpg, .png, .jpeg"
-                  />
-                </label> */}
                 <label className="w-full flex justify-center items-center">
                   <div className="cursor-pointer h-fit w-fit px-2 py-2 relative bg-secondary rounded-full">
-                    <div className="absolute right-1 bottom-1 bg-primary px-1 py-1 rounded-full">
+                    <div className="absolute right-1 bottom-1 bg-primary px-1 py-1 rounded-full text-ascent-1">
                       <FaFileImage />
                     </div>
                     {review ? (
