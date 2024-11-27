@@ -44,3 +44,22 @@ export const aicheckpost = async (data) => {
     console.log(error);
   }
 };
+
+export const aichecktext = async (chat) => {
+  console.log(chat);
+  const text = chat;
+  try {
+    const res = await aiapiRequest({
+      url: `/check-text`,
+      method: "POST",
+      data: {
+        text: text || "",
+      },
+    });
+    console.log(res);
+
+    return res?.data?.sensitive;
+  } catch (error) {
+    console.log(error);
+  }
+};

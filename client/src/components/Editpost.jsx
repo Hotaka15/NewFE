@@ -332,7 +332,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
                             />
                           </label>
-                          <label
+                          {/* <label
                             htmlFor="default-radio-2"
                             className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
                           >
@@ -357,7 +357,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               }}
                               className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                             />
-                          </label>
+                          </label> */}
                           <label
                             htmlFor="default-radio-3"
                             className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"

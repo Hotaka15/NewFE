@@ -314,16 +314,16 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
 
     // await fetchPost();
   };
-  const videoJsOptions = {
-    controls: true, // Hiển thị điều khiển
-    autoplay: false, // Không tự động phát
-    preload: "auto", // Tự động tải
-    sources: [
-      {
-        src: "https://vjs.zencdn.net/v/oceans.mp4", // Đường dẫn video
-      },
-    ],
-  };
+  // const videoJsOptions = {
+  //   controls: true, // Hiển thị điều khiển
+  //   autoplay: false, // Không tự động phát
+  //   preload: "auto", // Tự động tải
+  //   sources: [
+  //     {
+  //       src: "https://vjs.zencdn.net/v/oceans.mp4", // Đường dẫn video
+  //     },
+  //   ],
+  // };
 
   const handlerpdetail = () => {
     setReportdetail(!reportdetail);
@@ -551,7 +551,7 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
                           </p>
                         </Link>
                         <span className="text-ascent-2 text-sm">
-                          {moment(comment?.createAt ?? "2023-05-25").fromNow()}
+                          {moment(comment?.createdAt ?? "2023-05-25").fromNow()}
                         </span>
                       </div>
                     </div>
