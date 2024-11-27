@@ -129,7 +129,7 @@ lg:rounded-lg h-screen overflow-hidden"
 
           <div className=" w-full h-full bg-primary px-4 flex flex-col overflow-y-auto rounded-lg items-center">
             {page == 1 ? (
-              <Chart />
+              <UserChart />
             ) : page == 2 ? (
               <ListUser
                 listUser={listUser}
@@ -139,7 +139,7 @@ lg:rounded-lg h-screen overflow-hidden"
             ) : page == 3 ? (
               <Reportlist user={user} />
             ) : (
-              <UserChart />
+              <Chart />
             )}
           </div>
         </div>

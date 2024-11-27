@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminaprrovePostreport, admingetPostreport } from "../until/admin";
 import Loading from "./Loading";
-const Reportlist = ({ user }) => {
+const Reportlist = ({ user, sl }) => {
   const nevigate = useNavigate();
   const id = "67276cedbdf484bf88585a44";
   const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ const Reportlist = ({ user }) => {
     fetchReport();
   }, []);
   return (
-    <div className="px-4 py-3 h-full overflow-x-auto">
+    <div className="px-4 py-2 h-full overflow-x-auto">
       {loading ? (
         <div className="w-full h-full">
           <Loading />
@@ -82,13 +82,13 @@ const Reportlist = ({ user }) => {
               onClick={() => {
                 nevigate(`/post/${id}`);
               }}
-              className="border border-ascent-2 py-3"
+              className="border border-ascent-2 py-2"
             >
               {id}
             </th>
-            <th className="border border-ascent-2 py-3">1</th>
-            <th className="border border-ascent-2 py-3">Spam</th>
-            <th className="select-none flex justify-center gap-2 border border-ascent-2 py-3">
+            <th className="border border-ascent-2 py-2">1</th>
+            <th className="border border-ascent-2 py-2">Spam</th>
+            <th className="select-none flex justify-center gap-2 border border-ascent-2 py-2">
               <div className="px-4 rounded-lg py-1 bg-blue cursor-pointer">
                 Hold
               </div>
@@ -97,44 +97,84 @@ const Reportlist = ({ user }) => {
               </div>
             </th>
           </tr> */}
-            {listreport.map((report) => (
-              <tr>
-                <th
-                  onClick={() => {
-                    nevigate(`/post/${report.postId}`);
-                  }}
-                  className="border border-[#66666645] py-3 px-3 underline underline-offset-2 cursor-pointer"
-                >
-                  {report.postId}
-                </th>
-                <th className="border border-[#66666645] py-3 px-3">
-                  {report.reportCount}
-                </th>
-                <th className="border border-[#66666645] py-3 px-3 text-wrap">
-                  {report.reasons.map((rp) => rp + ", ")}
-                </th>
-                <th className="select-none  border border-[#66666645] py-3 px-3">
-                  <div className="flex justify-center gap-2">
-                    <div
-                      onClick={() => {
-                        handlereportapprove(report.postId);
-                      }}
-                      className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
-                    >
-                      Approve
+            {sl &&
+              listreport.slice(0, 3).map((report) => (
+                <tr>
+                  <th
+                    onClick={() => {
+                      nevigate(`/post/${report.postId}`);
+                    }}
+                    className="border border-[#66666645] py-2 px-3 underline underline-offset-2 cursor-pointer"
+                  >
+                    {report.postId}
+                  </th>
+                  <th className="border border-[#66666645] py-2 px-3">
+                    {report.reportCount}
+                  </th>
+                  <th className="border border-[#66666645] py-2 px-3 text-wrap">
+                    {report.reasons.map((rp) => rp + ", ")}
+                  </th>
+                  <th className="select-none  border border-[#66666645] py-2 px-3">
+                    <div className="flex justify-center gap-2">
+                      <div
+                        onClick={() => {
+                          handlereportapprove(report.postId);
+                        }}
+                        className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
+                      >
+                        Approve
+                      </div>
+                      <div
+                        onClick={() => {
+                          handlereportdelete(report.postId);
+                        }}
+                        className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
+                      >
+                        Delete
+                      </div>
                     </div>
-                    <div
-                      onClick={() => {
-                        handlereportdelete(report.postId);
-                      }}
-                      className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
-                    >
-                      Delete
+                  </th>
+                </tr>
+              ))}
+            {!sl &&
+              listreport.map((report) => (
+                <tr>
+                  <th
+                    onClick={() => {
+                      nevigate(`/post/${report.postId}`);
+                    }}
+                    className="border border-[#66666645] py-2 px-3 underline underline-offset-2 cursor-pointer"
+                  >
+                    {report.postId}
+                  </th>
+                  <th className="border border-[#66666645] py-2 px-3">
+                    {report.reportCount}
+                  </th>
+                  <th className="border border-[#66666645] py-2 px-3 text-wrap">
+                    {report.reasons.map((rp) => rp + ", ")}
+                  </th>
+                  <th className="select-none  border border-[#66666645] py-2 px-3">
+                    <div className="flex justify-center gap-2">
+                      <div
+                        onClick={() => {
+                          handlereportapprove(report.postId);
+                        }}
+                        className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
+                      >
+                        Approve
+                      </div>
+                      <div
+                        onClick={() => {
+                          handlereportdelete(report.postId);
+                        }}
+                        className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
+                      >
+                        Delete
+                      </div>
                     </div>
-                  </div>
-                </th>
-              </tr>
-            ))}
+                  </th>
+                </tr>
+              ))}
           </tbody>
         </table>
       )}

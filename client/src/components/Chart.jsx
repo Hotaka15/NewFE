@@ -11,7 +11,12 @@ import {
   reportsbypostDashboard,
   reportsbyreasonDashboard,
 } from "../until/dashboard";
+import PieChartRpP from "./PieChartRpP";
+import BarRpP from "./BarRpP";
+import { useSelector } from "react-redux";
+import Reportlist from "./ReportList";
 const Chart = () => {
+  const { user } = useSelector((state) => state?.user);
   const fetchdashboard = async () => {
     const byreason = await reportsbyreasonDashboard();
     console.log(byreason);
@@ -30,37 +35,38 @@ const Chart = () => {
           <BsPostcardHeartFill size={30} />
           <div>
             <div className="text-ascent-2 text-sm">Total Posts:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">234</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaUser size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Users:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">277</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <AiFillLike size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Likes:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">50</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaCommentAlt size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Comments:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">70</div>
           </div>
         </div>
       </div>
       <div className="w-full flex gap-4 mb-4">
-        <BarRp />
-        <PieChartRp />
+        <BarRpP />
+        <PieChartRpP />
       </div>
       <div className="w-full ">
-        <RecentRp />
+        {/* <RecentRp /> */}
+        <Reportlist user={user} sl={true} />
       </div>
     </div>
   );

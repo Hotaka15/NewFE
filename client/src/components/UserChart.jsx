@@ -35,28 +35,28 @@ const UserChart = () => {
           <BsPostcardHeartFill size={30} />
           <div>
             <div className="text-ascent-2 text-sm">Total Posts:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">234</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaUser size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Users:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">277</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <AiFillLike size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Likes:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">50</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaCommentAlt size={25} />
           <div>
             <div className="text-ascent-2 text-sm">Total Comments:</div>
-            <div className="text-ascent-1 text-xl">234,234234</div>
+            <div className="text-ascent-1 text-xl">70</div>
           </div>
         </div>
       </div>
@@ -64,9 +64,7 @@ const UserChart = () => {
         <BarRp />
         <PieChartRp genders={genders} />
       </div>
-      <div className="w-full ">
-        <RecentRp />
-      </div>
+      <div className="w-full ">{/* <RecentRp /> */}</div>
     </div>
   );
 };

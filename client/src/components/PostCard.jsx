@@ -20,6 +20,7 @@ import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
 import VideoPlayer from "./VideoPlayer";
+import { aichecktext } from "../until/ai";
 
 const getPostComments = async (id, user) => {
   console.log(user?.token);
@@ -67,23 +68,33 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
         from: user?.firstName + " " + user?.lastName,
         replyAt: replyAt,
       };
-      const res = await postapiRequest({
-        url: URL,
-        data: newData,
-        token: user?.token,
-        method: "POST",
-      });
-      console.log(res);
+      const chat = data?.comment;
 
-      if (res?.status === "failed") {
-        setErrMsg(res);
-      } else {
-        reset({
-          comment: "",
-        });
+      const result = await aichecktext(chat);
+
+      if (!result) {
         setErrMsg("");
-        await getComments();
+        const res = await postapiRequest({
+          url: URL,
+          data: newData,
+          token: user?.token,
+          method: "POST",
+        });
+        console.log(res);
+
+        if (res?.status === "failed") {
+          setErrMsg(res);
+        } else {
+          reset({
+            comment: "",
+          });
+          setErrMsg("");
+          await getComments();
+        }
+      } else {
+        setErrMsg("Sensitive");
       }
+
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -111,16 +122,13 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
           error={errors.comment ? errors.comment.message : ""}
         />
       </div>
-      {errMsg?.message && (
+      {errMsg && (
         <span
           role="alert"
-          className={`text-sm ${
-            errMsg?.status === "failed"
-              ? "text-[#f64949fe]"
-              : "text-[#2ba150fe]"
-          } mt-0.5`}
+          className={`text-sm 
+            text-[#f64949fe] mt-0.5`}
         >
-          {errMsg?.message}
+          {errMsg}
         </span>
       )}
 
