@@ -16,7 +16,7 @@ import { SlOptions } from "react-icons/sl";
 import { GoBookmarkSlashFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Editpost from "./Editpost";
-import { postapiRequest, postlikePost } from "../until/post";
+import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
 import VideoPlayer from "./VideoPlayer";
@@ -302,6 +302,18 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
       console.log(error);
     }
   };
+
+  const handleDeletePost = async (id) => {
+    try {
+      await postdeletePost(id, user?.token);
+
+      setIsreport(true);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // await fetchPost();
+  };
   const videoJsOptions = {
     controls: true, // Hiển thị điều khiển
     autoplay: false, // Không tự động phát
@@ -502,7 +514,7 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
             {user?._id === post?.userId && (
               <div
                 className="flex gap-1 items-center text-base cursor-pointer select-none hover:bg-ascent-3/10 px-3 py-2 rounded-lg"
-                onClick={() => deletePost(post?._id)}
+                onClick={() => handleDeletePost(post?._id)}
               >
                 <MdOutlineDeleteOutline size={20} />
                 <span>Delete</span>

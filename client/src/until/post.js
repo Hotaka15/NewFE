@@ -148,6 +148,8 @@ export const postdeletePost = async (id, token) => {
       token: token,
       method: "DELETE",
     });
+    console.log(res);
+
     return;
   } catch (error) {
     console.log(error);
