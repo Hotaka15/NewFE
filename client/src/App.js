@@ -16,6 +16,7 @@ import {
   Search,
   Save,
   Demo,
+  NewFeed,
 } from "./pages";
 import { useSelector } from "react-redux";
 import PrivateRoute from "./until/privateroute";
@@ -62,6 +63,7 @@ function App() {
             <Route path="/search/:keyword?" element={<Search />} />
             <Route path="/save" element={<Save />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/newfeed" element={<NewFeed />} />
           </Route>
         ) : (
           <Route element={<Layout />}>
@@ -77,6 +79,7 @@ function App() {
             <Route path="/search/:keyword?" element={<Search />} />
             <Route path="/save" element={<Save />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/newfeed" element={<NewFeed />} />
           </Route>
         )}
 

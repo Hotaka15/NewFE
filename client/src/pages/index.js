@@ -14,6 +14,7 @@ import ProfileDetail from "./FriendDetail";
 import Search from "./Search";
 import Save from "./Save";
 import Demo from "./Demo";
+import NewFeed from "./NewFeed";
 export {
   Home,
   Register,
@@ -31,4 +32,5 @@ export {
   Search,
   Save,
   Demo,
+  NewFeed,
 };

@@ -8,6 +8,7 @@ import { FaVideo } from "react-icons/fa";
 import { RiMemoriesFill } from "react-icons/ri";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { MdEvent } from "react-icons/md";
+import { MdFeed } from "react-icons/md";
 import {
   CustomButton,
   EditProfile,
@@ -412,14 +413,14 @@ const Home = () => {
                 </span>
               </Link>
               <Link
-                to={""}
+                to={"/newfeed"}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
                 <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
                   <div className="w-10 h-10 flex items-center justify-center">
-                    <MdGroups size={40} />
+                    <MdFeed size={40} />
                   </div>
-                  Group
+                  NewFeeed
                 </span>
               </Link>
 
