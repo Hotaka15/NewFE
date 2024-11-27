@@ -29,6 +29,7 @@ import UserTiitle from "./UserTiitle";
 import Inbox from "./Inbox";
 import Postrange from "./Postrange";
 import UserChart from "./UserChart";
+import SuggestPost from "./SuggestPost";
 export {
   TextInput,
   Loading,
@@ -61,4 +62,5 @@ export {
   Inbox,
   Postrange,
   UserChart,
+  SuggestPost,
 };

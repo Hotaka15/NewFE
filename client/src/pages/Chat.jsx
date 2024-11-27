@@ -624,7 +624,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                 <div className="w-full flex  justify-end">
                   <div className="flex flex-col items-end">
                     <div className="bg-blue p-2 border rounded-xl ml-2 max-w-2xl">
-                      <p className="text-justify text-white px-2 py-1">
+                      <p className="text-justify text-white px-2 py-1 break-words">
                         {chat?.text}
                       </p>
                       <div className="flex justify-end w-full text-white text-xs pt-1 py-2 ">
@@ -659,7 +659,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                       )}
                   </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-                    <p className="text-justify text-ascent-1 px-2 py-1 w-fit">
+                    <p className="text-justify text-ascent-1 px-2 py-1 w-fit break-words">
                       {chat?.text}
                     </p>
                     <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
