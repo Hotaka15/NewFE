@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +16,7 @@ import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
 import { CiVideoOn } from "react-icons/ci";
 import ReactPlayer from "react-player";
+import { TbMessageChatbot } from "react-icons/tb";
 import { AiFillRobot } from "react-icons/ai";
 import {
   postapiRequest,
@@ -24,6 +25,8 @@ import {
 } from "../until/post";
 import { aicheckpost } from "../until/ai";
 import SuggestPost from "./SuggestPost";
+import { userfriendSuggest, usergetFriends } from "../until/user";
+import UserTiitle from "./UserTiitle";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -46,6 +49,7 @@ const Post = ({ setPage }) => {
   const [videoUpload, setVideoUpload] = useState(null);
   const [err, setErr] = useState("");
   const [isSuggest, setIsSuggest] = useState(false);
+  const [friends, setFriends] = useState([]);
   const handlebg = (e) => {
     // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
@@ -193,6 +197,18 @@ const Post = ({ setPage }) => {
   const handleSelect = (e) => {
     setPicuter(e.target.files[0]);
   };
+  const fetchFriends = async () => {
+    try {
+      const res = await usergetFriends(user?.token);
+      setFriends(res?.friends);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchFriends();
+  }, []);
 
   return (
     <div>
@@ -204,381 +220,389 @@ const Post = ({ setPage }) => {
           <div className="fixed inset-0 transition-opacticy">
             <div className="absolute inset-0 bg-[#000] opacity-70"></div>
           </div>
-          {!isSuggest && (
-            <span className="h-full w-full flex justify-center items-center sm:inline-block sm:align-middle sm:h-screen  select-none">
-              <form onSubmit={handleSubmit(handlePostSubmit)}>
-                <div
-                  className="inline-block align-bottom bg-primary rounded-3xl
+
+          <span className="h-full w-full flex justify-center items-center sm:inline-block sm:align-middle sm:h-screen  select-none">
+            <form onSubmit={handleSubmit(handlePostSubmit)}>
+              <div
+                className="inline-block align-bottom bg-primary rounded-3xl
             text-left overflow-hidden shadow-xl transform transition-all
             sm:my-10 sm:align-middle sm:max-w-md sm:w-full"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="modal-headline"
-                >
-                  <div className="flex justify-between px-6 pt-5 pb-2">
-                    <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-headline"
+              >
+                <div className="flex justify-between px-6 pt-5 pb-2">
+                  {/* <div
                       className="text-blue"
                       onClick={() => {
                         handleisSuggest();
                       }}
                     >
-                      <AiFillRobot size={30} />
-                    </div>
+                      <TbMessageChatbot size={30} />
+                    </div> */}
 
-                    <label
-                      htmlFor="name"
-                      className="block w-full  text-xl text-ascent-1 text-center font-bold"
-                    >
-                      Create Post
-                    </label>
+                  <label
+                    htmlFor="name"
+                    className="block w-full  text-xl text-ascent-1 text-center font-bold"
+                  >
+                    Create Post
+                  </label>
 
-                    <button className="text-ascent-1" onClick={handleClose}>
-                      <MdClose size={22} />
-                    </button>
-                  </div>
-                  <div className="flex flex-col relative">
-                    {write && (
-                      <div className="w-full h-full">
-                        <div className="flex justify-center items-center ">
-                          <div
-                            className="bg-secondary text-ascent-1 px-2 py-1 opacity-70 flex justify-center items-center gap-1"
-                            onClick={() => {
-                              setAudience(true);
-                              // setWrite(false);
-                            }}
-                          >
-                            <FaEarthAfrica />
-                            {option} <AiOutlineDown size={15} />
-                          </div>
+                  <button className="text-ascent-1" onClick={handleClose}>
+                    <MdClose size={22} />
+                  </button>
+                </div>
+                <div className="flex flex-col relative">
+                  {write && (
+                    <div className="w-full h-full">
+                      <div className="flex justify-center items-center ">
+                        <div
+                          className="bg-secondary text-ascent-1 px-2 py-1 opacity-70 flex justify-center items-center gap-1"
+                          onClick={() => {
+                            setAudience(true);
+                            // setWrite(false);
+                          }}
+                        >
+                          <FaEarthAfrica />
+                          {option} <AiOutlineDown size={15} />
                         </div>
-                        <div className="flex justify-between px-6 pt-5 pb-2">
-                          <label
-                            htmlFor="name"
-                            className="block font-medium text-xl text-ascent-1 text-left py-7 box-border"
-                          ></label>
-                          <div className="w-full h-full flex-col-reverse m-3 gap-80">
-                            <textarea
-                              {...register("description", {
-                                required: "Write something about post",
-                              })}
-                              error={
-                                errors.description
-                                  ? errors.description.message
-                                  : ""
-                              }
-                              className="w-full h-72 bg-primary rounded-3xl border-none
+                      </div>
+                      <div className="flex justify-between px-6 pt-5 pb-2">
+                        <label
+                          htmlFor="name"
+                          className="block font-medium text-xl text-ascent-1 text-left py-7 box-border"
+                        ></label>
+                        <div className="w-full h-full flex-col-reverse m-3 gap-80">
+                          <textarea
+                            {...register("description", {
+                              required: "Write something about post",
+                            })}
+                            error={
+                              errors.description
+                                ? errors.description.message
+                                : ""
+                            }
+                            className="w-full h-72 bg-primary rounded-3xl border-none
             outline-none text-xl text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 placeholder:text-3xl resize-none"
-                              value={content}
-                              placeholder="Write something about post"
-                              onChange={(ev) => {
-                                setContent(ev.target.value);
-                              }}
-                            />
-                            {preview && (
-                              <div className="py-4 w-full flex justify-center gap-3 bg-secondary rounded-xl ">
-                                <div
-                                  className="flex relative w-full justify-center items-center rounded-xl overflow-hidden"
-                                  onClick={() => {}}
-                                >
-                                  <img src={review} alt="Something wrong" />
-                                  <div
-                                    onClick={() => {
-                                      setPreview(false);
-                                      setFile(null);
-                                    }}
-                                    className="rotate-45 cursor-pointer absolute right-3 top-1 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
-                                  >
-                                    <AiOutlinePlus />
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                            {videoFile && (
-                              <div className="relative">
-                                <video controls width="400">
-                                  {/* <ReactPlayer controls={true} url={videoFile} /> */}
-                                  <source src={videoFile} type="video/mp4" />
-                                  Your browser does not support the video tag.
-                                </video>
+                            value={content}
+                            placeholder="Write something about post"
+                            onChange={(ev) => {
+                              setContent(ev.target.value);
+                            }}
+                          />
+                          {preview && (
+                            <div className="py-4 w-full flex justify-center gap-3 bg-secondary rounded-xl ">
+                              <div
+                                className="flex relative w-full justify-center items-center rounded-xl overflow-hidden"
+                                onClick={() => {}}
+                              >
+                                <img src={review} alt="Something wrong" />
                                 <div
                                   onClick={() => {
-                                    // setPreview(false);
-                                    setVideoFile(null);
+                                    setPreview(false);
+                                    setFile(null);
                                   }}
-                                  className="rotate-45 cursor-pointer absolute right-2 top-2 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
+                                  className="rotate-45 cursor-pointer absolute right-3 top-1 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
                                 >
                                   <AiOutlinePlus />
                                 </div>
                               </div>
-                            )}
-                            {!posting && (
-                              <div className="flex gap-3 mt-2">
-                                <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
-                                  <CiShoppingTag />
-                                  <div className="">Tags</div>
-                                </div>
+                            </div>
+                          )}
+                          {videoFile && (
+                            <div className="relative">
+                              <video controls width="400">
+                                {/* <ReactPlayer controls={true} url={videoFile} /> */}
+                                <source src={videoFile} type="video/mp4" />
+                                Your browser does not support the video tag.
+                              </video>
+                              <div
+                                onClick={() => {
+                                  // setPreview(false);
+                                  setVideoFile(null);
+                                }}
+                                className="rotate-45 cursor-pointer absolute right-2 top-2 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
+                              >
+                                <AiOutlinePlus />
+                              </div>
+                            </div>
+                          )}
+                          {!posting && (
+                            <div className="flex gap-3 mt-2">
+                              <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
+                                <CiShoppingTag />
+                                <div className="">Tags</div>
+                              </div>
 
-                                <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
-                                  <label
-                                    htmlFor="imgUpload"
-                                    className="flex items-center gap-1 text-base text-[#345cd9]  cursor-pointer"
-                                  >
-                                    <input
-                                      type="file"
-                                      onChange={(e) => {
-                                        e.target.files[0] && handlebg(e);
-                                      }}
-                                      className="hidden"
-                                      id="imgUpload"
-                                      data-max-size="5120"
-                                      accept=".jpg, .png, .jpeg"
-                                    />
-                                    <CiImageOn />
-                                    Image
-                                  </label>
-                                </div>
+                              <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
+                                <label
+                                  htmlFor="imgUpload"
+                                  className="flex items-center gap-1 text-base text-[#345cd9]  cursor-pointer"
+                                >
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      e.target.files[0] && handlebg(e);
+                                    }}
+                                    className="hidden"
+                                    id="imgUpload"
+                                    data-max-size="5120"
+                                    accept=".jpg, .png, .jpeg"
+                                  />
+                                  <CiImageOn />
+                                  Image
+                                </label>
+                              </div>
 
-                                <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
-                                  <label
-                                    htmlFor="videoUpload"
-                                    className="flex items-center gap-1 text-base text-[#e30b65]  cursor-pointer"
-                                  >
-                                    <input
-                                      type="file"
-                                      onChange={(e) => {
-                                        e.target.files[0] &&
-                                          handleFileChange(e);
-                                      }}
-                                      className="hidden"
-                                      id="videoUpload"
-                                      data-max-size="5120"
-                                      accept="video/*"
-                                    />
-                                    <CiVideoOn />
-                                    Video
-                                  </label>
-                                </div>
+                              <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
+                                <label
+                                  htmlFor="videoUpload"
+                                  className="flex items-center gap-1 text-base text-[#e30b65]  cursor-pointer"
+                                >
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      e.target.files[0] && handleFileChange(e);
+                                    }}
+                                    className="hidden"
+                                    id="videoUpload"
+                                    data-max-size="5120"
+                                    accept="video/*"
+                                  />
+                                  <CiVideoOn />
+                                  Video
+                                </label>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="w-full flex justify-end">
+                            {err && (
+                              <div className="w-full flex justify-center items-center text-[#f64949fe]">
+                                {err}
                               </div>
                             )}
-
-                            <div className="w-full flex justify-end">
-                              {err && (
-                                <div className="w-full flex justify-center items-center text-[#f64949fe]">
-                                  {err}
-                                </div>
-                              )}
-                              {posting ? (
-                                <div className="w-full flex justify-center items-center mx-2">
-                                  <Loading />
-                                </div>
-                              ) : (
-                                <CustomButton
-                                  type="submit"
-                                  Post
-                                  onClick={() => {
-                                    console.log("press");
-                                  }}
-                                  containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
+                            {posting ? (
+                              <div className="w-full flex justify-center items-center mx-2">
+                                <Loading />
+                              </div>
+                            ) : (
+                              <CustomButton
+                                type="submit"
+                                Post
+                                onClick={() => {
+                                  console.log("press");
+                                }}
+                                containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                  tittle="Post"
-                                />
-                              )}
-                            </div>
+                                tittle="Post"
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
-                    )}
-                    {audience && (
-                      <div className="bg-primary absolute w-full h-full flex flex-col justify-between">
-                        <div className="flex w-full h-full select-none overflow-y-auto my-5">
-                          <div
-                            className="w-full h-72 mb-20 rounded-3xl border-none
+                    </div>
+                  )}
+                  {audience && (
+                    <div className="bg-primary absolute w-full h-full flex flex-col justify-between">
+                      <div className="flex w-full h-full select-none overflow-y-auto my-5">
+                        <div
+                          className="w-full h-72 mb-20 rounded-3xl border-none
             outline-none text-xl text-ascent-1 px-5 py-3 placeholder:text-ascent-2 "
+                        >
+                          <label
+                            htmlFor="default-radio-1"
+                            className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
                           >
                             <label
                               htmlFor="default-radio-1"
-                              className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                              className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              <label
-                                htmlFor="default-radio-1"
-                                className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
-                              >
-                                Public
-                                <br />
-                                <span className="text-ascent-2 text-base">
-                                  Anyone can see
-                                </span>
-                              </label>
-                              <input
-                                id="default-radio-1"
-                                type="radio"
-                                value="public"
-                                name="auth"
-                                onChange={(e) => {
-                                  setOption(e.target.value);
-                                }}
-                                className="w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
-                            dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
-                              />
+                              Public
+                              <br />
+                              <span className="text-ascent-2 text-base">
+                                Anyone can see
+                              </span>
                             </label>
+                            <input
+                              id="default-radio-1"
+                              type="radio"
+                              value="public"
+                              name="auth"
+                              onChange={(e) => {
+                                setOption(e.target.value);
+                              }}
+                              className="w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
+                            dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                            />
+                          </label>
+                          <label
+                            htmlFor="default-radio-2"
+                            className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                          >
                             <label
                               htmlFor="default-radio-2"
-                              className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                              className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              <label
-                                htmlFor="default-radio-2"
-                                className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
-                              >
-                                Specific friends
-                                <br />
-                                <span className="text-ascent-2 text-base">
-                                  Only show to some friends
-                                </span>
-                              </label>
-                              <input
-                                id="default-radio-2"
-                                type="radio"
-                                value="specific"
-                                name="auth"
-                                onChange={(e) => {
-                                  setOption(e.target.value);
-                                  setSpecific(!specific);
-                                }}
-                                className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                              />
+                              Specific friends
+                              <br />
+                              <span className="text-ascent-2 text-base">
+                                Only show to some friends
+                              </span>
                             </label>
+                            <input
+                              id="default-radio-2"
+                              type="radio"
+                              value="specific"
+                              name="auth"
+                              onChange={(e) => {
+                                setOption(e.target.value);
+                                setSpecific(!specific);
+                              }}
+                              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                          </label>
+                          <label
+                            htmlFor="default-radio-3"
+                            className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                          >
                             <label
                               htmlFor="default-radio-3"
-                              className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                              className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              <label
-                                htmlFor="default-radio-3"
-                                className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
-                              >
-                                Friend
-                                <br />
-                                <span className="text-ascent-2 text-base">
-                                  Your friends
-                                </span>
-                              </label>
-                              <input
-                                id="default-radio-3"
-                                type="radio"
-                                value="friends"
-                                name="auth"
-                                onChange={(e) => {
-                                  setOption(e.target.value);
-                                }}
-                                className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                              />
+                              Friend
+                              <br />
+                              <span className="text-ascent-2 text-base">
+                                Your friends
+                              </span>
                             </label>
+                            <input
+                              id="default-radio-3"
+                              type="radio"
+                              value="friends"
+                              name="auth"
+                              onChange={(e) => {
+                                setOption(e.target.value);
+                              }}
+                              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                          </label>
+                          <label
+                            htmlFor="default-radio-4"
+                            className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                          >
                             <label
                               htmlFor="default-radio-4"
-                              className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
+                              className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              <label
-                                htmlFor="default-radio-4"
-                                className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
-                              >
-                                Only me
-                                <br />
-                                <span className="text-ascent-2 text-base">
-                                  Only show to you
-                                </span>
-                              </label>
-                              <input
-                                id="default-radio-4"
-                                type="radio"
-                                value="only me"
-                                name="auth"
-                                onChange={(e) => {
-                                  setOption(e.target.value);
-                                }}
-                                className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                              />
+                              Only me
+                              <br />
+                              <span className="text-ascent-2 text-base">
+                                Only show to you
+                              </span>
                             </label>
-                          </div>
-                        </div>
-                        <div className=" flex justify-between px-6">
-                          <div className="w-full flex m-3 justify-between items-center">
-                            <CustomButton
-                              type=""
-                              Post
-                              onClick={() => {
-                                setAudience(false);
-                                setWrite(true);
+                            <input
+                              id="default-radio-4"
+                              type="radio"
+                              value="only me"
+                              name="auth"
+                              onChange={(e) => {
+                                setOption(e.target.value);
                               }}
-                              containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
-                    py-3 text-sm font-medium text-ascent-1 outline-none`}
-                              tittle="Back"
+                              className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                             />
-                            <div className="w-full h-full flex-col-reverse gap-80">
-                              <div className="w-full flex justify-end">
-                                <CustomButton
-                                  type=""
-                                  Post
-                                  onClick={() => {
-                                    setAudience(!audience);
-                                    // setWrite(!write);
-                                    console.log("press");
-                                  }}
-                                  containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
+                          </label>
+                        </div>
+                      </div>
+                      <div className=" flex justify-between px-6">
+                        <div className="w-full flex m-3 justify-between items-center">
+                          <CustomButton
+                            type=""
+                            Post
+                            onClick={() => {
+                              setAudience(false);
+                              setWrite(true);
+                            }}
+                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                    py-3 text-sm font-medium text-ascent-1 outline-none`}
+                            tittle="Back"
+                          />
+                          <div className="w-full h-full flex-col-reverse gap-80">
+                            <div className="w-full flex justify-end">
+                              <CustomButton
+                                type=""
+                                Post
+                                onClick={() => {
+                                  setAudience(!audience);
+                                  // setWrite(!write);
+                                  console.log("press");
+                                }}
+                                containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                  tittle="Done"
-                                />
-                              </div>
+                                tittle="Done"
+                              />
                             </div>
                           </div>
                         </div>
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {specific && (
-                      <div className="bg-primary absolute w-full h-full flex flex-col justify-between">
-                        <div className="flex w-full h-full select-none overflow-y-auto my-5">
-                          <div
-                            className="w-full h-full mb-20 rounded-3xl border-none
+                  {specific && (
+                    <div className="bg-primary absolute w-full h-full flex flex-col justify-between">
+                      <div className="flex w-full h-full select-none overflow-y-auto my-5">
+                        <div
+                          className="w-full h-full mb-20 rounded-3xl border-none
           outline-none text-xl text-ascent-1 px-5 py-3 placeholder:text-ascent-2"
-                          >
-                            <input
-                              type="text"
-                              className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
-                              placeholder="Search"
-                            />
-                            <div className="w-full flex items-center justify-center">
-                              <div className="flex flex-wrap gap-2 justify-start mb-2">
-                                {lists.length > 0 &&
-                                  lists?.map((friend) => {
-                                    var check = lists.includes(friend?._id);
-                                    return (
-                                      <div
-                                        key={friend?._id}
-                                        onClick={() => {
-                                          pushList(friend);
-                                          console.log(lists);
-                                        }}
-                                        className="flex flex-col justify-center items-center"
-                                      >
-                                        <img
-                                          src={friend?.profileUrl ?? NoProfile}
-                                          alt=""
-                                          className="h-16 w-full object-contain rounded-full"
-                                        />
-                                        <span>{friend?.firstName}</span>
-                                      </div>
-                                    );
-                                  })}
-                              </div>
+                        >
+                          <input
+                            type="text"
+                            className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
+                            placeholder="Search"
+                          />
+                          <div className="w-full flex items-center justify-center">
+                            <div className="flex flex-wrap gap-2 justify-start mb-2">
+                              {lists.length > 0 &&
+                                lists?.map((friend) => {
+                                  var check = lists.includes(friend?._id);
+                                  return (
+                                    // <div
+                                    //   key={friend?._id}
+                                    //   onClick={() => {
+                                    //     pushList(friend);
+                                    //     console.log(lists);
+                                    //   }}
+                                    //   className="flex flex-col justify-center items-center"
+                                    // >
+                                    //   <img
+                                    //     src={friend?.profileUrl ?? NoProfile}
+                                    //     alt=""
+                                    //     className="h-16 w-full object-contain rounded-full"
+                                    //   />
+                                    //   <span>{friend?.firstName}</span>
+                                    // </div>
+                                    <div
+                                      onClick={() => {
+                                        pushList(friend);
+                                        console.log(lists);
+                                      }}
+                                    >
+                                      <UserTiitle useradd={friend} />
+                                    </div>
+                                  );
+                                })}
                             </div>
-                            <div className="w-full h-full ">
-                              {user?.friends.map((friend) => {
+                          </div>
+                          <div className="w-full h-full ">
+                            {friends &&
+                              friends.map((friend) => {
                                 var check = lists.includes(friend?._id);
 
                                 return (
                                   <div
                                     onClick={() => {
-                                      pushList(friend);
+                                      pushList(friend?._id);
                                       console.log(lists);
                                     }}
                                     className={`${
@@ -587,7 +611,7 @@ const Post = ({ setPage }) => {
                                   >
                                     <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
                                       <img
-                                        src={friend?.profileUrl ?? NoProfile}
+                                        src={friend?.profileUrl || NoProfile}
                                         alt=""
                                         className="h-16 w-16 object-cover rounded-full mr-3"
                                       />
@@ -627,24 +651,24 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                   // />
                                 );
                               })}
-                            </div>
                           </div>
                         </div>
-                        <div className=" flex justify-between px-6">
-                          <div className="w-full flex m-3 justify-between items-center">
-                            <CustomButton
-                              type=""
-                              Post
-                              onClick={() => {
-                                setSpecific(!specific);
-                              }}
-                              containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                      </div>
+                      <div className=" flex justify-between px-6">
+                        <div className="w-full flex m-3 justify-between items-center">
+                          <CustomButton
+                            type=""
+                            Post
+                            onClick={() => {
+                              setSpecific(!specific);
+                            }}
+                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
-                              tittle="Back"
-                            />
-                            <div className="w-full h-full flex-col-reverse gap-80">
-                              <div className="w-full flex justify-end">
-                                {/* <CustomButton
+                            tittle="Back"
+                          />
+                          <div className="w-full h-full flex-col-reverse gap-80">
+                            <div className="w-full flex justify-end">
+                              <CustomButton
                                 type=""
                                 Post
                                 onClick={() => {
@@ -655,20 +679,33 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}
                                 tittle="Done"
-                              /> */}
-                              </div>
+                              />
                             </div>
                           </div>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-              </form>
-            </span>
-          )}
+              </div>
+            </form>
+            <div
+              className="absolute bottom-10 right-10 text-ascent-1 rounded-full px-2 py-2 bg-primary/50 hover:bg-primary"
+              onClick={() => {
+                handleisSuggest();
+              }}
+            >
+              <TbMessageChatbot size={40} />
+            </div>
+          </span>
+
           {/* &#8203; */}
-          {isSuggest && <SuggestPost handleisSuggest={handleisSuggest} />}
+
+          {isSuggest && (
+            <div className="absolute w-[425px] h-[620px]  bottom-10 right-10">
+              <SuggestPost handleisSuggest={handleisSuggest} />
+            </div>
+          )}
         </div>
       </div>
     </div>

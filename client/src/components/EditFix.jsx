@@ -9,7 +9,7 @@ import { UpdateProfile, UserLogin } from "../redux/userSlice";
 import { apiRequest, handFileUpload } from "../until";
 import { NoProfile } from "../assets";
 import { userapiRequest } from "../until/user";
-
+import { FaFileImage } from "react-icons/fa6";
 const EditFix = () => {
   const { user, edit } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -340,19 +340,24 @@ const EditFix = () => {
                   />
                 </label> */}
                 <label className="w-full flex justify-center items-center">
-                  {review ? (
-                    <img
-                      src={review}
-                      className="object-cover rounded-full h-24 w-24"
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      src={user?.profileUrl ?? NoProfile}
-                      className="object-cover rounded-full h-24 w-24"
-                      alt=""
-                    />
-                  )}
+                  <div className="cursor-pointer h-fit w-fit px-2 py-2 relative bg-secondary rounded-full">
+                    <div className="absolute right-1 bottom-1 bg-primary px-1 py-1 rounded-full">
+                      <FaFileImage />
+                    </div>
+                    {review ? (
+                      <img
+                        src={review}
+                        className="object-cover rounded-full h-24 w-24"
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src={user?.profileUrl ?? NoProfile}
+                        className="object-cover rounded-full h-24 w-24"
+                        alt=""
+                      />
+                    )}
+                  </div>
 
                   <input
                     type="file"

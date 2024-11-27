@@ -35,44 +35,46 @@ const SuggestPost = ({ handleisSuggest }) => {
 
   return (
     <div className=" absolute w-full h-full flex flex-col items-center justify-center">
-      <div className="w-2/4 h-2/3 bg-primary rounded-xl overflow-hidden">
+      <div className="w-full h-full bg-primary rounded-xl overflow-hidden">
         <div className="w-full flex py-2 px-4 border-b border-[#66666645]">
-          <span className="  w-full text-ascent-1 text-2xl">Suggest Ai</span>
+          <span className="w-full text-ascent-1 text-2xl font-medium select-none">
+            Suggest AI
+          </span>
           <div
-            className="text-ascent-1 text-2xl cursor-pointer"
+            className="text-ascent-1 text-2xl cursor-pointer flex justify-center items-center"
             onClick={handleisSuggest}
           >
             <MdClose size={22} />
           </div>
         </div>
+        <div className="flex py-2 px-4 bg-primary rounded-md select-none">
+          <div
+            className={`${
+              isText && "bg-ascent-1/10"
+            } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
+            onClick={() => {
+              setIsText(true);
+            }}
+          >
+            Text
+          </div>
+          <div
+            className={`${
+              !isText && "bg-ascent-1/10"
+            } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
+            onClick={() => {
+              setIsText(false);
+            }}
+          >
+            Images
+          </div>
+        </div>
         <div
           id="window-chat"
           ref={chatWindowRef}
-          className="h-[500px] w-full my-2 px-8 overflow-y-auto "
+          className="h-[450px] w-full my-2 px-4 overflow-y-auto "
         >
-          <div className="absolute flex border border-[#66666645] rounded-md">
-            <div
-              className={`${
-                isText && "bg-ascent-1/10"
-              } px-2 py-1 rounded-md text-ascent-1`}
-              onClick={() => {
-                setIsText(true);
-              }}
-            >
-              Text
-            </div>
-            <div
-              className={`${
-                !isText && "bg-ascent-1/10"
-              } px-2 py-1 rounded-md text-ascent-1`}
-              onClick={() => {
-                setIsText(false);
-              }}
-            >
-              Images
-            </div>
-          </div>
-          <div className="w-full flex flex-col">
+          <div className="w-full h-full flex flex-col mt-10 justify-end">
             {history &&
               history.map((his, index) => {
                 if (his?.role == "user") {
@@ -89,7 +91,7 @@ const SuggestPost = ({ handleisSuggest }) => {
                     <div className="flex gap-2">
                       <div
                         key={index}
-                        className="text-ascent-1 bg-blue rounded-xl mb-2 px-4 py-3 max-w-lg break-words self-start"
+                        className="text-white bg-blue rounded-xl mb-2 px-4 py-3 max-w-lg break-words self-start"
                       >
                         {his?.text}
                       </div>
@@ -107,12 +109,12 @@ const SuggestPost = ({ handleisSuggest }) => {
               })}
           </div>
         </div>
-        <div className="w-full flex items-center justify-center gap-2 mb-4">
+        <div className="w-full flex items-center justify-center gap-2 mb-4 px-4">
           {/* <Loading /> */}
           <input
             type="text"
             placeholder="Write something..."
-            className="bg-secondary rounded-full w-2/5 outline-none px-4 py-2 text-ascent-1 border-[#66666645] border"
+            className="bg-secondary rounded-full w-4/5 outline-none px-4 py-2 text-ascent-1 border-[#66666645] border"
             value={content}
             onChange={(e) => {
               handlecontent(e);
