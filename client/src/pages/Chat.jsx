@@ -82,10 +82,11 @@ const RangeChat = forwardRef(
     const [file, setFile] = useState(null);
     const [faild, setFald] = useState([]);
     const [after, setAfter] = useState([]);
-    console.log(user);
-    console.log(idroom);
-    console.log(userinfo);
-
+    const [onScreen, setOnscreen] = useState(false);
+    // console.log(user);
+    // console.log(idroom);
+    // console.log(userinfo);
+    const chatWindowRef = useRef(null);
     const id_1 = user?._id;
     const id_2 = userinfo?._id;
     const handlebg = (e) => {
@@ -119,7 +120,7 @@ const RangeChat = forwardRef(
         } catch (error) {
           console.log(error);
         }
-
+        setOnscreen(true);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -193,17 +194,25 @@ const RangeChat = forwardRef(
     };
 
     const position = () => {
-      let position = document.getElementById("listchat");
-      // let position1 = document.getElementById("window_chatlist");
-      if (position) {
-        console.log(position.offsetHeight);
-        console.log(position.scrollHeight);
-        // console.log(position.scrollHeight);
-        position.scrollTo({
-          top: position.scrollHeight,
-          behavior: "smooth", // Cuộn mượt
-        });
-      }
+      // let position = document.getElementById("listchat");
+
+      // if (position) {
+      //   console.log(position.offsetHeight);
+      //   console.log(position.scrollHeight);
+
+      //   position.scrollTo({
+      //     top: position.scrollHeight,
+
+      //   });
+      // }
+      setTimeout(() => {
+        if (chatWindowRef.current) {
+          console.log(chatWindowRef.current.scrollHeight);
+          console.log(chatWindowRef.current.scrollTop);
+          console.log(chatWindowRef.current.offsetHeight);
+          chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+        }
+      }, 100);
     };
 
     const handlepre = useCallback(
@@ -223,19 +232,34 @@ const RangeChat = forwardRef(
       setFile(null);
     };
 
-    useImperativeHandle(ref, () => ({
-      fetchchat,
-      position,
-    }));
+    // useImperativeHandle(ref, () => ({
+    //   fetchchat,
+    //   position,
+    // }));
     useEffect(() => {
       setLoading(true);
       fetchchat(idroom);
-
-      // fetchData();
-    }, [idroom]);
-    useEffect(() => {
       position();
-    }, [loading]);
+      return () => {
+        setOnscreen(false);
+      };
+    }, [idroom]);
+
+    const scrollToBottom = debounce(() => {
+      if (chatWindowRef.current && onScreen) {
+        chatWindowRef.current.scrollIntoView({
+          behavior: "smooth", // Cuộn mượt
+          block: "end", // Đảm bảo cuộn về cuối phần tử
+        });
+      }
+      setLoading(false);
+    }, 300);
+
+    // useEffect(() => {
+
+    //   position();
+
+    // }, [onScreen]);
 
     // nhận tin nhắn
     useEffect(() => {
@@ -253,13 +277,19 @@ const RangeChat = forwardRef(
           console.log(data);
           fetchList();
           fetchchat(idroom);
+
           // fetchchatforchild(idroom);
         });
       }
+
+      // return () => {
+      //   setOnscreen(false);
+      // };
       // console.log(socket);
     }, [socket, idroom]);
+
     return (
-      <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-lg justify-between">
+      <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-hidden rounded-lg justify-between">
         {/* Phần tiêu đề của khung chat */}
         <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
           <div className="text-ascent-1 font-bold text-3xl">
@@ -309,34 +339,27 @@ const RangeChat = forwardRef(
         </div>
 
         {/* Phần nội dung của khung chat */}
-        <div id="listchat" className="flex w-full h-3/4 overflow-y-auto">
-          {/* Danh sách tin nhắn */}
-          <div className="flex flex-col gap-2 h-full w-full">
-            <div className="flex items-center w-full">
-              {/* ref={myDivRef} */}
-              {/* <div className="bg-gray-300 rounded-full h-8 w-8 flex items-center justify-between text-ascent-2"></div> */}
-              {/* {page == 1 && <Pagechat_1 />}
-            {page == 2 && <Pagechat_2 />}
-            {page == 3 && <Pagechat_3 />} */}
-              {/* <Pagechat_1 /> */}
-              {loading ? (
-                <div className=" w-full h-full flex justify-center items-start">
-                  <Loading />
-                </div>
-              ) : idroom ? (
-                <PageChat
-                  listchat={after}
-                  socket={socket}
-                  userinfo={userinfo}
-                />
-              ) : (
-                <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
-                  Select Conversation
-                </div>
-              )}
+
+        {/* Danh sách tin nhắn */}
+        <div
+          id="listchat"
+          ref={chatWindowRef}
+          className="flex grow-0 w-full h-3/4 overflow-y-auto"
+        >
+          {loading ? (
+            <div className=" w-full h-full flex justify-center items-start ">
+              <Loading />
             </div>
-          </div>
+          ) : idroom ? (
+            <PageChat listchat={after} socket={socket} userinfo={userinfo} />
+          ) : (
+            <div className="w-full h-[1000px]">Select Conversation</div>
+          )}
         </div>
+
+        {/* Thêm phần tử cuối cùng để cuộn đến khi cần */}
+        {/* <div ref={chatEndRef} /> */}
+
         {/* <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
           <CiCircleCheck />
           Seen
@@ -592,6 +615,8 @@ const UserCard = forwardRef(
 const PageChat = ({ listchat, socket, userinfo }) => {
   const { user } = useSelector((state) => state.user);
   const [isme, setIsme] = useState(true);
+  const [visibleChats, setVisibleChats] = useState([]);
+  const chatRefs = useRef([]);
   console.log(listchat);
   {
     /* <div className="w-full flex justify-center">
@@ -629,37 +654,71 @@ const PageChat = ({ listchat, socket, userinfo }) => {
     }
   };
 
-  const handlescroll = () => {
-    let position = document.getElementById("window_chat");
-    let position1 = document.getElementById("window_chatlist");
-    if (position) {
-      console.log(position);
+  // const handlescroll = () => {
+  //   let position = document.getElementById("window_chat");
+  //   let position1 = document.getElementById("window_chatlist");
 
-      console.log(position.scrollTop);
-      console.log(position.scrollHeight);
-      console.log("offsetHeight:", position.offsetHeight);
-      // position1.scrollTo({
-      //   top: 500,
-      //   behavior: "smooth", // Cuộn mượt
-      // });
-      position.scrollTop = position.scrollHeight;
-      setTimeout(() => {
-        console.log(position.scrollTop);
-      }, 100);
-    }
-  };
+  //   if (position) {
+  //     console.log(position);
+
+  //     console.log(position.scrollTop);
+  //     console.log(position.scrollHeight);
+  //     console.log("offsetHeight:", position.offsetHeight);
+  //     position1.scrollTo({
+  //       top: 500,
+  //       behavior: "smooth", // Cuộn mượt
+  //     });
+  //     // position.scrollTop = position.scrollHeight;
+  //     setTimeout(() => {
+  //       console.log(position.scrollTop);
+  //     }, 100);
+  //   }
+  // };
 
   useEffect(() => {
-    setTimeout(() => {
-      handlescroll(); // Đảm bảo cuộn sau khi DOM được render đầy đủ
-    }, 1000);
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const chatId = entry.target.dataset.id; // Lấy ID của phần tử
+            if (!visibleChats.includes(chatId)) {
+              setVisibleChats((prev) => [...prev, chatId]); // Thêm ID vào danh sách visibleChats
+            }
+          }
+        });
+      },
+      { threshold: 0.5 } // Khi ít nhất 50% phần tử hiển thị
+    );
 
+    // Gắn observer vào các phần tử có class "itemchat"
+    chatRefs.current.forEach((chatElement) => {
+      if (chatElement) {
+        // Kiểm tra phần tử tồn tại
+        observer.observe(chatElement); // Quan sát phần tử DOM
+      }
+    });
+
+    return () => {
+      observer.disconnect(); // Hủy observer khi component unmount
+    };
+  }, [listchat]);
   return (
     <div
       id="window_chatlist"
-      className="w-full h-full flex justify-center items-start grow-0"
+      className="w-full h-full flex justify-center items-start "
     >
+      {/* <div className="absolute bg-blue overflow-y-auto">
+        <h3>Visible Posts:</h3>
+        <ul>
+          {visibleChats.length > 0 ? (
+            visibleChats.map((postId) => (
+              <li key={postId}>Post ID: {postId}</li>
+            ))
+          ) : (
+            <p>No post is visible yet.</p>
+          )}
+        </ul>
+      </div> */}
       {listchat && listchat?.length > 0 ? (
         <div id="window_chat" className="flex flex-col gap-2 w-full h-full">
           {listchat
@@ -667,7 +726,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
             .reverse()
             ?.map((chat, index, listchat) => {
               return chat?.senderId == user?._id ? (
-                <div className="w-full flex  justify-end">
+                <div className="w-full flex  justify-end" key={chat?._id}>
                   <div className="flex flex-col items-end ">
                     <div
                       className={`${
@@ -705,7 +764,12 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                   </div>
                 </div>
               ) : (
-                <div className="w-full">
+                <div
+                  className="w-full itemchat "
+                  ref={(el) => chatRefs.current.push(el)}
+                  key={chat?._id}
+                  data-id={chat._id}
+                >
                   <div>
                     {index < listchat.length &&
                       listchat[index]?.senderId !=
@@ -723,7 +787,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                       )}
                   </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
-                    <p className="text-justify text-ascent-1 px-2 py-1 w-fit break-words">
+                    <p className="text-justify text-ascent-1 px-2 py-1 break-words">
                       {chat?.text}
                     </p>
                     <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
@@ -1045,8 +1109,7 @@ const Chat = () => {
                   <input
                     type="text"
                     className="px-5 bg-secondary text-ascent-2 rounded-full w-full border border-[#66666690] 
-        outline-none text-sm  
-         py-2 placeholder:text-ascent-2"
+        outline-none text-sm  py-2 placeholder:text-ascent-2"
                     placeholder="Search"
                     onChange={(e) => setSearch(e.target.value)}
                   />

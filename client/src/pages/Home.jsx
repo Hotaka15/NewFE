@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import Cookies from "js-cookie";
 import { FaUserFriends } from "react-icons/fa";
@@ -80,6 +86,7 @@ const Home = () => {
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [visiblePosts, setVisiblePosts] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const videoRef = useRef(null);
   // console.log(user);
@@ -306,6 +313,32 @@ const Home = () => {
   };
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Lọc các phần tử đang hiển thị
+        const visible = entries
+          .filter((entry) => entry.isIntersecting) // Kiểm tra phần tử có vào viewport hay không
+          .map((entry) => entry.target.dataset.postId); // Lấy ID từ data-post-id
+
+        // Cập nhật trạng thái các bài đăng đang hiển thị
+        setVisiblePosts((prevVisiblePosts) => [
+          ...new Set([...prevVisiblePosts, ...visible]), // Thêm vào các post mới hiển thị (tránh trùng lặp)
+        ]);
+      },
+      { threshold: 0.5 } // 50% phần tử phải hiển thị trong viewport
+    );
+
+    // Thêm observer cho tất cả các phần tử div có class "itempost"
+    const divElements = document.querySelectorAll(".itempost");
+    divElements.forEach((div) => observer.observe(div));
+
+    // Cleanup khi component unmount
+    return () => {
+      observer.disconnect();
+    };
+  }, [posts, loading]);
+
+  useEffect(() => {
     if (page) {
       if (page == 1) {
         console.log("hey");
@@ -373,7 +406,7 @@ const Home = () => {
           {/* {LEFT} */}
           <div className="hidden w-1/5 h-full md:flex flex-col gap-6 overflow-y-auto flex-initial">
             {/* <ProfileCard user={user} /> */}
-            <div className="bg-primary w-full h-fit rounded-lg flex flex-col gap-3 overflow-hidden">
+            <div className=" w-full h-fit rounded-lg flex flex-col gap-3 overflow-hidden">
               <Link
                 to={"/profilefix/" + user?._id}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -479,7 +512,7 @@ const Home = () => {
           {/* {CENTTER} bg-primary */}
           <div
             id="post_range"
-            className="no-scrollbar h-full flex-initial w-2/5  px-4 flex flex-col gap-6 overflow-y-auto rounded-lg "
+            className="no-scrollbar h-full flex-initial w-2/5  px-4 flex flex-col gap-2 overflow-y-auto rounded-lg "
           >
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
@@ -511,73 +544,6 @@ const Home = () => {
                   <div className="px-8">What's on your mind....</div>
                 </div>
               </div>
-
-              {/* {preview && (
-                <>
-                  <span className="text-ascent-1">Preview Image</span>
-                  <img
-                    className="w-full mt-2 rounded-lg"
-                    src={`${URL.createObjectURL(file)} `}
-                    onClick={() => {
-                      {
-                        setPreview(false);
-                        setFile(null);
-                      }
-                    }}
-                  />
-                </>
-              )}
-               */}
-              {/* {"After"} */}
-
-              {preview && (
-                <>
-                  {/* <span
-                    className="text-ascent-1 cursor-pointer rounded-full px-4 py-1 bg-[#0444a4]"
-                    onClick={() => {
-                      setPreview(false);
-                      setFile(null);
-                    }}
-                  >
-                    Close
-                  </span> */}
-                  {/* <span className="text-ascent-1">
-                    Preview {file.type.includes("image") ? "Image" : "Video"}
-                  </span> */}
-                  {/* {file.type.includes("image") ? (
-                    <img
-                      className="w-full mt-2 rounded-lg"
-                      src={`${URL.createObjectURL(file)}`}
-                    />
-                  ) : (
-                    <video
-                      ref={videoRef}
-                      controls
-                      className="w-full mt-2 rounded-lg"
-                    >
-                      <source
-                        src={`${URL.createObjectURL(file)}`}
-                        type={file.type}
-                      />
-                      Your browser does not support the video tag.
-                    </video>
-                  )} */}
-                </>
-              )}
-
-              {/* {file != null && <img src="" />}
-              {errMsg?.message && (
-                <span
-                  role="alert"
-                  className={`text-sm ${
-                    errMsg?.status === "failed"
-                      ? "text-[#f64949fe]"
-                      : "text-[#2bá50fe]"
-                  } mt-0.5`}
-                >
-                  {errMsg?.message}
-                </span>
-              )} */}
 
               {
                 <div className="flex items-center justify-between py-4">
@@ -648,13 +614,20 @@ const Home = () => {
               <Loading />
             ) : posts?.length > 0 ? (
               posts?.map((post, index) => (
-                <PostCard
-                  key={index}
-                  posts={post}
-                  user={user}
-                  deletePost={handleDeletePost}
-                  likePost={handleLikePost}
-                />
+                <div
+                  className="itempost"
+                  key={post._id}
+                  data-post-id={post._id}
+                  post={post}
+                >
+                  <PostCard
+                    key={index}
+                    posts={post}
+                    user={user}
+                    deletePost={handleDeletePost}
+                    likePost={handleLikePost}
+                  />
+                </div>
               ))
             ) : (
               // <Postrange />
@@ -662,17 +635,31 @@ const Home = () => {
                 <p className="text-lg text-ascent-2">No Post Available</p>
               </div>
             )}
+            {/* <div className="absolute bg-blue overflow-y-auto">
+              <h3>Visible Posts:</h3>
+              <ul>
+                {visiblePosts.length > 0 ? (
+                  visiblePosts.map((postId) => (
+                    <li key={postId}>Post ID: {postId}</li>
+                  ))
+                ) : (
+                  <p>No post is visible yet.</p>
+                )}
+              </ul>
+            </div> */}
             {posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
-          <div className="hidden w-1/5 h-full lg:flex flex-col gap-6 overflow-y-auto flex-initial">
+          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 overflow-y-auto flex-initial">
             {/* {FRIEND REQUEST} */}
-            <div className="w-full bg-primary shadow-sm rounded-lg px-6 py-5">
+            <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
-            pb-2 border-b border-[#66666645f]"
+            pb-2 "
               >
-                <span className="font-medium">Friend Request</span>
+                <span className="font-medium text-lg text-ascent-2">
+                  Friend Request
+                </span>
                 <span>{friendRequest?.length}</span>
               </div>
 
@@ -723,9 +710,11 @@ const Home = () => {
             </div>
             <Lastactive />
             {/* {SUGGEST FRIENDS} */}
-            <div className="w-full bg-primary shadow-sm rounded-lg px-5 py-5">
+            <div className="w-full shadow-sm py-5">
               <div className="flex items-center justify-between text-sm text-ascent-1 ">
-                <span className="font-medium">Friend Suggestion</span>
+                <span className="font-medium text-lg text-ascent-2">
+                  Friend Suggestion
+                </span>
               </div>
               <form
                 className="hidden md:flex items-center justify-center gap-5"
@@ -737,7 +726,7 @@ const Home = () => {
                       register={register("search")}
                     /> */}
                 <input
-                  className="bg-primary placeholder:text-[#666] pl-1 border-[#66666690] border-b w-full 
+                  className="bg-bgColor placeholder:text-[#666] pl-1 border-[#66666690] border-b w-full 
                       outline-none text-ascent-2"
                   placeholder="Search"
                   value={search}

@@ -27,28 +27,15 @@ const Lastactive = () => {
     fetchNotification();
   }, []);
   return (
-    <div className="w-full bg-primary shadow-sm rounded-lg  py-5">
+    <div className="w-full shadow-sm border-b border-ascent-2 pb-5">
       <div
         className="flex items-center justify-between text-sm text-ascent-1 
-            pb-2 border-b border-[#66666645f]  mx-6"
+            pb-2 "
       >
-        <span className="font-medium">Last Activities</span>
+        <span className="font-medium text-lg text-ascent-2">
+          Last Activities
+        </span>
       </div>
-      {/* <div className="w-full flex gap-4 items-center cursor-pointer">
-        <img
-          src={user?.profileUrl ?? NoProfile}
-          alt={user?.firstName}
-          className="w-10 h-10 object-cover rounded-full"
-        />
-        <div className="flex-1">
-          <p className="text-base font-medium text-ascent-1">
-            {user?.firstName} {user?.lastName}
-          </p>
-          <span className="text-sm text-ascent-2">
-            {user?.profession ?? "No Profession"}
-          </span>
-        </div>
-      </div> */}
 
       {notifications?.slice(0, 3).map((notification, index) => (
         <Link to={`${notifications[index]?.redirectUrl}`}>
