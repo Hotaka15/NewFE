@@ -122,6 +122,7 @@ const RangeChat = forwardRef(
           console.log(error);
         }
         setOnscreen(true);
+        position();
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -212,6 +213,10 @@ const RangeChat = forwardRef(
           console.log(chatWindowRef.current.scrollTop);
           console.log(chatWindowRef.current.offsetHeight);
           chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+          // chatWindowRef.current.scrollIntoView({
+          //   behavior: "smooth", // Cuộn mượt
+          //   block: "end", // Đảm bảo cuộn về cuối phần tử
+          // });
         }
       }, 100);
     };
@@ -240,7 +245,6 @@ const RangeChat = forwardRef(
     useEffect(() => {
       setLoading(true);
       fetchchat(idroom);
-      position();
       return () => {
         setOnscreen(false);
       };
@@ -248,15 +252,15 @@ const RangeChat = forwardRef(
 
     useEffect(() => {});
 
-    const scrollToBottom = debounce(() => {
-      if (chatWindowRef.current && onScreen) {
-        chatWindowRef.current.scrollIntoView({
-          behavior: "smooth", // Cuộn mượt
-          block: "end", // Đảm bảo cuộn về cuối phần tử
-        });
-      }
-      setLoading(false);
-    }, 300);
+    // const scrollToBottom = debounce(() => {
+    //   if (chatWindowRef.current && onScreen) {
+    //     chatWindowRef.current.scrollIntoView({
+    //       behavior: "smooth", // Cuộn mượt
+    //       block: "end", // Đảm bảo cuộn về cuối phần tử
+    //     });
+    //   }
+    //   setLoading(false);
+    // }, 300);
 
     // useEffect(() => {
 

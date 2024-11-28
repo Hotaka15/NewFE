@@ -21,7 +21,7 @@ import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
 import VideoPlayer from "./VideoPlayer";
 import { aichecktext } from "../until/ai";
-
+import { FaEye } from "react-icons/fa";
 const getPostComments = async (id, user) => {
   console.log(user?.token);
 
@@ -276,7 +276,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
   );
 };
 
-const PostCard = ({ posts, user, deletePost, likePost }) => {
+const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
   const [showAll, setShowAll] = useState(0);
   const [showReply, setshowReply] = useState(0);
   const [comments, setComments] = useState([]);
@@ -292,6 +292,7 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
   const [upost, setUpost] = useState();
   const [isLiking, setIsLiking] = useState(false);
   const [isreport, setIsreport] = useState(false);
+
   const handleupdatepost = (res) => {
     setPost(res);
   };
@@ -417,11 +418,19 @@ const PostCard = ({ posts, user, deletePost, likePost }) => {
             </span> */}
                 <span className="hidden md:flex text-ascent-2">
                   {moment(post?.createdAt ?? "2023-05-25").fromNow()}
+                  <div className="w-2"></div>
+                  {isCheck && (
+                    <div className="flex justify-center items-center">
+                      {" "}
+                      <FaEye />
+                    </div>
+                  )}
                 </span>
               </div>
               {/* <span className="hidden md:flex text-ascent-2">
             {moment(post?.createdAt ?? "2023-05-25").fromNow()}
           </span> */}
+
               <div
                 className="text-ascent-1 h-fit px-2 py-1 rounded-lg hover:bg-ascent-3/30"
                 onClick={() => {

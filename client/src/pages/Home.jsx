@@ -65,7 +65,7 @@ import {
   postrenewfetchPosts,
 } from "../until/post";
 import { debounce } from "lodash";
-import { SetPosts, UpdatePosts } from "../redux/postSlice";
+import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -88,6 +88,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [visiblePosts, setVisiblePosts] = useState([]);
   const [trigger, setTrigger] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
+  const timeoutIdRef = useRef(null); // Lưu trữ timeoutId
+
   const videoRef = useRef(null);
   // console.log(user);
   let pages = 1;
@@ -312,32 +315,112 @@ const Home = () => {
     }
   };
 
+  // useEffect(() => {
+  //   // const observer = new IntersectionObserver(
+  //   //   (entries) => {
+
+  //   //     const visible = entries
+  //   //       .filter((entry) => entry.isIntersecting)
+  //   //       .map((entry) => entry.target.dataset.postId);
+
+  //   //     setVisiblePosts((prevVisiblePosts) => [
+  //   //       ...new Set([...prevVisiblePosts, ...visible]),
+  //   //     ]);
+  //   //     dispatch(CheckedPosts(visible));
+  //   //   },
+  //   //   { threshold: 0.5 }
+  //   // );
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         const postId = entry.target.dataset.postId;
+
+  //         if (entry.isIntersecting) {
+  //           // Nếu phần tử vào viewport, bắt đầu đếm thời gian
+  //           if (timeoutId) {
+  //             clearTimeout(timeoutId); // Hủy timeout cũ nếu có
+  //           }
+
+  //           const newTimeoutId = setTimeout(() => {
+  //             // Sau 5 giây, thực hiện dispatch và cập nhật visiblePosts
+  //             setVisiblePosts((prevVisiblePosts) => [
+  //               ...new Set([...prevVisiblePosts, postId]), // Thêm postId nếu chưa có
+  //             ]);
+  //             console.log(postId);
+  //           }, 5000); // Đặt timeout 5 giây
+
+  //           // Lưu timeoutId để có thể hủy nếu cần
+  //           setTimeoutId(newTimeoutId);
+  //         } else {
+  //           // Nếu phần tử không còn trong viewport, hủy timeout
+  //           if (timeoutId) {
+  //             console.log(postId);
+
+  //             clearTimeout(timeoutId);
+  //           }
+  //         }
+  //       });
+  //     },
+  //     { threshold: 1 } // 50% của phần tử cần phải hiển thị trong viewport
+  //   );
+
+  //   const divElements = document.querySelectorAll(".itempost");
+  //   divElements.forEach((div) => observer.observe(div));
+
+  //   return () => {
+  //     observer.disconnect();
+  //   };
+  // }, [posts, loading]);
   useEffect(() => {
+    // Tạo observer để theo dõi sự thay đổi của phần tử
     const observer = new IntersectionObserver(
       (entries) => {
-        // Lọc các phần tử đang hiển thị
-        const visible = entries
-          .filter((entry) => entry.isIntersecting) // Kiểm tra phần tử có vào viewport hay không
-          .map((entry) => entry.target.dataset.postId); // Lấy ID từ data-post-id
+        entries.forEach((entry) => {
+          const postId = entry.target.dataset.postId;
 
-        // Cập nhật trạng thái các bài đăng đang hiển thị
-        setVisiblePosts((prevVisiblePosts) => [
-          ...new Set([...prevVisiblePosts, ...visible]), // Thêm vào các post mới hiển thị (tránh trùng lặp)
-        ]);
+          if (entry.isIntersecting) {
+            // Nếu phần tử vào viewport, bắt đầu đếm thời gian
+            if (timeoutIdRef.current) {
+              clearTimeout(timeoutIdRef.current); // Hủy timeout cũ nếu có
+            }
+
+            // Đặt timeout 5 giây
+            timeoutIdRef.current = setTimeout(() => {
+              // Sau 5 giây, thực hiện dispatch và cập nhật visiblePosts
+              // setVisiblePosts((prevVisiblePosts) => [
+              //   ...new Set([...prevVisiblePosts, postId]), // Thêm postId nếu chưa có
+              // ]);
+              console.log(postId);
+
+              // Dispatch hành động để kiểm tra postId
+              dispatch(CheckedPosts([postId]));
+            }, 1000); // Đặt timeout 5 giây
+          } else {
+            // Nếu phần tử không còn trong viewport, hủy timeout
+            if (timeoutIdRef.current) {
+              clearTimeout(timeoutIdRef.current);
+              timeoutIdRef.current = null; // Reset lại timeoutId
+            }
+          }
+        });
       },
-      { threshold: 0.5 } // 50% phần tử phải hiển thị trong viewport
+      { threshold: 1 } // 100% của phần tử cần phải hiển thị trong viewport
     );
 
-    // Thêm observer cho tất cả các phần tử div có class "itempost"
+    // Quan sát các phần tử .itempost
     const divElements = document.querySelectorAll(".itempost");
     divElements.forEach((div) => observer.observe(div));
+    const doc = document.getElementById("post_range");
+    console.log(doc.clientHeight);
 
-    // Cleanup khi component unmount
+    // Cleanup khi component unmount hoặc posts/ loading thay đổi
     return () => {
       observer.disconnect();
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current); // Hủy timeout nếu component unmount
+      }
     };
   }, [posts, loading]);
-
   useEffect(() => {
     if (page) {
       if (page == 1) {
@@ -434,7 +517,7 @@ const Home = () => {
                 </span>
               </Link>
 
-              <Link
+              {/* <Link
                 to={"/save"}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
@@ -444,7 +527,7 @@ const Home = () => {
                   </div>
                   Saved
                 </span>
-              </Link>
+              </Link> */}
               <Link
                 to={"/newfeed"}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -457,7 +540,7 @@ const Home = () => {
                 </span>
               </Link>
 
-              <Link
+              {/* <Link
                 to={""}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
@@ -489,9 +572,9 @@ const Home = () => {
                   </div>
                   Event
                 </span>
-              </Link>
+              </Link> */}
               <Link
-                to={""}
+                to={`/chat/${user?._id}`}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
                 <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
@@ -626,6 +709,7 @@ const Home = () => {
                     user={user}
                     deletePost={handleDeletePost}
                     likePost={handleLikePost}
+                    isCheck={post?.isCheck}
                   />
                 </div>
               ))

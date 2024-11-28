@@ -27,6 +27,22 @@ const postSlice = createSlice({
 
       state.posts = action.payload;
     },
+    checkedPosts(state, action) {
+      const list = [...state.posts];
+      console.log(action.payload);
+
+      const id = action.payload;
+      console.log(id);
+
+      let item = list.find((obj) => obj._id == id);
+      if (item) {
+        item.isCheck = true;
+      }
+      console.log(item);
+
+      state.editp = list;
+      // state.posts = action.payload;
+    },
     updateEditp(state, action) {
       state.editp = action.payload;
     },
@@ -50,5 +66,11 @@ export function UpdatePosts(post) {
 export function UpdateEditp(val) {
   return (dispatch, getState) => {
     dispatch(postSlice.actions.updateEditp(val));
+  };
+}
+
+export function CheckedPosts(post) {
+  return (dispatch, getState) => {
+    dispatch(postSlice.actions.checkedPosts(post));
   };
 }
