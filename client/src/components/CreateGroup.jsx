@@ -40,8 +40,8 @@ const CreateGroup = ({ setCreatg }) => {
   };
 
   const handleSearch = async (e) => {
-    e.preventDefault();
-    console.log(e);
+    // e.preventDefault();
+    // console.log(e);
 
     if (search === "") {
       fetchSuggestFriends();
@@ -76,9 +76,18 @@ const CreateGroup = ({ setCreatg }) => {
 
     setListAdd(lista);
   };
+  // useEffect(() => {
+  //   fetchSuggestFriends();
+  // }, []);
   useEffect(() => {
-    fetchSuggestFriends();
-  }, []);
+    const timeoutId = setTimeout(() => {
+      handleSearch(search);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
   return (
     <div className="absolute w-full h-full bg-secondary/30 z-50 ">
       <div className="w-full h-full flex justify-center items-center">
@@ -119,18 +128,18 @@ const CreateGroup = ({ setCreatg }) => {
               placeholder="Description"
             />
           </div>
+          <div className="flex w-full justify-start items-center gap-3 ">
+            <span className="text-ascent-1">Member</span>
 
-          <span className="text-ascent-1">Member</span>
-          <form onSubmit={(e) => handleSearch(e)}>
             <input
               type="text"
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
-              className="bg-secondary px-2 py-2 rounded-2xl text-ascent-1"
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
               placeholder="Search"
             />
-          </form>
+          </div>
 
           <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap justify-center ">
             {listsuggest &&

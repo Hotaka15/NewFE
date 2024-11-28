@@ -83,6 +83,7 @@ const RangeChat = forwardRef(
     const [faild, setFald] = useState([]);
     const [after, setAfter] = useState([]);
     const [onScreen, setOnscreen] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
     // console.log(user);
     // console.log(idroom);
     // console.log(userinfo);
@@ -244,6 +245,8 @@ const RangeChat = forwardRef(
         setOnscreen(false);
       };
     }, [idroom]);
+
+    useEffect(() => {});
 
     const scrollToBottom = debounce(() => {
       if (chatWindowRef.current && onScreen) {
