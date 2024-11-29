@@ -218,7 +218,7 @@ const TopBar = ({ user, setKey }) => {
       {ava && (
         <div className="bg-primary">
           <div className=" right-20 z-50 absolute w-fit overflow-auto border rounded-xl text-ascent-1 h-fit border-[#66666690] justify-center flex flex-col">
-            <Link to={"/profilefix/" + user?._id} className="flex gap-2">
+            <Link to={"/profile/" + user?._id} className="flex gap-2">
               <div className="w-full px-10 text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex flex-col justify-evenly">
                 <div className="flex justify-center items-center">
                   <img

@@ -30,6 +30,7 @@ import Inbox from "./Inbox";
 import Postrange from "./Postrange";
 import UserChart from "./UserChart";
 import SuggestPost from "./SuggestPost";
+import VideoPlayer from "./VideoPlayer";
 export {
   TextInput,
   Loading,
@@ -63,4 +64,5 @@ export {
   Postrange,
   UserChart,
   SuggestPost,
+  VideoPlayer,
 };

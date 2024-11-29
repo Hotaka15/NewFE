@@ -39,7 +39,7 @@ const Lastactive = () => {
 
       {notifications?.slice(0, 3).map((notification, index) => (
         <Link to={`${notifications[index]?.redirectUrl}`}>
-          <div className="w-full flex gap-4 items-center cursor-pointer py-2 hover:bg-ascent-3/30 rounded-xl px-6">
+          <div className="w-full flex gap-4 items-center cursor-pointer py-2 hover:bg-ascent-3/30  px-2">
             <img
               src={notifications[index]?.senderInfo?.avatar ?? NoProfile}
               alt={notifications[index]?.senderInfo?.name}

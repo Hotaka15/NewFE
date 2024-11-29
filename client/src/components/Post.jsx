@@ -10,12 +10,14 @@ import { apiRequest, handFileUpload } from "../until";
 import { FaEarthAfrica } from "react-icons/fa6";
 import { TiDeleteOutline } from "react-icons/ti";
 import { CiImageOn, CiShoppingTag } from "react-icons/ci";
+import { MdImage } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
+import { RiFolderVideoFill } from "react-icons/ri";
 import { CiVideoOn } from "react-icons/ci";
-import ReactPlayer from "react-player";
+
 import { TbMessageChatbot } from "react-icons/tb";
 import { AiFillRobot } from "react-icons/ai";
 import {
@@ -27,6 +29,7 @@ import { aicheckpost } from "../until/ai";
 import SuggestPost from "./SuggestPost";
 import { userfriendSuggest, usergetFriends } from "../until/user";
 import UserTiitle from "./UserTiitle";
+import VideoPlayer from "./VideoPlayer";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -125,9 +128,27 @@ const Post = ({ setPage }) => {
       if (filevideo.size > maxFileSize) {
         setErr("Video must be under 50mb");
       } else {
-        setVideoUpload(filevideo);
-        setVideoFile(URL.createObjectURL(filevideo));
-        setErr("");
+        // setVideoUpload(filevideo);
+        // setVideoFile(URL.createObjectURL(filevideo));
+        const videocheck = URL.createObjectURL(filevideo);
+        const videoElement = document.createElement("video");
+        videoElement.src = videocheck;
+        videoElement.onloadedmetadata = () => {
+          const width = videoElement.videoWidth;
+          const height = videoElement.videoHeight;
+
+          console.log("Width:", width, "Height:", height);
+
+          // Giới hạn độ phân giải: ví dụ, giới hạn tối đa 1280x720
+          if (width > 1280 || height > 720) {
+            setErr("Video resolution exceeds the limit of 1280x720");
+          } else {
+            setErr("");
+            setVideoUpload(filevideo);
+            setVideoFile(URL.createObjectURL(filevideo));
+          }
+        };
+        // setErr("");
       }
     }
   };
@@ -206,6 +227,7 @@ const Post = ({ setPage }) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchFriends();
   }, []);
@@ -254,8 +276,33 @@ const Post = ({ setPage }) => {
                 </div>
                 <div className="flex flex-col relative">
                   {write && (
-                    <div className="w-full h-full">
-                      <div className="flex justify-center items-center ">
+                    <div className="w-full h-full ">
+                      <div className="w-full ">
+                        <div className="px-7 flex gap-2">
+                          <img
+                            src={user?.profileUrl ?? NoProfile}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                          <div>
+                            <span className="text-ascent-1">
+                              {user?.firstName + " " + user?.lastName}
+                            </span>
+                            <div className="flex justify-center items-center ">
+                              <div
+                                className="bg-secondary text-ascent-1 text-xs px-1 py-1 opacity-70 flex justify-center items-center gap-1"
+                                onClick={() => {
+                                  setAudience(true);
+                                  // setWrite(false);
+                                }}
+                              >
+                                <FaEarthAfrica />
+                                {option} <AiOutlineDown size={15} />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <div className="flex justify-center items-center ">
                         <div
                           className="bg-secondary text-ascent-1 px-2 py-1 opacity-70 flex justify-center items-center gap-1"
                           onClick={() => {
@@ -266,8 +313,8 @@ const Post = ({ setPage }) => {
                           <FaEarthAfrica />
                           {option} <AiOutlineDown size={15} />
                         </div>
-                      </div>
-                      <div className="flex justify-between px-6 pt-5 pb-2">
+                      </div> */}
+                      <div className="flex justify-between px-2 pt-5 pb-2">
                         <label
                           htmlFor="name"
                           className="block font-medium text-xl text-ascent-1 text-left py-7 box-border"
@@ -284,7 +331,7 @@ const Post = ({ setPage }) => {
                             }
                             className="w-full h-72 bg-primary rounded-3xl border-none
             outline-none text-xl text-ascent-1 
-            px-4 py-3 placeholder:text-ascent-2 placeholder:text-3xl resize-none"
+            px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
                             value={content}
                             placeholder="Write something about post"
                             onChange={(ev) => {
@@ -312,11 +359,12 @@ const Post = ({ setPage }) => {
                           )}
                           {videoFile && (
                             <div className="relative">
-                              <video controls width="400">
-                                {/* <ReactPlayer controls={true} url={videoFile} /> */}
+                              {/* <video controls width="400">
+                                
                                 <source src={videoFile} type="video/mp4" />
                                 Your browser does not support the video tag.
-                              </video>
+                              </video> */}
+                              <VideoPlayer source={videoFile} />
                               <div
                                 onClick={() => {
                                   // setPreview(false);
@@ -329,72 +377,75 @@ const Post = ({ setPage }) => {
                             </div>
                           )}
                           {!posting && (
-                            <div className="flex gap-3 mt-2">
-                              <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
-                                <CiShoppingTag />
-                                <div className="">Tags</div>
+                            <div className="flex gap-3 mt-2 border border-[#66666690] px-2 py-3 items-center rounded-lg justify-between">
+                              {/* <div className="w-fit py-1 flex outline-1 px-3 text-[#04c922] bg-primary rounded-full outline  justify-center items-center cursor-pointer ">
+                                  <CiShoppingTag />
+                                  <div className="">Tags</div>
+                                </div> */}
+                              <div className="text-ascent-2">
+                                Add to your post
                               </div>
+                              <div className="flex gap-2 items-center">
+                                <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
+                                  <label
+                                    htmlFor="imgUpload"
+                                    className="flex items-center gap-1 text-base text-[#345cd9]  cursor-pointer"
+                                  >
+                                    <input
+                                      type="file"
+                                      onChange={(e) => {
+                                        e.target.files[0] && handlebg(e);
+                                      }}
+                                      className="hidden"
+                                      id="imgUpload"
+                                      data-max-size="5120"
+                                      accept=".jpg, .png, .jpeg"
+                                    />
+                                    <MdImage size={25} />
+                                  </label>
+                                </div>
 
-                              <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
-                                <label
-                                  htmlFor="imgUpload"
-                                  className="flex items-center gap-1 text-base text-[#345cd9]  cursor-pointer"
-                                >
-                                  <input
-                                    type="file"
-                                    onChange={(e) => {
-                                      e.target.files[0] && handlebg(e);
-                                    }}
-                                    className="hidden"
-                                    id="imgUpload"
-                                    data-max-size="5120"
-                                    accept=".jpg, .png, .jpeg"
-                                  />
-                                  <CiImageOn />
-                                  Image
-                                </label>
-                              </div>
-
-                              <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
-                                <label
-                                  htmlFor="videoUpload"
-                                  className="flex items-center gap-1 text-base text-[#e30b65]  cursor-pointer"
-                                >
-                                  <input
-                                    type="file"
-                                    onChange={(e) => {
-                                      e.target.files[0] && handleFileChange(e);
-                                    }}
-                                    className="hidden"
-                                    id="videoUpload"
-                                    data-max-size="5120"
-                                    accept="video/*"
-                                  />
-                                  <CiVideoOn />
-                                  Video
-                                </label>
+                                <div className="w-fit py-1 flex outline-1 px-3 text-[#e30b65] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
+                                  <label
+                                    htmlFor="videoUpload"
+                                    className="flex items-center gap-1 text-base text-[#e30b65]  cursor-pointer"
+                                  >
+                                    <input
+                                      type="file"
+                                      onChange={(e) => {
+                                        e.target.files[0] &&
+                                          handleFileChange(e);
+                                      }}
+                                      className="hidden"
+                                      id="videoUpload"
+                                      data-max-size="5120"
+                                      accept="video/mp4"
+                                    />
+                                    <RiFolderVideoFill size={25} />
+                                  </label>
+                                </div>
                               </div>
                             </div>
                           )}
 
-                          <div className="w-full flex justify-end">
+                          <div className="w-full flex justify-end ">
                             {err && (
-                              <div className="w-full flex justify-center items-center text-[#f64949fe]">
+                              <div className="w-full flex justify-center text-xs items-center text-[#f64949fe]">
                                 {err}
                               </div>
                             )}
                             {posting ? (
-                              <div className="w-full flex justify-center items-center mx-2">
+                              <div className="w-full flex justify-center items-center my-4">
                                 <Loading />
                               </div>
                             ) : (
                               <CustomButton
                                 type="submit"
                                 Post
-                                onClick={() => {
-                                  console.log("press");
-                                }}
-                                containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
+                                // onClick={() => {
+                                //   console.log("press");
+                                // }}
+                                containerStyles={`inline-flex justify-center rounded-xl mt-2 bg-blue w-full
                     py-3 text-sm font-medium text-white outline-none`}
                                 tittle="Post"
                               />
@@ -702,7 +753,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
           {/* &#8203; */}
 
           {isSuggest && (
-            <div className="absolute w-[425px] h-[620px]  bottom-10 right-10">
+            <div className="fixed w-[425px] h-[620px]  bottom-10 right-10">
               <SuggestPost handleisSuggest={handleisSuggest} />
             </div>
           )}

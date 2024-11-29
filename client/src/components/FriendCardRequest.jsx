@@ -61,7 +61,7 @@ const FriendCardRequest = ({
           <span
             className="text-ascent-1 cursor-pointer"
             onClick={() => {
-              navigate("/profilefix/" + userr?._id);
+              navigate("/profile/" + userr?._id);
             }}
           >
             {userr?.firstName} {userr?.lastName}

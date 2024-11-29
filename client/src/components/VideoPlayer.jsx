@@ -1,32 +1,31 @@
-import React, { useRef, useEffect } from "react";
-import videojs from "video.js";
-import "video.js/dist/video-js.css"; // Import CSS mặc định của Video.js
-
-const VideoPlayer = ({ options }) => {
-  const videoRef = useRef(null); // Tham chiếu đến thẻ video
-  const playerRef = useRef(null); // Tham chiếu đến instance của Video.js
-
-  useEffect(() => {
-    if (videoRef.current && !playerRef.current) {
-      // Khởi tạo Video.js player
-      const player = videojs(videoRef.current, options);
-      playerRef.current = player;
-    }
-
-    return () => {
-      if (playerRef.current) {
-        // Hủy player khi component bị gỡ bỏ
-        playerRef.current.dispose();
-        playerRef.current = null;
-      }
-    };
-  }, [options]);
+import React, { useEffect, useState } from "react";
+import { DefaultPlayer as Video } from "react-html5video";
+import "react-html5video/dist/styles.css";
+const VideoPlayer = ({ source }) => {
+  console.log(source);
 
   return (
-    <div data-vjs-player>
-      <video ref={videoRef} className="video-js"></video>
+    <div className="rounded-lg overflow-hidden">
+      <Video
+        // autoPlay
+        loop
+        muted
+        controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
+        onCanPlayThrough={() => {
+          // Do stuff
+        }}
+      >
+        <source src={source} type="video/mp4" />
+        Your browser does not support the video tag.
+        {/* <track
+      label="English"
+      kind="subtitles"
+      srcLang="en"
+      src={source}
+      default
+    /> */}
+      </Video>
     </div>
   );
 };
-
 export default VideoPlayer;

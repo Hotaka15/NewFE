@@ -221,6 +221,29 @@ const RangeChat = forwardRef(
       }, 100);
     };
 
+    const handleScroll = useCallback(
+      debounce((e) => {
+        const target = e.target;
+
+        if (target.scrollTop <= target.scrollHeight * 0.4 && !isFetching) {
+          setPage((prevPage) => prevPage + 1);
+          console.log(page);
+        }
+      }, 500),
+      [isFetching]
+    );
+
+    // await postrenewfetchPosts(user?.token, dispatch, 1);
+
+    useEffect(() => {
+      const postRange = document.getElementById("listchat");
+      postRange.addEventListener("scroll", handleScroll);
+
+      return () => {
+        postRange.removeEventListener("scroll", handleScroll);
+      };
+    }, [handleScroll]);
+
     const handlepre = useCallback(
       debounce((e) => {
         const position = e.target;

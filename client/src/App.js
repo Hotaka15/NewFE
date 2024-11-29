@@ -57,7 +57,7 @@ function App() {
             <Route path="/frienddetails" element={<ProfileDetail />} />
             <Route path="/friendsuggest" element={<FriendDetailSuggest />} />
             <Route path="/friendrequest" element={<FriendDetailRequest />} />
-            <Route path="/profile/:id?" element={<Profile />} />
+            {/* <Route path="/profile/:id?" element={<Profile />} /> */}
             <Route path="/chat/:id?" element={<Chat />} />
             <Route path="/post/:id?" element={<PostPage />} />
             <Route path="/search/:keyword?" element={<Search />} />
@@ -73,7 +73,7 @@ function App() {
             <Route path="/frienddetails" element={<ProfileDetail />} />
             <Route path="/friendsuggest" element={<FriendDetailSuggest />} />
             <Route path="/friendrequest" element={<FriendDetailRequest />} />
-            <Route path="/profile/:id?" element={<Profile />} />
+            {/* <Route path="/profile/:id?" element={<Profile />} /> */}
             <Route path="/chat/:id?" element={<Chat />} />
             <Route path="/post/:id?" element={<PostPage />} />
             <Route path="/search/:keyword?" element={<Search />} />
@@ -96,7 +96,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ChangePassword />} />
-        <Route path="/profilefix/:id?" element={<ProfileFix />} />
+        <Route path="/profile/:id?" element={<ProfileFix />} />
       </Routes>
     </div>
   );

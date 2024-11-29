@@ -19,9 +19,10 @@ import Editpost from "./Editpost";
 import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
-import VideoPlayer from "./VideoPlayer";
+
 import { aichecktext } from "../until/ai";
 import { FaEye } from "react-icons/fa";
+import VideoPlayer from "./VideoPlayer";
 const getPostComments = async (id, user) => {
   console.log(user?.token);
 
@@ -323,16 +324,6 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
 
     // await fetchPost();
   };
-  // const videoJsOptions = {
-  //   controls: true, // Hiển thị điều khiển
-  //   autoplay: false, // Không tự động phát
-  //   preload: "auto", // Tự động tải
-  //   sources: [
-  //     {
-  //       src: "https://vjs.zencdn.net/v/oceans.mp4", // Đường dẫn video
-  //     },
-  //   ],
-  // };
 
   const handlerpdetail = () => {
     setReportdetail(!reportdetail);
@@ -397,7 +388,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
       {!isreport && (
         <div className="mb-2 bg-primary p-4 rounded-xl">
           <div className="flex gap-3 items-center mb-2">
-            <Link to={"/profilefix/" + post?.userId}>
+            <Link to={"/profile/" + post?.userId}>
               <img
                 src={upost?.profileUrl ?? NoProfile}
                 alt={upost?.firstName}
@@ -407,7 +398,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
 
             <div className="relative w-full flex justify-between select-none">
               <div className="">
-                <Link to={"/profilefix/" + upost?._id}>
+                <Link to={"/profile/" + upost?._id}>
                   <p className="font-medium text-lg text-ascent-1">
                     {upost?.firstName} {upost?.lastName}
                   </p>
@@ -480,16 +471,16 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
               </p>
             </Link>
             {post?.urlVideo && (
-              <div className="h-full flex justify-center items-center">
-                <video controls width="650px">
+              <div className="h-full flex justify-center items-center mt-1 ">
+                <VideoPlayer source={post?.urlVideo} />
+                {/* <video controls width="650px">
                   <source src={post?.urlVideo} type="video/mp4" />
                   Your browser does not support the video tag.
-                </video>
-                {/* <VideoPlayer options={videoJsOptions} /> */}
+                </video> */}
               </div>
             )}
             {post?.image && (
-              <div className="h-full flex justify-center items-center">
+              <div className="h-full flex justify-center items-center mt-1">
                 <img
                   src={post?.image}
                   alt="post image"

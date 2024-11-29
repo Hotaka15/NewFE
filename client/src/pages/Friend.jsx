@@ -59,10 +59,10 @@ const Friend = () => {
   };
   const crollleft = () => {
     let position = document.getElementById("request");
-    // console.log(position.offsetWidth);
-    // console.log(position.scrollWidth);
-    // console.log(position.clientWidth);
-    // console.log(position.scrollLeft);
+    console.log(position.offsetWidth);
+    console.log(position.scrollWidth);
+    console.log(position.clientWidth);
+    console.log(position.scrollLeft);
     position.scrollLeft -= 200;
     position.scrollLeft < 100 ? setCheckl("hidden") : setCheckl("");
     position.scrollLeft <= position.scrollWidth - position.clientWidth - 200
@@ -225,6 +225,86 @@ lg:rounded-lg h-screen overflow-hidden"
                     {/* <div className="absolute w-full h-full bg-primary rounded-xl flex justify-center items-center text-lg text-ascent-2">
                     No Request
                   </div> */}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className="h-fit w-fit flex-shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
                     {friendRequest?.map((friend) => (
                       <div className="h-fit w-fit flex-shrink-0">
                         <FriendCardRequest

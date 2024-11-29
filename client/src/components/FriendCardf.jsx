@@ -16,7 +16,7 @@ const FriendCardf = ({ friend }) => {
 
         <div className="w-full flex flex-col gap-4 pt-4">
           <Link
-            to={"/profilefix/" + friend?._id}
+            to={"/profile/" + friend?._id}
             className="w-full flex gap-4 items-center cursor-pointer"
           >
             <img

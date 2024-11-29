@@ -15,6 +15,8 @@ import { RiMemoriesFill } from "react-icons/ri";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { MdEvent } from "react-icons/md";
 import { MdFeed } from "react-icons/md";
+
+import { IoVideocamOutline } from "react-icons/io5";
 import {
   CustomButton,
   EditProfile,
@@ -66,6 +68,8 @@ import {
 } from "../until/post";
 import { debounce } from "lodash";
 import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
+import { CiSearch } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -90,7 +94,7 @@ const Home = () => {
   const [trigger, setTrigger] = useState(false);
   const [timeoutId, setTimeoutId] = useState(null);
   const timeoutIdRef = useRef(null); // Lưu trữ timeoutId
-
+  const [isSearch, setIsSearch] = useState(false);
   const videoRef = useRef(null);
   // console.log(user);
   let pages = 1;
@@ -299,13 +303,28 @@ const Home = () => {
     }
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
+  // const handleSearch = async (e) => {
+  //   e.preventDefault();
+  //   if (search === "") {
+  //     fetchSuggestFriends();
+  //   } else {
+  //     try {
+  //       console.log(`/users/search/${search}`);
+  //       const res = await searchUserName(user?.token, search);
+  //       console.log(res);
+  //       setsuggestedFriends(res);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  const handleSearch = async () => {
     if (search === "") {
       fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
+        // console.log(`/users/search/${value}`);
         const res = await searchUserName(user?.token, search);
         console.log(res);
         setsuggestedFriends(res);
@@ -314,6 +333,16 @@ const Home = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleSearch();
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [search]);
 
   // useEffect(() => {
   //   // const observer = new IntersectionObserver(
@@ -468,12 +497,9 @@ const Home = () => {
   useEffect(() => {
     dispatch(UpdatePosts([]));
     setLoading(true);
-    // test();
-    // getUser();
-    // fetchPost();
+
     fetchFriendRequest();
 
-    // fetchNotification();
     fetchSuggestFriends();
   }, []);
 
@@ -491,7 +517,7 @@ const Home = () => {
             {/* <ProfileCard user={user} /> */}
             <div className=" w-full h-fit rounded-lg flex flex-col gap-3 overflow-hidden">
               <Link
-                to={"/profilefix/" + user?._id}
+                to={"/profile/" + user?._id}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
                 <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
@@ -589,23 +615,23 @@ const Home = () => {
             {user?.friends?.map((friend) => {
               console.log(friend);
 
-              <FriendsCard friend={friend} />;
+              <FriendsCard friend={user?.friends} />;
             })}
           </div>
           {/* {CENTTER} bg-primary */}
           <div
             id="post_range"
-            className="no-scrollbar h-full flex-initial w-2/5  px-4 flex flex-col gap-2 overflow-y-auto rounded-lg "
+            className="no-scrollbar h-full flex-initial w-2/4  px-4 flex flex-col gap-2 overflow-y-auto rounded-lg "
           >
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
               className="bg-primary px-4 rounded-lg"
             >
-              <div className="w-full flex items-center gap-2 py-4 border-b border-[#66666645]">
+              <div className="w-full flex items-start gap-2 py-4 border-b border-[#66666645]">
                 <img
                   src={user?.profileUrl ?? NoProfile}
                   alt="User Image"
-                  className="w-14 h-14 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full object-cover"
                 />
 
                 {/* <TextInput
@@ -618,21 +644,26 @@ const Home = () => {
                   error={errors.description ? errors.description.message : ""}
                 /> */}
                 <div
-                  className=" text-ascent-2 rounded-full border border-[#66666645] py-5 w-full bg-secondary hover:cursor-text"
+                  // border border-[#66666645]
+                  className=" text-ascent-2 rounded-full  pt-2 w-full pb-10 hover:cursor-text"
                   onClick={() => {
-                    // console.log("!solem");
                     dispatch(UpdatePost(true));
                   }}
                 >
-                  <div className="px-8">What's on your mind....</div>
+                  <div className="px-8 text-lg">What's on your mind....</div>
                 </div>
               </div>
 
               {
-                <div className="flex items-center justify-between py-4">
+                <div
+                  className="flex items-center justify-start gap-2 py-4"
+                  onClick={() => {
+                    dispatch(UpdatePost(true));
+                  }}
+                >
                   <label
                     htmlFor="imgUpload"
-                    className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
+                    className="flex items-center gap-1 text-base text-ascent-2  cursor-pointer"
                   >
                     {/* <input
                     type="file"
@@ -642,41 +673,41 @@ const Home = () => {
                     data-max-size="5120"
                     accept=".jpg, .png, .jpeg"
                   /> */}
-                    {/* <BiImages />
-                  <span>Image</span> */}
+                    <BiImages />
+                    <span>Image</span>
                   </label>
 
-                  {/* <label
-                  htmlFor="videoUpload"
-                  className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
-                >
-                  <input
+                  <label
+                    htmlFor="videoUpload"
+                    className="flex items-center gap-1 text-base text-ascent-2  cursor-pointer"
+                  >
+                    {/* <input
                     type="file"
                     onChange={(e) => handlePreview(e.target.files[0])}
                     className="hidden"
                     id="videoUpload"
                     data-max-size="5120"
                     accept=".mp4, .wav"
-                  />
-                  <BiSolidVideo />
-                  <span>Video</span>
-                </label> */}
+                  /> */}
+                    <IoVideocamOutline size={20} />
+                    <span>Video</span>
+                  </label>
 
-                  <label
+                  {/* <label
                     htmlFor="vgifUpload"
-                    className="flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer"
+                    className="flex items-center gap-1 text-base text-ascent-2  cursor-pointer"
                   >
-                    {/* <input
+                     <input
                     type="file"
                     onChange={(e) => handlePreview(e.target.files[0])}
                     className="hidden"
                     id="vgifUpload"
                     data-max-size="5120"
                     accept=".gif"
-                  /> */}
-                    {/* <BsFiletypeGif />
-                  <span>Gif</span> */}
-                  </label>
+                  /> 
+                    <BsFiletypeGif />
+                    <span>Gif</span>
+                  </label> */}
 
                   {/* <div>
                   {posting ? (
@@ -689,6 +720,13 @@ const Home = () => {
                     />
                   )}
                 </div> */}
+                  <div className="w-full flex items-end justify-end">
+                    <CustomButton
+                      type="submit"
+                      tittle="Post"
+                      containerStyles="bg-[#0444a4] text-white py-1 px-6 rounded-full font-semibold text-sm "
+                    />
+                  </div>
                 </div>
               }
             </form>
@@ -698,7 +736,7 @@ const Home = () => {
             ) : posts?.length > 0 ? (
               posts?.map((post, index) => (
                 <div
-                  className="itempost"
+                  className="itempost "
                   key={post._id}
                   data-post-id={post._id}
                   post={post}
@@ -734,7 +772,7 @@ const Home = () => {
             {posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
-          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 overflow-y-auto flex-initial">
+          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 overflow-y-auto flex-initial px-2">
             {/* {FRIEND REQUEST} */}
             <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
               <div
@@ -744,7 +782,7 @@ const Home = () => {
                 <span className="font-medium text-lg text-ascent-2">
                   Friend Request
                 </span>
-                <span>{friendRequest?.length}</span>
+                {/* <span>{friendRequest?.length}</span> */}
               </div>
 
               <div className="w-full flex flex-col gap-4 pt-4">
@@ -752,10 +790,10 @@ const Home = () => {
                   friendRequest?.map(({ _id, sender }) => (
                     <div
                       key={sender?._id}
-                      className="flex items-center justify-between"
+                      className="flex items-center justify-between "
                     >
                       <Link
-                        to={"/profilefix/" + sender?._id}
+                        to={"/profile/" + sender?._id}
                         className="w-full flex gap-4 items-center 
                           cursor-pointer "
                       >
@@ -794,52 +832,71 @@ const Home = () => {
             </div>
             <Lastactive />
             {/* {SUGGEST FRIENDS} */}
-            <div className="w-full shadow-sm py-5">
-              <div className="flex items-center justify-between text-sm text-ascent-1 ">
-                <span className="font-medium text-lg text-ascent-2">
-                  Friend Suggestion
-                </span>
-              </div>
-              <form
-                className="hidden md:flex items-center justify-center gap-5"
-                onSubmit={(e) => handleSearch(e)}
-              >
-                {/* <TextInput
+            <div className="w-full shadow-sm ">
+              {!isSearch && (
+                <div className="flex items-center justify-between text-sm text-ascent-1 ">
+                  <span className="font-medium text-lg text-ascent-2 select-none">
+                    Friend Suggestion
+                  </span>
+                  <div
+                    className="flex items-center justify-center text-ascent-2 cursor-pointer"
+                    onClick={() => setIsSearch(true)}
+                  >
+                    <CiSearch size={20} />
+                  </div>
+                </div>
+              )}
+              {isSearch && (
+                <form
+                  className="hidden md:flex items-center justify-center gap-5"
+                  // onSubmit={(e) => handleSearch(e)}
+                >
+                  {/* <TextInput
                       styles="w-full rounded-l-full py-5"
                       placeholder="What's on your mind...."
                       register={register("search")}
                     /> */}
-                <input
-                  className="bg-bgColor placeholder:text-[#666] pl-1 border-[#66666690] border-b w-full 
+                  <input
+                    className="bg-bgColor placeholder:text-[#666] border-[#66666690] border-b w-4/5 
                       outline-none text-ascent-2"
-                  placeholder="Search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                {/* <CustomButton
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <div
+                    className="flex items-center justify-center text-ascent-2 cursor-pointer"
+                    onClick={() => {
+                      setIsSearch(false);
+                      setSearch("");
+                    }}
+                  >
+                    <IoMdClose size={20} />
+                  </div>
+                  {/* <CustomButton
                       tittle="search"
                       type="submit"
                       containerStyles="bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full"
                     /> */}
 
-                <button
+                  {/* <button
                   onClick={() => {}}
                   type={"submit"}
                   className={`inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full`}
                 >
                   search
-                </button>
-              </form>
+                </button> */}
+                </form>
+              )}
 
-              <div className="w-full flex flex-col gap-4 pt-4">
+              <div className="w-full flex flex-col  pt-4">
                 {suggestedFriends &&
                   suggestedFriends?.map((friend) => (
                     <div
-                      className="flex items-center justify-between"
+                      className="flex items-center justify-between  py-2 px-2 select-none"
                       key={friend._id}
                     >
                       <Link
-                        to={"/profilefix/" + friend?._id}
+                        to={"/profile/" + friend?._id}
                         key={friend._id}
                         className="w-full flex gap-4 items-center 
                   cursor-pointer"

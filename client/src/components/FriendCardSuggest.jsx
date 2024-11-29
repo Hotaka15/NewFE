@@ -50,7 +50,7 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
           <span
             className="text-ascent-1 cursor-pointer"
             onClick={() => {
-              navigate("/profilefix/" + friend?._id);
+              navigate("/profile/" + friend?._id);
             }}
           >
             {friend?.firstName} {friend?.lastName}

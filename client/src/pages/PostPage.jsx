@@ -309,7 +309,7 @@ lg:rounded-lg h-screen overflow-hidden"
             <div className="w-full h-full overflow-auto flex justify-center gap-7">
               <div className="h-fit max-h-full bg-primary w-1/2 flex flex-col rounded-lg px-7 py-7 justify-start ">
                 <div className="flex gap-3 items-center mb-2">
-                  <Link to={"/profilefix/" + upost?._id}>
+                  <Link to={"/profile/" + upost?._id}>
                     <img
                       src={upost?.profileUrl ?? NoProfile}
                       alt={upost?.firstName}
@@ -319,7 +319,7 @@ lg:rounded-lg h-screen overflow-hidden"
 
                   <div className="w-full flex justify-between overflow-auto">
                     <div className="">
-                      <Link to={"/profilefix/" + upost?._id}>
+                      <Link to={"/profile/" + upost?._id}>
                         <p className="font-medium text-lg text-ascent-1">
                           {upost?.firstName} {upost?.lastName}
                         </p>

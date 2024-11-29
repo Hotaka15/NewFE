@@ -34,7 +34,7 @@ const ProfileCard = ({ user }) => {
     center shadow-sm rounded-xl px-6 py-4"
       >
         <div className="w-full flex items-center justify-between border-b pb-5 boder-[##66666645]">
-          <Link to={"/profilefix/" + user?._id} className="flex gap-2">
+          <Link to={"/profile/" + user?._id} className="flex gap-2">
             <img
               src={user?.profileUrl ?? NoProfile}
               alt={user?.email}
