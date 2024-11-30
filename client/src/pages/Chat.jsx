@@ -167,9 +167,9 @@ const RangeChat = forwardRef(
             res?.message != "Không thể lấy tin nhắn trong hội thoại." &&
             res?.data?.remainingPages > 0
           ) {
-            const lists = [...listchat, ...res?.data?.messages];
-
-            setNextchat(lists);
+            // const lists = [...listchat, ...res?.data?.messages];
+            setListchat((pre) => [...pre, ...res?.data?.messages]);
+            // setNextchat(lists);
           }
         } catch (error) {
           console.log(error);
@@ -275,7 +275,7 @@ const RangeChat = forwardRef(
           console.log(page);
           // fetchnextchat(idroom);
         }
-      }, 100),
+      }, 300),
       [isFetching]
     );
 
@@ -302,7 +302,7 @@ const RangeChat = forwardRef(
     //   []
     // );
     const handlePr = () => {
-      console.log(review, file);
+      // console.log(review, file);
 
       setReview(null);
       setFile(null);
@@ -314,8 +314,19 @@ const RangeChat = forwardRef(
     // }));
 
     useEffect(() => {
-      const lists = [...listchat, ...nextchat];
-      setListchat(lists);
+      try {
+        if (Array.isArray(listchat) && Array.isArray(nextchat)) {
+          const before = [...listchat];
+          const after = [...nextchat];
+          const lists = [...before, ...after];
+          setListchat(lists);
+        } else {
+          console.error("listchat or nextchat is not an array");
+        }
+        // setListchat(lists);
+      } catch (error) {
+        console.log(error);
+      }
     }, [nextchat]);
 
     useEffect(() => {
@@ -332,6 +343,8 @@ const RangeChat = forwardRef(
     }, [idroom]);
 
     useEffect(() => {
+      console.log("2");
+
       fetchnextchat(idroom);
     }, [page]);
 
@@ -706,7 +719,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
   const [isme, setIsme] = useState(true);
   const [visibleChats, setVisibleChats] = useState([]);
   const chatRefs = useRef([]);
-  console.log(listchat);
+  // console.log(listchat);
   const id_1 = user?._id;
   {
     /* <div className="w-full flex justify-center">
