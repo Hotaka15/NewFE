@@ -56,6 +56,7 @@ import { handFileUpload } from "../until";
 import CreateGroup from "../components/CreateGroup";
 import { aichecktext } from "../until/ai";
 import { sendMessageGroup } from "../until/group";
+import ChatUser from "../components/ChatUser";
 
 const RangeChat = forwardRef(
   (
@@ -105,6 +106,7 @@ const RangeChat = forwardRef(
       setChat((prevInput) => prevInput + e.emoji);
       setShowPicker(false);
     };
+    console.log(userinfo);
 
     const fetchchat = async (idroom) => {
       try {
@@ -141,7 +143,7 @@ const RangeChat = forwardRef(
           }
 
           console.log(res?.data?.messages);
-
+          // setListchat((pre) => [...pre, ...res?.data?.messages]);
           setListchat(res?.data?.messages);
         } catch (error) {
           console.log(error);
@@ -276,7 +278,7 @@ const RangeChat = forwardRef(
           console.log(page);
           // fetchnextchat(idroom);
         }
-      }, 200),
+      }, 100),
       [isFetching]
     );
 
@@ -314,21 +316,21 @@ const RangeChat = forwardRef(
     //   position,
     // }));
 
-    useEffect(() => {
-      try {
-        if (Array.isArray(listchat) && Array.isArray(nextchat)) {
-          const before = [...listchat];
-          const after = [...nextchat];
-          const lists = [...before, ...after];
-          setListchat(lists);
-        } else {
-          console.error("listchat or nextchat is not an array");
-        }
-        // setListchat(lists);
-      } catch (error) {
-        console.log(error);
-      }
-    }, [nextchat]);
+    // useEffect(() => {
+    //   try {
+    //     if (Array.isArray(listchat) && Array.isArray(nextchat)) {
+    //       const before = [...listchat];
+    //       const after = [...nextchat];
+    //       const lists = [...before, ...after];
+    //       setListchat(lists);
+    //     } else {
+    //       console.error("listchat or nextchat is not an array");
+    //     }
+    //     // setListchat(lists);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }, [nextchat]);
 
     useEffect(() => {
       setLoading(true);
@@ -391,18 +393,31 @@ const RangeChat = forwardRef(
         {/* Phần tiêu đề của khung chat */}
         <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
           <div className="text-ascent-1 font-bold text-3xl">
-            <div className=" flex text-ascent-1 text-sm items-center gap-1">
-              <img
-                src={userinfo?.profileUrl ?? NoProfile}
-                alt="post image"
-                className="w-14 h-14 shrink-0 object-cover rounded-full "
-              ></img>
-              <div className="flex items-center w-full h-full">
-                <span className="align-middle">
-                  {userinfo?.firstName} {userinfo?.lastName}
-                </span>
+            {type == "inbox" ? (
+              <div className=" flex text-ascent-1 text-sm items-center gap-1">
+                <img
+                  src={userinfo?.profileUrl ?? NoProfile}
+                  alt="post image"
+                  className="w-14 h-14 shrink-0 object-cover rounded-full "
+                ></img>
+                <div className="flex items-center w-full h-full">
+                  <span className="align-middle">
+                    {userinfo?.firstName} {userinfo?.lastName}
+                  </span>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className=" flex text-ascent-1 text-sm items-center gap-1">
+                <img
+                  src={NoProfile}
+                  alt="post image"
+                  className="w-14 h-14 shrink-0 object-cover rounded-full "
+                ></img>
+                <div className="flex items-center w-full h-full">
+                  <span className="align-middle">{userinfo?.name}</span>
+                </div>
+              </div>
+            )}
           </div>
           <div className="flex relative justify-center items-center text-ascent-1 gap-2">
             <IoCallSharp size={25} />
@@ -720,7 +735,8 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
   const [isme, setIsme] = useState(true);
   const [visibleChats, setVisibleChats] = useState([]);
   const chatRefs = useRef([]);
-  // console.log(listchat);
+
+  console.log(listchat);
   const id_1 = user?._id;
   {
     /* <div className="w-full flex justify-center">
@@ -911,16 +927,17 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                     {index < listchat.length &&
                       listchat[index]?.senderId !=
                         listchat[index + 1]?.senderId && (
-                        <div className="flex items-center justify-center w-fit gap-2 mb-2">
-                          <img
-                            src={userinfo?.profileUrl || NoProfile}
-                            className="w-7 h-7 object-cover rounded-lg"
-                            alt=""
-                          />
-                          <span className="text-ascent-2">
-                            {userinfo?.firstName}
-                          </span>
-                        </div>
+                        // <div className="flex items-center justify-center w-fit gap-2 mb-2">
+                        //   <img
+                        //     src={userinfo?.profileUrl || NoProfile}
+                        //     className="w-7 h-7 object-cover rounded-lg"
+                        //     alt=""
+                        //   />
+                        //   <span className="text-ascent-2">
+                        //     {userinfo?.firstName}
+                        //   </span>
+                        // </div>
+                        <ChatUser id={listchat[index].senderId} />
                       )}
                   </div>
                   <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
