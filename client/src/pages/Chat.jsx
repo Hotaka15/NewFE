@@ -227,6 +227,7 @@ const RangeChat = forwardRef(
           const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
 
           handlesend(id_2, chat);
+          setPage(2);
           console.log(res);
         }
 
@@ -263,7 +264,7 @@ const RangeChat = forwardRef(
           //   block: "end", // Đảm bảo cuộn về cuối phần tử
           // });
         }
-      }, 300);
+      }, 100);
     };
 
     const handleScroll = useCallback(
@@ -275,7 +276,7 @@ const RangeChat = forwardRef(
           console.log(page);
           // fetchnextchat(idroom);
         }
-      }, 300),
+      }, 200),
       [isFetching]
     );
 
