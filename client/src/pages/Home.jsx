@@ -649,6 +649,7 @@ const Home = () => {
 
               <FriendsCard friend={user?.friends} />;
             })} */}
+            <Lastactive />
             <div className="w-full  shadow-sm   py-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
@@ -918,7 +919,7 @@ const Home = () => {
                   ))}
               </div>
             </div> */}
-            <Lastactive />
+            {/* <Lastactive /> */}
             {/* {SUGGEST FRIENDS} */}
             <div className="w-full shadow-sm ">
               {!isSearch && (
@@ -976,7 +977,7 @@ const Home = () => {
                 </form>
               )}
 
-              <div className="w-full h-[40%] flex flex-col pt-4 overflow-auto">
+              <div className="w-full h-[90%] flex flex-col pt-4 overflow-auto">
                 {suggestedFriends &&
                   suggestedFriends?.map((friend) => (
                     <div
