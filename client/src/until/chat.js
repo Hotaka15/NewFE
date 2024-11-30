@@ -115,7 +115,7 @@ export const sendMessage = async (token, idroom, id_1, chat, uri) => {
       method: "POST",
     });
     console.log(res);
-    //   dispatch(SetPosts(res?.data?.latestPosts));
+
     return res;
   } catch (error) {
     console.log(error);
@@ -125,17 +125,17 @@ export const sendMessage = async (token, idroom, id_1, chat, uri) => {
 export const seenMessage = async (token, id_1, id_2) => {
   try {
     const res = await chatapiRequest({
-      url: "/message/send",
+      url: "/message/mark-read",
       token: token,
       data: {
-        messageId: "673ca18fe4f3f5028188065e",
-        userId: "63c1b5f1e4b0d7ef9a7f3c0e",
+        messageId: id_2,
+        userId: id_1,
       },
-      method: "POST",
+      method: "PUT",
     });
     console.log(res);
-    //   dispatch(SetPosts(res?.data?.latestPosts));
-    return res;
+
+    return;
   } catch (error) {
     console.log(error);
   }

@@ -8,7 +8,7 @@ const VideoPlayer = ({ source }) => {
     <div className="rounded-lg overflow-hidden">
       <Video
         // autoPlay
-        loop
+        // loop
         muted
         controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]}
         onCanPlayThrough={() => {

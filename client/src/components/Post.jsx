@@ -44,7 +44,7 @@ const Post = ({ setPage }) => {
   const [specific, setSpecific] = useState(false);
   const [file, setFile] = useState(null);
   const [posting, setPosting] = useState(false);
-  const [review, setReview] = useState();
+  const [review, setReview] = useState(null);
   const [tem, setTem] = useState();
   const [lists, setLists] = useState([]);
   const [option, setOption] = useState("public");
@@ -54,6 +54,8 @@ const Post = ({ setPage }) => {
   const [isSuggest, setIsSuggest] = useState(false);
   const [friends, setFriends] = useState([]);
   const handlebg = (e) => {
+    setVideoUpload(null);
+    setVideoFile(null);
     // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
     const reader = new FileReader();
@@ -119,6 +121,8 @@ const Post = ({ setPage }) => {
   };
 
   const handleFileChange = (e) => {
+    setReview(null);
+    setFile(null);
     const maxFileSize = 50 * 1024 * 1024;
     console.log(e.target.files[0]);
     console.log(e.target.files[0].size);
@@ -154,56 +158,58 @@ const Post = ({ setPage }) => {
   };
 
   const handlePostSubmit = async (data) => {
-    setPosting(true);
+    if (content || file || videoUpload) {
+      setPosting(true);
 
-    data.visibility = option;
-    console.log(data);
-    checkpost(data);
+      data.visibility = option;
+      console.log(data);
+      await checkpost(data);
 
-    try {
-      const uri = file && (await handFileUpload(file));
-      const uriv = videoUpload && (await handFileUpload(videoUpload));
-      const newData = uri
-        ? { ...data, image: uri }
-        : uriv
-        ? { ...data, urlVideo: uriv }
-        : data;
-      const checked = await checkpost(newData);
-      console.log(checked);
+      try {
+        const uri = file && (await handFileUpload(file));
+        const uriv = videoUpload && (await handFileUpload(videoUpload));
+        const newData = uri
+          ? { ...data, image: uri }
+          : uriv
+          ? { ...data, urlVideo: uriv }
+          : data;
+        const checked = await checkpost(newData);
+        console.log(checked);
 
-      if (checked && checked?.sensitive == false) {
-        setErr("");
-        setPreview(false);
-        const res = await postapiRequest({
-          url: "",
-          data: newData,
-          token: user?.token,
-          method: "POST",
-        });
-        console.log(res);
-
-        if (res?.status === "failed") {
-          seterrMsg(res);
-        } else {
-          reset({
-            description: "",
+        if (checked && checked?.sensitive == false) {
+          setErr("");
+          setPreview(false);
+          const res = await postapiRequest({
+            url: "",
+            data: newData,
+            token: user?.token,
+            method: "POST",
           });
+          console.log(res);
+
+          if (res?.status === "failed") {
+            seterrMsg(res);
+          } else {
+            reset({
+              description: "",
+            });
+            setFile(null);
+            seterrMsg("");
+            // await postrenewfetchPosts(user?.token, dispatch, 1);
+            await setPage();
+          }
+          setPosting(false);
           setFile(null);
-          seterrMsg("");
-          // await postrenewfetchPosts(user?.token, dispatch, 1);
-          await setPage();
+          setPreview(false);
+          handleClose();
+        } else {
+          setPosting(false);
+          setErr("Sensitive content");
         }
+      } catch (error) {
+        console.log(error);
         setPosting(false);
-        setFile(null);
-        setPreview(false);
-        handleClose();
-      } else {
-        setPosting(false);
-        setErr("Sensitive content");
       }
-    } catch (error) {
-      console.log(error);
-      setPosting(false);
     }
   };
 
@@ -321,14 +327,14 @@ const Post = ({ setPage }) => {
                         ></label>
                         <div className="w-full h-full flex-col-reverse m-3 gap-80">
                           <textarea
-                            {...register("description", {
-                              required: "Write something about post",
-                            })}
-                            error={
-                              errors.description
-                                ? errors.description.message
-                                : ""
-                            }
+                            // {...register("description", {
+                            //   required: "Write something about post",
+                            // })}
+                            // error={
+                            //   errors.description
+                            //     ? errors.description.message
+                            //     : ""
+                            // }
                             className="w-full h-72 bg-primary rounded-3xl border-none
             outline-none text-xl text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
@@ -338,7 +344,7 @@ const Post = ({ setPage }) => {
                               setContent(ev.target.value);
                             }}
                           />
-                          {preview && (
+                          {review && (
                             <div className="py-4 w-full flex justify-center gap-3 bg-secondary rounded-xl ">
                               <div
                                 className="flex relative w-full justify-center items-center rounded-xl overflow-hidden"
@@ -347,7 +353,7 @@ const Post = ({ setPage }) => {
                                 <img src={review} alt="Something wrong" />
                                 <div
                                   onClick={() => {
-                                    setPreview(false);
+                                    setReview(null);
                                     setFile(null);
                                   }}
                                   className="rotate-45 cursor-pointer absolute right-3 top-1 bg-[#000000] aspect-square rounded-full opacity-90 w-6 h-6 text-white flex justify-center items-center"
@@ -396,6 +402,7 @@ const Post = ({ setPage }) => {
                                       onChange={(e) => {
                                         e.target.files[0] && handlebg(e);
                                       }}
+                                      key={file ? "1" : ""}
                                       className="hidden"
                                       id="imgUpload"
                                       data-max-size="5120"
@@ -416,6 +423,7 @@ const Post = ({ setPage }) => {
                                         e.target.files[0] &&
                                           handleFileChange(e);
                                       }}
+                                      key={videoUpload ? "1" : ""}
                                       className="hidden"
                                       id="videoUpload"
                                       data-max-size="5120"
@@ -634,6 +642,7 @@ const Post = ({ setPage }) => {
                                     //   <span>{friend?.firstName}</span>
                                     // </div>
                                     <div
+                                      key={friend?._id}
                                       onClick={() => {
                                         pushList(friend);
                                         console.log(lists);
@@ -664,7 +673,7 @@ const Post = ({ setPage }) => {
                                       <img
                                         src={friend?.profileUrl || NoProfile}
                                         alt=""
-                                        className="h-16 w-16 object-cover rounded-full mr-3"
+                                        className="h-12 w-12 object-cover rounded-full mr-3"
                                       />
                                       <div
                                         id={friend._id}

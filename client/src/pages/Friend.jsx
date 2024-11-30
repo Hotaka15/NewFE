@@ -132,6 +132,9 @@ const Friend = () => {
 
   useEffect(() => {
     scrollhidde();
+  }, [crollright]);
+  useEffect(() => {
+    // scrollhidde();
     fetchSuggestFriends();
     fetchFriendRequest();
   }, []);

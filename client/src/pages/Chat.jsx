@@ -42,6 +42,7 @@ import {
   chatfetchListpersonal,
   createConversations,
   fetchChat,
+  seenMessage,
   sendMessage,
 } from "../until/chat";
 import {
@@ -78,7 +79,7 @@ const RangeChat = forwardRef(
     const [chat, setChat] = useState("");
     const [loading, setLoading] = useState(false);
     const { theme } = useSelector((state) => state.theme);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(2);
     const [file, setFile] = useState(null);
     const [faild, setFald] = useState([]);
     const [after, setAfter] = useState([]);
@@ -104,16 +105,11 @@ const RangeChat = forwardRef(
       setChat((prevInput) => prevInput + e.emoji);
       setShowPicker(false);
     };
-    // const position = () => {
-    //   let position = document.getElementById("window_chat");
-    //   console.log(position.scrollTop);
-    //   console.log(position.scrollHeight);
-    //   position.scrollTop = position.scrollHeight;
-    // };
+
     const fetchchat = async (idroom) => {
       try {
         // const res = await
-        const res = await fetchChat(user?.token, idroom, page);
+        const res = await fetchChat(user?.token, idroom, 1);
         console.log(res);
         console.log(faild);
         try {
@@ -128,6 +124,28 @@ const RangeChat = forwardRef(
         console.log(error);
       }
     };
+
+    const fetchnextchat = async (idroom) => {
+      try {
+        console.log(page);
+        console.log(idroom);
+
+        const res = await fetchChat(user?.token, idroom, page);
+        console.log(res);
+        console.log(faild);
+        try {
+          if (res?.message != "Không thể lấy tin nhắn trong hội thoại.") {
+            const lists = [...listchat, ...res?.data?.messages];
+
+            setListchat(lists);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
     useEffect(() => {
       const newList =
         faild && faild.length > 0
@@ -135,10 +153,14 @@ const RangeChat = forwardRef(
               .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .reverse()
           : listchat;
-
+      // let lastElement =
+      //   newList &&
+      //   newList
+      //     .reverse()
+      //     .find((item) => item.senderId === user?.id && item.status == "sent");
+      // lastElement && lastElement.checked == true;
       console.log(newList);
       setAfter(newList);
-      position();
     }, [listchat, faild]);
 
     const handlesend = async (id_2, chat) => {
@@ -194,7 +216,23 @@ const RangeChat = forwardRef(
         console.log(error);
       }
     };
-
+    const positionAfter = () => {
+      setTimeout(() => {
+        if (chatWindowRef.current) {
+          console.log(chatWindowRef.current.scrollHeight);
+          console.log(chatWindowRef.current.scrollTop);
+          console.log(chatWindowRef.current.offsetHeight);
+          chatWindowRef.current.scrollTop =
+            chatWindowRef.current.scrollHeight -
+            (chatWindowRef.current.scrollHeight -
+              chatWindowRef.current.scrollTop);
+          // chatWindowRef.current.scrollIntoView({
+          //   behavior: "smooth", // Cuộn mượt
+          //   block: "end", // Đảm bảo cuộn về cuối phần tử
+          // });
+        }
+      }, 1000);
+    };
     const position = () => {
       // let position = document.getElementById("listchat");
 
@@ -229,7 +267,7 @@ const RangeChat = forwardRef(
           setPage((prevPage) => prevPage + 1);
           console.log(page);
         }
-      }, 500),
+      }, 100),
       [isFetching]
     );
 
@@ -268,12 +306,20 @@ const RangeChat = forwardRef(
     useEffect(() => {
       setLoading(true);
       fetchchat(idroom);
+      setPage(2);
+
       return () => {
         setOnscreen(false);
       };
     }, [idroom]);
 
-    useEffect(() => {});
+    useEffect(() => {
+      fetchnextchat(idroom);
+    }, [page]);
+
+    // useEffect(() => {
+    //   page > 2 && positionAfter();
+    // }, [page]);
 
     // const scrollToBottom = debounce(() => {
     //   if (chatWindowRef.current && onScreen) {
@@ -381,7 +427,12 @@ const RangeChat = forwardRef(
               <Loading />
             </div>
           ) : idroom ? (
-            <PageChat listchat={after} socket={socket} userinfo={userinfo} />
+            <PageChat
+              listchat={after}
+              socket={socket}
+              userinfo={userinfo}
+              idroom={idroom}
+            />
           ) : (
             <div className="w-full h-[1000px]">Select Conversation</div>
           )}
@@ -648,6 +699,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
   const [visibleChats, setVisibleChats] = useState([]);
   const chatRefs = useRef([]);
   console.log(listchat);
+  const id_1 = user?._id;
   {
     /* <div className="w-full flex justify-center">
         <span className="text-ascent-1 ">20/10/2024</span>
@@ -705,6 +757,11 @@ const PageChat = ({ listchat, socket, userinfo }) => {
   //   }
   // };
 
+  const handleSeen = async (id_1, id_2) => {
+    const check = listchat.find((item) => item?._id == id_2);
+    !check && (await seenMessage(id_1, id_2));
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -712,7 +769,16 @@ const PageChat = ({ listchat, socket, userinfo }) => {
           if (entry.isIntersecting) {
             const chatId = entry.target.dataset.id; // Lấy ID của phần tử
             if (!visibleChats.includes(chatId)) {
-              setVisibleChats((prev) => [...prev, chatId]); // Thêm ID vào danh sách visibleChats
+              setVisibleChats((prev) => [...prev, chatId]);
+              const id_2 = chatId; // Thêm ID vào danh sách visibleChats
+              handleSeen(id_1, id_2);
+              // const privateMessage = "seen";
+              // socket &&
+              //   idroom &&
+              //   socket.emit("sendMessage", {
+              //     idConversation: idroom,
+              //     message: privateMessage,
+              //   });
             }
           }
         });
@@ -751,12 +817,17 @@ const PageChat = ({ listchat, socket, userinfo }) => {
       </div> */}
       {listchat && listchat?.length > 0 ? (
         <div id="window_chat" className="flex flex-col gap-2 w-full h-full">
+          {listchat && listchat.length > 10 && (
+            <div className="mt-2">
+              <Loading />
+            </div>
+          )}
           {listchat
             ?.slice() // Tạo một bản sao của mảng
             .reverse()
             ?.map((chat, index, listchat) => {
               return chat?.senderId == user?._id ? (
-                <div className="w-full flex  justify-end" key={chat?._id}>
+                <div className="w-full flex justify-end" key={chat?._id}>
                   <div className="flex flex-col items-end ">
                     <div
                       className={`${
@@ -792,6 +863,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                       />
                     )}
                   </div>
+                  {/* {chat?.checked && <div className="bg-blue">Seen </div>} */}
                 </div>
               ) : (
                 <div
@@ -863,73 +935,7 @@ const Chat = () => {
   const [createg, setCreatg] = useState(false);
   const [manageru, setManageru] = useState(false);
   const [block, setBlock] = useState(false);
-  const [listmanager, setListmanager] = useState([
-    {
-      createdAt: "2024-09-14T06:57:38.122Z",
-      email: "toan6858@gmail.com",
-      firstName: "Nguyễn",
-      following: [],
-      friends: [],
-      lastName: "Takt",
-      location: "VietNam",
-      chat: "Vậy anh sẽ cân nhắc thêm. Cảm ơn em.",
-      profileUrl:
-        "https://res.cloudinary.com/dr91wukb1/image/upload/v1730531001/SOCIALMEDIA/g2og0hxbfrh56oiadfum.png",
-      role: "Admin",
-      statusActive: true,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MzNlMmI1MTQ1NTlhODA2ZjdmYzMiLCJleHAiOjE3NDYyNzEwMzEsImlhdCI6MTczMDcxOTAzMX0.ZgRy1JRcgxzPFRQSeMZlMYO-uSJprZLdrh1isI0P7Dg",
-      updatedAt: "2024-11-02T07:05:03.542Z",
-      verified: true,
-      views: [],
-      __v: 2,
-      _id: "66e533e2b514559a806f7fc3",
-      page: 1,
-      time: "10AM",
-    },
-    {
-      createdAt: "2024-09-14T06:57:38.122Z",
-      email: "toan6858@gmail.com",
-      firstName: "joshua",
-      following: [],
-      friends: [],
-      lastName: "smith",
-      location: "VietNam",
-      chat: " Ok, phòng họp 3 rất phù hợp. Vậy là mình sẽ họp vào thứ Hai lúc 10h sáng tại phòng họp 3 nhé.",
-      role: "Admin",
-      statusActive: true,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MzNlMmI1MTQ1NTlhODA2ZjdmYzMiLCJleHAiOjE3NDYyNzEwMzEsImlhdCI6MTczMDcxOTAzMX0.ZgRy1JRcgxzPFRQSeMZlMYO-uSJprZLdrh1isI0P7Dg",
-      updatedAt: "2024-11-02T07:05:03.542Z",
-      verified: true,
-      views: [],
-      __v: 2,
-      _id: "66e533e2b514559a806f7fc3",
-      page: 2,
-      time: "6PM",
-    },
-    {
-      createdAt: "2024-09-14T06:57:38.122Z",
-      email: "toan6858@gmail.com",
-      firstName: "Nguyễn",
-      following: [],
-      friends: [],
-      lastName: "Huy",
-      location: "VietNam",
-      chat: "See you soon!",
-      role: "Admin",
-      statusActive: true,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU1MzNlMmI1MTQ1NTlhODA2ZjdmYzMiLCJleHAiOjE3NDYyNzEwMzEsImlhdCI6MTczMDcxOTAzMX0.ZgRy1JRcgxzPFRQSeMZlMYO-uSJprZLdrh1isI0P7Dg",
-      updatedAt: "2024-11-02T07:05:03.542Z",
-      verified: true,
-      views: [],
-      __v: 2,
-      _id: "66e533e2b514559a806f7fc3",
-      page: 3,
-      time: "9AM",
-    },
-  ]);
+
   const [listsuggest, setListsuggest] = useState();
   const [socket, setSocket] = useState();
   const [listchat, setListchat] = useState([]);
@@ -1042,25 +1048,13 @@ const Chat = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const socketConnect = io("http://localhost:3005", {
-  //     auth: { token: user?.token },
-  //   });
-  //   return socketConnect.disconnect();
-  // }, []);
-
   const fetchchatforchild = async (idroom) => {
     await childRef.current.fetchchat(idroom);
     console.log(idroom);
     childRef.current.position();
   };
 
-  // const newSocket = io("ws://localhost:3005", {
-  //   reconnection: true,
-  //   transports: ["websocket"],
-  // });
   useEffect(() => {
-    // position();
     const newSocket = io("ws://localhost:3005", {
       reconnection: true,
       transports: ["websocket"],

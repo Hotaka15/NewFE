@@ -1,6 +1,5 @@
 import axios from "axios";
 import { SetPosts } from "../redux/postSlice";
-import { redirect } from "react-router-dom";
 
 const API_URL = "http://localhost:8800";
 export const API = axios.create({

@@ -96,7 +96,7 @@ const Home = () => {
   const timeoutIdRef = useRef(null); // Lưu trữ timeoutId
   const [isSearch, setIsSearch] = useState(false);
   const videoRef = useRef(null);
-  // console.log(user);
+  const timeoutIds = {};
   let pages = 1;
   const {
     register,
@@ -400,8 +400,50 @@ const Home = () => {
   //     observer.disconnect();
   //   };
   // }, [posts, loading]);
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       entries.forEach((entry) => {
+  //         const postId = entry.target.dataset.postId;
+
+  //         if (entry.isIntersecting) {
+  //           // Nếu phần tử vào viewport, bắt đầu đếm thời gian
+  //           if (timeoutIdRef.current) {
+  //             clearTimeout(timeoutIdRef.current); // Hủy timeout cũ nếu có
+  //           }
+
+  //           // Đặt timeout 5 giây
+  //           timeoutIdRef.current = setTimeout(() => {
+  //             console.log(postId);
+
+  //             dispatch(CheckedPosts([postId]));
+  //           }, 1000);
+  //         } else {
+  //           if (timeoutIdRef.current) {
+  //             clearTimeout(timeoutIdRef.current);
+  //             timeoutIdRef.current = null;
+  //           }
+  //         }
+  //       });
+  //     },
+  //     { threshold: 1 }
+  //   );
+
+  //   const divElements = document.querySelectorAll(".itempost");
+  //   divElements.forEach((div) => observer.observe(div));
+  //   const doc = document.getElementById("post_range");
+  //   console.log(doc.clientHeight);
+
+  //   return () => {
+  //     observer.disconnect();
+  //     if (timeoutIdRef.current) {
+  //       clearTimeout(timeoutIdRef.current);
+  //     }
+  //   };
+  // }, [posts, loading]);
   useEffect(() => {
-    // Tạo observer để theo dõi sự thay đổi của phần tử
+    // const timeoutIds = {}; // Đối tượng lưu timeoutId cho từng phần tử
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -409,45 +451,35 @@ const Home = () => {
 
           if (entry.isIntersecting) {
             // Nếu phần tử vào viewport, bắt đầu đếm thời gian
-            if (timeoutIdRef.current) {
-              clearTimeout(timeoutIdRef.current); // Hủy timeout cũ nếu có
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]); // Hủy timeout cũ nếu có
             }
 
             // Đặt timeout 5 giây
-            timeoutIdRef.current = setTimeout(() => {
-              // Sau 5 giây, thực hiện dispatch và cập nhật visiblePosts
-              // setVisiblePosts((prevVisiblePosts) => [
-              //   ...new Set([...prevVisiblePosts, postId]), // Thêm postId nếu chưa có
-              // ]);
+            timeoutIds[postId] = setTimeout(() => {
               console.log(postId);
-
-              // Dispatch hành động để kiểm tra postId
               dispatch(CheckedPosts([postId]));
-            }, 1000); // Đặt timeout 5 giây
+            }, 1000);
           } else {
-            // Nếu phần tử không còn trong viewport, hủy timeout
-            if (timeoutIdRef.current) {
-              clearTimeout(timeoutIdRef.current);
-              timeoutIdRef.current = null; // Reset lại timeoutId
+            // Nếu phần tử rời khỏi viewport, hủy timeout
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]);
+              delete timeoutIds[postId];
             }
           }
         });
       },
-      { threshold: 1 } // 100% của phần tử cần phải hiển thị trong viewport
+      { threshold: 0.8 } // Kích hoạt khi 100% phần tử vào viewport
     );
 
-    // Quan sát các phần tử .itempost
+    // Theo dõi các phần tử
     const divElements = document.querySelectorAll(".itempost");
     divElements.forEach((div) => observer.observe(div));
-    const doc = document.getElementById("post_range");
-    console.log(doc.clientHeight);
 
-    // Cleanup khi component unmount hoặc posts/ loading thay đổi
+    // Dọn dẹp khi component bị unmount
     return () => {
       observer.disconnect();
-      if (timeoutIdRef.current) {
-        clearTimeout(timeoutIdRef.current); // Hủy timeout nếu component unmount
-      }
+      Object.values(timeoutIds).forEach(clearTimeout); // Hủy tất cả timeout
     };
   }, [posts, loading]);
   useEffect(() => {
@@ -515,7 +547,7 @@ const Home = () => {
           {/* {LEFT} */}
           <div className="hidden w-1/5 h-full md:flex flex-col gap-6 overflow-y-auto flex-initial">
             {/* <ProfileCard user={user} /> */}
-            <div className=" w-full h-fit rounded-lg flex flex-col gap-3 overflow-hidden">
+            <div className=" w-full h-fit pb-3 flex flex-col gap-3 overflow-hidden border-b border-ascent-2">
               <Link
                 to={"/profile/" + user?._id}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -612,11 +644,67 @@ const Home = () => {
               </Link>
             </div>
             {/* <FriendsCard friend={user.friends} /> */}
-            {user?.friends?.map((friend) => {
+            {/* {user?.friends?.map((friend) => {
               console.log(friend);
 
               <FriendsCard friend={user?.friends} />;
-            })}
+            })} */}
+            <div className="w-full  shadow-sm   py-5">
+              <div
+                className="flex items-center justify-between text-sm text-ascent-1 
+            pb-2 "
+              >
+                <span className="font-medium text-lg text-ascent-2">
+                  Friend Request
+                </span>
+                {/* <span>{friendRequest?.length}</span> */}
+              </div>
+
+              <div className="w-full flex flex-col gap-4 pt-4">
+                {friendRequest &&
+                  friendRequest?.map(({ _id, sender }) => (
+                    <div
+                      key={sender?._id}
+                      className="flex items-center justify-between "
+                    >
+                      <Link
+                        to={"/profile/" + sender?._id}
+                        className="w-full flex gap-4 items-center 
+                          cursor-pointer "
+                      >
+                        <img
+                          src={sender?.profileUrl ?? NoProfile}
+                          alt={sender?.firstName}
+                          className="w-10 h-10 object-cover rounded-full"
+                        />
+                        <div className="flex-1">
+                          <p className="text-base font-medium text-ascent-1">
+                            {sender?.firstName} {sender?.lastName}
+                          </p>
+                          <span className="text-sm text-ascent-2">
+                            Request
+                            {/* {from?.profession ?? "No Profession"} */}
+                          </span>
+                        </div>
+                      </Link>
+                      <div className="flex gap-1">
+                        <CustomButton
+                          tittle="Accept"
+                          onClick={() => acceptFriendRequest(_id, "accepted")}
+                          containerStyles="bg-[#0444a4] text-xs text-white px-1.5
+                    py-1 rounded-full"
+                        />
+                        <CustomButton
+                          tittle="Deny"
+                          onClick={() => acceptFriendRequest(_id, "rejected")}
+                          containerStyles="border border-[#666] text-xs
+                    text-ascent-1 px-1.5 py-1 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
           {/* {CENTTER} bg-primary */}
           <div
@@ -772,9 +860,9 @@ const Home = () => {
             {posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
-          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 overflow-y-auto flex-initial px-2">
+          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2  flex-initial px-2">
             {/* {FRIEND REQUEST} */}
-            <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
+            {/* <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
             pb-2 "
@@ -782,7 +870,7 @@ const Home = () => {
                 <span className="font-medium text-lg text-ascent-2">
                   Friend Request
                 </span>
-                {/* <span>{friendRequest?.length}</span> */}
+                
               </div>
 
               <div className="w-full flex flex-col gap-4 pt-4">
@@ -808,7 +896,7 @@ const Home = () => {
                           </p>
                           <span className="text-sm text-ascent-2">
                             Request
-                            {/* {from?.profession ?? "No Profession"} */}
+                            
                           </span>
                         </div>
                       </Link>
@@ -829,7 +917,7 @@ const Home = () => {
                     </div>
                   ))}
               </div>
-            </div>
+            </div> */}
             <Lastactive />
             {/* {SUGGEST FRIENDS} */}
             <div className="w-full shadow-sm ">
@@ -888,7 +976,7 @@ const Home = () => {
                 </form>
               )}
 
-              <div className="w-full flex flex-col  pt-4">
+              <div className="w-full h-[40%] flex flex-col pt-4 overflow-auto">
                 {suggestedFriends &&
                   suggestedFriends?.map((friend) => (
                     <div
