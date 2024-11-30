@@ -88,6 +88,7 @@ const RangeChat = forwardRef(
     const [onScreen, setOnscreen] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
     const thisRoom = useRef("");
+    const [nextchat, setNextchat] = useState([]);
     const chatWindowRef = useRef(null);
     const id_1 = user?._id;
     const id_2 = userinfo?._id;
@@ -168,7 +169,7 @@ const RangeChat = forwardRef(
           ) {
             const lists = [...listchat, ...res?.data?.messages];
 
-            setListchat(lists);
+            setNextchat(lists);
           }
         } catch (error) {
           console.log(error);
@@ -311,11 +312,17 @@ const RangeChat = forwardRef(
     //   fetchchat,
     //   position,
     // }));
+
+    useEffect(() => {
+      const lists = [...listchat, ...nextchat];
+      setListchat(lists);
+    }, [nextchat]);
+
     useEffect(() => {
       setLoading(true);
       console.log(idroom);
       fetchchat(idroom);
-      const postRange = document.getElementById("listchat");
+
       thisRoom.current = idroom;
       // return () => {
       //   setPage(2);
