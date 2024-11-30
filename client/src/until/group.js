@@ -61,3 +61,24 @@ export const createGroup = async (
     console.log(error);
   }
 };
+
+export const sendMessageGroup = async (token, idroom, id_1, chat, uri) => {
+  try {
+    const res = await groupapiRequest({
+      url: "/message/group",
+      token: token,
+      data: {
+        conversationId: idroom,
+        senderId: id_1,
+        text: chat,
+        fileUrl: uri || "",
+      },
+      method: "POST",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

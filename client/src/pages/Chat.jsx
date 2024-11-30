@@ -55,6 +55,7 @@ import { forwardRef } from "react";
 import { handFileUpload } from "../until";
 import CreateGroup from "../components/CreateGroup";
 import { aichecktext } from "../until/ai";
+import { sendMessageGroup } from "../until/group";
 
 const RangeChat = forwardRef(
   (
@@ -70,6 +71,7 @@ const RangeChat = forwardRef(
       idroom,
       socket,
       fetchList,
+      type,
       fetchchatforchild,
     },
     ref
@@ -85,9 +87,7 @@ const RangeChat = forwardRef(
     const [after, setAfter] = useState([]);
     const [onScreen, setOnscreen] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
-    // console.log(user);
-    // console.log(idroom);
-    // console.log(userinfo);
+    const thisRoom = useRef("");
     const chatWindowRef = useRef(null);
     const id_1 = user?._id;
     const id_2 = userinfo?._id;
@@ -99,7 +99,6 @@ const RangeChat = forwardRef(
         setReview(reader.result);
       };
       reader.readAsDataURL(e.target.files[0]);
-      // setPreview(true);
     };
     const onEmojiClick = (e) => {
       setChat((prevInput) => prevInput + e.emoji);
@@ -108,7 +107,6 @@ const RangeChat = forwardRef(
 
     const fetchchat = async (idroom) => {
       try {
-        // const res = await
         const res = await fetchChat(user?.token, idroom, 1);
         console.log(res);
         console.log(faild);
@@ -131,10 +129,6 @@ const RangeChat = forwardRef(
                     check = true;
                     break;
                   }
-
-                  // console.log(message);
-
-                  // message.cheked = true;
                 }
               }
               if (check) {
@@ -168,7 +162,10 @@ const RangeChat = forwardRef(
         console.log(res);
         console.log(faild);
         try {
-          if (res?.message != "Không thể lấy tin nhắn trong hội thoại.") {
+          if (
+            res?.message != "Không thể lấy tin nhắn trong hội thoại." &&
+            res?.data?.remainingPages > 0
+          ) {
             const lists = [...listchat, ...res?.data?.messages];
 
             setListchat(lists);
@@ -187,12 +184,6 @@ const RangeChat = forwardRef(
               .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .reverse()
           : listchat;
-      // let lastElement =
-      //   newList &&
-      //   newList
-      //     .reverse()
-      //     .find((item) => item.senderId === user?.id && item.status == "sent");
-      // lastElement && lastElement.checked == true;
       console.log(newList);
       setAfter(newList);
     }, [listchat, faild]);
@@ -228,17 +219,12 @@ const RangeChat = forwardRef(
               createdAt: new Date(),
             },
           ]);
-          // faild.push({
-          //   status: "failed",
-          //   senderId: user?._id,
-          //   text: chat,
-          //   createdAt: new Date(),
-          // });
 
           console.log(faild);
         } else {
           const uri = file && (await handFileUpload(file));
           const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
+
           handlesend(id_2, chat);
           console.log(res);
         }
@@ -250,35 +236,21 @@ const RangeChat = forwardRef(
         console.log(error);
       }
     };
-    const positionAfter = () => {
-      setTimeout(() => {
-        if (chatWindowRef.current) {
-          console.log(chatWindowRef.current.scrollHeight);
-          console.log(chatWindowRef.current.scrollTop);
-          console.log(chatWindowRef.current.offsetHeight);
-          chatWindowRef.current.scrollTop =
-            chatWindowRef.current.scrollHeight -
-            (chatWindowRef.current.scrollHeight -
-              chatWindowRef.current.scrollTop);
-          // chatWindowRef.current.scrollIntoView({
-          //   behavior: "smooth", // Cuộn mượt
-          //   block: "end", // Đảm bảo cuộn về cuối phần tử
-          // });
-        }
-      }, 1000);
-    };
+    // const positionAfter = () => {
+    //   setTimeout(() => {
+    //     if (chatWindowRef.current) {
+    //       console.log(chatWindowRef.current.scrollHeight);
+    //       console.log(chatWindowRef.current.scrollTop);
+    //       console.log(chatWindowRef.current.offsetHeight);
+    //       chatWindowRef.current.scrollTop =
+    //         chatWindowRef.current.scrollHeight -
+    //         (chatWindowRef.current.scrollHeight -
+    //           chatWindowRef.current.scrollTop);
+
+    //     }
+    //   }, 1000);
+    // };
     const position = () => {
-      // let position = document.getElementById("listchat");
-
-      // if (position) {
-      //   console.log(position.offsetHeight);
-      //   console.log(position.scrollHeight);
-
-      //   position.scrollTo({
-      //     top: position.scrollHeight,
-
-      //   });
-      // }
       setTimeout(() => {
         if (chatWindowRef.current) {
           console.log(chatWindowRef.current.scrollHeight);
@@ -290,7 +262,7 @@ const RangeChat = forwardRef(
           //   block: "end", // Đảm bảo cuộn về cuối phần tử
           // });
         }
-      }, 100);
+      }, 300);
     };
 
     const handleScroll = useCallback(
@@ -300,6 +272,7 @@ const RangeChat = forwardRef(
         if (target.scrollTop <= target.scrollHeight * 0.4 && !isFetching) {
           setPage((prevPage) => prevPage + 1);
           console.log(page);
+          // fetchnextchat(idroom);
         }
       }, 100),
       [isFetching]
@@ -308,6 +281,7 @@ const RangeChat = forwardRef(
     // await postrenewfetchPosts(user?.token, dispatch, 1);
 
     useEffect(() => {
+      // thisRoom.current != idroom && setPage(2);
       const postRange = document.getElementById("listchat");
       postRange.addEventListener("scroll", handleScroll);
 
@@ -316,16 +290,16 @@ const RangeChat = forwardRef(
       };
     }, [handleScroll]);
 
-    const handlepre = useCallback(
-      debounce((e) => {
-        const position = e.target;
-        console.log(12312312);
+    // const handlepre = useCallback(
+    //   debounce((e) => {
+    //     const position = e.target;
+    //     console.log(12312312);
 
-        position.scrollTop < position.scrollHeight * 0.4 &&
-          setPage((pre) => pre + 1);
-      }, 500),
-      []
-    );
+    //     position.scrollTop < position.scrollHeight * 0.4 &&
+    //       setPage((pre) => pre + 1);
+    //   }, 500),
+    //   []
+    // );
     const handlePr = () => {
       console.log(review, file);
 
@@ -339,21 +313,20 @@ const RangeChat = forwardRef(
     // }));
     useEffect(() => {
       setLoading(true);
+      console.log(idroom);
       fetchchat(idroom);
-      setPage(2);
-
-      return () => {
-        setOnscreen(false);
-      };
+      const postRange = document.getElementById("listchat");
+      thisRoom.current = idroom;
+      // return () => {
+      //   setPage(2);
+      //   postRange.removeEventListener("scroll", handleScroll);
+      // };
+      // postRange.removeEventListener("scroll", handleScroll);
     }, [idroom]);
 
     useEffect(() => {
       fetchnextchat(idroom);
     }, [page]);
-
-    // useEffect(() => {
-    //   page > 2 && positionAfter();
-    // }, [page]);
 
     // const scrollToBottom = debounce(() => {
     //   if (chatWindowRef.current && onScreen) {
@@ -373,14 +346,6 @@ const RangeChat = forwardRef(
 
     // nhận tin nhắn
     useEffect(() => {
-      // socket.on("receivePrivateMessage", (data) => {
-      //   console.log(
-      //     `Received private message from ${data.from}: ${data.message}`
-      //   );
-      //   fetchchat(idroom);
-      // });
-
-      // socket.reconnection;
       setFald([]);
       if (socket && idroom) {
         socket.on("receiveMessage", (data) => {
@@ -576,7 +541,7 @@ const UserCard = forwardRef(
       socket,
       conversationId,
       hanldeGroupchat,
-
+      type,
       fetchList,
       fetchchats,
     },
@@ -712,7 +677,7 @@ const UserCard = forwardRef(
         <div className="flex-col w-full flex h-full justify-center">
           <div className="flex justify-between">
             <span className="text-ascent-1">
-              {avatar?.firstName} {avatar?.lastName}
+              {avatar?.firstName} {avatar?.lastName} {conversationId}
             </span>
             <span className="text-ascent-2 ">{time}</span>
           </div>
@@ -1071,7 +1036,7 @@ const Chat = () => {
     console.log(user);
     userChat(user);
 
-    console.log(id_1);
+    // console.log(id_1);
 
     const id_2 = user?._id;
     try {
@@ -1234,6 +1199,7 @@ const Chat = () => {
                       conversationId={itemchat?._id}
                       fetchList={fetchList}
                       ref={childRef}
+                      type={type}
                       // event={() => {
                       //   onchangepage(user?.page);
                       // }}
@@ -1289,22 +1255,24 @@ const Chat = () => {
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>
-
-          <RangeChat
-            user={user}
-            userinfo={userinfo}
-            newChat={newChat}
-            setNewChat={setNewChat}
-            reviewcheck={reviewcheck}
-            setReviewcheck={setReviewcheck}
-            review={review}
-            setReview={setReview}
-            idroom={idroom}
-            fetchList={fetchList}
-            socket={socket}
-            ref={childRef}
-            fetchchatforchild={fetchchatforchild}
-          />
+          <div className="w-3/4" key={idroom}>
+            <RangeChat
+              user={user}
+              userinfo={userinfo}
+              newChat={newChat}
+              setNewChat={setNewChat}
+              reviewcheck={reviewcheck}
+              setReviewcheck={setReviewcheck}
+              review={review}
+              setReview={setReview}
+              idroom={idroom}
+              fetchList={fetchList}
+              socket={socket}
+              ref={childRef}
+              fetchchatforchild={fetchchatforchild}
+              type={type}
+            />
+          </div>
         </div>
       </div>
       {/* Xem trước ảnh */}
