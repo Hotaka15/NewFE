@@ -113,6 +113,40 @@ const RangeChat = forwardRef(
         console.log(res);
         console.log(faild);
         try {
+          console.log(res?.data?.messages[0]);
+          console.log(user?._id);
+          try {
+            for (let message of res?.data?.messages || []) {
+              console.log(message);
+
+              let check = false;
+              if (message.senderId === user?._id) {
+                for (let obj of message?.readStatus) {
+                  if (obj.status === "read") {
+                    console.log(message);
+
+                    message.checked
+                      ? message.checked.push(obj?._id)
+                      : (message.checked = [obj?._id]);
+                    check = true;
+                    break;
+                  }
+
+                  // console.log(message);
+
+                  // message.cheked = true;
+                }
+              }
+              if (check) {
+                break;
+              }
+            }
+          } catch (error) {
+            console.log(error);
+          }
+
+          console.log(res?.data?.messages);
+
           setListchat(res?.data?.messages);
         } catch (error) {
           console.log(error);
@@ -351,8 +385,10 @@ const RangeChat = forwardRef(
       if (socket && idroom) {
         socket.on("receiveMessage", (data) => {
           console.log(data);
-          fetchList();
-          fetchchat(idroom);
+          if (data?.message && data?.message != "seen") {
+            fetchList();
+            fetchchat(idroom);
+          }
 
           // fetchchatforchild(idroom);
         });
@@ -693,7 +729,7 @@ const UserCard = forwardRef(
   }
 );
 
-const PageChat = ({ listchat, socket, userinfo }) => {
+const PageChat = ({ listchat, socket, userinfo, idroom }) => {
   const { user } = useSelector((state) => state.user);
   const [isme, setIsme] = useState(true);
   const [visibleChats, setVisibleChats] = useState([]);
@@ -767,18 +803,21 @@ const PageChat = ({ listchat, socket, userinfo }) => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const chatId = entry.target.dataset.id; // Lấy ID của phần tử
+            const chatId = entry.target.dataset.id;
+            const senderId = entry.target.dataset.senderid;
+            // console.log(senderId);
+
             if (!visibleChats.includes(chatId)) {
               setVisibleChats((prev) => [...prev, chatId]);
               const id_2 = chatId; // Thêm ID vào danh sách visibleChats
               handleSeen(id_1, id_2);
-              // const privateMessage = "seen";
-              // socket &&
-              //   idroom &&
-              //   socket.emit("sendMessage", {
-              //     idConversation: idroom,
-              //     message: privateMessage,
-              //   });
+              const privateMessage = "seen";
+              socket &&
+                idroom &&
+                socket.emit("sendMessage", {
+                  idConversation: idroom,
+                  message: privateMessage,
+                });
             }
           }
         });
@@ -827,7 +866,10 @@ const PageChat = ({ listchat, socket, userinfo }) => {
             .reverse()
             ?.map((chat, index, listchat) => {
               return chat?.senderId == user?._id ? (
-                <div className="w-full flex justify-end" key={chat?._id}>
+                <div
+                  className="w-full flex-col flex justify-end"
+                  key={chat?._id}
+                >
                   <div className="flex flex-col items-end ">
                     <div
                       className={`${
@@ -863,6 +905,12 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                       />
                     )}
                   </div>
+                  {chat?.checked && (
+                    <div className="flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+                      <CiCircleCheck />
+                      Seen
+                    </div>
+                  )}
                   {/* {chat?.checked && <div className="bg-blue">Seen </div>} */}
                 </div>
               ) : (
@@ -871,6 +919,7 @@ const PageChat = ({ listchat, socket, userinfo }) => {
                   ref={(el) => chatRefs.current.push(el)}
                   key={chat?._id}
                   data-id={chat._id}
+                  data-senderid={chat.senderId}
                 >
                   <div>
                     {index < listchat.length &&
@@ -909,10 +958,10 @@ const PageChat = ({ listchat, socket, userinfo }) => {
 
           <div className="w-full flex justify-center"></div>
 
-          <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+          {/* <div className="w-full flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
             <CiCircleCheck />
             Seen
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
@@ -1079,7 +1128,7 @@ const Chat = () => {
     };
   }, []);
   useEffect(() => {
-    console.log("trigger");
+    // console.log("trigger");
     console.log(idroom);
     // newSocket.on("receiveMessage", (data) => {
     //   console.log(data);
