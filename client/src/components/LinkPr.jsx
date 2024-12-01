@@ -35,12 +35,13 @@ export default function LinkPr({ text }) {
 
   useEffect(() => {
     geturl(text);
-    // fetchurl("https://www.youtube.com/watch?v=DldSLwMeJpM");
   }, []);
 
   return (
-    <div className="w-full h-fit bg-secondary rounded-xl pb-2 cursor-pointer select-none">
-      {/* <div className="">{pr?.url && <img src={pr?.url} alt={pr?.url} />}</div> */}
+    <div className="w-full h-fit bg-secondary  pb-2 cursor-pointer select-none ">
+      <div className="min-w-full min-h-7">
+        {pr?.url && <img src={pr?.image} />}
+      </div>
 
       <div className="">
         <a

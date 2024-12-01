@@ -73,7 +73,9 @@ const data = [
   },
 ];
 
-export default function BarRp() {
+export default function BarRp({ monthly }) {
+  console.log(monthly);
+
   return (
     <div className="h-[22rem] bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">
       <strong className="text-gray-700 font-medium text-ascent-1">
@@ -84,7 +86,7 @@ export default function BarRp() {
           <BarChart
             width={500}
             height={300}
-            data={data}
+            data={monthly}
             margin={{
               top: 20,
               right: 10,
@@ -93,12 +95,12 @@ export default function BarRp() {
             }}
           >
             <CartesianGrid strokeDasharray="3 3 0 0" vertical={false} />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="_id" />
             <YAxis className="text-ascent-1" />
             <Tooltip />
             <Legend />
-            <Bar dataKey="Comments" fill="#0ea5e9" />
-            <Bar dataKey="Likes" fill="#ea580c" />
+            <Bar dataKey="count" fill="#0ea5e9" />
+            {/* <Bar dataKey="Likes" fill="#ea580c" /> */}
           </BarChart>
         </ResponsiveContainer>
       </div>

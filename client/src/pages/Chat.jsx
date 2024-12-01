@@ -1003,7 +1003,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                       />
                     )}
                     {checkurl(chat?.text) && (
-                      <div className="max-w-xs ">
+                      <div className="max-w-xs rounded-xl">
                         <LinkPr text={chat?.text} />
                       </div>
                     )}
