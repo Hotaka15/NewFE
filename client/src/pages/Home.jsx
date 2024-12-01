@@ -70,6 +70,7 @@ import { debounce } from "lodash";
 import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
+import { checklink } from "../until/checkapi";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -531,7 +532,7 @@ const Home = () => {
     setLoading(true);
 
     fetchFriendRequest();
-
+    // checklink("https://www.youtube.com/watch?v=DldSLwMeJpM");
     fetchSuggestFriends();
   }, []);
 

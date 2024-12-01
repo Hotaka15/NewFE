@@ -31,6 +31,7 @@ import Postrange from "./Postrange";
 import UserChart from "./UserChart";
 import SuggestPost from "./SuggestPost";
 import VideoPlayer from "./VideoPlayer";
+import LinkPr from "./LinkPr";
 export {
   TextInput,
   Loading,
@@ -65,4 +66,5 @@ export {
   UserChart,
   SuggestPost,
   VideoPlayer,
+  LinkPr,
 };

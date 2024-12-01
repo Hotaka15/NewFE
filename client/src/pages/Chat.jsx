@@ -11,6 +11,7 @@ import {
   UserTiitle,
   CustomButton,
   Loading,
+  LinkPr,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -327,7 +328,7 @@ const RangeChat = forwardRef(
           //   block: "end", // Đảm bảo cuộn về cuối phần tử
           // });
         }
-      }, 400);
+      }, 700);
     };
 
     const handleScroll = useCallback(
@@ -864,6 +865,11 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
     await seenMessage(id_1, id_2);
   };
 
+  const checkurl = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/gi;
+    return urlRegex.test(text); // Trả về true nếu tồn tại URL
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -934,7 +940,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
       id="window_chatlist"
       className="w-full h-full flex justify-center items-start "
     >
-      <div className="absolute bg-blue overflow-y-auto">
+      {/* <div className="absolute bg-blue overflow-y-auto">
         <h3>Visible Posts:</h3>
         <ul>
           {visibleChats.length > 0 ? (
@@ -945,7 +951,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
             <p>No post is visible yet.</p>
           )}
         </ul>
-      </div>
+      </div> */}
       {listchat && listchat?.length > 0 ? (
         <div id="window_chat" className="flex flex-col gap-2 w-full h-full">
           {listchat && listchat.length > 10 && (
@@ -996,7 +1002,13 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                         className="w-96 p-2 ml-2 rounded-3xl object-cover"
                       />
                     )}
+                    {checkurl(chat?.text) && (
+                      <div className="max-w-xs ">
+                        <LinkPr text={chat?.text} />
+                      </div>
+                    )}
                   </div>
+
                   {chat?.checked && (
                     <div className="flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
                       <CiCircleCheck />
@@ -1044,6 +1056,11 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                       alt="chat?.file_url"
                       className="w-96 p-2 ml-2 rounded-3xl object-cover"
                     />
+                  )}
+                  {checkurl(chat?.text) && (
+                    <div className="max-w-xs">
+                      <LinkPr text={chat?.text} />
+                    </div>
                   )}
                 </div>
               );
