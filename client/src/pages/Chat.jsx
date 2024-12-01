@@ -180,6 +180,63 @@ const RangeChat = forwardRef(
         console.log(error);
       }
     };
+
+    const fetchchatSeen = async (idroom) => {
+      try {
+        const res = await fetchChat(user?.token, idroom, 1);
+        console.log(res);
+        console.log(faild);
+        try {
+          console.log(res?.data?.messages[0]);
+          console.log(user?._id);
+          try {
+            for (let message of res?.data?.messages || []) {
+              console.log(message);
+
+              let check = false;
+              if (message.senderId === user?._id) {
+                for (let obj of message?.readStatus) {
+                  if (obj.status === "read") {
+                    console.log(message);
+
+                    message.checked
+                      ? message.checked.push(obj?._id)
+                      : (message.checked = [obj?._id]);
+                    check = true;
+                    break;
+                  }
+                }
+              }
+              if (check) {
+                break;
+              }
+            }
+          } catch (error) {
+            console.log(error);
+          }
+
+          const listChat = [...listchat];
+          const updatechat = listChat.map((itemA) => {
+            const itemB = res?.data?.messages.find(
+              (item) => item._id === itemA._id
+            );
+            return itemB ? { ...itemA, ...itemB } : itemA;
+          });
+
+          console.log(updatechat);
+
+          // setListchat(res?.data?.messages);
+        } catch (error) {
+          console.log(error);
+        }
+        setOnscreen(true);
+        position();
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     useEffect(() => {
       const newList =
         faild && faild.length > 0
@@ -257,16 +314,20 @@ const RangeChat = forwardRef(
     const position = () => {
       setTimeout(() => {
         if (chatWindowRef.current) {
-          console.log(chatWindowRef.current.scrollHeight);
-          console.log(chatWindowRef.current.scrollTop);
-          console.log(chatWindowRef.current.offsetHeight);
-          chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+          // console.log(chatWindowRef.current.scrollHeight);
+          // console.log(chatWindowRef.current.scrollTop);
+          // console.log(chatWindowRef.current.offsetHeight);
+          // chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+          chatWindowRef.current.scrollTo({
+            top: chatWindowRef.current.scrollHeight,
+            behavior: "smooth",
+          });
           // chatWindowRef.current.scrollIntoView({
           //   behavior: "smooth", // Cuộn mượt
           //   block: "end", // Đảm bảo cuộn về cuối phần tử
           // });
         }
-      }, 100);
+      }, 400);
     };
 
     const handleScroll = useCallback(
@@ -376,6 +437,8 @@ const RangeChat = forwardRef(
           if (data?.message && data?.message != "seen") {
             fetchList();
             fetchchat(idroom);
+          } else {
+            fetchchatSeen(idroom);
           }
 
           // fetchchatforchild(idroom);
@@ -796,8 +859,9 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
   // };
 
   const handleSeen = async (id_1, id_2) => {
-    const check = listchat.find((item) => item?._id == id_2);
-    !check && (await seenMessage(id_1, id_2));
+    // const check = listchat.find((item) => item?._id == id_2);
+    // !check && (await seenMessage(id_1, id_2));
+    await seenMessage(id_1, id_2);
   };
 
   useEffect(() => {
@@ -812,14 +876,40 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
             if (!visibleChats.includes(chatId)) {
               setVisibleChats((prev) => [...prev, chatId]);
               const id_2 = chatId; // Thêm ID vào danh sách visibleChats
-              handleSeen(id_1, id_2);
+              // handleSeen(id_1, id_2);
+              console.log(id_1);
+
               const privateMessage = "seen";
-              socket &&
-                idroom &&
-                socket.emit("sendMessage", {
-                  idConversation: idroom,
-                  message: privateMessage,
-                });
+              const result = listchat.find(
+                (listchat) => listchat._id === chatId
+              );
+              console.log(result);
+              if (socket) {
+                if (idroom) {
+                  const found = result?.readStatus?.find(
+                    (item) => item._id === id_1
+                  );
+
+                  console.log(found);
+
+                  // if (result?.readStatus?.status !== "read" || "sent")
+                  if (found) {
+                    console.log(result);
+                    handleSeen(id_1, id_2);
+                    socket.emit("sendMessage", {
+                      idConversation: idroom,
+                      message: privateMessage,
+                    });
+                  }
+                }
+              }
+              // socket &&
+              //   idroom &&
+              //   result?.readStatus?.status !== "read" &&
+              //   socket.emit("sendMessage", {
+              //     idConversation: idroom,
+              //     message: privateMessage,
+              //   });
             }
           }
         });
@@ -844,7 +934,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
       id="window_chatlist"
       className="w-full h-full flex justify-center items-start "
     >
-      {/* <div className="absolute bg-blue overflow-y-auto">
+      <div className="absolute bg-blue overflow-y-auto">
         <h3>Visible Posts:</h3>
         <ul>
           {visibleChats.length > 0 ? (
@@ -855,7 +945,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
             <p>No post is visible yet.</p>
           )}
         </ul>
-      </div> */}
+      </div>
       {listchat && listchat?.length > 0 ? (
         <div id="window_chat" className="flex flex-col gap-2 w-full h-full">
           {listchat && listchat.length > 10 && (
