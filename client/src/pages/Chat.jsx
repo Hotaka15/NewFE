@@ -12,6 +12,7 @@ import {
   CustomButton,
   Loading,
   LinkPr,
+  Managergroup,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -75,6 +76,8 @@ const RangeChat = forwardRef(
       fetchList,
       type,
       fetchchatforchild,
+      setRoleo,
+      setAddu,
     },
     ref
   ) => {
@@ -92,6 +95,7 @@ const RangeChat = forwardRef(
     const thisRoom = useRef("");
     const [nextchat, setNextchat] = useState([]);
     const chatWindowRef = useRef(null);
+    const [toggle, setToggle] = useState(false);
     const id_1 = user?._id;
     const id_2 = userinfo?._id;
     const handlebg = (e) => {
@@ -485,33 +489,44 @@ const RangeChat = forwardRef(
           </div>
           <div className="flex relative justify-center items-center text-ascent-1 gap-2">
             <IoCallSharp size={25} />
-            <SlOptionsVertical size={25} className="cursor-pointer" />
-            {/* <div className="absolute w-40 h-40 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
-            <div
-              // onClick={() => {
-              //   setCreatg(!createg);
-              // }}
-              className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
-            >
-              Create Group
-            </div>
-            <div
-              // onClick={() => {
-              //   setRoleo(!roleo);
-              // }}
-              className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
-            >
-              Manager
-            </div>
-            <div
-              // onClick={() => {
-              //   setAddu(!addu);
-              // }}
-              className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
-            >
-              Add User
-            </div>
-          </div> */}
+            {type == "group" && (
+              <div
+                className="flex items-center justify-center"
+                onClick={() => {
+                  setToggle(!toggle);
+                }}
+              >
+                <SlOptionsVertical size={25} className="cursor-pointer" />
+              </div>
+            )}
+            {toggle && (
+              <div className="absolute w-40 h-30 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+                {/* <div
+                  onClick={() => {
+                    setCreatg(!createg);
+                  }}
+                  className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                >
+                  Create Group
+                </div> */}
+                <div
+                  onClick={() => {
+                    setRoleo(true);
+                  }}
+                  className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                >
+                  Manager
+                </div>
+                <div
+                  onClick={() => {
+                    setAddu(true);
+                  }}
+                  className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
+                >
+                  Add User
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -1413,6 +1428,8 @@ const Chat = () => {
               idroom={idroom}
               fetchList={fetchList}
               socket={socket}
+              setRoleo={setRoleo}
+              setAddu={setAddu}
               ref={childRef}
               fetchchatforchild={fetchchatforchild}
               type={type}
@@ -1678,68 +1695,7 @@ const Chat = () => {
       {/*ROLE*/}
       {roleo && (
         <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
-              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-                  Manager member
-                  <div
-                    className="text-ascent-1 h-full flex items-center cursor-pointer"
-                    onClick={() => {
-                      setRoleo(!roleo);
-                    }}
-                  >
-                    <MdClose size={25} />
-                  </div>
-                </span>
-              </div>
-
-              <input
-                type="text"
-                className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
-                placeholder="Search"
-              />
-              <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
-                <div className="w-full relative h-fit bg-secondary px-2 py-2 text-ascent-1 flex gap-2 justify-between items-center rounded-3xl">
-                  <div className="flex justify-center items-center gap-3">
-                    <img
-                      src={user?.profileUrl ? user?.profileUrl : NoProfile}
-                      alt=""
-                      className="h-16 w-16 rounded-full object-cover"
-                    />
-                    {user?.firstName} {user?.lastName}
-                  </div>
-
-                  <SlOptionsVertical className="mr-2" />
-                  <div className="absolute w-40 h-20 top-[80%] right-6 z-50 select-none">
-                    <div className="w-full h-full bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
-                      <div
-                        onClick={() => {}}
-                        className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
-                      >
-                        Change Role
-                      </div>
-                      <div className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30">
-                        Delete
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className="w-full flex justify-end"
-                onClick={() => {
-                  setRoleo(!roleo);
-                }}
-              >
-                <CustomButton
-                  tittle="Close"
-                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-                />
-              </div>
-            </div>
-          </div>
+          <Managergroup setRoleo={setRoleo} />
         </div>
       )}
       {/* Ratio */}

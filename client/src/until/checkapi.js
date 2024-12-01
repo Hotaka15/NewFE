@@ -11,7 +11,6 @@ export const authcheckRequest = async ({ url, method }) => {
   try {
     console.log(url, method);
     const key = "4954b1608026ae14178a4061b0d79ce7";
-    const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
     const result = await API(url, {
       method: method || "GET",
       headers: { "X-Linkpreview-Api-Key": key },

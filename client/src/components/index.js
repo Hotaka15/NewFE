@@ -32,6 +32,7 @@ import UserChart from "./UserChart";
 import SuggestPost from "./SuggestPost";
 import VideoPlayer from "./VideoPlayer";
 import LinkPr from "./LinkPr";
+import Managergroup from "./Managergroup";
 export {
   TextInput,
   Loading,
@@ -67,4 +68,5 @@ export {
   SuggestPost,
   VideoPlayer,
   LinkPr,
+  Managergroup,
 };

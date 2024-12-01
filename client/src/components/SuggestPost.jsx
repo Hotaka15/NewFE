@@ -2,18 +2,36 @@ import React, { useEffect, useRef, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import Loading from "./Loading";
+import { generatetext } from "../until/suggestfr";
 const SuggestPost = ({ handleisSuggest }) => {
   const [history, setHistory] = useState([]);
   const [content, setContent] = useState("");
   const [isText, setIsText] = useState(true);
+  const [loading, setLoading] = useState(false);
   const chatWindowRef = useRef(null);
 
-  const handlehistoryuser = () => {
+  const handlehistoryuser = async () => {
     const list = [...history];
     list.push({ role: "user", text: content });
     setHistory(list);
     handleScrollToBottom();
+    setLoading(false);
   };
+
+  const handleSendText = async (content) => {
+    setLoading(true);
+    const prompt = content;
+    console.log(prompt);
+
+    try {
+      const res = await generatetext(prompt);
+      console.log(res);
+      handlehistoryuser();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handlehistorybot = () => {
     const list = [...history];
     list.push({ role: "bot", text: content });
@@ -109,24 +127,34 @@ const SuggestPost = ({ handleisSuggest }) => {
               })}
           </div>
         </div>
-        <div className="w-full flex items-center justify-center gap-2 mb-4 px-4">
-          {/* <Loading /> */}
-          <input
-            type="text"
-            placeholder="Write something..."
-            className="bg-secondary rounded-full w-4/5 outline-none px-4 py-2 text-ascent-1 border-[#66666645] border"
-            value={content}
-            onChange={(e) => {
-              handlecontent(e);
-            }}
-          />
-          <div
-            className="bg-blue text-white px-4 py-2  rounded-xl"
-            onClick={handlehistorybot}
-          >
-            Send
+
+        {loading && (
+          <div className="w-full flex items-center justify-center gap-2 mb-4 px-4">
+            <Loading />
           </div>
-        </div>
+        )}
+
+        {!loading && (
+          <div className="w-full flex items-center justify-center gap-2 mb-4 px-4">
+            <input
+              type="text"
+              placeholder="Write something..."
+              className="bg-secondary rounded-full w-4/5 outline-none px-4 py-2 text-ascent-1 border-[#66666645] border"
+              value={content}
+              onChange={(e) => {
+                handlecontent(e);
+              }}
+            />
+            <div
+              className="bg-blue text-white px-4 py-2  rounded-xl"
+              onClick={() => {
+                handleSendText(content);
+              }}
+            >
+              Send
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
