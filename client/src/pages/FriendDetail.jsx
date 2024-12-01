@@ -18,6 +18,7 @@ import moment from "moment";
 import { UpdateProfile } from "../redux/userSlice";
 import { usergetFriends, usergetUserInfo } from "../until/user";
 import { postfetchuserPosts } from "../until/post";
+import { io } from "socket.io-client";
 const ProfileDetail = ({ title }) => {
   const [friend, setFriend] = useState();
   const { user, edit } = useSelector((state) => state.user);
@@ -95,6 +96,22 @@ const ProfileDetail = ({ title }) => {
     setLoading(true);
     getUser(user?._id);
     getFriend(user?.token);
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
 
   return (

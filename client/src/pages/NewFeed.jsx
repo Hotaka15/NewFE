@@ -59,6 +59,7 @@ import {
 } from "../until/post";
 import { debounce } from "lodash";
 import { SetPosts, UpdatePosts } from "../redux/postSlice";
+import { io } from "socket.io-client";
 const NewFeed = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -358,6 +359,22 @@ const NewFeed = () => {
 
     // fetchNotification();
     fetchSuggestFriends();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
 
   return (

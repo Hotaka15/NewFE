@@ -33,6 +33,7 @@ import {
   usersendFriendRequest,
 } from "../until/user";
 import { postfetchuserPosts } from "../until/post";
+import { io } from "socket.io-client";
 const FriendDetailSuggest = ({ title }) => {
   const { id, key } = useParams();
   const [friend, setFriend] = useState();
@@ -182,6 +183,22 @@ const FriendDetailSuggest = ({ title }) => {
     fetchSuggestFriends();
     getUser(user?._id);
   }, [id]);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
+  }, []);
 
   return (
     <div className="home w-full bg-bgColor text-ascent-1 overflow-hidden lg:rounded-lg h-screen items-center px-0 lg:px-10 select-none">

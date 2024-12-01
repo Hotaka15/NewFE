@@ -16,6 +16,7 @@ import { BiComment, BiLike, BiSolidLike } from "react-icons/bi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
+import { io } from "socket.io-client";
 
 const getPostComments = async (id) => {
   try {
@@ -292,6 +293,22 @@ const PostPage = () => {
   useEffect(() => {
     getPost();
     getComments(id);
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
   return (
     <div className="">

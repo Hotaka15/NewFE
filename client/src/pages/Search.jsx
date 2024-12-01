@@ -16,6 +16,7 @@ import {
   postlikePost,
   postsearchfetchPosts,
 } from "../until/post";
+import { io } from "socket.io-client";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState();
@@ -78,6 +79,22 @@ const Search = () => {
     };
 
     loop(0);
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
 
   return (

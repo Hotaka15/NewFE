@@ -71,6 +71,7 @@ import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { checklink } from "../until/checkapi";
+import { io } from "socket.io-client";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -534,6 +535,22 @@ const Home = () => {
     fetchFriendRequest();
     // checklink("https://www.youtube.com/watch?v=DldSLwMeJpM");
     fetchSuggestFriends();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
 
   return (

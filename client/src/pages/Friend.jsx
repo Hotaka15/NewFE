@@ -16,6 +16,7 @@ import {
   userfriendSuggest,
   usersendFriendRequest,
 } from "../until/user";
+import { io } from "socket.io-client";
 const Friend = () => {
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(true);
@@ -137,6 +138,22 @@ const Friend = () => {
     // scrollhidde();
     fetchSuggestFriends();
     fetchFriendRequest();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
 
   return (

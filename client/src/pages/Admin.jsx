@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiRequest, fetchNotifications } from "../until";
 import Chart from "../components/Chart";
 import { admingetlistUser } from "../until/admin";
+import { io } from "socket.io-client";
 
 const Admin = () => {
   const [notifications, setNotifications] = useState();
@@ -53,6 +54,22 @@ const Admin = () => {
   useEffect(() => {
     fetchUser();
     // fetchNotification();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
   }, []);
   return (
     <div className="">

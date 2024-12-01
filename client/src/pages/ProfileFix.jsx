@@ -17,6 +17,7 @@ import {
   postfetchuserPosts,
   postlikePost,
 } from "../until/post";
+import { io } from "socket.io-client";
 const ProfileFix = () => {
   const { id } = useParams();
   const { user, edit } = useSelector((state) => state.user);
@@ -83,6 +84,22 @@ const ProfileFix = () => {
     setLoading(true);
     getUser();
   }, [id]);
+
+  useEffect(() => {
+    const newSocket = io("ws://localhost:3005", {
+      reconnection: true,
+      transports: ["websocket"],
+    });
+
+    let userId = user?._id;
+    newSocket.emit("userOnline", { userId });
+
+    return () => {
+      let userId = user?._id;
+      newSocket.emit("userOffline", { userId });
+      newSocket.disconnect();
+    };
+  }, []);
 
   return (
     <div className="home w-full bg-bgColor text-ascent-1 overflow-hidden lg:rounded-lg h-screen items-center px-0 lg:px-10">
