@@ -561,11 +561,10 @@ const Home = () => {
       >
         <TopBar user={user} />
 
-        <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-10 h-full justify-between">
+        <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-3 h-full justify-between">
           {/* {LEFT} */}
-          <div className="hidden w-1/5 h-full md:flex flex-col gap-6 overflow-y-auto flex-initial">
-            {/* <ProfileCard user={user} /> */}
-            <div className=" w-full h-fit pb-3 flex flex-col gap-3 overflow-hidden border-b border-ascent-2">
+          <div className="hidden w-1/5 h-full md:flex flex-col gap-2 overflow-y-auto flex-initial">
+            <div className=" w-full h-fit pb-3 flex flex-col gap-3  border-b border-ascent-2">
               <Link
                 to={"/profile/" + user?._id}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -668,7 +667,7 @@ const Home = () => {
               <FriendsCard friend={user?.friends} />;
             })} */}
             <Lastactive />
-            <div className="w-full  shadow-sm   py-5">
+            <div className="w-full shadow-sm pb-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
             pb-2 "
@@ -728,7 +727,7 @@ const Home = () => {
           {/* {CENTTER} bg-primary */}
           <div
             id="post_range"
-            className="no-scrollbar h-full flex-initial w-2/4  px-4 flex flex-col gap-2 overflow-y-auto rounded-lg "
+            className="no-scrollbar h-full flex-initial w-2/4 px-4 flex flex-col gap-2 overflow-y-auto rounded-lg "
           >
             <form
               onSubmit={handleSubmit(handlePostSubmit)}
@@ -879,7 +878,7 @@ const Home = () => {
             {posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
-          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2  flex-initial px-2">
+          <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 flex-initial px-2 pb-4">
             {/* {FRIEND REQUEST} */}
             {/* <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
               <div
@@ -939,7 +938,7 @@ const Home = () => {
             </div> */}
             {/* <Lastactive /> */}
             {/* {SUGGEST FRIENDS} */}
-            <div className="w-full shadow-sm ">
+            <div className="w-full h-full shadow-sm ">
               {!isSearch && (
                 <div className="flex items-center justify-between text-sm text-ascent-1 ">
                   <span className="font-medium text-lg text-ascent-2 select-none">
@@ -995,7 +994,7 @@ const Home = () => {
                 </form>
               )}
 
-              <div className="w-full h-[90%] flex flex-col pt-4 overflow-auto">
+              <div className="w-full h-full flex flex-col pt-4 overflow-auto ">
                 {suggestedFriends &&
                   suggestedFriends?.map((friend) => (
                     <div

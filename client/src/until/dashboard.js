@@ -7,6 +7,36 @@ export const API = axios.create({
   responseType: "json",
 });
 
+const API_URLP = "http://localhost:3002/api";
+
+export const APIp = axios.create({
+  baseURL: API_URLP,
+  responseType: "json",
+});
+
+export const dbapiRequestP = async ({ url, token, data, method }) => {
+  try {
+    // console.log(url, token, data, method);
+    const result = await APIp(url, {
+      method: method || "GET",
+      data: data,
+      headers: {
+        "content-type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    });
+    console.log(result);
+
+    return result?.data;
+  } catch (error) {
+    const err = error.response.data;
+
+    console.log(err);
+
+    return { status: err.status, message: err.message };
+  }
+};
+
 export const dbapiRequest = async ({ url, token, data, method }) => {
   try {
     // console.log(url, token, data, method);
@@ -77,7 +107,7 @@ export const userDashboard = async () => {
 
 export const reportsbyreasonDashboard = async () => {
   try {
-    const res = await dbapiRequest({
+    const res = await dbapiRequestP({
       url: "/stat/reports-by-reason",
     });
     console.log(res);
@@ -88,7 +118,7 @@ export const reportsbyreasonDashboard = async () => {
 };
 export const reportsbypostDashboard = async () => {
   try {
-    const res = await dbapiRequest({
+    const res = await dbapiRequestP({
       url: "/stat/reports-by-post",
     });
     console.log(res);
@@ -99,8 +129,8 @@ export const reportsbypostDashboard = async () => {
 };
 export const dayreportDashboard = async () => {
   try {
-    const res = await dbapiRequest({
-      url: "/stat/reports-by-date?groupBy=day",
+    const res = await dbapiRequestP({
+      url: "/stat/reports-by-date?groupBy=month",
     });
     console.log(res);
     return res;

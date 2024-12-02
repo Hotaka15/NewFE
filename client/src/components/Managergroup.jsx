@@ -192,8 +192,8 @@ export default function Managergroup({ setRoleo }) {
             <div className="relative h-1/3 overflow-auto w-full flex ">
               <img src={NoProfile} className="w-full object-cover blur-lg" />
             </div>
-            <div className="w-full relative bottom-4 flex flex-col items-center">
-              <img src={NoProfile} className="object-cover h-14 w-14" />
+            <div className="w-full relative bottom-6 flex flex-col items-center">
+              <img src={NoProfile} className="object-cover h-20 w-20" />
               <span className="text-ascent-1">Name</span>
             </div>
             <div className="w-full px-4 cursor-pointer ">

@@ -8,15 +8,20 @@ const data = [
   { name: "Other", value: 32 },
   { name: "Violence", value: 15 },
 ];
-// const data = [
-//   { count: 8, gender: null },
-//   { count: 15, gender: "female" },
-//   { count: 23, gender: "male" },
-//   { count: 27, gender: "other" },
-//   { count: 43, gender: "prefer_not_to_say" },
-// ];
+
 const RADIAN = Math.PI / 180;
-const COLORS = ["#00C49F", "#FFBB28", "#FF8042", "#cb4335", "#2874a6 "];
+const COLORS = [
+  "#00C49F ",
+  "#FFBB28 ",
+  "#FF8042 ",
+  "#cb4335 ",
+  "#2874a6 ",
+  "#8e44ad ",
+  "#f39c12 ",
+  "#2ecc71 ",
+  "#3498db ",
+  "#e74c3c ",
+];
 
 const renderCustomizedLabel = ({
   cx,
@@ -43,7 +48,12 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function PieChartRpP({ genders }) {
+export default function PieChartRpP({ resaon }) {
+  console.log(resaon);
+  const updatedData = resaon.map((item) => ({
+    name: item._id,
+    totalReports: item.totalReports,
+  }));
   return (
     <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
       <strong className="text-gray-700 font-medium text-ascent-1">
@@ -53,16 +63,16 @@ export default function PieChartRpP({ genders }) {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart width={400} height={300}>
             <Pie
-              data={data}
+              data={updatedData}
               cx="50%"
               cy="45%"
               labelLine={false}
               label={renderCustomizedLabel}
               outerRadius={105}
               fill="#8884d8"
-              dataKey="value"
+              dataKey="totalReports"
             >
-              {data.map((_, index) => (
+              {updatedData.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

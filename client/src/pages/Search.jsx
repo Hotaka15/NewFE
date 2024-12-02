@@ -19,7 +19,7 @@ import {
 import { io } from "socket.io-client";
 const Search = () => {
   const { keyword } = useParams();
-  const [key, setKey] = useState();
+  const [key, setKey] = useState(keyword);
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(true);
   console.log("main key:" + keyword);
@@ -64,7 +64,7 @@ const Search = () => {
   };
   useEffect(() => {
     // setLoading(true);
-    handleSearch(keyword);
+    handleSearch(key);
     // fetchPost();
 
     const loop = (iteration) => {
@@ -72,7 +72,7 @@ const Search = () => {
       // Dừng sau 10 lần (10 giây)
 
       setTimeout(() => {
-        keyword && handleSearch(keyword);
+        key && handleSearch(key);
 
         loop(iteration + 1); // Gọi lại loop với lần lặp tiếp theo
       }, 10000); // Thực hiện mỗi giây

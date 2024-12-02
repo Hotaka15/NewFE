@@ -40,34 +40,7 @@ const FriendMain = (user) => {
           id="request"
           className=" flex w-fit h-fit justify-start grow-0 overflow-x-auto gap-2 scroll-smooth"
         >
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
-            <FriendCard />
-          </div>
-          <div className="h-fit w-fit flex-shrink-0">
+          <div className="h-1/6 w-fit flex-shrink-0">
             <FriendCard />
           </div>
         </div>

@@ -19,7 +19,7 @@ import { RiFolderVideoFill } from "react-icons/ri";
 import { CiVideoOn } from "react-icons/ci";
 
 import { TbMessageChatbot } from "react-icons/tb";
-import { AiFillRobot } from "react-icons/ai";
+import { PiShootingStarFill } from "react-icons/pi";
 import {
   postapiRequest,
   postfetchPosts,
@@ -30,6 +30,7 @@ import SuggestPost from "./SuggestPost";
 import { userfriendSuggest, usergetFriends } from "../until/user";
 import UserTiitle from "./UserTiitle";
 import VideoPlayer from "./VideoPlayer";
+import { generateImg, generatetext } from "../until/suggestfr";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -52,7 +53,60 @@ const Post = ({ setPage }) => {
   const [videoUpload, setVideoUpload] = useState(null);
   const [err, setErr] = useState("");
   const [isSuggest, setIsSuggest] = useState(false);
+  const [textsp, setTextsp] = useState("");
   const [friends, setFriends] = useState([]);
+  const [counttext, setCounttext] = useState(100);
+  const [suggestpost, setSuggestpost] = useState(false);
+  const [isText, setIsText] = useState(true);
+  const [resText, setResText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resImg, setResImg] = useState(null);
+  const handleTextsp = (e) => {
+    console.log(e.target.value);
+
+    const inputText = e.target.value;
+    const words = inputText.trim().split(/\s+/);
+    const count = words[0] === "" ? 0 : words.length;
+
+    if (inputText && count <= 100 && counttext > 0) {
+      setTextsp(inputText);
+      setCounttext(100 - count);
+    } else if (inputText == "") {
+      setTextsp();
+      setCounttext(100);
+    }
+  };
+
+  const handleSendText = async (textsp) => {
+    if (textsp != "" && isText) {
+      setLoading(true);
+      const prompt = textsp;
+      console.log(prompt);
+
+      try {
+        const res = await generatetext(prompt);
+        console.log(res);
+        setResText(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (textsp != "" && !isText) {
+      setLoading(true);
+      const prompt = textsp;
+      console.log(prompt);
+
+      try {
+        const res = await generateImg(prompt);
+        console.log(res);
+        setResImg(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    setLoading(false);
+  };
+
   const handlebg = (e) => {
     setVideoUpload(null);
     setVideoFile(null);
@@ -163,7 +217,7 @@ const Post = ({ setPage }) => {
 
       data.visibility = option;
       console.log(data);
-      await checkpost(data);
+      // await checkpost(data);
 
       try {
         const uri = file && (await handFileUpload(file));
@@ -327,14 +381,12 @@ const Post = ({ setPage }) => {
                         ></label>
                         <div className="w-full h-full flex-col-reverse m-3 gap-80">
                           <textarea
-                            // {...register("description", {
-                            //   required: "Write something about post",
-                            // })}
-                            // error={
-                            //   errors.description
-                            //     ? errors.description.message
-                            //     : ""
-                            // }
+                            {...register("description")}
+                            error={
+                              errors.description
+                                ? errors.description.message
+                                : ""
+                            }
                             className="w-full h-72 bg-primary rounded-3xl border-none
             outline-none text-xl text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
@@ -388,10 +440,21 @@ const Post = ({ setPage }) => {
                                   <CiShoppingTag />
                                   <div className="">Tags</div>
                                 </div> */}
-                              <div className="text-ascent-2">
+                              <div className="text-ascent-2 ">
                                 Add to your post
                               </div>
                               <div className="flex gap-2 items-center">
+                                <div
+                                  onClick={() => {
+                                    setSuggestpost(true);
+                                  }}
+                                  className="w-fit py-1 flex outline-1 px-3 bg-gradient-to-r from-[#0099ff] from-25% to-[#9966ff] to-60%  rounded-full outline  justify-center items-center cursor-pointer"
+                                >
+                                  <label className="flex items-center gap-1 text-base text-[#ffff00]  text-transparent  cursor-pointer  ">
+                                    <PiShootingStarFill size={25} />
+                                  </label>
+                                </div>
+
                                 <div className="w-fit py-1 flex outline-1 px-3 text-[#345cd9] bg-primary rounded-full outline  justify-center items-center cursor-pointer">
                                   <label
                                     htmlFor="imgUpload"
@@ -757,12 +820,107 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
             >
               <TbMessageChatbot size={40} />
             </div>
+            {suggestpost && (
+              <div className="fixed top-0 right-0 z-20 w-full h-full flex items-center justify-center">
+                <div className="absolute w-full h-full bg-gradient-to-r opacity-40 from-[#0099ff] from-25% to-[#9966ff] to-60%"></div>
+                <div className="w-1/4 h-2/3 bg-primary rounded-2xl z-10 overflow-hidden relative">
+                  <div
+                    className="text-ascent-1  py-4 px-4 flex justify-end cursor-pointer"
+                    onClick={() => {
+                      setSuggestpost(false);
+                    }}
+                  >
+                    <MdClose size={22} />
+                  </div>
+                  <div className="px-4 w-full ">
+                    <div className="w-full rounded-xl overflow-hidden border border-[#66666690] relative ">
+                      <textarea
+                        value={textsp}
+                        onChange={(e) => {
+                          handleTextsp(e);
+                        }}
+                        className="w-full h-52 bg-primary  border-none
+            outline-none text-xl text-ascent-1 
+            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
+                        placeholder="Write something about post"
+                      />
+                      <div className="flex justify-between px-4 pb-4">
+                        <div className=" text-ascent-2">Word: {counttext}</div>
+
+                        {loading && (
+                          <div className="flex justify-center items-center">
+                            <Loading />
+                          </div>
+                        )}
+
+                        {!loading && (
+                          <div className="flex justify-center items-center">
+                            <div className="flex py-2  bg-primary rounded-md select-none">
+                              <div
+                                className={`${
+                                  isText && "bg-ascent-1/10"
+                                } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
+                                onClick={() => {
+                                  setIsText(true);
+                                }}
+                              >
+                                Text
+                              </div>
+                              <div
+                                className={`${
+                                  !isText && "bg-ascent-1/10"
+                                } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
+                                onClick={() => {
+                                  setIsText(false);
+                                }}
+                              >
+                                Images
+                              </div>
+                            </div>
+
+                            <div
+                              className="bg-blue px-2 py-1 text-white rounded-lg"
+                              onClick={() => {
+                                handleSendText(textsp);
+                              }}
+                            >
+                              Submit
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {isText && (
+                      <div className="mt-10 w-full rounded-xl overflow-hidden border border-[#66666690] relative ">
+                        <textarea
+                          value={resText}
+                          onChange={(e) => {
+                            setResText(e);
+                          }}
+                          className="w-full h-52 bg-primary  border-none
+            outline-none text-xl text-ascent-1 
+            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
+                          placeholder="Text"
+                        />
+                      </div>
+                    )}
+                    {!isText && (
+                      <div className="mt-10 w-full flex justify-center items-center rounded-xl overflow-hidden border border-[#66666690] relative ">
+                        {resImg && (
+                          <img src={resImg} className="max-h-44 object-cover" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </span>
 
           {/* &#8203; */}
 
           {isSuggest && (
-            <div className="fixed w-[425px] h-[620px]  bottom-10 right-10">
+            <div className="fixed w-[425px] h-[620px] z-10 bottom-10 right-10">
               <SuggestPost handleisSuggest={handleisSuggest} />
             </div>
           )}

@@ -5,7 +5,10 @@ import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
 import PieChartRp from "./PieChartRp";
 import BarRp from "./BarRp";
+import { MdAdminPanelSettings } from "react-icons/md";
 import RecentRp from "./RecentRp";
+import { IoPeople } from "react-icons/io5";
+import { FaCheckCircle } from "react-icons/fa";
 import {
   ageDashboard,
   genderDashboard,
@@ -35,7 +38,7 @@ const UserChart = () => {
     <div className="w-full h-full bg-primary py-4 ga">
       <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
-          <BsPostcardHeartFill size={30} />
+          <IoPeople size={35} />
           <div>
             <div className="text-ascent-2 text-sm">Total Users</div>
             <div className="text-ascent-1 text-xl">{total?.totalUsers}</div>
@@ -51,14 +54,14 @@ const UserChart = () => {
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
-          <AiFillLike size={25} />
+          <MdAdminPanelSettings size={40} />
           <div>
             <div className="text-ascent-2 text-sm">Total Admins:</div>
             <div className="text-ascent-1 text-xl">{total?.totalAdmins}</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
-          <FaCommentAlt size={25} />
+          <FaCheckCircle size={35} />
           <div>
             <div className="text-ascent-2 text-sm">Verified Users:</div>
             <div className="text-ascent-1 text-xl">

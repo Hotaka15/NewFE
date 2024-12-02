@@ -157,7 +157,7 @@ export const postdeletePost = async (id, token) => {
 };
 
 export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
-  // console.log("Data: " + data);
+  console.log("Data: " + data);
   try {
     const res = await postapiRequest({
       url: "/search?keyword=" + data,

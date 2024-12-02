@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3009/api/users";
+const API_URL = "http://localhost:3009/";
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -58,6 +58,35 @@ export const generatetext = async (prompt) => {
       method: "POST",
     });
     console.log(res);
+    return res?.generated_text;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const generateImg = async (prompt) => {
+  try {
+    const data = { prompt: prompt };
+    console.log(data);
+
+    // const res = await smartapiRequest({
+    //   url: "/generate-image",
+    //   data: data || {},
+    //   method: "POST",
+    // });
+    const res = await axios.get("http://localhost:3009/generate_image", {
+      responseType: "blob",
+      data: data,
+      method: "POST",
+    });
+
+    // const blob = new Blob([res]);
+    const url = URL.createObjectURL(res.data);
+    console.log(typeof url);
+    console.log(url);
+
+    console.log(res);
+    return res;
   } catch (error) {
     console.log(error);
   }

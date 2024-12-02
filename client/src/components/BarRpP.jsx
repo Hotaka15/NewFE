@@ -73,7 +73,12 @@ const data = [
   },
 ];
 
-export default function BarRpP() {
+export default function BarRpP({ month }) {
+  console.log(month);
+  const updatedData = month.map((item) => ({
+    name: `${item._id.year}/${item._id.month}`,
+    totalReports: item.totalReports,
+  }));
   return (
     <div className="h-[22rem] bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">
       <strong className="text-gray-700 font-medium text-ascent-1">
@@ -84,7 +89,7 @@ export default function BarRpP() {
           <BarChart
             width={500}
             height={300}
-            data={data}
+            data={updatedData}
             margin={{
               top: 20,
               right: 10,
@@ -97,8 +102,8 @@ export default function BarRpP() {
             <YAxis className="text-ascent-1" />
             <Tooltip />
             <Legend />
-            <Bar dataKey="Post" fill="#0ea5e9" />
-            <Bar dataKey="Report" fill="#ea580c" />
+            {/* <Bar dataKey="Post" fill="#0ea5e9" /> */}
+            <Bar dataKey="totalReports" fill="#ea580c" />
           </BarChart>
         </ResponsiveContainer>
       </div>

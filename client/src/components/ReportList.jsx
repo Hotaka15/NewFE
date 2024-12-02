@@ -98,7 +98,7 @@ const Reportlist = ({ user, sl }) => {
             </th>
           </tr> */}
             {sl &&
-              listreport.slice(0, 3).map((report) => (
+              listreport.slice(0, 5).map((report) => (
                 <tr>
                   <th
                     onClick={() => {

@@ -40,17 +40,17 @@ export default function LinkPr({ text }) {
   return (
     <div className="w-full h-fit bg-secondary  pb-2 cursor-pointer select-none ">
       <div className="min-w-full min-h-7">
-        {pr?.url && <img src={pr?.image} />}
+        {pr?.url && <img src={pr?.image} className="" />}
       </div>
 
-      <div className="">
+      <div className="px-2">
         <a
           href={pr?.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-ascent-1 mx-2 mt-2 underline underline-offset-2"
+          className="text-ascent-1 mx-2 mt-2 underline underline-offset-2 text-wrap"
         >
-          {pr?.title}
+          {pr?.title.length > 35 ? pr?.title.slice(0, 35) + "..." : pr?.title}
         </a>
       </div>
     </div>

@@ -15,14 +15,21 @@ import PieChartRpP from "./PieChartRpP";
 import BarRpP from "./BarRpP";
 import { useSelector } from "react-redux";
 import Reportlist from "./ReportList";
+
 const Chart = () => {
   const { user } = useSelector((state) => state?.user);
+  const [resaon, SetReason] = useState([]);
+  const [month, setMonth] = useState([]);
+  const [bypost, setBypost] = useState([]);
   const fetchdashboard = async () => {
     const byreason = await reportsbyreasonDashboard();
     console.log(byreason);
+    SetReason(byreason);
     const bypost = await reportsbypostDashboard();
+    setBypost(bypost);
     console.log(bypost);
     const report = await dayreportDashboard();
+    setMonth(report);
     console.log(report);
   };
   useState(() => {
@@ -30,7 +37,7 @@ const Chart = () => {
   }, []);
   return (
     <div className="w-full h-full bg-primary py-4 ga">
-      <div className="grid grid-cols-4 gap-4 mb-4">
+      {/* <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <BsPostcardHeartFill size={30} />
           <div>
@@ -59,10 +66,10 @@ const Chart = () => {
             <div className="text-ascent-1 text-xl">70</div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="w-full flex gap-4 mb-4">
-        <BarRpP />
-        <PieChartRpP />
+        <BarRpP month={month} />
+        <PieChartRpP resaon={resaon} />
       </div>
       <div className="w-full ">
         {/* <RecentRp /> */}

@@ -17,7 +17,7 @@ import { FaTwitterSquare } from "react-icons/fa";
 import moment from "moment";
 import { UpdateProfile } from "../redux/userSlice";
 import { usergetFriends, usergetUserInfo } from "../until/user";
-import { postfetchuserPosts } from "../until/post";
+import { postfetchuserPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
 const ProfileDetail = ({ title }) => {
   const [friend, setFriend] = useState();
@@ -58,8 +58,8 @@ const ProfileDetail = ({ title }) => {
   };
   // const fetchFriend = () => {};
   const handleLikePost = async (uri) => {
-    await likePost({ uri: uri, token: user?.token });
-    await getPosts(uid);
+    await postlikePost({ uri: uri, token: user?.token });
+    // await getPosts(uid);
   };
   const getPosts = async (uri, res) => {
     console.log(uri);
