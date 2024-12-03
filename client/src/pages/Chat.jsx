@@ -13,6 +13,7 @@ import {
   Loading,
   LinkPr,
   Managergroup,
+  AddMember,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -59,6 +60,7 @@ import CreateGroup from "../components/CreateGroup";
 import { aichecktext } from "../until/ai";
 import { sendMessageGroup } from "../until/group";
 import ChatUser from "../components/ChatUser";
+import AddNewMember from "../components/AddNewMember";
 
 const RangeChat = forwardRef(
   (
@@ -659,6 +661,7 @@ const UserCard = forwardRef(
       type,
       fetchList,
       fetchchats,
+      handlemember,
     },
     ref
   ) => {
@@ -718,11 +721,6 @@ const UserCard = forwardRef(
         );
       }
     };
-    useEffect(() => {
-      return () => {
-        // outRoom();
-      };
-    }, []);
 
     const handleTime = () => {
       if (itemchat?.lastMessage?.timestamp) {
@@ -761,6 +759,7 @@ const UserCard = forwardRef(
       console.log(user);
       setIdroom(conversationId);
       itemchat?.type == "group" ? hanldeGroupchat() : hanldeUserchat(avatar);
+      itemchat?.type == "group" && handlemember();
     };
     const getAvatar = async () => {
       try {
@@ -784,16 +783,29 @@ const UserCard = forwardRef(
           handle();
         }}
       >
-        <img
-          src={avatar?.profileUrl ?? NoProfile}
-          alt={avatar?.firstName}
-          className="w-14 h-14 object-cover rounded-full"
-        />
+        {type == "inbox" ? (
+          <img
+            src={avatar?.profileUrl ?? NoProfile}
+            alt={avatar?.firstName}
+            className="w-14 h-14 object-cover rounded-full"
+          />
+        ) : (
+          <img
+            src={NoProfile}
+            className="w-14 h-14 object-cover rounded-full"
+          />
+        )}
+
         <div className="flex-col w-full flex h-full justify-center">
           <div className="flex justify-between">
-            <span className="text-ascent-1">
-              {avatar?.firstName} {avatar?.lastName} {conversationId}
-            </span>
+            {type == "inbox" ? (
+              <span className="text-ascent-1">
+                {avatar?.firstName} {avatar?.lastName}
+              </span>
+            ) : (
+              <span className="text-ascent-1">{itemchat?.name}</span>
+            )}
+
             <span className="text-ascent-2 ">{time}</span>
           </div>
           <span className="text-ascent-2">
@@ -1123,6 +1135,7 @@ const Chat = () => {
   const [newChat, setNewChat] = useState(false);
   const [idroom, setIdroom] = useState();
   const childRef = useRef();
+  const [member, setMember] = useState([]);
   const [type, setType] = useState("inbox");
   const userChat = (user) => {
     setUserinfo(user);
@@ -1191,6 +1204,10 @@ const Chat = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const handlemember = (members) => {
+    setMember([...members]);
+    console.log(members);
   };
   const hanldeUserchat = async (user) => {
     console.log(user);
@@ -1384,6 +1401,9 @@ const Chat = () => {
                       conversationId={itemchat?._id}
                       fetchList={fetchList}
                       ref={childRef}
+                      handlemember={() => {
+                        handlemember(itemchat.members);
+                      }}
                       // event={() => {
                       //   onchangepage(user?.page);
                       // }}
@@ -1448,195 +1468,196 @@ const Chat = () => {
         </div>
       )}
       {/* CREATGROUP */}
-      {createg && <CreateGroup setCreatg={setCreatg} />}
+      {createg && <CreateGroup fetchList={fetchList} setCreatg={setCreatg} />}
       {/* ADD member */}
-      {addu && (
-        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[40%] rounded-2xl">
-              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-                  Add member
-                  <div
-                    className="text-ascent-1 h-full flex items-center cursor-pointer"
-                    onClick={() => {
-                      setAddu(!addu);
-                    }}
-                  >
-                    <MdClose size={25} />
-                  </div>
-                </span>
-              </div>
+      {
+        addu && <AddNewMember idroom={idroom} setAddu={setAddu} />
+        // <div className="absolute w-full h-full bg-secondary/30 z-50 ">
+        //   <div className="w-full h-full flex justify-center items-center">
+        //     <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[40%] rounded-2xl">
+        //       <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
+        //         <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+        //           Add member
+        //           <div
+        //             className="text-ascent-1 h-full flex items-center cursor-pointer"
+        //             onClick={() => {
+        //               setAddu(!addu);
+        //             }}
+        //           >
+        //             <MdClose size={25} />
+        //           </div>
+        //         </span>
+        //       </div>
 
-              <input
-                type="text"
-                className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
-                placeholder="Search"
-              />
-              <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-                <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-                  <img
-                    src={user?.profileUrl}
-                    alt=""
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  {user?.firstName}
-                  <IoIosAddCircle />
-                </div>
-              </div>
-              <div className="h-1/4 flex flex-wrap items-start gap-2 overflow-y-auto content-start">
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-                <UserTiitle />
-              </div>
+        //       <input
+        //         type="text"
+        //         className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
+        //         placeholder="Search"
+        //       />
+        //       <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
+        //           <img
+        //             src={user?.profileUrl}
+        //             alt=""
+        //             className="h-5 w-5 rounded-full object-cover"
+        //           />
+        //           {user?.firstName}
+        //           <IoIosAddCircle />
+        //         </div>
+        //       </div>
+        //       <div className="h-1/4 flex flex-wrap items-start gap-2 overflow-y-auto content-start">
+        //         <UserTiitle />
+        //         <UserTiitle />
+        //         <UserTiitle />
+        //         <UserTiitle />
+        //         <UserTiitle />
+        //       </div>
 
-              <div className="w-full flex justify-end items-end">
-                <CustomButton
-                  tittle="Submit"
-                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+        //       <div className="w-full flex justify-end items-end">
+        //         <CustomButton
+        //           tittle="Submit"
+        //           containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+        //         />
+        //       </div>
+        //     </div>
+        //   </div>
+        // </div>
+      }
       {/* Manager member */}
       {/* <div className="absolute w-full h-full bg-secondary/30 z-50 ">
         <div className="w-full h-full flex justify-center items-center">
@@ -1695,7 +1716,7 @@ const Chat = () => {
       {/*ROLE*/}
       {roleo && (
         <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-          <Managergroup setRoleo={setRoleo} />
+          <Managergroup setRoleo={setRoleo} member={member} idroom={idroom} />
         </div>
       )}
       {/* Ratio */}

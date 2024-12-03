@@ -22,7 +22,7 @@ import {
   userapiRequest,
   usergetUserInfo,
 } from "../until/user";
-import { postfetchuserPosts } from "../until/post";
+import { postfetchuserPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
 const FriendDetailRequest = ({ title }) => {
   const { id, key } = useParams();
@@ -100,8 +100,8 @@ const FriendDetailRequest = ({ title }) => {
   console.log(id);
 
   const handleLikePost = async (uri) => {
-    await likePost({ uri: uri, token: user?.token });
-    await getPosts(uid);
+    await postlikePost({ uri: uri, token: user?.token });
+    // await getPosts(uid);
   };
   // const getPosts = async (id) => {
   //   let uri = "/posts/get-user-post/" + id;

@@ -33,6 +33,7 @@ import SuggestPost from "./SuggestPost";
 import VideoPlayer from "./VideoPlayer";
 import LinkPr from "./LinkPr";
 import Managergroup from "./Managergroup";
+import AddUserCard from "./AddUserCard";
 export {
   TextInput,
   Loading,
@@ -69,4 +70,5 @@ export {
   VideoPlayer,
   LinkPr,
   Managergroup,
+  AddUserCard,
 };

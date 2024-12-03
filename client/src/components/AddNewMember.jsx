@@ -9,8 +9,10 @@ import { MdClose } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { searchUserName, userfriendSuggest } from "../until/user";
 import { NoProfile } from "../assets";
-import { createGroup } from "../until/group";
-const CreateGroup = ({ fetchList, setCreatg }) => {
+import { addMemberGroup, createGroup } from "../until/group";
+
+import AddUserCard from "./AddUserCard";
+const AddNewMember = ({ idroom, setAddu }) => {
   const { user } = useSelector((state) => state.user);
   const [listsuggest, setListsuggest] = useState([]);
   const [listAdd, setListAdd] = useState([]);
@@ -55,28 +57,18 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
       }
     }
   };
-  const creatGrp = async () => {
-    const userId = user?._id;
 
+  const handleSubmit = async () => {
     try {
-      if (userId) {
-        if (name) {
-          console.log(name);
-          if (description) {
-            if (listAdd.length > 1) {
-              await createGroup(
-                user?.token,
-                userId,
-                name,
-                description,
-                listAdd
-              );
-              fetchList();
-              setCreatg(false);
-            }
-          }
-        }
-      }
+      console.log(idroom, listAdd);
+
+      const id_1 = user?._id;
+
+      const res =
+        listAdd.length > 0 &&
+        (await addMemberGroup(user?.token, id_1, idroom, listAdd));
+      console.log(res);
+      setAddu(false);
     } catch (error) {
       console.log(error);
     }
@@ -105,42 +97,19 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
   return (
     <div className="absolute w-full h-full bg-secondary/30 z-50 ">
       <div className="w-full h-full flex justify-center items-center">
-        <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-[60%] rounded-2xl">
+        <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-[50%] rounded-2xl">
           <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
             <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-              Create Group
+              Add Member
               <div
                 className="text-ascent-1 h-full flex items-center cursor-pointer"
                 onClick={() => {
-                  setCreatg(false);
+                  setAddu(false);
                 }}
               >
                 <MdClose size={25} />
               </div>
             </span>
-          </div>
-
-          <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">Name </span>
-            <input
-              type="text"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Name"
-            />
-          </div>
-          <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">Description </span>
-            <input
-              type="text"
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Description"
-            />
           </div>
           <div className="flex w-full justify-start items-center gap-3 ">
             <span className="text-ascent-1">Member</span>
@@ -155,7 +124,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
             />
           </div>
 
-          <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap justify-center ">
+          <div className="content-start border-b border-[#66666645] pb-2 h-2/5 bg-primary gap-2 overflow-y-auto flex flex-wrap justify-center ">
             {listsuggest &&
               listsuggest.map((suggest) => {
                 return (
@@ -166,20 +135,21 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
                     key={suggest?._id}
                     className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl"
                   >
-                    <img
-                      src={
-                        suggest?.profileUrl ? suggest?.profileUrl : NoProfile
-                      }
-                      alt=""
-                      className="h-5 w-5 rounded-full object-cover"
-                    />
-                    {suggest?.firstName}
-                    <IoIosAddCircle />
+                    <AddUserCard useradd={suggest?._id} />
+                    {/* <img
+                        src={
+                          suggest?.profileUrl ? suggest?.profileUrl : NoProfile
+                        }
+                        alt=""
+                        className="h-5 w-5 rounded-full object-cover"
+                      />
+                      {suggest?.firstName}
+                      <IoIosAddCircle /> */}
                   </div>
                 );
               })}
           </div>
-          <div className="h-1/4 flex flex-wrap gap-2 overflow-y-auto content-start justify-center">
+          <div className="h-2/5 flex flex-wrap gap-2 overflow-y-auto content-start justify-center">
             {listAdd &&
               listAdd.map((useradd) => {
                 return (
@@ -198,7 +168,9 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
             <CustomButton
               tittle="Submit"
               containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-              onClick={creatGrp}
+              onClick={() => {
+                handleSubmit();
+              }}
             />
           </div>
         </div>
@@ -207,4 +179,4 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
   );
 };
 
-export default CreateGroup;
+export default AddNewMember;

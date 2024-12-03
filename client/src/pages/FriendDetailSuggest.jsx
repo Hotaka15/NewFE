@@ -32,7 +32,7 @@ import {
   usergetUserInfo,
   usersendFriendRequest,
 } from "../until/user";
-import { postfetchuserPosts } from "../until/post";
+import { postfetchuserPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
 const FriendDetailSuggest = ({ title }) => {
   const { id, key } = useParams();
@@ -53,8 +53,8 @@ const FriendDetailSuggest = ({ title }) => {
   };
 
   const handleLikePost = async (uri) => {
-    await likePost({ uri: uri, token: user?.token });
-    await getPosts(uid);
+    await postlikePost({ uri: uri, token: user?.token });
+    // await getPosts(uid);
   };
   const getPosts = async (uri, res) => {
     console.log(uri);

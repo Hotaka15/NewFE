@@ -140,3 +140,18 @@ export const seenMessage = async (token, id_1, id_2) => {
     console.log(error);
   }
 };
+
+export const chatfetchDetail = async (token, idroom) => {
+  console.log(token, idroom);
+  try {
+    const res = await chatapiRequest({
+      url: `/conversations/${idroom}`,
+      token: token,
+      method: "GET",
+    });
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

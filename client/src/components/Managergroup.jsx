@@ -4,6 +4,10 @@ import CustomButton from "./CustomButton";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import { NoProfile } from "../assets";
+import { chatfetchDetail } from "../until/chat";
+import { usergetUserInfo } from "../until/user";
+import { Link } from "react-router-dom";
+import { changeRoleGroup, deleteMemberGroup } from "../until/group";
 
 // const UserDetail = ({}) => {
 //   return (
@@ -14,41 +18,59 @@ import { NoProfile } from "../assets";
 //   );
 // };
 
-const UserCard = ({ setChangeRole, user }) => {
+const UserCard = ({ token, setChangeRole, user, isAdmin, setInfo }) => {
   const [choose, setChoose] = useState(false);
   const chooseRef = useRef(null);
+  const [infor, setInfor] = useState();
   const buttonRef = useRef(null);
+  console.log(token);
+
+  const getInfor = async () => {
+    const id = user;
+    const res = await usergetUserInfo(token, id);
+    console.log(res);
+    setInfor(res);
+  };
+
+  const handle = () => {
+    setChangeRole(true);
+    setInfo(infor);
+  };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Kiểm tra nếu click bên ngoài dropdown và button
-      if (
-        chooseRef.current &&
-        !chooseRef.current.contains(event.target) && // Nếu click không phải trong dropdown
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target) // Nếu click không phải trong button mở dropdown
-      ) {
-        setChoose(false); // Đóng dropdown
-      }
-    };
-
-    // Thêm event listener
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      // Cleanup: Gỡ bỏ event listener khi component unmount
-      document.removeEventListener("click", handleClickOutside);
-    };
+    getInfor();
   }, []);
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     // Kiểm tra nếu click bên ngoài dropdown và button
+  //     if (
+  //       chooseRef.current &&
+  //       !chooseRef.current.contains(event.target) && // Nếu click không phải trong dropdown
+  //       buttonRef.current &&
+  //       !buttonRef.current.contains(event.target) // Nếu click không phải trong button mở dropdown
+  //     ) {
+  //       setChoose(false); // Đóng dropdown
+  //     }
+  //   };
+
+  //   // Thêm event listener
+  //   document.addEventListener("click", handleClickOutside);
+
+  //   return () => {
+  //     // Cleanup: Gỡ bỏ event listener khi component unmount
+  //     document.removeEventListener("click", handleClickOutside);
+  //   };
+  // }, []);
   return (
     <div className="w-full relative h-fit bg-secondary px-2 py-2 text-ascent-1 flex gap-2 justify-between items-center rounded-3xl">
       <div className="flex justify-center items-center gap-3 select-none">
         <img
-          src={user?.profileUrl ? user?.profileUrl : NoProfile}
+          src={infor?.profileUrl ?? NoProfile}
           alt=""
           className="h-12 w-12 rounded-full object-cover"
         />
-        {user?.firstName} {user?.lastName}
+        {infor?.firstName} {infor?.lastName}
       </div>
 
       <SlOptionsVertical
@@ -58,7 +80,7 @@ const UserCard = ({ setChangeRole, user }) => {
         //   setChoose(!choose);
         // }}
         onClick={() => {
-          setChangeRole(true);
+          handle();
         }}
       />
       {/* {choose && (
@@ -86,9 +108,66 @@ const UserCard = ({ setChangeRole, user }) => {
   );
 };
 
-export default function Managergroup({ setRoleo }) {
+export default function Managergroup({ setRoleo, idroom }) {
+  console.log(idroom);
+  const [member, setMember] = useState([]);
   const { user } = useSelector((state) => state.user);
   const [changeRole, setChangeRole] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState();
+  const [info, setInfo] = useState();
+  const [listadmin, setListadmin] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const token = user?.token;
+  const getDetail = async (idroom) => {
+    const res = await chatfetchDetail(user?.token, idroom);
+    console.log(res);
+    if (res) {
+      setListadmin([...res?.data?.admins]);
+      const array = [...res?.data?.admins];
+      setIsAdmin(array.includes(user?._id));
+      console.log(array.includes(user?._id));
+      setMember(res?.data?.members);
+    }
+  };
+
+  const handleDelete = async (_id) => {
+    try {
+      const id_1 = user?._id;
+      const id_2 = _id;
+
+      const res = await deleteMemberGroup(user?.token, idroom, id_1, id_2);
+      await getDetail(idroom);
+      setChangeRole(false);
+      setIsSuccess(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlechangeRole = async (_id) => {
+    console.log("asdj");
+
+    console.log(_id, role);
+    console.log(user?._id);
+
+    try {
+      const id_1 = user?._id;
+      const id_2 = _id;
+      const res = await changeRoleGroup(user?.token, idroom, id_1, id_2, role);
+      console.log(res);
+      console.log(typeof res.status);
+      res.status == 200 && setIsSuccess(true);
+      getDetail(idroom);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDetail(idroom);
+  }, []);
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
@@ -106,14 +185,27 @@ export default function Managergroup({ setRoleo }) {
           </span>
         </div>
 
-        <input
+        {/* <input
           type="text"
           className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
           placeholder="Search"
-        />
+        /> */}
         <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
-          <UserCard setChangeRole={setChangeRole} user={user} />
-          <UserCard setChangeRole={setChangeRole} user={user} />
+          {member &&
+            member.map((user) => {
+              return (
+                <UserCard
+                  key={user._id}
+                  token={token}
+                  setChangeRole={setChangeRole}
+                  user={user}
+                  isAdmin={isAdmin}
+                  setInfo={setInfo}
+                />
+              );
+            })}
+          {/* <UserCard setChangeRole={setChangeRole} user={user} />
+          <UserCard setChangeRole={setChangeRole} user={user} /> */}
         </div>
 
         <div
@@ -185,48 +277,91 @@ export default function Managergroup({ setRoleo }) {
               className="absolute  top-2 cursor-pointer z-50 right-2 px-1 py-1 rounded-full bg-bgColor/30 text-ascent-1 flex items-center "
               onClick={() => {
                 setChangeRole(false);
+                setIsSuccess(false);
               }}
             >
               <MdClose size={25} />
             </div>
             <div className="relative h-1/3 overflow-auto w-full flex ">
-              <img src={NoProfile} className="w-full object-cover blur-lg" />
+              <img
+                src={info.profileUrl ?? NoProfile}
+                className="w-full object-cover blur-lg"
+              />
             </div>
             <div className="w-full relative bottom-6 flex flex-col items-center">
-              <img src={NoProfile} className="object-cover h-20 w-20" />
-              <span className="text-ascent-1">Name</span>
+              <img
+                src={info.profileUrl ?? NoProfile}
+                className="object-cover h-20 w-20 rounded-full"
+              />
+              <span className="text-ascent-1">
+                {info.firstName} {info.lastName}
+              </span>
             </div>
-            <div className="w-full px-4 cursor-pointer ">
-              <div className="font-normal select-none text-ascent-1 w-full hover:bg-ascent-3/30 flex justify-center text-base py-1 bg-secondary rounded-lg ">
-                PROFILE
+            <div className="w-full px-4 cursor-pointer relative bottom-4">
+              <a
+                href={`http://localhost:3000/profile/${info?._id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="font-normal select-none text-ascent-1 w-full hover:bg-ascent-3/30 flex justify-center text-base py-1 bg-secondary rounded-lg ">
+                  PROFILE
+                </div>
+              </a>
+            </div>
+            {!isAdmin && (
+              <div className="px-4 relative bottom-4">
+                <div className="text-ascent-2 mp-2 py-3">
+                  Role: {listadmin.includes(info._id) ? "Admin" : "Member"}
+                </div>
+
+                {/* <div className="px-6 w-full text-ascent-2">
+                  {listadmin.includes(info._id) ? "Admin" : "Member"}
+                </div> */}
               </div>
-            </div>
+            )}
+            {isAdmin && (
+              <div className="px-4 relative bottom-4">
+                <span className="text-ascent-2 mp-2">Select role:</span>
 
-            <span className="text-ascent-2 px-4 ">Select role:</span>
+                <select
+                  defaultValue={
+                    listadmin.includes(info._id) ? "admin" : "member"
+                  }
+                  onChange={(e) => setRole(e.target.value)}
+                  className="text-ascent-1 rounded-lg outline-none w-full bg-secondary  border border-[#66666690] px-4 py-3"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="member">Member</option>
+                </select>
+              </div>
+            )}
 
-            <div className="px-2">
-              <select className="text-ascent-1 rounded-lg outline-none w-full bg-secondary  border border-[#66666690] px-4 py-3">
-                <option selected value="male">
-                  Member
-                </option>
-                <option value="female">Admin</option>
-                <option value="other">Member</option>
-              </select>
-            </div>
+            {isAdmin && (
+              <div className="w-full flex justify-between px-4 absolute bottom-5">
+                <CustomButton
+                  tittle="Delete"
+                  onClick={() => {
+                    handleDelete(info._id);
+                  }}
+                  containerStyles="bg-[#ff0015b2] w-fit px-2 py-2 rounded-xl text-white"
+                />
 
-            <div className="w-full flex justify-between px-4 absolute bottom-5">
-              <CustomButton
-                tittle="Delete"
-                onClick={() => {
-                  setChangeRole(false);
-                }}
-                containerStyles="bg-[#ff0015b2] w-fit px-2 py-2 rounded-xl text-white"
-              />
-              <CustomButton
-                tittle="Update"
-                containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-              />
-            </div>
+                {!isSuccess && (
+                  <CustomButton
+                    onClick={() => {
+                      handlechangeRole(info._id);
+                    }}
+                    tittle="Update"
+                    containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
+                  />
+                )}
+                {isSuccess && (
+                  <div className="px-3 text-[#2ba150fe] flex justify-center items-center">
+                    Success
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

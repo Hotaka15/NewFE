@@ -82,3 +82,70 @@ export const sendMessageGroup = async (token, idroom, id_1, chat, uri) => {
     console.log(error);
   }
 };
+
+export const changeRoleGroup = async (token, idroom, id_1, id_2, role) => {
+  try {
+    console.log(idroom, id_1, id_2, role);
+
+    const res = await groupapiRequest({
+      url: "/change-role",
+      token: token,
+      data: {
+        adminId: id_1,
+        conversationId: idroom,
+        memberId: id_2,
+        newRole: role,
+      },
+      method: "PUT",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addMemberGroup = async (token, id_1, idroom, listAdd) => {
+  try {
+    console.log(idroom, id_1, listAdd);
+
+    const res = await groupapiRequest({
+      url: "/add-member",
+      token: token,
+      data: {
+        userId: id_1,
+        groupId: idroom,
+        newMembers: listAdd,
+      },
+      method: "POST",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteMemberGroup = async (token, idroom, id_1, id_2) => {
+  try {
+    console.log(idroom, id_1, id_2);
+
+    const res = await groupapiRequest({
+      url: "/remove-member",
+      token: token,
+      data: {
+        adminId: id_1,
+        conversationId: idroom,
+        memberId: id_2,
+      },
+      method: "DELETE",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
