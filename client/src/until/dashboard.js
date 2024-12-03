@@ -82,10 +82,10 @@ export const genderDashboard = async () => {
     console.log(error);
   }
 };
-export const monthregisterDashboard = async () => {
+export const monthregisterDashboard = async (filter) => {
   try {
     const res = await dbapiRequest({
-      url: "/stat/registration-stats?timePeriod=month",
+      url: `/stat/registration-stats?timePeriod=${filter}`,
     });
     console.log(res);
     return res;
@@ -127,10 +127,10 @@ export const reportsbypostDashboard = async () => {
     console.log(error);
   }
 };
-export const dayreportDashboard = async () => {
+export const dayreportDashboard = async (filter) => {
   try {
     const res = await dbapiRequestP({
-      url: "/stat/reports-by-date?groupBy=month",
+      url: `/stat/reports-by-date?groupBy=${filter}`,
     });
     console.log(res);
     return res;

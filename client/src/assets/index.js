@@ -1,3 +1,4 @@
 import BgImage from "./bgImage.webp";
 import NoProfile from "./userprofile.png";
-export { BgImage, NoProfile };
+import GroupImg from "./group.png";
+export { BgImage, NoProfile, GroupImg };

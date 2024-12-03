@@ -272,7 +272,7 @@ const FriendDetailRequest = ({ title }) => {
                         {friend?.sender?.profession ?? "No Profession"}
                       </span>
                     </div>
-                    <div className="flex gap-1 ">
+                    <div className="flex gap-1 sm:flex-col">
                       <CustomButton
                         onClick={() => {
                           acceptFriendRequest(friend?._id, "accepted");

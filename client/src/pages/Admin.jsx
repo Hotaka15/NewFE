@@ -4,6 +4,8 @@ import {
   TopBarAdmin,
   Reportlist,
   UserChart,
+  TopBar,
+  EditFix,
 } from "../components/index";
 import { ListUser } from "../components/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -78,7 +80,10 @@ const Admin = () => {
 lg:rounded-lg h-screen overflow-hidden"
       >
         <div className="flex flex-col items-end ">
-          <TopBarAdmin user={user} />
+          <div className="w-full">
+            <TopBar user={user} />
+          </div>
+
           {/* <div className=" relative w-1/6 h-1/4 bg-bgColor border border-[#66666690] rounded-sm text-ascent-1">
             <span>Notication</span>
           </div> */}
@@ -162,7 +167,7 @@ lg:rounded-lg h-screen overflow-hidden"
         </div>
       </div>
 
-      {edit && <EditProfile />}
+      {edit && <EditFix />}
     </div>
   );
 };

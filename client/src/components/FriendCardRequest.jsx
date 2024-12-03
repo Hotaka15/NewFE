@@ -51,11 +51,11 @@ const FriendCardRequest = ({
   // handle;
   return (
     <div>
-      <div className="bg-primary overflow-hidden border h-fit w-fit rounded-lg border-[#66666645]">
+      <div className="bg-primary overflow-hidden border h-full w-full rounded-lg border-[#66666645]">
         <img
           src={userr?.profileUrl ?? NoProfile}
           alt="Error"
-          className="w-44 h-44  object-cover"
+          className="w-44 h-44 object-cover"
         />
         <div className="w-full h-full py-3 flex flex-col justify-center items-center font-bold gap-5">
           <span

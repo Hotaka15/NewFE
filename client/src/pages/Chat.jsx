@@ -14,6 +14,7 @@ import {
   LinkPr,
   Managergroup,
   AddMember,
+  EditFix,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -38,7 +39,7 @@ import { IoCallSharp } from "react-icons/io5";
 import { MdEmojiEmotions } from "react-icons/md";
 import { CiCirclePlus } from "react-icons/ci";
 import Picker from "emoji-picker-react";
-import { BgImage, NoProfile } from "../assets";
+import { BgImage, GroupImg, NoProfile } from "../assets";
 
 import { io } from "socket.io-client";
 import {
@@ -479,7 +480,7 @@ const RangeChat = forwardRef(
             ) : (
               <div className=" flex text-ascent-1 text-sm items-center gap-1">
                 <img
-                  src={NoProfile}
+                  src={GroupImg}
                   alt="post image"
                   className="w-14 h-14 shrink-0 object-cover rounded-full "
                 ></img>
@@ -790,10 +791,7 @@ const UserCard = forwardRef(
             className="w-14 h-14 object-cover rounded-full"
           />
         ) : (
-          <img
-            src={NoProfile}
-            className="w-14 h-14 object-cover rounded-full"
-          />
+          <img src={GroupImg} className="w-14 h-14 object-cover rounded-full" />
         )}
 
         <div className="flex-col w-full flex h-full justify-center">
@@ -999,7 +997,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                     <div
                       className={`${
                         chat?.status == "sent" ? "bg-blue" : "bg-secondary/70"
-                      } p-2 border rounded-xl ml-2 max-w-2xl `}
+                      } p-2 rounded-xl ml-2 max-w-2xl `}
                     >
                       <p
                         className={`${
@@ -1069,7 +1067,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                         <ChatUser id={listchat[index].senderId} />
                       )}
                   </div>
-                  <div className="bg-[#66666645] p-2 border rounded-xl ml-2 max-w-2xl w-fit">
+                  <div className="bg-[#66666645] p-2 rounded-xl ml-2 max-w-2xl w-fit">
                     <p className="text-justify text-ascent-1 px-2 py-1 break-words">
                       {chat?.text}
                     </p>
@@ -1725,6 +1723,7 @@ const Chat = () => {
           <Managergroup setRoleo={setRoleo} member={member} idroom={idroom} />
         </div>
       )}
+      {edit && <EditFix />}
       {/* Ratio */}
       {/* {addu && (
         <div className="absolute w-full h-full bg-secondary/30 z-50 ">

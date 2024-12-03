@@ -87,17 +87,16 @@ const Home = () => {
   const [preview, setPreview] = useState(false);
   const [search, setSearch] = useState("");
   const [posting, setPosting] = useState(false);
-  const [picreview, setPicreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [visiblePosts, setVisiblePosts] = useState([]);
+
   const [trigger, setTrigger] = useState(false);
   const [timeoutId, setTimeoutId] = useState(null);
-  const timeoutIdRef = useRef(null); // Lưu trữ timeoutId
+  const timeoutIdRef = useRef(null);
   const [isSearch, setIsSearch] = useState(false);
-  const videoRef = useRef(null);
+  const [socket, setSocket] = useState();
   const timeoutIds = {};
   let pages = 1;
   const {
@@ -147,6 +146,8 @@ const Home = () => {
       setPosting(false);
     }
   };
+
+  console.log(posts);
 
   // const handlePreview = async (file) => {
   //   if (file) {
@@ -445,12 +446,23 @@ const Home = () => {
   // }, [posts, loading]);
   useEffect(() => {
     // const timeoutIds = {}; // Đối tượng lưu timeoutId cho từng phần tử
+    const sendInteraction = async (_id, postId, category) => {
+      const data = {
+        user_id: _id,
+        post_id: postId,
+        post_category: category,
+        action: "seen",
+      };
 
+      console.log("Emitting user_interaction:", data);
+      await socket.emit("user_interaction", data);
+    };
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const postId = entry.target.dataset.postId;
 
+          const category = entry.target.dataset.postCategory;
           if (entry.isIntersecting) {
             // Nếu phần tử vào viewport, bắt đầu đếm thời gian
             if (timeoutIds[postId]) {
@@ -460,6 +472,8 @@ const Home = () => {
             // Đặt timeout 5 giây
             timeoutIds[postId] = setTimeout(() => {
               console.log(postId);
+              console.log(category);
+              sendInteraction(user?._id, postId, category);
               dispatch(CheckedPosts([postId]));
             }, 1000);
           } else {
@@ -487,7 +501,6 @@ const Home = () => {
   useEffect(() => {
     if (page) {
       if (page == 1) {
-        console.log("hey");
         dispatch(UpdatePosts([]));
         fetchPost();
       } else fetchPost();
@@ -533,7 +546,6 @@ const Home = () => {
     setLoading(true);
 
     fetchFriendRequest();
-    // checklink("https://www.youtube.com/watch?v=DldSLwMeJpM");
     fetchSuggestFriends();
   }, []);
 
@@ -542,6 +554,8 @@ const Home = () => {
       reconnection: true,
       transports: ["websocket"],
     });
+
+    setSocket(newSocket);
 
     let userId = user?._id;
     newSocket.emit("userOnline", { userId });
@@ -842,9 +856,10 @@ const Home = () => {
             ) : posts?.length > 0 ? (
               posts?.map((post, index) => (
                 <div
-                  className="itempost "
+                  className="itempost"
                   key={post._id}
                   data-post-id={post._id}
+                  data-post-category={post.categories}
                   post={post}
                 >
                   <PostCard
@@ -854,6 +869,7 @@ const Home = () => {
                     deletePost={handleDeletePost}
                     likePost={handleLikePost}
                     isCheck={post?.isCheck}
+                    socekt={socket}
                   />
                 </div>
               ))

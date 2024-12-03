@@ -58,7 +58,7 @@ import {
   postrenewfetchPosts,
 } from "../until/post";
 import { debounce } from "lodash";
-import { SetPosts, UpdatePosts } from "../redux/postSlice";
+import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 import { io } from "socket.io-client";
 const NewFeed = () => {
   const { posts } = useSelector((state) => state.posts);
@@ -81,7 +81,9 @@ const NewFeed = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
+  const [socket, setSocket] = useState();
   const videoRef = useRef(null);
+  const timeoutIds = {};
   // console.log(user);
   let pages = 1;
   const {
@@ -306,6 +308,61 @@ const NewFeed = () => {
   };
 
   useEffect(() => {
+    const sendInteraction = async (_id, postId, category) => {
+      const data = {
+        user_id: _id,
+        post_id: postId,
+        post_category: category,
+        action: "seen",
+      };
+
+      console.log("Emitting user_interaction:", data);
+      await socket.emit("user_interaction", data);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const postId = entry.target.dataset.postId;
+
+          const category = entry.target.dataset.postCategory;
+
+          if (entry.isIntersecting) {
+            // Nếu phần tử vào viewport, bắt đầu đếm thời gian
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]); // Hủy timeout cũ nếu có
+            }
+
+            // Đặt timeout 5 giây
+            timeoutIds[postId] = setTimeout(() => {
+              console.log(postId);
+              sendInteraction(user?._id, postId, category);
+              dispatch(CheckedPosts([postId]));
+            }, 1000);
+          } else {
+            // Nếu phần tử rời khỏi viewport, hủy timeout
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]);
+              delete timeoutIds[postId];
+            }
+          }
+        });
+      },
+      { threshold: 0.8 } // Kích hoạt khi 100% phần tử vào viewport
+    );
+
+    // Theo dõi các phần tử
+    const divElements = document.querySelectorAll(".itempost");
+    divElements.forEach((div) => observer.observe(div));
+
+    // Dọn dẹp khi component bị unmount
+    return () => {
+      observer.disconnect();
+      Object.values(timeoutIds).forEach(clearTimeout); // Hủy tất cả timeout
+    };
+  }, [posts, loading]);
+
+  useEffect(() => {
     if (page) {
       if (page == 1) {
         console.log("hey");
@@ -367,6 +424,8 @@ const NewFeed = () => {
       transports: ["websocket"],
     });
 
+    setSocket(newSocket);
+
     let userId = user?._id;
     newSocket.emit("userOnline", { userId });
 
@@ -400,13 +459,21 @@ const NewFeed = () => {
                 </div>
               ) : posts?.length > 0 ? (
                 posts?.map((post, index) => (
-                  <PostCard
-                    key={index}
-                    posts={post}
-                    user={user}
-                    deletePost={handleDeletePost}
-                    likePost={handleLikePost}
-                  />
+                  <div
+                    className="itempost"
+                    key={post._id}
+                    data-post-id={post._id}
+                    post={post}
+                  >
+                    <PostCard
+                      key={index}
+                      posts={post}
+                      user={user}
+                      deletePost={handleDeletePost}
+                      likePost={handleLikePost}
+                      isCheck={post?.isCheck}
+                    />
+                  </div>
                 ))
               ) : (
                 <div className="flex w-full h-full items-center justify-center">

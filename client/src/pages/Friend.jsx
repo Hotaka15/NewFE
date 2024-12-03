@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FriendCardSuggest, TopBar } from "../components";
+import { FriendCardSuggest, Loading, TopBar } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";
 import { useSelector } from "react-redux";
@@ -240,13 +240,84 @@ lg:rounded-lg h-screen overflow-hidden"
                 {friendRequest.length > 0 ? (
                   <div
                     id="request"
-                    className="flex w-fit h-full justify-start grow-0 overflow-x-auto gap-2 scroll-smooth rounded-xl overflow-hidden"
+                    className=" flex w-full h-full justify-start grow-0 overflow-x-auto gap-2 scroll-smooth rounded-xl overflow-hidden"
                   >
                     {/* <div className="absolute w-full h-full bg-primary rounded-xl flex justify-center items-center text-lg text-ascent-2">
-                    No Request
-                  </div> */}
+                      No Request
+                    </div> */}
+
                     {friendRequest?.map((friend) => (
-                      <div className="h-1/6 overflow-hidden">
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
+                        <FriendCardRequest
+                          user={user}
+                          fetchFriendRequest={fetchFriendRequest}
+                          setfriendRequest={setfriendRequest}
+                          friend={friend}
+                        />
+                      </div>
+                    ))}
+                    {friendRequest?.map((friend) => (
+                      <div className=" overflow-hidden shrink-0">
                         <FriendCardRequest
                           user={user}
                           fetchFriendRequest={fetchFriendRequest}
@@ -259,47 +330,10 @@ lg:rounded-lg h-screen overflow-hidden"
                 ) : (
                   <div
                     id="request"
-                    className="relative flex w-fit h-full justify-start grow-0 overflow-x-auto gap-2 scroll-smooth rounded-xl overflow-hidden"
+                    className="relative flex w-full h-full justify-start grow-0 overflow-x-auto gap-2 scroll-smooth rounded-xl overflow-hidden"
                   >
                     <div className="absolute w-full h-full bg-primary rounded-xl flex justify-center items-center text-lg text-ascent-2">
                       No Request
-                    </div>
-
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
-                    </div>
-                    <div className="h-fit w-fit flex-shrink-0">
-                      <FriendCardRequest />
                     </div>
                     <div className="h-fit w-fit flex-shrink-0">
                       <FriendCardRequest />
@@ -319,7 +353,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   </Link>
                 </div>
 
-                <div className="flex justify-center items-center flex-col">
+                <div className="flex justify-center items-center flex-col w-full">
                   <div className="w-2/3 h-fit flex gap-4 flex-wrap">
                     {suggestedFriends && suggestedFriends.length > 0 ? (
                       suggestedFriends.map((friend) => {
@@ -337,7 +371,10 @@ lg:rounded-lg h-screen overflow-hidden"
                       })
                     ) : (
                       <div>
-                        <div className="w-full h-full bg-primary rounded-2xl "></div>
+                        <div className="w-full h-full bg-primary rounded-2xl ">
+                          {" "}
+                          <Loading />
+                        </div>
                         <div className="w-full h-fit flex gap-2 flex-wrap">
                           {(() => {
                             const items = [];

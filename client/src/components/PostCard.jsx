@@ -221,13 +221,13 @@ const Opt = ({ post, onClick, report, handlerp }) => {
   // }
   return (
     <div className="w-fit bg-bgColor">
-      <span
+      {/* <span
         onClick={() => {
           setSave(!save);
         }}
         className=" flex  bg-primary justify-start items-center px-3 py-4 gap-2 hover:bg-ascent-3/30"
       >
-        {/* {save ? (
+        {save ? (
           <div className="text-ascent-1 flex justify-start items-center w-full gap-2">
             <GoBookmarkSlashFill />
             <div className="text-ascent-1 flex flex-col">
@@ -248,8 +248,8 @@ const Opt = ({ post, onClick, report, handlerp }) => {
               </span>
             </div>
           </div>
-        )} */}
-      </span>
+        )}
+      </span> */}
       {post?.userId == user?._id && (
         <span
           onClick={onClick}
@@ -277,7 +277,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
   );
 };
 
-const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
+const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
   const [showAll, setShowAll] = useState(0);
   const [showReply, setshowReply] = useState(0);
   const [comments, setComments] = useState([]);
@@ -376,6 +376,9 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {}, []);
+
   useEffect(() => {
     getPost();
   }, []);
@@ -488,10 +491,14 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                 ></img>
               </div>
             )}
+
+            <div className="flex justify-start gap-2 mt-1 w-full px-5 items-center ">
+              <FaEye /> {post?.viewers.length} views
+            </div>
           </div>
 
           <div
-            className="mt-4 flex justify-between items-center  
+            className="mt-1 flex justify-between items-center  
       text-ascent-2 text-base border-t border-[#66666645]"
           >
             <p

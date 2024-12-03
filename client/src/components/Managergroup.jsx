@@ -3,7 +3,7 @@ import { MdClose } from "react-icons/md";
 import CustomButton from "./CustomButton";
 import { SlOptionsVertical } from "react-icons/sl";
 import { useSelector } from "react-redux";
-import { NoProfile } from "../assets";
+import { GroupImg, NoProfile } from "../assets";
 import { chatfetchDetail } from "../until/chat";
 import { usergetUserInfo } from "../until/user";
 import { Link } from "react-router-dom";
@@ -118,11 +118,13 @@ export default function Managergroup({ setRoleo, idroom }) {
   const [info, setInfo] = useState();
   const [listadmin, setListadmin] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [inforRoom, setInforRoom] = useState();
   const token = user?.token;
   const getDetail = async (idroom) => {
     const res = await chatfetchDetail(user?.token, idroom);
     console.log(res);
     if (res) {
+      setInforRoom(res?.data);
       setListadmin([...res?.data?.admins]);
       const array = [...res?.data?.admins];
       setIsAdmin(array.includes(user?._id));
@@ -171,9 +173,8 @@ export default function Managergroup({ setRoleo, idroom }) {
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
-        <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-          <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-            Manager member
+        <div className="w-full flex px-3 ">
+          <span className="text-ascent-1 w-full flex items-center justify-end text-xl font-medium ">
             <div
               className="text-ascent-1 h-full flex items-center cursor-pointer"
               onClick={() => {
@@ -184,12 +185,26 @@ export default function Managergroup({ setRoleo, idroom }) {
             </div>
           </span>
         </div>
+        <div className="w-full flex flex-col items-center ">
+          <div className="w-fit h-fit bg-white rounded-full">
+            <img
+              src={GroupImg}
+              className="w-20 h-20 object-cover rounded-full"
+            />
+          </div>
+          <span className="text-ascent-1 text-2xl font-semibold mt-2">
+            {inforRoom?.name}
+          </span>
+        </div>
 
         {/* <input
           type="text"
           className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
           placeholder="Search"
         /> */}
+        <div className="w-full px-2">
+          <span className="text-ascent-2">Member:</span>
+        </div>
         <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
           {member &&
             member.map((user) => {
@@ -208,7 +223,7 @@ export default function Managergroup({ setRoleo, idroom }) {
           <UserCard setChangeRole={setChangeRole} user={user} /> */}
         </div>
 
-        <div
+        {/* <div
           className="w-full flex justify-end"
           onClick={() => {
             setRoleo(false);
@@ -218,7 +233,7 @@ export default function Managergroup({ setRoleo, idroom }) {
             tittle="Close"
             containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white select-none"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* {changeRole && (

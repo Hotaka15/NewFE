@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsPostcardHeartFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
@@ -21,6 +21,7 @@ const Chart = () => {
   const [resaon, SetReason] = useState([]);
   const [month, setMonth] = useState([]);
   const [bypost, setBypost] = useState([]);
+  const [filter, setFilter] = useState("month");
   const fetchdashboard = async () => {
     const byreason = await reportsbyreasonDashboard();
     console.log(byreason);
@@ -28,13 +29,19 @@ const Chart = () => {
     const bypost = await reportsbypostDashboard();
     setBypost(bypost);
     console.log(bypost);
-    const report = await dayreportDashboard();
+  };
+  const handlefill = async (filter) => {
+    const report = await dayreportDashboard(filter);
     setMonth(report);
     console.log(report);
   };
-  useState(() => {
+  useEffect(() => {
     fetchdashboard();
   }, []);
+  useEffect(() => {
+    handlefill(filter);
+  }, [filter]);
+  // useEffect(() => {}, []);
   return (
     <div className="w-full h-full bg-primary py-4 ga">
       {/* <div className="grid grid-cols-4 gap-4 mb-4">
@@ -68,7 +75,45 @@ const Chart = () => {
         </div>
       </div> */}
       <div className="w-full flex gap-4 mb-4">
-        <BarRpP month={month} />
+        <div className="relative w-full ">
+          <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
+            <div
+              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
+                filter == "year" && "bg-bgColor"
+              } rounded-lg`}
+              onClick={() => {
+                console.log("year");
+                setFilter("year");
+              }}
+            >
+              Year
+            </div>
+            <div
+              className={`${
+                filter == "year" && "bg-bgColor"
+              } text-ascent-2 cursor-pointer py-1 px-2 bg-primary  rounded-lg`}
+              onClick={() => {
+                console.log("month");
+                setFilter("month");
+              }}
+            >
+              Month
+            </div>
+            <div
+              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
+                filter == "year" && "bg-bgColor"
+              } rounded-lg`}
+              onClick={() => {
+                console.log("day");
+                setFilter("day");
+              }}
+            >
+              Day
+            </div>
+          </div>
+          <BarRpP month={month} />
+        </div>
+
         <PieChartRpP resaon={resaon} />
       </div>
       <div className="w-full ">
