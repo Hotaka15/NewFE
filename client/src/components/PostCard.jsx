@@ -227,7 +227,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
         }}
         className=" flex  bg-primary justify-start items-center px-3 py-4 gap-2 hover:bg-ascent-3/30"
       >
-        {save ? (
+        {/* {save ? (
           <div className="text-ascent-1 flex justify-start items-center w-full gap-2">
             <GoBookmarkSlashFill />
             <div className="text-ascent-1 flex flex-col">
@@ -248,7 +248,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
               </span>
             </div>
           </div>
-        )}
+        )} */}
       </span>
       {post?.userId == user?._id && (
         <span
@@ -305,7 +305,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
         token: user?.token,
         method: "GET",
       });
-      // console.log(res);
+      console.log(res);
 
       setPost(res);
     } catch (error) {

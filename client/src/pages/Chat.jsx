@@ -810,8 +810,8 @@ const UserCard = forwardRef(
           </div>
           <span className="text-ascent-2">
             {itemchat?.lastMessage
-              ? itemchat?.lastMessage?.content?.length > 30
-                ? itemchat?.lastMessage?.content.slice(0, 30) + "..."
+              ? itemchat?.lastMessage?.content?.length > 20
+                ? itemchat?.lastMessage?.content.slice(0, 20) + "..."
                 : itemchat?.lastMessage?.content
               : "New chat"}
           </span>
@@ -1287,7 +1287,7 @@ const Chat = () => {
         <TopBar user={user} />
         <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-32 h-full shrink-0">
           {/* {LEFT} */}
-          <div className="h-full w-20 rounded-xl bg-primary overflow-hidden flex flex-col justify-between">
+          <div className="h-full w-[4%] rounded-xl bg-primary overflow-hidden flex flex-col justify-between">
             <div className="w-full  gap-7 flex flex-col items-center content-end justify-start py-5 ">
               <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
                 <IoIosChatbubbles className="text-ascent-1 " size={30} />
@@ -1309,7 +1309,7 @@ const Chat = () => {
             </div>
           </div>
           <div
-            className="w-1/5 lg:w-1/5 h-full bg-primary md:flex flex-col gap-1
+            className="w-1/5  h-full bg-primary md:flex flex-col gap-1
         overflow-y-auto overflow-x-hidden rounded-xl grow-0"
           >
             <div>
@@ -1435,26 +1435,32 @@ const Chat = () => {
             </div>
             {/* <FriendsCard friends={user?.friends} /> */}
           </div>
-          <div className="w-3/4" key={idroom}>
-            <RangeChat
-              user={user}
-              userinfo={userinfo}
-              newChat={newChat}
-              setNewChat={setNewChat}
-              reviewcheck={reviewcheck}
-              setReviewcheck={setReviewcheck}
-              review={review}
-              setReview={setReview}
-              idroom={idroom}
-              fetchList={fetchList}
-              socket={socket}
-              setRoleo={setRoleo}
-              setAddu={setAddu}
-              ref={childRef}
-              fetchchatforchild={fetchchatforchild}
-              type={type}
-            />
-          </div>
+          {idroom ? (
+            <div className="w-3/4" key={idroom}>
+              <RangeChat
+                user={user}
+                userinfo={userinfo}
+                newChat={newChat}
+                setNewChat={setNewChat}
+                reviewcheck={reviewcheck}
+                setReviewcheck={setReviewcheck}
+                review={review}
+                setReview={setReview}
+                idroom={idroom}
+                fetchList={fetchList}
+                socket={socket}
+                setRoleo={setRoleo}
+                setAddu={setAddu}
+                ref={childRef}
+                fetchchatforchild={fetchchatforchild}
+                type={type}
+              />
+            </div>
+          ) : (
+            <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-hidden rounded-lg justify-center items-center text-ascent-2 text-xl">
+              Choose Conversation
+            </div>
+          )}
         </div>
       </div>
       {/* Xem trước ảnh */}
