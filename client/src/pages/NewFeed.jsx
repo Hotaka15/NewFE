@@ -313,7 +313,7 @@ const NewFeed = () => {
         user_id: _id,
         friendId: friendId,
         post_id: postId,
-        post_category: "music",
+        post_category: category ?? "music",
       };
 
       console.log("Emitting user_interaction:", data);
