@@ -200,6 +200,14 @@ const ProfileFix = () => {
                 </div>
               ) : (
                 <div className="absolute right-4 bottom-2 flex gap-4">
+                  <div
+                    onClick={() => {
+                      handleFriendRequest(id);
+                    }}
+                    className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                  >
+                    Add Friend
+                  </div>
                   <Link to={`/chat/${id}`}>
                     <div
                       onClick={() => {
@@ -210,21 +218,12 @@ const ProfileFix = () => {
                       Chat
                     </div>
                   </Link>
-
-                  <div
-                    onClick={() => {
-                      handleFriendRequest(id);
-                    }}
-                    className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
-                  >
-                    Add Friend
-                  </div>
-                  <div
+                  {/* <div
                     onClick={() => {}}
                     className="z-30 bg-primary px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer hover:bg-ascent-3/10 "
                   >
                     Follow
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
