@@ -36,54 +36,55 @@ const Notification = ({ notify }) => {
         </div> */}
       </div>
       <div className="w-full flex flex-col gap-4 pb-2 ">
-        {notify?.map(
-          ({
-            _id,
-            message: content,
-            senderInfo: from,
-            createdAt,
-            redirectUrl,
-          }) => (
-            <div
-              key={_id}
-              className="flex gap-2 items-center justify-between px-6 "
-            >
+        {notify &&
+          notify?.map(
+            ({
+              _id,
+              message: content,
+              senderInfo: from,
+              createdAt,
+              redirectUrl,
+            }) => (
               <div
-                onClick={() => {
-                  dispatch(Setnotification(false));
-                }}
-                className="w-full flex gap-4 items-center "
+                key={_id}
+                className="flex gap-2 items-center justify-between px-6 "
               >
-                <Link to={`${redirectUrl}`} className="flex gap-4">
-                  <img
-                    src={from?.avatar ?? NoProfile}
-                    alt={from?.name}
-                    className="w-12 h-12  object-cover rounded-full"
-                  />
-                  <div className="flex-1 ">
-                    <p className="text-base font-bold text-ascent-1 ">
-                      {from?.name}
-                    </p>
+                <div
+                  onClick={() => {
+                    dispatch(Setnotification(false));
+                  }}
+                  className="w-full flex gap-4 items-center "
+                >
+                  <Link to={`${redirectUrl}`} className="flex gap-4">
+                    <img
+                      src={from?.avatar ?? NoProfile}
+                      alt={from?.name}
+                      className="w-12 h-12  object-cover rounded-full"
+                    />
+                    <div className="flex-1 ">
+                      <p className="text-base font-bold text-ascent-1 ">
+                        {from?.name}
+                      </p>
 
-                    <span className="text-sm text-ascent-2 ">
-                      {content
-                        ? content?.length > 50
-                          ? content.slice(0, 50) + "..."
-                          : content
-                        : "Wrong"}
-                    </span>
-                    <span className="hidden md:flex text-ascent-2 text-xs">
-                      {moment(createdAt ?? "2023-05-25").fromNow()}
-                    </span>
-                  </div>
-                </Link>
+                      <span className="text-sm text-ascent-2 ">
+                        {content
+                          ? content?.length > 50
+                            ? content.slice(0, 50) + "..."
+                            : content
+                          : "Wrong"}
+                      </span>
+                      <span className="hidden md:flex text-ascent-2 text-xs">
+                        {moment(createdAt ?? "2023-05-25").fromNow()}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+                <div className="px-1 py-1 hover:bg-bgColor rounded-lg">
+                  <SlOptions />
+                </div>
               </div>
-              <div className="px-1 py-1 hover:bg-bgColor rounded-lg">
-                <SlOptions />
-              </div>
-            </div>
-          )
-        )}
+            )
+          )}
       </div>
     </div>
   );
