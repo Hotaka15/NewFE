@@ -36,7 +36,7 @@ const Notification = ({ notify }) => {
         </div> */}
       </div>
       <div className="w-full flex flex-col gap-4 pb-2 ">
-        {notify &&
+        {notify.length > 0 &&
           notify?.map(
             ({
               _id,

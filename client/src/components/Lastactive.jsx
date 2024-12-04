@@ -6,7 +6,7 @@ import moment from "moment";
 import { notifetchNotifications } from "../until/noti";
 import { Link } from "react-router-dom";
 const Lastactive = () => {
-  const [notifications, setNotifications] = useState();
+  const [notifications, setNotifications] = useState([]);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -37,7 +37,7 @@ const Lastactive = () => {
         </span>
       </div>
 
-      {notifications &&
+      {notifications.length > 0 &&
         notifications?.slice(0, 3).map((notification, index) => (
           <Link key={index} to={`${notifications[index]?.redirectUrl}`}>
             <div className="w-full flex gap-4 items-center cursor-pointer py-2 hover:bg-ascent-3/30  px-2">

@@ -339,7 +339,7 @@ const Home = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       handleSearch();
-    }, 1000);
+    }, 3000);
 
     return () => {
       clearTimeout(timeoutId);

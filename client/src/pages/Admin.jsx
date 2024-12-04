@@ -15,7 +15,7 @@ import { admingetlistUser } from "../until/admin";
 import { io } from "socket.io-client";
 
 const Admin = () => {
-  const [notifications, setNotifications] = useState();
+  const [notifications, setNotifications] = useState([]);
   const { user, edit } = useSelector((state) => state.user);
   const [listUser, setListUser] = useState();
   const dispatch = useDispatch();

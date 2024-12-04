@@ -67,7 +67,7 @@ const NewFeed = () => {
 
   const { user, edit, notification, post } = useSelector((state) => state.user);
   const [friendRequest, setfriendRequest] = useState([]);
-  const [notifications, setNotifications] = useState();
+
   const [suggestedFriends, setsuggestedFriends] = useState();
   const [errMsg, seterrMsg] = useState("");
   const [page, setPage] = useState(1);
@@ -174,19 +174,7 @@ const NewFeed = () => {
     setTrigger(!trigger);
     // await fetchPost();
   };
-  const fetchNotification = async () => {
-    try {
-      const res = await fetchNotifications({
-        token: user?.token,
-        userId: user?._id,
-        dispatch,
-      });
-      console.log(res);
-      setNotifications(res.notifications);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const test = async () => {
     //console.log(user);
     const res = await checktoken({
@@ -338,7 +326,7 @@ const NewFeed = () => {
               console.log(postId);
               sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
-            }, 1000);
+            }, 3000);
           } else {
             // Nếu phần tử rời khỏi viewport, hủy timeout
             if (timeoutIds[postId]) {

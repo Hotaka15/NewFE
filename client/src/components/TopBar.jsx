@@ -28,7 +28,7 @@ import { IoLogOut } from "react-icons/io5";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
-  const [notifications, setNotifications] = useState();
+  const [notifications, setNotifications] = useState([]);
   const [profilecard, setProfilecard] = useState();
   const [ava, setAva] = useState();
   const [value, setvalue] = useState("");
