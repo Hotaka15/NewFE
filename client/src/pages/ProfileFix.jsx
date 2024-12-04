@@ -135,6 +135,8 @@ const ProfileFix = () => {
     };
   }, []);
 
+  console.log(user?.friends.includes(id));
+
   return (
     <div className="home w-full bg-bgColor text-ascent-1 overflow-hidden lg:rounded-lg h-screen items-center px-0 lg:px-10">
       <TopBar user={user} />
@@ -200,14 +202,16 @@ const ProfileFix = () => {
                 </div>
               ) : (
                 <div className="absolute right-4 bottom-2 flex gap-4">
-                  <div
-                    onClick={() => {
-                      handleFriendRequest(id);
-                    }}
-                    className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
-                  >
-                    Add Friend
-                  </div>
+                  {!user?.friends.includes(id) && (
+                    <div
+                      onClick={() => {
+                        handleFriendRequest(id);
+                      }}
+                      className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                    >
+                      Add Friend
+                    </div>
+                  )}
                   <Link to={`/chat/${id}`}>
                     <div
                       onClick={() => {
