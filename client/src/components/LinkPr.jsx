@@ -45,7 +45,7 @@ export default function LinkPr({ text }) {
 
       <div className="px-2">
         <a
-          href={pr?.url}
+          href={`http://localhost:3000/check?url=` + pr?.url}
           target="_blank"
           rel="noopener noreferrer"
           className="text-ascent-1 mx-2 mt-2 underline underline-offset-2 text-wrap"

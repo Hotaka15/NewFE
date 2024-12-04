@@ -1,12 +1,36 @@
 import axios from "axios";
 
 const API_URL = "https://api.linkpreview.net/";
-
+const API_SAFE = "https://www.virustotal.com/api/v3/urls";
 export const API = axios.create({
   baseURL: API_URL,
   responseType: "json",
 });
 
+export const APIs = axios.create({
+  baseURL: API_SAFE,
+  responseType: "json",
+});
+export const authsafeRequest = async ({ url }) => {
+  try {
+    console.log(url);
+    const key =
+      "c313493540156576e5ff26d3de682b86d22005ae9e4983f4689249657862a8d2";
+    const result = await APIs({
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "x-apikey": key,
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      data: new URLSearchParams({ url: url }),
+    });
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export const authcheckRequest = async ({ url, method }) => {
   try {
     console.log(url, method);
@@ -37,42 +61,34 @@ export const checklink = async (url) => {
   }
 };
 
-// import axios from "axios";
+export const checksafelink = async (url) => {
+  console.log(url);
+  try {
+    const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
+    const res = await authsafeRequest({
+      url: url,
+    });
+    console.log(res);
 
-// const API_URL = "https://opengraph.io/api/1.1/site/";
+    return res.status;
+  } catch (error) {
+    console.log(error);
+  }
+  // const options = {
+  //   method: "POST",
+  //   headers: {
+  //     accept: "application/json",
+  //     "x-apikey":
+  //       "c313493540156576e5ff26d3de682b86d22005ae9e4983f4689249657862a8d2",
+  //     "content-type": "application/x-www-form-urlencoded",
+  //   },
+  //   data: new URLSearchParams({ url: url }).toString(),
+  // };
 
-// export const API = axios.create({
-//   baseURL: API_URL,
-//   responseType: "json",
-// });
+  // const res = await axios("https://www.virustotal.com/api/v3/urls", options)
+  //   .then((res) => res)
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.error(err));
 
-// export const authcheckRequest = async ({ url, method }) => {
-//   try {
-//     console.log(url, method);
-//     const key = "4954b1608026ae14178a4061b0d79ce7";
-//     const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
-//     const result = await API(url, {
-//       method: method || "GET",
-//     });
-//     console.log(result);
-//     // return result;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// export const checklink = async (url) => {
-//   console.log(url);
-//   try {
-//     const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
-//     const res = await authcheckRequest({
-//       url: `/${url}/` + opkey,
-//       method: "GET",
-//     });
-//     console.log(res);
-
-//     return res;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
+  // console.log(res);
+};

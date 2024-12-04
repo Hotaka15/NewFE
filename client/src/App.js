@@ -17,6 +17,7 @@ import {
   Save,
   Demo,
   NewFeed,
+  Check,
 } from "./pages";
 import { useSelector } from "react-redux";
 import PrivateRoute from "./until/privateroute";
@@ -97,6 +98,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:id/:token" element={<ChangePassword />} />
         <Route path="/profile/:id?" element={<ProfileFix />} />
+        <Route path="/check" element={<Check />} />
       </Routes>
     </div>
   );
