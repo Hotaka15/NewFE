@@ -856,8 +856,22 @@ const Home = () => {
               </div>
             </div> */}
             {/* <Lastactive /> */}
+            <div className="w-full h-1/2 shadow-sm ">
+              <span className="font-medium text-lg text-ascent-2 select-none">
+                Friends
+              </span>
+              <div className="w-full h-full overflow-y-auto pb-7">
+                <FriendsCard friend={user.friends} />
+              </div>
+            </div>
+
+            {/* {user?.friends?.map((friend) => {
+              console.log(friend);
+
+              <FriendsCard friend={user?.friends} />;
+            })} */}
             {/* {SUGGEST FRIENDS} */}
-            <div className="w-full h-full shadow-sm ">
+            <div className="w-full h-1/2 shadow-sm bg-bgColor">
               {!isSearch && (
                 <div className="flex items-center justify-between text-sm text-ascent-1 ">
                   <span className="font-medium text-lg text-ascent-2 select-none">

@@ -5,7 +5,8 @@ import { Logout, Setnotification } from "../redux/userSlice";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SlOptions } from "react-icons/sl";
-import { notireadNotifications } from "../until/noti";
+import { notideleteNotifications, notireadNotifications } from "../until/noti";
+import { TiDelete } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
 const Notification = ({ notify, fetchNotification }) => {
   console.log(notify);
@@ -28,13 +29,23 @@ const Notification = ({ notify, fetchNotification }) => {
     }
   };
 
+  const handleDelete = async (_id) => {
+    try {
+      const token = user?.token;
+      const res = await notideleteNotifications({ token, _id });
+      await fetchNotification();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="relative w-full shadow-sm rounded-full  py-5">
       <div
         className="flex flex-col text-2xl text-ascent-1 
               mx-6 gap-2 mb-2"
       >
-        <span className="font-medium "> Notification</span>
+        <span className="font-medium ">Notifications</span>
         {/* <div className="font-normal text-base">
           <span
             className={`w-fit  px-3 py-1 text-ascent-1 rounded-full hover:bg-bgColor cursor-pointer ${bg}`}
@@ -102,8 +113,13 @@ const Notification = ({ notify, fetchNotification }) => {
                       </div>
                     </Link>
                   </div>
-                  <div className="px-1 py-1 hover:bg-bgColor rounded-lg">
-                    <SlOptions />
+                  <div
+                    className="px-1 py-1 hover:bg-bgColor rounded-lg"
+                    onClick={() => {
+                      handleDelete(_id);
+                    }}
+                  >
+                    <TiDelete size={20} />
                   </div>
                 </div>
               )
@@ -115,6 +131,7 @@ const Notification = ({ notify, fetchNotification }) => {
               _id,
               message: content,
               senderInfo: from,
+              isRead,
               createdAt,
               redirectUrl,
             }) => (
@@ -125,6 +142,7 @@ const Notification = ({ notify, fetchNotification }) => {
                 <div
                   onClick={() => {
                     dispatch(Setnotification(false));
+                    handleRead(_id);
                   }}
                   className="w-full flex gap-4 items-center "
                 >
@@ -135,8 +153,13 @@ const Notification = ({ notify, fetchNotification }) => {
                       className="w-12 h-12  object-cover rounded-full"
                     />
                     <div className="flex-1 ">
-                      <p className="text-base font-bold text-ascent-1 ">
-                        {from?.name}
+                      <p className="text-base font-bold text-ascent-1 flex">
+                        {from?.name}{" "}
+                        {!isRead && (
+                          <div className="text-ascent-2 flex justify-center items-center">
+                            <GoDotFill />
+                          </div>
+                        )}
                       </p>
 
                       <span className="text-sm text-ascent-2 ">
@@ -152,8 +175,13 @@ const Notification = ({ notify, fetchNotification }) => {
                     </div>
                   </Link>
                 </div>
-                <div className="px-1 py-1 hover:bg-bgColor rounded-lg">
-                  <SlOptions />
+                <div
+                  className="px-1 py-1 hover:bg-bgColor rounded-lg"
+                  onClick={() => {
+                    handleDelete(_id);
+                  }}
+                >
+                  <TiDelete size={20} />
                 </div>
               </div>
             )

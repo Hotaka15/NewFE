@@ -70,3 +70,21 @@ export const notireadNotifications = async ({ token, _id }) => {
     console.log(error);
   }
 };
+
+export const notideleteNotifications = async ({ token, _id }) => {
+  console.log(_id);
+
+  try {
+    const res = await notiapiRequest({
+      url: `/${_id}`,
+      token: token,
+      method: "DELETE",
+      data: {},
+    });
+    // console.log(res);
+    //dispatch(SetPosts(res?.data));
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

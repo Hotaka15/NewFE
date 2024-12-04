@@ -15,6 +15,7 @@ import {
   Managergroup,
   AddMember,
   EditFix,
+  FriendsCard,
 } from "../components";
 import Cookies from "js-cookie";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -62,6 +63,8 @@ import { aichecktext } from "../until/ai";
 import { sendMessageGroup } from "../until/group";
 import ChatUser from "../components/ChatUser";
 import AddNewMember from "../components/AddNewMember";
+import FriendCardf from "../components/FriendCardf";
+import FriendCardfChat from "../components/FriendCardfChat";
 
 const RangeChat = forwardRef(
   (
@@ -699,14 +702,6 @@ const UserCard = forwardRef(
       // });
     };
 
-    // useEffect(() => {
-    //   return () => {
-    //     socket.emit("leaveGroup", { userId, groupId: conversationId });
-    //     console.log(
-    //       `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
-    //     );
-    //   };
-    // }, [conversationId]);
     useEffect(() => {
       joinroom(userId, conversationId);
       console.log(conversationId, idroom);
@@ -739,22 +734,15 @@ const UserCard = forwardRef(
         const date = parseISO(itemchat.lastMessage.timestamp);
         const now = new Date();
 
-        // Tính tổng số phút giữa hai thời điểm
         const totalMinutesDifference = differenceInMinutes(now, date);
         if (totalMinutesDifference < 60) {
-          // Nếu dưới 1 giờ, hiển thị số phút
           setTime(`${totalMinutesDifference}m`);
         } else if (totalMinutesDifference < 1440) {
-          // 1440 phút = 24 giờ
-          // Nếu dưới 24 giờ, hiển thị giờ và phút
           const hours = Math.floor(totalMinutesDifference / 60);
           const minutes = totalMinutesDifference % 60;
 
           setTime(`${hours}h`);
         } else {
-          // Nếu trên 24 giờ, hiển thị số ngày
-          // const daysDifference = formatDistanceToNow(date, { addSuffix: true });
-          // setTime(`${daysDifference}d`);
           const daysDifference = differenceInDays(now, date);
           setTime(`${daysDifference} day${daysDifference > 1 ? "s" : ""}`);
         }
@@ -1151,13 +1139,14 @@ const Chat = () => {
   const [idroom, setIdroom] = useState();
   const childRef = useRef();
   const [member, setMember] = useState([]);
+  const [listfriend, setListfriend] = useState(false);
   const [type, setType] = useState("inbox");
   const userChat = (user) => {
     setUserinfo(user);
   };
   const id_1 = user?._id;
 
-  // console.log(user);
+  console.log(user);
 
   const handlepage = (id) => {
     setPage(id);
@@ -1304,10 +1293,20 @@ const Chat = () => {
           {/* {LEFT} */}
           <div className="h-full w-[4%] rounded-xl bg-primary overflow-hidden flex flex-col justify-between">
             <div className="w-full  gap-7 flex flex-col items-center content-end justify-start py-5 ">
-              <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
+              <div
+                className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl"
+                onClick={() => {
+                  setListfriend(false);
+                }}
+              >
                 <IoIosChatbubbles className="text-ascent-1 " size={30} />
               </div>
-              <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
+              <div
+                className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl"
+                onClick={() => {
+                  setListfriend(true);
+                }}
+              >
                 <IoIosContact className="text-ascent-1 " size={30} />
               </div>
               <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
@@ -1323,115 +1322,116 @@ const Chat = () => {
               </div>
             </div>
           </div>
-          <div
-            className="w-1/5  h-full bg-primary md:flex flex-col gap-1
+          {!listfriend && (
+            <div
+              className="w-1/5  h-full bg-primary md:flex flex-col gap-1
         overflow-y-auto overflow-x-hidden rounded-xl grow-0"
-          >
-            <div>
-              <div className="w-full font-bold text-ascent-1 text-3xl px-5 py-5">
-                Chat
-              </div>
-              <div className="w-full flex flex-col items-center px-4">
-                <form
-                  className="hidden md:flex w-full items-center justify-center gap-5"
-                  onSubmit={(e) => handleSearch(e)}
-                >
-                  <input
-                    type="text"
-                    className="px-5 bg-secondary text-ascent-2 rounded-full w-full border border-[#66666690] 
+            >
+              <div>
+                <div className="w-full font-bold text-ascent-1 text-3xl px-5 py-5">
+                  Chat
+                </div>
+                <div className="w-full flex flex-col items-center px-4">
+                  <form
+                    className="hidden md:flex w-full items-center justify-center gap-5"
+                    onSubmit={(e) => handleSearch(e)}
+                  >
+                    <input
+                      type="text"
+                      className="px-5 bg-secondary text-ascent-2 rounded-full w-full border border-[#66666690] 
         outline-none text-sm  py-2 placeholder:text-ascent-2"
-                    placeholder="Search"
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </form>
-              </div>
-            </div>
-            <div className="w-full h-fit flex gap-2 mx-4 mt-2">
-              <div
-                className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
-                onClick={() => {
-                  setType("inbox");
-                }}
-              >
-                Inbox
-              </div>
-              <div
-                className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
-                onClick={() => {
-                  setType("group");
-                }}
-              >
-                Group
-              </div>
-            </div>
-            {type == "group" && (
-              <div className="w-full flex justify-center items-center  px-4 pt-2 cursor-pointer">
-                <div
-                  className="bg-blue text-white w-full flex justify-center items-center py-2 rounded-xl cursor-pointer"
-                  onClick={() => {
-                    setCreatg(true);
-                  }}
-                >
-                  Create Group
+                      placeholder="Search"
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </form>
                 </div>
               </div>
-            )}
+              <div className="w-full h-fit flex gap-2 mx-4 mt-2">
+                <div
+                  className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
+                  onClick={() => {
+                    setType("inbox");
+                  }}
+                >
+                  Inbox
+                </div>
+                <div
+                  className="text-ascent-1 bg-ascent-3/30 rounded-full px-3 py-1 cursor-pointer"
+                  onClick={() => {
+                    setType("group");
+                  }}
+                >
+                  Group
+                </div>
+              </div>
+              {type == "group" && (
+                <div className="w-full flex justify-center items-center  px-4 pt-2 cursor-pointer">
+                  <div
+                    className="bg-blue text-white w-full flex justify-center items-center py-2 rounded-xl cursor-pointer"
+                    onClick={() => {
+                      setCreatg(true);
+                    }}
+                  >
+                    Create Group
+                  </div>
+                </div>
+              )}
 
-            <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
-              {type == "inbox" &&
-                listchat &&
-                listchat.length > 0 &&
-                listchat.map((itemchat) => {
-                  return (
-                    <UserCard
-                      key={itemchat?._id}
-                      user={user}
-                      socket={socket}
-                      itemchat={itemchat}
-                      conversationId={itemchat?._id}
-                      fetchList={fetchList}
-                      ref={childRef}
-                      type={type}
-                      // event={() => {
-                      //   onchangepage(user?.page);
-                      // }}
-                      hanldeUserchat={hanldeUserchat}
-                      // onUser={() => {
-                      //   hanldeUserchat(user);
-                      // }}
-                    />
-                  );
-                })}
+              <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
+                {type == "inbox" &&
+                  listchat &&
+                  listchat.length > 0 &&
+                  listchat.map((itemchat) => {
+                    return (
+                      <UserCard
+                        key={itemchat?._id}
+                        user={user}
+                        socket={socket}
+                        itemchat={itemchat}
+                        conversationId={itemchat?._id}
+                        fetchList={fetchList}
+                        ref={childRef}
+                        type={type}
+                        // event={() => {
+                        //   onchangepage(user?.page);
+                        // }}
+                        hanldeUserchat={hanldeUserchat}
+                        // onUser={() => {
+                        //   hanldeUserchat(user);
+                        // }}
+                      />
+                    );
+                  })}
 
-              {type == "group" &&
-                listgroup &&
-                listgroup.length > 0 &&
-                listgroup.map((itemchat) => {
-                  return (
-                    <UserCard
-                      key={itemchat?._id}
-                      user={user}
-                      socket={socket}
-                      itemchat={itemchat}
-                      conversationId={itemchat?._id}
-                      fetchList={fetchList}
-                      ref={childRef}
-                      handlemember={() => {
-                        handlemember(itemchat.members);
-                      }}
-                      // event={() => {
-                      //   onchangepage(user?.page);
-                      // }}
-                      hanldeGroupchat={() => {
-                        hanldeGroupchat(itemchat);
-                      }}
-                      // onUser={() => {
-                      //   hanldeUserchat(user);
-                      // }}
-                    />
-                  );
-                })}
-              {/* <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
+                {type == "group" &&
+                  listgroup &&
+                  listgroup.length > 0 &&
+                  listgroup.map((itemchat) => {
+                    return (
+                      <UserCard
+                        key={itemchat?._id}
+                        user={user}
+                        socket={socket}
+                        itemchat={itemchat}
+                        conversationId={itemchat?._id}
+                        fetchList={fetchList}
+                        ref={childRef}
+                        handlemember={() => {
+                          handlemember(itemchat.members);
+                        }}
+                        // event={() => {
+                        //   onchangepage(user?.page);
+                        // }}
+                        hanldeGroupchat={() => {
+                          hanldeGroupchat(itemchat);
+                        }}
+                        // onUser={() => {
+                        //   hanldeUserchat(user);
+                        // }}
+                      />
+                    );
+                  })}
+                {/* <div className="w-full text-ascent-1 flex justify-center items-start text-xl flex-col">
                 <div className="w-full px-5 text-xl">Suggest</div>
                 {listsuggest &&
                   listsuggest?.length > 0 &&
@@ -1447,9 +1447,64 @@ const Chat = () => {
                     );
                   })}
               </div> */}
+              </div>
+              {/* <FriendsCard friends={user?.friends} /> */}
             </div>
-            {/* <FriendsCard friends={user?.friends} /> */}
-          </div>
+          )}
+          {listfriend && (
+            <div
+              className="w-1/5  h-full bg-primary md:flex flex-col gap-1
+        overflow-y-auto overflow-x-hidden rounded-xl grow-0"
+            >
+              <div>
+                <div className="w-full font-bold text-ascent-1 text-3xl px-5 py-5">
+                  Friends
+                </div>
+              </div>
+
+              <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
+                {/* {type == "inbox" &&
+                  listchat &&
+                  listchat.length > 0 &&
+                  listchat.map((itemchat) => {
+                    return (
+                      <UserCard
+                        key={itemchat?._id}
+                        user={user}
+                        socket={socket}
+                        itemchat={itemchat}
+                        conversationId={itemchat?._id}
+                        fetchList={fetchList}
+                        ref={childRef}
+                        type={type}
+
+                        hanldeUserchat={hanldeUserchat}
+
+                      />
+                    );
+                  })} */}
+
+                {user?.friends &&
+                  user.friends.map((friend) => {
+                    console.log(friend);
+                    return (
+                      <div
+                        className="w-full px-4"
+                        onClick={() => {
+                          setType("inbox");
+                        }}
+                      >
+                        <FriendCardfChat
+                          friend={friend}
+                          hanldeUserchat={hanldeUserchat}
+                        />
+                      </div>
+                    );
+                  })}
+                {/* <FriendsCard friend={user.friends} /> */}
+              </div>
+            </div>
+          )}
           {idroom ? (
             <div className="w-3/4" key={idroom}>
               <RangeChat

@@ -3,37 +3,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { NoProfile } from "../assets";
 import { Login } from "../pages";
+import FriendCardf from "./FriendCardf";
 
 const FriendsCard = ({ friend }) => {
   console.log(friend);
   return (
     <div>
-      <div className="w-full bg-primary shadow-sm rounded-lg px-6 py-5">
-        <div className="flex items-center justify-between text-lg text-ascent-1 bp-2 border-b border-[#66666645]">
-          <span className="font-medium"> Friends</span>
-          <span>{friend?.length}</span>
+      <div className="w-full shadow-sm rounded-lg">
+        <div className="flex items-center justify-between text-lg text-ascent-2 bp-2 ">
+          {/* <span>{friend?.length}</span> */}
         </div>
         {friend.map((friend) => (
-          <div key={friend?._id} className="w-full flex flex-col gap-4 pt-4">
-            <Link
-              to={"/profile/" + friend?._id}
-              className="w-full flex gap-4 items-center cursor-pointer"
-            >
-              <img
-                src={friend?.profileUrl ?? NoProfile}
-                alt={friend?.firstName}
-                className="w-10 h-10 object-cover rounded-full"
-              />
-              <div className="flex-1">
-                <p className="text-base font-medium text-ascent-1">
-                  {friend?.firstName} {friend?.lastName}
-                </p>
-                <span className="text-sm text-ascent-2">
-                  {friend?.profession ?? "No Profession"}
-                </span>
-              </div>
-            </Link>
-          </div>
+          <FriendCardf friend={friend} />
         ))}
       </div>
     </div>

@@ -10,7 +10,11 @@ import { FaTwitterSquare } from "react-icons/fa";
 import moment from "moment";
 import Cookies from "js-cookie";
 import { UpdateProfile } from "../redux/userSlice";
-import { usergetUserInfo, usersendFriendRequest } from "../until/user";
+import {
+  userapiRequest,
+  usergetUserInfo,
+  usersendFriendRequest,
+} from "../until/user";
 import {
   postdeletePost,
   postfetchPosts,
@@ -18,6 +22,7 @@ import {
   postlikePost,
 } from "../until/post";
 import { io } from "socket.io-client";
+import { handFileUpload } from "../until";
 const ProfileFix = () => {
   const { id } = useParams();
   const { user, edit } = useSelector((state) => state.user);
@@ -28,14 +33,6 @@ const ProfileFix = () => {
   const [userInfor, setUserInfor] = useState(user);
   const [banner, setBanner] = useState(user?.profileUrl ?? NoProfile);
   const navigate = useNavigate();
-  const handlebg = (e) => {
-    console.log(e.target.files[0]);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setBanner(reader.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  };
 
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
@@ -79,7 +76,44 @@ const ProfileFix = () => {
     dispatch(UpdateProfile(true));
   };
   console.log(userInfor);
+  const handlebg = (e) => {
+    console.log(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setBanner(reader.result);
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+  const onSubmit = async (e) => {
+    try {
+      const file = e.target.files[0];
+      const uri = file && (await handFileUpload(file));
+      const res = await userapiRequest({
+        url: "",
+        data: {
+          cover_photo: uri,
+        },
+        method: "PUT",
+        token: user?.token,
+      });
 
+      console.log(res);
+      if (res?.status === "failed") {
+      } else {
+        const newUser = { token: user?.token, ...res };
+
+        // dispatch(UserLogin(newUser));
+
+        setTimeout(() => {
+          dispatch(UpdateProfile(false));
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("submits");
+  };
   useEffect(() => {
     setLoading(true);
     getUser();
@@ -116,7 +150,7 @@ const ProfileFix = () => {
                 className="object-cover h-full w-full
               overflow-hidden rounded-xl z-0"
               />
-              {/* {id == user?._id && (
+              {id == user?._id && (
                 <label className="absolute right-4 bottom-2 z-30 bg-primary/50 px-6 py-2 rounded-xl border border-[#66666690] cursor-pointer">
                   Edit
                   <input
@@ -125,10 +159,11 @@ const ProfileFix = () => {
                     accept=".jpg, .png, .jpeg"
                     onInput={(e) => {
                       e.target.files[0] && handlebg(e);
+                      onSubmit(e);
                     }}
                   />
                 </label>
-              )} */}
+              )}
             </div>
 
             <div

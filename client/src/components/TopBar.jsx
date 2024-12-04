@@ -13,7 +13,7 @@ import { FaTools } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
 
 import { setTheme } from "../redux/theme";
-import { Logout, Setnotification } from "../redux/userSlice";
+import { Logout, Setnotification, UserLogin } from "../redux/userSlice";
 import { fetchNotifications, fetchPosts } from "../until";
 import Notification from "./Notification";
 import { CiSettings } from "react-icons/ci";
@@ -25,6 +25,7 @@ import { NoProfile } from "../assets";
 import { notifetchNotifications } from "../until/noti";
 import { postsearchfetchPosts } from "../until/post";
 import { IoLogOut } from "react-icons/io5";
+import { userapiRequest } from "../until/user";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -34,6 +35,7 @@ const TopBar = ({ user, setKey }) => {
   const [value, setvalue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -87,6 +89,37 @@ const TopBar = ({ user, setKey }) => {
       console.log(error);
     }
   };
+
+  const onSubmit = async () => {
+    try {
+      const res = await userapiRequest({
+        url: "",
+        data: {
+          statusActive: !user?.statusActive,
+        },
+        method: "PUT",
+        token: user?.token,
+      });
+
+      console.log(res);
+      if (res?.status === "failed") {
+      } else {
+        const newUser = { token: user?.token, ...res };
+
+        // dispatch(UserLogin(newUser));
+
+        setTimeout(() => {
+          dispatch(UpdateProfile(false));
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("submits");
+  };
+
+  console.log(user?.statusActive);
 
   useEffect(() => {
     fetchNotification();
@@ -235,7 +268,16 @@ const TopBar = ({ user, setKey }) => {
                 </div>
               </div>
             </Link>
-
+            {/* <div
+              className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex justify-evenly"
+              onClick={() => {
+                onSubmit();
+              }}
+            >
+              <div className="flex justify-center items-center">
+                Active: {user?.statusActive ? "ON" : "OFF"}
+              </div>
+            </div> */}
             <div
               className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex justify-evenly"
               onClick={() => dispatch(UpdateProfile(true))}
