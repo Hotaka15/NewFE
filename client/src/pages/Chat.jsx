@@ -1115,6 +1115,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
 const Chat = () => {
   const { user, edit } = useSelector((state) => state.user);
   const { id } = useParams();
+  console.log(id);
 
   const [showPicker, setShowPicker] = useState(false);
   const [review, setReview] = useState();
@@ -1242,7 +1243,15 @@ const Chat = () => {
       console.log(error);
     }
   };
-
+  const getAvatar = async () => {
+    try {
+      const res = await usergetUserpInfo(user?.token, id);
+      console.log(res);
+      hanldeUserchat(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const fetchchatforchild = async (idroom) => {
     await childRef.current.fetchchat(idroom);
     console.log(idroom);
@@ -1273,15 +1282,13 @@ const Chat = () => {
       newSocket.disconnect();
     };
   }, []);
+  // useEffect(() => {
+  //   console.log(idroom);
+
+  // }, [idroom]);
   useEffect(() => {
-    // console.log("trigger");
-    console.log(idroom);
-    // newSocket.on("receiveMessage", (data) => {
-    //   console.log(data);
-    //   fetchList();
-    //   fetchchatforchild(idroom);
-    // });
-  }, [idroom]);
+    id && getAvatar();
+  }, []);
   return (
     <div className="flex">
       <div
