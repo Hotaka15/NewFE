@@ -192,7 +192,14 @@ const ProfileFix = () => {
                   {userInfor?.firstName} {userInfor?.lastName}
                 </div>
               </div>
-              <div className="bg-blue h-16 shrink-0 w-full"></div>
+              <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2">
+                <div className=" px-4 border-b border-blue h-full flex justify-center items-center rounded-lg text-blue font-medium">
+                  Post
+                </div>
+                <div className="text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg">
+                  Friends
+                </div>
+              </div>
 
               {id == user?._id ? (
                 <div
