@@ -4,6 +4,7 @@ import moment from "moment";
 import { Logout, Setnotification } from "../redux/userSlice";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { SlOptions } from "react-icons/sl";
 const Notification = ({ notify }) => {
   console.log(notify);
   const [all, setAll] = useState(true);
@@ -43,15 +44,17 @@ const Notification = ({ notify }) => {
             createdAt,
             redirectUrl,
           }) => (
-            <Link to={`${redirectUrl}`}>
+            <div
+              key={_id}
+              className="flex gap-2 items-center justify-between px-6 "
+            >
               <div
                 onClick={() => {
                   dispatch(Setnotification(false));
                 }}
-                key={_id}
-                className="flex items-center justify-between px-6 hover:bg-bgColor"
+                className="w-full flex gap-4 items-center "
               >
-                <div className="w-full flex gap-4 items-center ">
+                <Link to={`${redirectUrl}`} className="flex gap-4">
                   <img
                     src={from?.avatar ?? NoProfile}
                     alt={from?.name}
@@ -73,9 +76,12 @@ const Notification = ({ notify }) => {
                       {moment(createdAt ?? "2023-05-25").fromNow()}
                     </span>
                   </div>
-                </div>
+                </Link>
               </div>
-            </Link>
+              <div className="px-1 py-1 hover:bg-bgColor rounded-lg">
+                <SlOptions />
+              </div>
+            </div>
           )
         )}
       </div>

@@ -172,7 +172,10 @@ export default function Managergroup({ setRoleo, idroom }) {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
+      <div className="fixed inset-0 transition-opacticy">
+        <div className="absolute inset-0 bg-[#000] opacity-70 z-0"></div>
+      </div>
+      <div className="absolute bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-1/2 rounded-2xl">
         <div className="w-full flex px-3 ">
           <span className="text-ascent-1 w-full flex items-center justify-end text-xl font-medium ">
             <div

@@ -294,7 +294,6 @@ const Home = () => {
     }
   };
   const getUser = async () => {
-    //console.log(user?.token);
     try {
       const res = await usergetUserInfo(user?.token, user?._id);
       const newData = { token: user?.token, ...res };
@@ -347,122 +346,26 @@ const Home = () => {
     };
   }, [search]);
 
-  // useEffect(() => {
-  //   // const observer = new IntersectionObserver(
-  //   //   (entries) => {
-
-  //   //     const visible = entries
-  //   //       .filter((entry) => entry.isIntersecting)
-  //   //       .map((entry) => entry.target.dataset.postId);
-
-  //   //     setVisiblePosts((prevVisiblePosts) => [
-  //   //       ...new Set([...prevVisiblePosts, ...visible]),
-  //   //     ]);
-  //   //     dispatch(CheckedPosts(visible));
-  //   //   },
-  //   //   { threshold: 0.5 }
-  //   // );
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       entries.forEach((entry) => {
-  //         const postId = entry.target.dataset.postId;
-
-  //         if (entry.isIntersecting) {
-  //           // Nếu phần tử vào viewport, bắt đầu đếm thời gian
-  //           if (timeoutId) {
-  //             clearTimeout(timeoutId); // Hủy timeout cũ nếu có
-  //           }
-
-  //           const newTimeoutId = setTimeout(() => {
-  //             // Sau 5 giây, thực hiện dispatch và cập nhật visiblePosts
-  //             setVisiblePosts((prevVisiblePosts) => [
-  //               ...new Set([...prevVisiblePosts, postId]), // Thêm postId nếu chưa có
-  //             ]);
-  //             console.log(postId);
-  //           }, 5000); // Đặt timeout 5 giây
-
-  //           // Lưu timeoutId để có thể hủy nếu cần
-  //           setTimeoutId(newTimeoutId);
-  //         } else {
-  //           // Nếu phần tử không còn trong viewport, hủy timeout
-  //           if (timeoutId) {
-  //             console.log(postId);
-
-  //             clearTimeout(timeoutId);
-  //           }
-  //         }
-  //       });
-  //     },
-  //     { threshold: 1 } // 50% của phần tử cần phải hiển thị trong viewport
-  //   );
-
-  //   const divElements = document.querySelectorAll(".itempost");
-  //   divElements.forEach((div) => observer.observe(div));
-
-  //   return () => {
-  //     observer.disconnect();
-  //   };
-  // }, [posts, loading]);
-  // useEffect(() => {
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       entries.forEach((entry) => {
-  //         const postId = entry.target.dataset.postId;
-
-  //         if (entry.isIntersecting) {
-  //           // Nếu phần tử vào viewport, bắt đầu đếm thời gian
-  //           if (timeoutIdRef.current) {
-  //             clearTimeout(timeoutIdRef.current); // Hủy timeout cũ nếu có
-  //           }
-
-  //           // Đặt timeout 5 giây
-  //           timeoutIdRef.current = setTimeout(() => {
-  //             console.log(postId);
-
-  //             dispatch(CheckedPosts([postId]));
-  //           }, 1000);
-  //         } else {
-  //           if (timeoutIdRef.current) {
-  //             clearTimeout(timeoutIdRef.current);
-  //             timeoutIdRef.current = null;
-  //           }
-  //         }
-  //       });
-  //     },
-  //     { threshold: 1 }
-  //   );
-
-  //   const divElements = document.querySelectorAll(".itempost");
-  //   divElements.forEach((div) => observer.observe(div));
-  //   const doc = document.getElementById("post_range");
-  //   console.log(doc.clientHeight);
-
-  //   return () => {
-  //     observer.disconnect();
-  //     if (timeoutIdRef.current) {
-  //       clearTimeout(timeoutIdRef.current);
-  //     }
-  //   };
-  // }, [posts, loading]);
   useEffect(() => {
     // const timeoutIds = {}; // Đối tượng lưu timeoutId cho từng phần tử
-    const sendInteraction = async (_id, postId, category) => {
+    const sendInteraction = async (_id, postId, friendId, category) => {
       const data = {
         user_id: _id,
+        friendId: friendId,
         post_id: postId,
         post_category: category,
-        action: "seen",
       };
 
       console.log("Emitting user_interaction:", data);
-      await socket.emit("user_interaction", data);
+      await socket.emit("interactPost", data);
     };
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const postId = entry.target.dataset.postId;
-
+          const friendId = entry.target.dataset.userId;
           const category = entry.target.dataset.postCategory;
+
           if (entry.isIntersecting) {
             // Nếu phần tử vào viewport, bắt đầu đếm thời gian
             if (timeoutIds[postId]) {
@@ -471,9 +374,8 @@ const Home = () => {
 
             // Đặt timeout 5 giây
             timeoutIds[postId] = setTimeout(() => {
-              console.log(postId);
-              console.log(category);
-              sendInteraction(user?._id, postId, category);
+              // console.log(category);
+              sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
             }, 1000);
           } else {
@@ -860,6 +762,7 @@ const Home = () => {
                   key={post._id}
                   data-post-id={post._id}
                   data-post-category={post.categories}
+                  data-user-id={post.userId}
                   post={post}
                 >
                   <PostCard

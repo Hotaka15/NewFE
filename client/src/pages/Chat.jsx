@@ -551,6 +551,7 @@ const RangeChat = forwardRef(
               socket={socket}
               userinfo={userinfo}
               idroom={idroom}
+              type={type}
             />
           ) : (
             <div className="w-full h-[1000px]">Select Conversation</div>
@@ -819,7 +820,7 @@ const UserCard = forwardRef(
   }
 );
 
-const PageChat = ({ listchat, socket, userinfo, idroom }) => {
+const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
   const { user } = useSelector((state) => state.user);
   const [isme, setIsme] = useState(true);
   const [visibleChats, setVisibleChats] = useState([]);
@@ -1034,7 +1035,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom }) => {
                     )}
                   </div>
 
-                  {chat?.checked && (
+                  {chat?.checked && type != "group" && (
                     <div className="flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
                       <CiCircleCheck />
                       Seen

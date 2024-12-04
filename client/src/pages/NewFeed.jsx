@@ -308,12 +308,12 @@ const NewFeed = () => {
   };
 
   useEffect(() => {
-    const sendInteraction = async (_id, postId, category) => {
+    const sendInteraction = async (_id, postId, friendId, category) => {
       const data = {
         user_id: _id,
+        friendId: friendId,
         post_id: postId,
         post_category: category,
-        action: "seen",
       };
 
       console.log("Emitting user_interaction:", data);
@@ -324,7 +324,7 @@ const NewFeed = () => {
       (entries) => {
         entries.forEach((entry) => {
           const postId = entry.target.dataset.postId;
-
+          const friendId = entry.target.dataset.userId;
           const category = entry.target.dataset.postCategory;
 
           if (entry.isIntersecting) {
@@ -336,7 +336,7 @@ const NewFeed = () => {
             // Đặt timeout 5 giây
             timeoutIds[postId] = setTimeout(() => {
               console.log(postId);
-              sendInteraction(user?._id, postId, category);
+              sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
             }, 1000);
           } else {
@@ -463,6 +463,8 @@ const NewFeed = () => {
                     className="itempost"
                     key={post._id}
                     data-post-id={post._id}
+                    data-post-category={post.categories}
+                    data-user-id={post.userId}
                     post={post}
                   >
                     <PostCard
