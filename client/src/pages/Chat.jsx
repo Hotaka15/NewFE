@@ -131,12 +131,15 @@ const RangeChat = forwardRef(
               let check = false;
               if (message.senderId === user?._id) {
                 for (let obj of message?.readStatus) {
-                  if (obj.status === "read") {
-                    console.log(message);
+                  console.log(obj);
+
+                  if (obj.status === "read" && obj.userId != user?._id) {
+                    console.log(obj);
+                    console.log(user?._id);
 
                     message.checked
-                      ? message.checked.push(obj?._id)
-                      : (message.checked = [obj?._id]);
+                      ? message.checked.push(obj?.userId)
+                      : (message.checked = [obj?.userId]);
                     check = true;
                     break;
                   }
@@ -191,6 +194,8 @@ const RangeChat = forwardRef(
 
     const fetchchatSeen = async (idroom) => {
       try {
+        console.log(listchat);
+
         const res = await fetchChat(user?.token, idroom, 1);
         console.log(res);
         console.log(faild);
@@ -224,6 +229,10 @@ const RangeChat = forwardRef(
           }
 
           const listChat = [...listchat];
+          console.log(listChat);
+
+          console.log(res);
+
           const updatechat = listChat.map((itemA) => {
             const itemB = res?.data?.messages.find(
               (item) => item._id === itemA._id
@@ -417,7 +426,7 @@ const RangeChat = forwardRef(
     useEffect(() => {
       console.log("2");
 
-      fetchnextchat(idroom);
+      listchat && fetchnextchat(idroom);
     }, [page]);
 
     // const scrollToBottom = debounce(() => {
@@ -441,11 +450,12 @@ const RangeChat = forwardRef(
       setFald([]);
       if (socket && idroom) {
         socket.on("receiveMessage", (data) => {
-          console.log(data);
           if (data?.message && data?.message != "seen") {
+            console.log(data);
             fetchList();
             fetchchat(idroom);
           } else {
+            console.log(data);
             fetchchatSeen(idroom);
           }
 
@@ -888,7 +898,9 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
   const handleSeen = async (id_1, id_2) => {
     // const check = listchat.find((item) => item?._id == id_2);
     // !check && (await seenMessage(id_1, id_2));
-    await seenMessage(id_1, id_2);
+    console.log(id_1, id_2);
+
+    await seenMessage(user?.token, id_1, id_2);
   };
 
   const checkurl = (text) => {
@@ -916,10 +928,12 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                 (listchat) => listchat._id === chatId
               );
               console.log(result);
+              console.log(user?._id);
+
               if (socket) {
                 if (idroom) {
                   const found = result?.readStatus?.find(
-                    (item) => item._id === id_1
+                    (item) => item.userId === id_1
                   );
 
                   console.log(found);
@@ -997,12 +1011,14 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                   <div className="flex flex-col items-end ">
                     <div
                       className={`${
-                        chat?.status == "sent" ? "bg-blue" : "bg-secondary/70"
+                        chat?.status == "sent" || chat?.status == "read"
+                          ? "bg-blue"
+                          : "bg-secondary/70"
                       } p-2 rounded-xl ml-2 max-w-2xl `}
                     >
                       <p
                         className={`${
-                          chat?.status == "sent"
+                          chat?.status == "sent" || chat?.status == "read"
                             ? "text-white"
                             : "text-ascent-2"
                         } text-justify  px-2 py-1 break-words`}
@@ -1011,12 +1027,12 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                       </p>
                       <div
                         className={`flex justify-end w-full ${
-                          chat?.status == "sent"
+                          chat?.status == "sent" || chat?.status == "read"
                             ? "text-white"
                             : "text-[#f64949fe]"
                         } text-xs pt-1 py-2 `}
                       >
-                        {chat?.status == "sent"
+                        {chat?.status == "sent" || chat?.status == "read"
                           ? handleTime(chat?.timestamp)
                           : "Sensitive"}
                       </div>

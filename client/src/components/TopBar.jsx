@@ -211,7 +211,10 @@ const TopBar = ({ user, setKey }) => {
       {notification && (
         <div className="bg-primary">
           <div className="top-20 right-32 z-50 absolute w-1/6 overflow-auto border bg-primary rounded-xl text-ascent-1 h-1/2 border-[#66666690] justify-center flex">
-            <Notification notify={notifications} />
+            <Notification
+              notify={notifications}
+              fetchNotification={fetchNotification}
+            />
           </div>
         </div>
       )}

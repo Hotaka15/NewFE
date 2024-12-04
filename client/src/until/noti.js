@@ -52,3 +52,21 @@ export const notifetchNotifications = async ({
     console.log(error);
   }
 };
+
+export const notireadNotifications = async ({ token, _id }) => {
+  console.log(_id);
+
+  try {
+    const res = await notiapiRequest({
+      url: `/${_id}/read`,
+      token: token,
+      method: "PUT",
+      data: {},
+    });
+    // console.log(res);
+    //dispatch(SetPosts(res?.data));
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

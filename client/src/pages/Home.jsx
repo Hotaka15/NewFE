@@ -339,7 +339,7 @@ const Home = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       handleSearch();
-    }, 3000);
+    }, 1000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -364,8 +364,8 @@ const Home = () => {
         entries.forEach((entry) => {
           const postId = entry.target.dataset.postId;
           const friendId = entry.target.dataset.userId;
-          const category = entry.target.dataset.postCategory;
-
+          const postCategory = entry.target.dataset.postCategory;
+          const category = postCategory.length > 0 ? postCategory : "music";
           if (entry.isIntersecting) {
             // Nếu phần tử vào viewport, bắt đầu đếm thời gian
             if (timeoutIds[postId]) {
@@ -377,7 +377,7 @@ const Home = () => {
               // console.log(category);
               sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
-            }, 1000);
+            }, 3000);
           } else {
             // Nếu phần tử rời khỏi viewport, hủy timeout
             if (timeoutIds[postId]) {

@@ -413,12 +413,12 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
                 <span className="hidden md:flex text-ascent-2">
                   {moment(post?.createdAt ?? "2023-05-25").fromNow()}
                   <div className="w-2"></div>
-                  {isCheck && (
+                  {/* {isCheck && (
                     <div className="flex justify-center items-center">
                       {" "}
                       <FaEye />
                     </div>
-                  )}
+                  )} */}
                 </span>
               </div>
               {/* <span className="hidden md:flex text-ascent-2">
