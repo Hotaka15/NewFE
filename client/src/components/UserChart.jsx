@@ -80,8 +80,8 @@ const UserChart = () => {
           <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
             <div
               className={`${
-                filter == "year" && "bg-bgColor"
-              } text-ascent-2 cursor-pointer py-1 px-2 bg-primary  rounded-lg`}
+                filter == "month" && "bg-bgColor"
+              } text-ascent-2 cursor-pointer py-1 px-2  rounded-lg`}
               onClick={() => {
                 console.log("month");
                 setFilter("month");
@@ -90,7 +90,7 @@ const UserChart = () => {
               Month
             </div>
             <div
-              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
+              className={` text-ascent-2 cursor-pointer py-1 px-2 ${
                 filter == "week" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
@@ -101,8 +101,8 @@ const UserChart = () => {
               Week
             </div>
             <div
-              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
-                filter == "year" && "bg-bgColor"
+              className={` text-ascent-2 cursor-pointer py-1 px-2  ${
+                filter == "day" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
                 console.log("day");

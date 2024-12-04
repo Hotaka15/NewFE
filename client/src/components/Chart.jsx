@@ -78,7 +78,7 @@ const Chart = () => {
         <div className="relative w-full ">
           <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
             <div
-              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
+              className={` text-ascent-2 cursor-pointer py-1 px-2 ${
                 filter == "year" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
@@ -90,8 +90,8 @@ const Chart = () => {
             </div>
             <div
               className={`${
-                filter == "year" && "bg-bgColor"
-              } text-ascent-2 cursor-pointer py-1 px-2 bg-primary  rounded-lg`}
+                filter == "month" && "bg-bgColor"
+              } text-ascent-2 cursor-pointer py-1 px-2  rounded-lg`}
               onClick={() => {
                 console.log("month");
                 setFilter("month");
@@ -100,8 +100,8 @@ const Chart = () => {
               Month
             </div>
             <div
-              className={` text-ascent-2 cursor-pointer py-1 px-2 bg-primary ${
-                filter == "year" && "bg-bgColor"
+              className={` text-ascent-2 cursor-pointer py-1 px-2 ${
+                filter == "day" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
                 console.log("day");

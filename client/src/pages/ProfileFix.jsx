@@ -192,6 +192,7 @@ const ProfileFix = () => {
                   {userInfor?.firstName} {userInfor?.lastName}
                 </div>
               </div>
+              <div className="bg-blue h-16 shrink-0 w-full"></div>
 
               {id == user?._id ? (
                 <div
