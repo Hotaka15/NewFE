@@ -98,6 +98,7 @@ const Reportlist = ({ user, sl }) => {
             </th>
           </tr> */}
             {sl &&
+              listreport &&
               listreport.slice(0, 5).map((report) => (
                 <tr>
                   <th
@@ -112,7 +113,7 @@ const Reportlist = ({ user, sl }) => {
                     {report.reportCount}
                   </th>
                   <th className="border border-[#66666645] py-2 px-3 text-wrap">
-                    {report.reasons.map((rp) => rp + ", ")}
+                    {report && report.reasons.map((rp) => rp + ", ")}
                   </th>
                   <th className="select-none  border border-[#66666645] py-2 px-3">
                     <div className="flex justify-center gap-2">
@@ -137,6 +138,7 @@ const Reportlist = ({ user, sl }) => {
                 </tr>
               ))}
             {!sl &&
+              listreport &&
               listreport.map((report) => (
                 <tr>
                   <th
@@ -151,7 +153,7 @@ const Reportlist = ({ user, sl }) => {
                     {report.reportCount}
                   </th>
                   <th className="border border-[#66666645] py-2 px-3 text-wrap">
-                    {report.reasons.map((rp) => rp + ", ")}
+                    {report && report.reasons.map((rp) => rp + ", ")}
                   </th>
                   <th className="select-none  border border-[#66666645] py-2 px-3">
                     <div className="flex justify-center gap-2">

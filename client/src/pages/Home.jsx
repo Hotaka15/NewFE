@@ -857,7 +857,7 @@ const Home = () => {
               </div>
             </div> */}
             {/* <Lastactive /> */}
-            <div className="w-full h-1/2 shadow-sm ">
+            <div className="w-full h-fit max-h-1/2 shadow-sm ">
               <span className="font-medium text-lg text-ascent-2 select-none">
                 Friends
               </span>

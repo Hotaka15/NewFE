@@ -50,10 +50,12 @@ const renderCustomizedLabel = ({
 
 export default function PieChartRpP({ resaon }) {
   console.log(resaon);
-  const updatedData = resaon.map((item) => ({
-    name: item._id,
-    totalReports: item.totalReports,
-  }));
+  const updatedData =
+    resaon &&
+    resaon.map((item) => ({
+      name: item._id,
+      totalReports: item.totalReports,
+    }));
   return (
     <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
       <strong className="text-gray-700 font-medium text-ascent-1">
@@ -72,12 +74,13 @@ export default function PieChartRpP({ resaon }) {
               fill="#8884d8"
               dataKey="totalReports"
             >
-              {updatedData.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={COLORS[index % COLORS.length]}
-                />
-              ))}
+              {updatedData &&
+                updatedData.map((_, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
             </Pie>
             <Legend />
           </PieChart>

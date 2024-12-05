@@ -61,6 +61,7 @@ const Notification = ({ notify, fetchNotification }) => {
       </div>
       <div className="w-full flex flex-col gap-4 pb-2 ">
         {!showAll &&
+          notify &&
           notify.length > 0 &&
           notify
             ?.slice(0, 6)

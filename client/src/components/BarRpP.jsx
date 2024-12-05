@@ -75,12 +75,14 @@ const data = [
 
 export default function BarRpP({ month }) {
   console.log(month);
-  const updatedData = month.map((item) => ({
-    name: `${item._id?.year ? item._id?.year : ""}${
-      item?._id?.month ? "/" + item?._id?.month : ""
-    }${item?._id?.day ? "/" + item?._id?.day : ""}`,
-    totalReports: item.totalReports,
-  }));
+  const updatedData =
+    month &&
+    month.map((item) => ({
+      name: `${item._id?.year ? item._id?.year : ""}${
+        item?._id?.month ? "/" + item?._id?.month : ""
+      }${item?._id?.day ? "/" + item?._id?.day : ""}`,
+      totalReports: item.totalReports,
+    }));
 
   return (
     <div className="h-[22rem] bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">

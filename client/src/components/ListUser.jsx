@@ -637,19 +637,20 @@ const ListUser = ({ listUser, fetchUser, setListUser }) => {
                 </div> */}
               </div>
               <div className="w-full grid grid-cols-2 gap-4  ">
-                {listUser.map((user) => {
-                  return (
-                    <div className="flex flex-initial items-center justify-center ">
-                      <UserCard
-                        key={user?._id}
-                        user={user}
-                        setDetails={handledetails}
-                        handleHistory={handleHistory}
-                        setUserInfo={setUserInfo}
-                      />
-                    </div>
-                  );
-                })}
+                {listUser &&
+                  listUser.map((user) => {
+                    return (
+                      <div className="flex flex-initial items-center justify-center ">
+                        <UserCard
+                          key={user?._id}
+                          user={user}
+                          setDetails={handledetails}
+                          handleHistory={handleHistory}
+                          setUserInfo={setUserInfo}
+                        />
+                      </div>
+                    );
+                  })}
               </div>
 
               {/* <UserCard

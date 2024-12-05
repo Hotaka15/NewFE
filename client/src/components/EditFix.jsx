@@ -19,6 +19,75 @@ const EditFix = () => {
   const [editor, setEditor] = useState(1);
   const [preview, setPreview] = useState();
   const [file, setFile] = useState(null);
+  const [birthDate, setBirthDate] = useState(
+    user && user?.birthDate.split("T")[0]
+  );
+
+  const provinces = [
+    "An Giang",
+    "Bà Rịa - Vũng Tàu",
+    "Bắc Giang",
+    "Bắc Kạn",
+    "Bạc Liêu",
+    "Bắc Ninh",
+    "Bến Tre",
+    "Bình Định",
+    "Bình Dương",
+    "Bình Phước",
+    "Bình Thuận",
+    "Cà Mau",
+    "Cần Thơ",
+    "Cao Bằng",
+    "Đà Nẵng",
+    "Đắk Lắk",
+    "Đắk Nông",
+    "Điện Biên",
+    "Đồng Nai",
+    "Đồng Tháp",
+    "Gia Lai",
+    "Hà Giang",
+    "Hà Nam",
+    "Hà Nội",
+    "Hà Tĩnh",
+    "Hải Dương",
+    "Hải Phòng",
+    "Hậu Giang",
+    "Hòa Bình",
+    "Hưng Yên",
+    "Khánh Hòa",
+    "Kiên Giang",
+    "Kon Tum",
+    "Lai Châu",
+    "Lâm Đồng",
+    "Lạng Sơn",
+    "Lào Cai",
+    "Long An",
+    "Nam Định",
+    "Nghệ An",
+    "Ninh Bình",
+    "Ninh Thuận",
+    "Phú Thọ",
+    "Phú Yên",
+    "Quảng Bình",
+    "Quảng Nam",
+    "Quảng Ngãi",
+    "Quảng Ninh",
+    "Quảng Trị",
+    "Sóc Trăng",
+    "Sơn La",
+    "Tây Ninh",
+    "Thái Bình",
+    "Thái Nguyên",
+    "Thanh Hóa",
+    "Thừa Thiên Huế",
+    "Tiền Giang",
+    "TP. Hồ Chí Minh",
+    "Trà Vinh",
+    "Tuyên Quang",
+    "Vĩnh Long",
+    "Vĩnh Phúc",
+    "Yên Bái",
+  ];
   const [review, setReview] = useState();
   const {
     register,
@@ -27,10 +96,10 @@ const EditFix = () => {
     formState: { errors },
   } = useForm({
     mode: "onBlur",
-    defaultValues: { ...user },
+    defaultValues: { ...user, birthDate: user?.birthDate.split("T")[0] },
   });
 
-  console.log(user);
+  console.log(user && user?.birthDate.split("T")[0]);
 
   const [checkpassword, setcheckpassword] = useState("");
   const handlebg = (e) => {
@@ -54,47 +123,47 @@ const EditFix = () => {
 
     setisSubmitting(true);
     seterrMsg("");
-    try {
-      const uri = picture && (await handFileUpload(picture));
-      const { firstName, lastName, location, profession, gender, birthDate } =
-        data;
+    // try {
+    //   const uri = picture && (await handFileUpload(picture));
+    //   const { firstName, lastName, location, profession, gender, birthDate } =
+    //     data;
 
-      const res = await userapiRequest({
-        url: "",
-        data: {
-          firstName,
-          lastName,
-          location,
-          profileUrl: uri ? uri : user?.profileUrl,
-          profession,
-          gender,
-          birthDate,
-        },
-        method: "PUT",
-        token: user?.token,
-      });
+    //   const res = await userapiRequest({
+    //     url: "",
+    //     data: {
+    //       firstName,
+    //       lastName,
+    //       location,
+    //       profileUrl: uri ? uri : user?.profileUrl,
+    //       profession,
+    //       gender,
+    //       birthDate,
+    //     },
+    //     method: "PUT",
+    //     token: user?.token,
+    //   });
 
-      console.log(res);
-      if (res?.status === "failed") {
-        seterrMsg(res);
-      } else {
-        seterrMsg(res);
+    //   console.log(res);
+    //   if (res?.status === "failed") {
+    //     seterrMsg(res);
+    //   } else {
+    //     seterrMsg(res);
 
-        const newUser = { token: user?.token, ...res };
+    //     const newUser = { token: user?.token, ...res };
 
-        dispatch(UserLogin(newUser));
+    //     dispatch(UserLogin(newUser));
 
-        setTimeout(() => {
-          dispatch(UpdateProfile(false));
-        }, 3000);
-      }
-      setisSubmitting(false);
+    //     setTimeout(() => {
+    //       dispatch(UpdateProfile(false));
+    //     }, 3000);
+    //   }
+    //   setisSubmitting(false);
 
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      setisSubmitting(false);
-    }
+    //   window.location.reload();
+    // } catch (error) {
+    //   console.log(error);
+    //   setisSubmitting(false);
+    // }
     // const { firstName, lastName, location, profession } = data;
     console.log("submits");
 
@@ -210,7 +279,7 @@ const EditFix = () => {
               <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
                   editor == 1
-                    ? "bg-blue text-ascent-1"
+                    ? "bg-blue text-white"
                     : "text-ascent-2 outline outline-1"
                 }  `}
                 onClick={() => setEditor(1)}
@@ -250,7 +319,7 @@ const EditFix = () => {
               <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
                   editor == 5
-                    ? "bg-blue text-ascent-1"
+                    ? "bg-blue text-white"
                     : "text-ascent-2 outline outline-1"
                 }  `}
                 onClick={() => setEditor(5)}
@@ -304,10 +373,41 @@ const EditFix = () => {
                     <input
                       {...register("birthDate")}
                       type="date"
+                      value={birthDate}
+                      onChange={(e) => {
+                        setBirthDate(e.target.value);
+                      }}
                       className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
                       // onClick={(e) => {
                       //   console.log(e.target.value);
                       // }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-4 w-full items-center justify-center">
+                  <div className="w-1/2">
+                    <p className={`text-ascent-2 text-sm mb-2`}>Location</p>
+                    <select
+                      {...register("location")}
+                      className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
+                    >
+                      {provinces.map((province, index) => (
+                        <option key={index} value={province}>
+                          {province}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="w-1/2">
+                    <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                    <input
+                      {...register("address")}
+                      type="text"
+                      onChange={(e) => {}}
+                      placeholder="Address"
+                      className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
                     />
                   </div>
                 </div>
@@ -323,7 +423,7 @@ const EditFix = () => {
                   error={errors.profession ? errors.profession?.message : ""}
                 />
 
-                <TextInput
+                {/* <TextInput
                   label="Location"
                   placeholder="Location"
                   type="text"
@@ -331,6 +431,14 @@ const EditFix = () => {
                   register={register("location", {
                     required: "Location do no match",
                   })}
+                  error={errors.location ? errors.location?.message : ""}
+                /> */}
+                <TextInput
+                  label="Hobby"
+                  placeholder="Hobby"
+                  type="text"
+                  styles="w-full"
+                  register={register("hobby")}
                   error={errors.location ? errors.location?.message : ""}
                 />
                 <label className="w-full flex justify-center items-center">
