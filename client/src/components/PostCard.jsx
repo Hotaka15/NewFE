@@ -492,8 +492,8 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
               </div>
             )}
 
-            <div className="flex justify-start gap-2 mt-1 w-full px-5 items-center ">
-              <FaEye /> {post?.viewers.length} views
+            <div className="flex justify-start gap-2 mt-1 w-full px-5 items-center text-ascent-1 ">
+              <FaEye /> {post?.viewers && post?.viewers.length} views
             </div>
           </div>
 

@@ -27,7 +27,11 @@ import { postsearchfetchPosts } from "../until/post";
 import { IoLogOut } from "react-icons/io5";
 import { Oval } from "react-loader-spinner";
 
-import { userapiRequest } from "../until/user";
+import {
+  searchUserName,
+  userapiRequest,
+  usergetlistUserInfo,
+} from "../until/user";
 import Loading from "./Loading";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
@@ -39,6 +43,8 @@ const TopBar = ({ user, setKey }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
+  const [listUser, setListUser] = useState([]);
+  const [listSearchUser, setListSearchUser] = useState([]);
   const wordLimit = 100;
   const {
     register,
@@ -61,14 +67,38 @@ const TopBar = ({ user, setKey }) => {
   // const handlegetFriend = async() => {
   //   const res = await
   // }
+  const fetchlistUser = async () => {
+    try {
+      const list = user?.friends.join(",");
+      console.log(list);
+      const res = await usergetlistUserInfo(user?.token, list);
+      console.log(res);
+      setListUser(res && res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const value = e.target.value;
     const wordCount = value.split(/\s+/).filter(Boolean).length;
     if (wordCount <= wordLimit && wordCount >= 0) {
       console.log(wordCount);
 
       setInputValue(value);
+    }
+
+    if (value.startsWith("@searchuser")) {
+      try {
+        const res = await searchUserName(
+          user?.token,
+          value.replace(/^@searchuser\s*/, "")
+        );
+        setListSearchUser(res);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -137,6 +167,7 @@ const TopBar = ({ user, setKey }) => {
 
   useEffect(() => {
     fetchNotification();
+    fetchlistUser();
   }, []);
   return (
     <div className="flex-col flex items-end select-none ">
@@ -197,7 +228,7 @@ const TopBar = ({ user, setKey }) => {
               className={`bg-secondary rounded border border-[#66666690] 
             outline-none text-sm text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 w-[18rem] lg:w-[38rem] rounded-l-full `}
-              placeholder="Search..."
+              placeholder="Search post or @user,@searchuser"
               type="text"
               {...register("search")}
               value={inputValue}
@@ -212,28 +243,96 @@ const TopBar = ({ user, setKey }) => {
               containerStyles="bg-[#0444a4] text-white px-6 py-2.5  rounded-r-full"
             />
           </form>
-          {inputValue.startsWith("@") && (
-            <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
-              {/* <div className="px-5 py-2 text-ascent-1">name</div>
+          {inputValue.startsWith("@") &&
+            !inputValue.startsWith("@searchuser") && (
+              <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
+                {listUser &&
+                  listUser
+                    .filter(
+                      (item) =>
+                        // item.firstName.toLowerCase() ===
+                        // inputValue.slice(1).toLowerCase()
+                        (inputValue.slice(1).length > 0 &&
+                          item.firstName
+                            .toLowerCase()
+                            .includes(inputValue.slice(1).toLowerCase())) ||
+                        item.lastName
+                          .toLowerCase()
+                          .includes(inputValue.slice(1).toLowerCase())
+                    )
+                    .map((item) => {
+                      return (
+                        <div
+                          key={item._id}
+                          className="px-5 py-2 text-ascent-1 flex items-center gap-2"
+                        >
+                          <img
+                            src={item.profileUrl ?? NoProfile}
+                            className="rounded-full object-cover h-5 w-5"
+                          />
+                          {item.firstName} {item.lastName}
+                        </div>
+                      );
+                    })}
+                {/* <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div>
               <div className="px-5 py-2 text-ascent-1">name</div> */}
-              <div className="w-full py-5 flex items-center justify-center">
-                <Oval
-                  visible={true}
-                  height="30"
-                  width="30"
-                  color="blue"
-                  ariaLabel="oval-loading"
-                  wrapperStyle={{}}
-                  wrapperClass=""
-                />
+                <div className="w-full py-5 flex items-center justify-center">
+                  <Oval
+                    visible={true}
+                    height="30"
+                    width="30"
+                    color="blue"
+                    ariaLabel="oval-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+          {inputValue.startsWith("@") &&
+            inputValue.startsWith("@searchuser") && (
+              <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
+                {listSearchUser &&
+                  listSearchUser.map((item) => {
+                    return (
+                      <div
+                        key={item._id}
+                        className="px-5 py-2 text-ascent-1 flex items-center gap-2"
+                      >
+                        <img
+                          src={item.profileUrl ?? NoProfile}
+                          className="rounded-full object-cover h-5 w-5"
+                        />
+                        {item.firstName} {item.lastName}
+                      </div>
+                    );
+                  })}
+                {/* <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div> */}
+                <div className="w-full py-5 flex items-center justify-center">
+                  <Oval
+                    visible={true}
+                    height="30"
+                    width="30"
+                    color="blue"
+                    ariaLabel="oval-loading"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                  />
+                </div>
+              </div>
+            )}
         </div>
 
         {/* {ICON} */}
@@ -255,7 +354,7 @@ const TopBar = ({ user, setKey }) => {
           </button>
           <div
             onClick={() => {
-              navigate(`/chat/${user?._id}`);
+              navigate(`/chat`);
             }}
             className="px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
           >

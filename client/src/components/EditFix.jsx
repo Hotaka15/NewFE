@@ -123,48 +123,48 @@ const EditFix = () => {
 
     setisSubmitting(true);
     seterrMsg("");
-    // try {
-    //   const uri = picture && (await handFileUpload(picture));
-    //   const { firstName, lastName, location, profession, gender, birthDate } =
-    //     data;
+    try {
+      const uri = picture && (await handFileUpload(picture));
+      const { firstName, lastName, location, profession, gender, birthDate } =
+        data;
 
-    //   const res = await userapiRequest({
-    //     url: "",
-    //     data: {
-    //       firstName,
-    //       lastName,
-    //       location,
-    //       profileUrl: uri ? uri : user?.profileUrl,
-    //       profession,
-    //       gender,
-    //       birthDate,
-    //     },
-    //     method: "PUT",
-    //     token: user?.token,
-    //   });
+      const res = await userapiRequest({
+        url: "",
+        data: {
+          firstName,
+          lastName,
+          location,
+          profileUrl: uri ? uri : user?.profileUrl,
+          profession,
+          gender,
+          birthDate,
+        },
+        method: "PUT",
+        token: user?.token,
+      });
 
-    //   console.log(res);
-    //   if (res?.status === "failed") {
-    //     seterrMsg(res);
-    //   } else {
-    //     seterrMsg(res);
+      console.log(res);
+      if (res?.status === "failed") {
+        seterrMsg(res);
+      } else {
+        seterrMsg(res);
 
-    //     const newUser = { token: user?.token, ...res };
+        const newUser = { token: user?.token, ...res };
 
-    //     dispatch(UserLogin(newUser));
+        dispatch(UserLogin(newUser));
 
-    //     setTimeout(() => {
-    //       dispatch(UpdateProfile(false));
-    //     }, 3000);
-    //   }
-    //   setisSubmitting(false);
+        setTimeout(() => {
+          dispatch(UpdateProfile(false));
+        }, 3000);
+      }
+      setisSubmitting(false);
 
-    //   window.location.reload();
-    // } catch (error) {
-    //   console.log(error);
-    //   setisSubmitting(false);
-    // }
-    // const { firstName, lastName, location, profession } = data;
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      setisSubmitting(false);
+    }
+    const { firstName, lastName, location, profession } = data;
     console.log("submits");
 
     console.log(data);

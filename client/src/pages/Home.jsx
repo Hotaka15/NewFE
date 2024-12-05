@@ -566,7 +566,7 @@ const Home = () => {
                 </span>
               </Link> */}
               <Link
-                to={`/chat/${user?._id}`}
+                to={`/chat/`}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
               >
                 <span className="text-base font-medium text-ascent-1 flex items-center gap-2">

@@ -110,7 +110,7 @@ export const searchUserName = async (token, search) => {
       method: "GET",
     });
 
-    // console.log(res);
+    console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -166,6 +166,23 @@ export const usersendFriendRequest = async (token, id) => {
       method: "POST",
     });
     // console.log(res);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const usergetlistUserInfo = async (token, list) => {
+  try {
+    console.log(list);
+    console.log(token);
+    const res = await userapiRequest({
+      url: "getUsersBulk?userIds=" + list,
+      token: token,
+      method: "GET",
+    });
+    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);

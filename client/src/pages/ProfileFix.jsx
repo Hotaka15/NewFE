@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { BsBriefcase, BsFacebook, BsInstagram } from "react-icons/bs";
 import { FaTwitterSquare } from "react-icons/fa";
+import { FaFacebookMessenger } from "react-icons/fa";
 import moment from "moment";
 import Cookies from "js-cookie";
 import { UpdateProfile } from "../redux/userSlice";
@@ -192,7 +193,7 @@ const ProfileFix = () => {
                   {userInfor?.firstName} {userInfor?.lastName}
                 </div>
               </div>
-              <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2">
+              <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2 border-t border-[#66666645]">
                 <div className=" px-4 border-b border-blue h-full flex justify-center items-center rounded-lg text-blue font-medium">
                   Post
                 </div>
@@ -225,9 +226,9 @@ const ProfileFix = () => {
                       onClick={() => {
                         handleFriendRequest(id);
                       }}
-                      className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                      className="text-white z-30 flex gap-2 bg-ascent-3/30 px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
                     >
-                      Chat
+                      <FaFacebookMessenger size={25} /> Chat
                     </div>
                   </Link>
                   {/* <div

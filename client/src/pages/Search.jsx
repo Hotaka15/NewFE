@@ -38,6 +38,8 @@ const Search = () => {
   };
   const handleSearch = async (data) => {
     try {
+      console.log(data);
+
       await postsearchfetchPosts(user.token, dispatch, "", data ? data : "");
       setLoading(false);
     } catch (error) {

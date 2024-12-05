@@ -92,7 +92,7 @@ const RangeChat = forwardRef(
     const [chat, setChat] = useState("");
     const [loading, setLoading] = useState(false);
     const { theme } = useSelector((state) => state.theme);
-    const [page, setPage] = useState(2);
+    const [page, setPage] = useState(1);
     const [file, setFile] = useState(null);
     const [faild, setFald] = useState([]);
     const [after, setAfter] = useState([]);
@@ -102,6 +102,7 @@ const RangeChat = forwardRef(
     const [nextchat, setNextchat] = useState([]);
     const chatWindowRef = useRef(null);
     const [toggle, setToggle] = useState(false);
+    const [trigger, setTrigger] = useState(false);
     const id_1 = user?._id;
     const id_2 = userinfo?._id;
     const handlebg = (e) => {
@@ -159,6 +160,7 @@ const RangeChat = forwardRef(
           console.log(res?.data?.messages);
           // setListchat((pre) => [...pre, ...res?.data?.messages]);
           setListchat(res?.data?.messages);
+          setPage(2);
         } catch (error) {
           console.log(error);
         }
@@ -413,11 +415,19 @@ const RangeChat = forwardRef(
     //     console.log(error);
     //   }
     // }, [nextchat]);
-
     useEffect(() => {
+      console.log(page);
       setLoading(true);
+      // listchat && fetchnextchat(idroom);
+    }, []);
+    useEffect(() => {
+      // setLoading(true);
       console.log(idroom);
-      fetchchat(idroom);
+      if (page == 1) {
+        fetchchat(idroom);
+      } else {
+        fetchnextchat(idroom);
+      }
 
       thisRoom.current = idroom;
       // return () => {
@@ -425,13 +435,7 @@ const RangeChat = forwardRef(
       //   postRange.removeEventListener("scroll", handleScroll);
       // };
       // postRange.removeEventListener("scroll", handleScroll);
-    }, [idroom]);
-
-    useEffect(() => {
-      console.log(page);
-
-      listchat && fetchnextchat(idroom);
-    }, [page]);
+    }, [idroom, page]);
 
     useEffect(() => {
       console.log(nextchat);
@@ -455,6 +459,45 @@ const RangeChat = forwardRef(
 
     // }, [onScreen]);
 
+    // useEffect(() => {
+    //   console.log("trigger");
+    //   // const listchat = [...after];
+    //   // console.log(listchat);
+    //   // try {
+    //   //   // console.log(res?.data?.messages[0]);
+    //   //   // console.log(user?._id);
+    //   //   try {
+    //   //     for (let message of listchat || []) {
+    //   //       console.log(message);
+
+    //   //       let check = false;
+    //   //       if (message.senderId === user?._id) {
+    //   //         console.log(message);
+    //   //         console.log(user?._id);
+
+    //   //         message.checked = true;
+    //   //         // ? message.checked.push(message?.userId)
+    //   //         // : (message.checked = [message?.userId]);
+    //   //         check = true;
+    //   //       }
+    //   //       if (check) {
+    //   //         break;
+    //   //       }
+    //   //     }
+    //   //   } catch (error) {
+    //   //     console.log(error);
+    //   //   }
+
+    //   //   console.log(res?.data?.messages);
+    //   //   // setListchat((pre) => [...pre, ...res?.data?.messages]);
+    //   //   setListchat(res?.data?.messages);
+    //   //   setPage(2);
+    //   // } catch (error) {
+    //   //   console.log(error);
+    //   // }
+    //   fetchChat(idroom);
+    // }, [trigger]);
+
     // nhận tin nhắn
     useEffect(() => {
       setFald([]);
@@ -466,8 +509,46 @@ const RangeChat = forwardRef(
             fetchchat(idroom);
             setPage(1);
           } else {
-            console.log(data);
-            fetchchatSeen(idroom);
+            // console.log(data);
+            // fetchchatSeen(idroom);
+            console.log(trigger);
+
+            setTrigger((prevTrigger) => !prevTrigger);
+            // fetchList();
+            // fetchchat(idroom);
+            // setPage(1);
+            // try {
+            //   console.log(res?.data?.messages[0]);
+            //   console.log(user?._id);
+            //   try {
+            //     for (let message of listchat || []) {
+            //       console.log(message);
+
+            //       let check = false;
+            //       if (message.senderId === user?._id) {
+            //         console.log(obj);
+            //         console.log(user?._id);
+
+            //         message.checked
+            //           ? message.checked.push(obj?.userId)
+            //           : (message.checked = [obj?.userId]);
+            //         check = true;
+            //       }
+            //       if (check) {
+            //         break;
+            //       }
+            //     }
+            //   } catch (error) {
+            //     console.log(error);
+            //   }
+
+            //   console.log(res?.data?.messages);
+            //   // setListchat((pre) => [...pre, ...res?.data?.messages]);
+            //   setListchat(res?.data?.messages);
+            //   setPage(2);
+            // } catch (error) {
+            //   console.log(error);
+            // }
           }
 
           // fetchchatforchild(idroom);
