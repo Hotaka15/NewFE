@@ -65,8 +65,6 @@ export const checklink = async (url) => {
 export const checksafelink = async (url) => {
   console.log(url);
   try {
-    console.log(id);
-    const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
     const res = await authsafeRequest({
       url: url,
     });
