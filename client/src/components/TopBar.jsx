@@ -25,7 +25,10 @@ import { NoProfile } from "../assets";
 import { notifetchNotifications } from "../until/noti";
 import { postsearchfetchPosts } from "../until/post";
 import { IoLogOut } from "react-icons/io5";
+import { Oval } from "react-loader-spinner";
+
 import { userapiRequest } from "../until/user";
+import Loading from "./Loading";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -35,7 +38,8 @@ const TopBar = ({ user, setKey }) => {
   const [value, setvalue] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [inputValue, setInputValue] = useState("");
+  const wordLimit = 100;
   const {
     register,
     handleSubmit,
@@ -49,12 +53,24 @@ const TopBar = ({ user, setKey }) => {
 
   const setAvatar = () => {
     setAva(!ava);
-    // console.log(ava);
   };
-  // const handleSearch = async (data) => {
-  //   await fetchPosts(user.token, dispatch, "", data);
 
-  // };
+  console.log(user?.friends);
+  console.log(user);
+
+  // const handlegetFriend = async() => {
+  //   const res = await
+  // }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    const wordCount = value.split(/\s+/).filter(Boolean).length;
+    if (wordCount <= wordLimit && wordCount >= 0) {
+      console.log(wordCount);
+
+      setInputValue(value);
+    }
+  };
 
   const handleSearch = async (data) => {
     console.log(data);
@@ -71,7 +87,7 @@ const TopBar = ({ user, setKey }) => {
     dispatch(Logout());
     navigate("/login");
   };
-  // console.log(notifications);
+
   const fetchNotification = async () => {
     const newData = {
       userId: user?._id,
@@ -105,8 +121,6 @@ const TopBar = ({ user, setKey }) => {
       if (res?.status === "failed") {
       } else {
         const newUser = { token: user?.token, ...res };
-
-        // dispatch(UserLogin(newUser));
 
         setTimeout(() => {
           dispatch(UpdateProfile(false));
@@ -169,22 +183,58 @@ const TopBar = ({ user, setKey }) => {
             />
           </Link>
         </div> */}
-        <form
-          className="hidden md:flex items-center justify-center"
-          onSubmit={handleSubmit(handleSearch)}
-        >
-          <TextInput
-            placeholder="Search..."
-            styles="w-[18rem] lg:w-[38rem] rounded-l-full py-3"
-            register={register("search")}
-          />
+        <div className="relative ">
+          <form
+            className="hidden md:flex items-center justify-center"
+            onSubmit={handleSubmit(handleSearch)}
+          >
+            {/* <TextInput
+              placeholder="Search..."
+              styles="w-[18rem] lg:w-[38rem] rounded-l-full py-3"
+              register={register("search")}
+            /> */}
+            <input
+              className={`bg-secondary rounded border border-[#66666690] 
+            outline-none text-sm text-ascent-1 
+            px-4 py-3 placeholder:text-ascent-2 w-[18rem] lg:w-[38rem] rounded-l-full `}
+              placeholder="Search..."
+              type="text"
+              {...register("search")}
+              value={inputValue}
+              onChange={(e) => {
+                handleInputChange(e);
+              }}
+            />
 
-          <CustomButton
-            tittle="search"
-            type="submit"
-            containerStyles="bg-[#0444a4] text-white px-6 py-2.5 mt-2 rounded-r-full"
-          />
-        </form>
+            <CustomButton
+              tittle="search"
+              type="submit"
+              containerStyles="bg-[#0444a4] text-white px-6 py-2.5  rounded-r-full"
+            />
+          </form>
+          {inputValue.startsWith("@") && (
+            <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
+              {/* <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div>
+              <div className="px-5 py-2 text-ascent-1">name</div> */}
+              <div className="w-full py-5 flex items-center justify-center">
+                <Oval
+                  visible={true}
+                  height="30"
+                  width="30"
+                  color="blue"
+                  ariaLabel="oval-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* {ICON} */}
 

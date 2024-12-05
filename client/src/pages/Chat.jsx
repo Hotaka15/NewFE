@@ -177,6 +177,7 @@ const RangeChat = forwardRef(
 
         const res = await fetchChat(user?.token, idroom, page);
         console.log(res);
+
         console.log(faild);
         try {
           if (
@@ -184,8 +185,8 @@ const RangeChat = forwardRef(
             res?.data?.remainingPages > 0
           ) {
             // const lists = [...listchat, ...res?.data?.messages];
-            setListchat((pre) => [...pre, ...res?.data?.messages]);
-            // setNextchat(lists);
+            // setListchat((pre) => [...pre, ...res?.data?.messages]);
+            setNextchat(res?.data?.messages);
           }
         } catch (error) {
           console.log(error);
@@ -427,10 +428,16 @@ const RangeChat = forwardRef(
     }, [idroom]);
 
     useEffect(() => {
-      console.log("2");
+      console.log(page);
 
       listchat && fetchnextchat(idroom);
     }, [page]);
+
+    useEffect(() => {
+      console.log(nextchat);
+
+      listchat && setListchat([...listchat, ...nextchat]);
+    }, [nextchat]);
 
     // const scrollToBottom = debounce(() => {
     //   if (chatWindowRef.current && onScreen) {
@@ -457,6 +464,7 @@ const RangeChat = forwardRef(
             console.log(data);
             fetchList();
             fetchchat(idroom);
+            setPage(1);
           } else {
             console.log(data);
             fetchchatSeen(idroom);

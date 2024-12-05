@@ -31,6 +31,7 @@ import { userfriendSuggest, usergetFriends } from "../until/user";
 import UserTiitle from "./UserTiitle";
 import VideoPlayer from "./VideoPlayer";
 import { generateImg, generatetext } from "../until/suggestfr";
+import { botsuggestRequest } from "../until/bot";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -78,31 +79,41 @@ const Post = ({ setPage }) => {
   };
 
   const handleSendText = async (textsp) => {
-    if (textsp != "" && isText) {
-      setLoading(true);
+    // if (textsp != "" && isText) {
+    //   setLoading(true);
+    //   const prompt = textsp;
+    //   console.log(prompt);
+
+    //   try {
+    //     const res = await botsuggestRequest(prompt);
+    //     console.log(res);
+    //     // setResText(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // if (textsp != "" && !isText) {
+    //   setLoading(true);
+    //   const prompt = textsp;
+    //   console.log(prompt);
+
+    //   try {
+    //     const res = await generateImg(prompt);
+    //     console.log(res);
+    //     setResImg(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+
+    try {
       const prompt = textsp;
       console.log(prompt);
-
-      try {
-        const res = await generatetext(prompt);
-        console.log(res);
-        setResText(res);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    if (textsp != "" && !isText) {
-      setLoading(true);
-      const prompt = textsp;
-      console.log(prompt);
-
-      try {
-        const res = await generateImg(prompt);
-        console.log(res);
-        setResImg(res);
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await botsuggestRequest(prompt);
+      console.log(res);
+      // setResText(res);
+    } catch (error) {
+      console.log(error);
     }
     setLoading(false);
   };
@@ -855,7 +866,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
 
                         {!loading && (
                           <div className="flex justify-center items-center">
-                            <div className="flex py-2  bg-primary rounded-md select-none">
+                            {/* <div className="flex py-2  bg-primary rounded-md select-none">
                               <div
                                 className={`${
                                   isText && "bg-ascent-1/10"
@@ -876,7 +887,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               >
                                 Images
                               </div>
-                            </div>
+                            </div> */}
 
                             <div
                               className="bg-blue px-2 py-1 text-white rounded-lg"

@@ -14,8 +14,8 @@ export const APIs = axios.create({
 export const authsafeRequest = async ({ url }) => {
   try {
     console.log(url);
-    const key =
-      "c313493540156576e5ff26d3de682b86d22005ae9e4983f4689249657862a8d2";
+
+    const key = process.env.REACT_APP_LINK_VIRUSTOTAL_ID;
     const result = await APIs({
       method: "POST",
       headers: {
@@ -34,7 +34,8 @@ export const authsafeRequest = async ({ url }) => {
 export const authcheckRequest = async ({ url, method }) => {
   try {
     console.log(url, method);
-    const key = "4954b1608026ae14178a4061b0d79ce7";
+
+    const key = process.env.REACT_APP_LINK_PREVIEW_ID;
     const result = await API(url, {
       method: method || "GET",
       headers: { "X-Linkpreview-Api-Key": key },
@@ -64,6 +65,7 @@ export const checklink = async (url) => {
 export const checksafelink = async (url) => {
   console.log(url);
   try {
+    console.log(id);
     const opkey = "7b201b61-975f-4d83-b16d-e3c71e697219";
     const res = await authsafeRequest({
       url: url,

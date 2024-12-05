@@ -365,7 +365,8 @@ const Home = () => {
           const postId = entry.target.dataset.postId;
           const friendId = entry.target.dataset.userId;
           const postCategory = entry.target.dataset.postCategory;
-          const category = postCategory.length > 0 ? postCategory : "music";
+          const category =
+            postCategory && postCategory.length > 0 ? postCategory : "music";
           if (entry.isIntersecting) {
             // Nếu phần tử vào viewport, bắt đầu đếm thời gian
             if (timeoutIds[postId]) {
@@ -755,7 +756,7 @@ const Home = () => {
 
             {loading ? (
               <Loading />
-            ) : posts?.length > 0 ? (
+            ) : posts && posts?.length > 0 ? (
               posts?.map((post, index) => (
                 <div
                   className="itempost"
@@ -794,7 +795,7 @@ const Home = () => {
                 )}
               </ul>
             </div> */}
-            {posts?.length > 0 && !loading && <Loading />}
+            {posts && posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
           <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 flex-initial px-2 pb-4">
