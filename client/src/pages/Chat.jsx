@@ -166,7 +166,7 @@ const RangeChat = forwardRef(
         }
         setOnscreen(true);
         position();
-        setLoading(false);
+        // setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -345,6 +345,10 @@ const RangeChat = forwardRef(
             top: chatWindowRef.current.scrollHeight,
             behavior: "smooth",
           });
+          setTimeout(() => {
+            setLoading(false);
+          }, 400);
+
           // chatWindowRef.current.scrollIntoView({
           //   behavior: "smooth", // Cuộn mượt
           //   block: "end", // Đảm bảo cuộn về cuối phần tử
@@ -395,10 +399,13 @@ const RangeChat = forwardRef(
       setFile(null);
     };
 
-    // useImperativeHandle(ref, () => ({
-    //   fetchchat,
-    //   position,
-    // }));
+    const handleloading = () => {
+      setLoading(true);
+    };
+
+    useImperativeHandle(ref, () => ({
+      handleloading,
+    }));
 
     // useEffect(() => {
     //   try {
@@ -419,7 +426,8 @@ const RangeChat = forwardRef(
       console.log(page);
       setLoading(true);
       // listchat && fetchnextchat(idroom);
-    }, []);
+    }, [userinfo]);
+
     useEffect(() => {
       // setLoading(true);
       console.log(idroom);
@@ -435,6 +443,9 @@ const RangeChat = forwardRef(
       //   postRange.removeEventListener("scroll", handleScroll);
       // };
       // postRange.removeEventListener("scroll", handleScroll);
+      // return () => {
+      //   setLoading(true);
+      // };
     }, [idroom, page]);
 
     useEffect(() => {
@@ -459,44 +470,44 @@ const RangeChat = forwardRef(
 
     // }, [onScreen]);
 
-    // useEffect(() => {
-    //   console.log("trigger");
-    //   // const listchat = [...after];
-    //   // console.log(listchat);
-    //   // try {
-    //   //   // console.log(res?.data?.messages[0]);
-    //   //   // console.log(user?._id);
-    //   //   try {
-    //   //     for (let message of listchat || []) {
-    //   //       console.log(message);
+    useEffect(() => {
+      console.log("trigger");
+      // const listchat = [...after];
+      // console.log(listchat);
+      // try {
+      //   // console.log(res?.data?.messages[0]);
+      //   // console.log(user?._id);
+      //   try {
+      //     for (let message of listchat || []) {
+      //       console.log(message);
 
-    //   //       let check = false;
-    //   //       if (message.senderId === user?._id) {
-    //   //         console.log(message);
-    //   //         console.log(user?._id);
+      //       let check = false;
+      //       if (message.senderId === user?._id) {
+      //         console.log(message);
+      //         console.log(user?._id);
 
-    //   //         message.checked = true;
-    //   //         // ? message.checked.push(message?.userId)
-    //   //         // : (message.checked = [message?.userId]);
-    //   //         check = true;
-    //   //       }
-    //   //       if (check) {
-    //   //         break;
-    //   //       }
-    //   //     }
-    //   //   } catch (error) {
-    //   //     console.log(error);
-    //   //   }
+      //         message.checked = true;
+      //         // ? message.checked.push(message?.userId)
+      //         // : (message.checked = [message?.userId]);
+      //         check = true;
+      //       }
+      //       if (check) {
+      //         break;
+      //       }
+      //     }
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
 
-    //   //   console.log(res?.data?.messages);
-    //   //   // setListchat((pre) => [...pre, ...res?.data?.messages]);
-    //   //   setListchat(res?.data?.messages);
-    //   //   setPage(2);
-    //   // } catch (error) {
-    //   //   console.log(error);
-    //   // }
-    //   fetchChat(idroom);
-    // }, [trigger]);
+      //   console.log(res?.data?.messages);
+      //   // setListchat((pre) => [...pre, ...res?.data?.messages]);
+      //   setListchat(res?.data?.messages);
+      //   setPage(2);
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      // fetchChat(idroom);
+    }, [trigger]);
 
     // nhận tin nhắn
     useEffect(() => {
@@ -562,7 +573,7 @@ const RangeChat = forwardRef(
     }, [socket, idroom]);
 
     return (
-      <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-hidden rounded-lg justify-between">
+      <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-hidden rounded-lg justify-between relative">
         {/* Phần tiêu đề của khung chat */}
         <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
           <div className="text-ascent-1 font-bold text-3xl">
@@ -634,6 +645,11 @@ const RangeChat = forwardRef(
             )}
           </div>
         </div>
+        {/* {loading && (
+          <div className="absolute bg-primary w-full h-3/4 flex justify-center items-start ">
+            <Loading />
+          </div>
+        )} */}
 
         {/* Phần nội dung của khung chat */}
 
@@ -641,13 +657,9 @@ const RangeChat = forwardRef(
         <div
           id="listchat"
           ref={chatWindowRef}
-          className="flex grow-0 w-full h-3/4 overflow-y-auto"
+          className="flex grow-0 w-full h-3/4 overflow-y-auto relative"
         >
-          {loading ? (
-            <div className=" w-full h-full flex justify-center items-start ">
-              <Loading />
-            </div>
-          ) : idroom ? (
+          {idroom ? (
             <PageChat
               listchat={after}
               socket={socket}
@@ -658,6 +670,12 @@ const RangeChat = forwardRef(
           ) : (
             <div className="w-full h-[1000px]">Select Conversation</div>
           )}
+
+          {/* {loading ? (
+            <div className=" w-full h-full flex justify-center items-start ">
+              <Loading />
+            </div>
+          ) : } */}
         </div>
 
         {/* Thêm phần tử cuối cùng để cuộn đến khi cần */}
@@ -747,6 +765,11 @@ const RangeChat = forwardRef(
             </form>
           </div>
         </div>
+        {loading && (
+          <div className="absolute bg-primary w-full h-full flex justify-center items-start top-0 left-0">
+            <Loading />
+          </div>
+        )}
       </div>
     );
   }
@@ -1010,7 +1033,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
               if (socket) {
                 if (idroom) {
                   const found = result?.readStatus?.find(
-                    (item) => item.userId === id_1
+                    (item) => item.userId === id_1 && item.status != "read"
                   );
 
                   console.log(found);
@@ -1304,6 +1327,12 @@ const Chat = () => {
     console.log(members);
   };
   const hanldeUserchat = async (user) => {
+    // if (childRef.current) {
+    //   console.log(childRef.current);
+    //   childRef.current.handleloading();
+    //   console.log("11");
+    // }
+
     console.log(user);
     userChat(user);
 

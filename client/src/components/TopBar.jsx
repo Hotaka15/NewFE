@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TbSocial } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -33,6 +33,7 @@ import {
   usergetlistUserInfo,
 } from "../until/user";
 import Loading from "./Loading";
+import { botsuggestsearchRequest } from "../until/bot";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -45,6 +46,7 @@ const TopBar = ({ user, setKey }) => {
   const [inputValue, setInputValue] = useState("");
   const [listUser, setListUser] = useState([]);
   const [listSearchUser, setListSearchUser] = useState([]);
+  const debounceTimeout = useRef(null);
   const wordLimit = 100;
   const {
     register,
@@ -90,12 +92,25 @@ const TopBar = ({ user, setKey }) => {
 
     if (value.startsWith("@searchuser")) {
       try {
-        const res = await searchUserName(
-          user?.token,
-          value.replace(/^@searchuser\s*/, "")
-        );
-        setListSearchUser(res);
-        console.log(res);
+        if (debounceTimeout.current) {
+          clearTimeout(debounceTimeout.current);
+        }
+
+        debounceTimeout.current = setTimeout(async () => {
+          try {
+            const prompt = value.replace(/^@searchuser\s*/, "");
+            const res = await botsuggestsearchRequest(prompt);
+            setListSearchUser(res && res?.info);
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+        }, 1000);
+
+        // const prompt = value.replace(/^@searchuser\s*/, "");
+        // const res = await botsuggestsearchRequest(prompt);
+        // setListSearchUser(res && res?.info);
+        // console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -262,16 +277,15 @@ const TopBar = ({ user, setKey }) => {
                     )
                     .map((item) => {
                       return (
-                        <div
-                          key={item._id}
-                          className="px-5 py-2 text-ascent-1 flex items-center gap-2"
-                        >
-                          <img
-                            src={item.profileUrl ?? NoProfile}
-                            className="rounded-full object-cover h-5 w-5"
-                          />
-                          {item.firstName} {item.lastName}
-                        </div>
+                        <Link key={item._id} to={`profile/${item._id}`}>
+                          <div className="px-5 py-2 text-ascent-1 flex items-center gap-2">
+                            <img
+                              src={item.profileUrl ?? NoProfile}
+                              className="rounded-full object-cover h-5 w-5"
+                            />
+                            {item.firstName} {item.lastName}
+                          </div>
+                        </Link>
                       );
                     })}
                 {/* <div className="px-5 py-2 text-ascent-1">name</div>
@@ -299,18 +313,18 @@ const TopBar = ({ user, setKey }) => {
             inputValue.startsWith("@searchuser") && (
               <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
                 {listSearchUser &&
+                  listSearchUser.length > 0 &&
                   listSearchUser.map((item) => {
                     return (
-                      <div
-                        key={item._id}
-                        className="px-5 py-2 text-ascent-1 flex items-center gap-2"
-                      >
-                        <img
-                          src={item.profileUrl ?? NoProfile}
-                          className="rounded-full object-cover h-5 w-5"
-                        />
-                        {item.firstName} {item.lastName}
-                      </div>
+                      <Link key={item._id} to={`profile/${item._id}`}>
+                        <div className="px-5 py-2 text-ascent-1 flex items-center gap-2">
+                          <img
+                            src={item.profileUrl ?? NoProfile}
+                            className="rounded-full object-cover h-5 w-5"
+                          />
+                          {item.firstName} {item.lastName}
+                        </div>
+                      </Link>
                     );
                   })}
                 {/* <div className="px-5 py-2 text-ascent-1">name</div>

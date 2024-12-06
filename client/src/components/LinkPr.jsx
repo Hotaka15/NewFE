@@ -40,7 +40,7 @@ export default function LinkPr({ text }) {
   return (
     <div className="w-full h-fit bg-ascent-3/30  pb-2 cursor-pointer select-none ">
       <div className="min-w-full min-h-7">
-        {pr?.url && <img src={pr?.image} className="" />}
+        {pr && pr?.url && pr?.image && <img src={pr?.image} className="" />}
       </div>
 
       <div className="px-2">

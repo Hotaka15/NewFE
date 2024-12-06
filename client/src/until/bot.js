@@ -1,7 +1,7 @@
 // /ai-assist/ai-process?prompt=thiết kế banber quảng cáo điện thoại
 import axios from "axios";
 
-const API_URL = "http://localhost:4000";
+const API_URL = "http://localhost:4000/api";
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -32,11 +32,26 @@ export const botsuggestRequest = async (prompt) => {
 
   try {
     const res = await botapiRequest({
-      url: `/ai-assist/ai-process?prompt=thiết kế banber quảng cáo điện thoại `,
+      url: `/ai-assist/ai-process?prompt=${prompt}`,
       method: "GET",
       data: {},
     });
-    return res;
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const botsuggestsearchRequest = async (prompt) => {
+  console.log(prompt);
+
+  try {
+    const res = await botapiRequest({
+      url: `/ai-assist/ai-process?prompt=tìm người ${prompt}`,
+      method: "GET",
+      data: {},
+    });
+    return res?.data;
   } catch (error) {
     console.log(error);
   }

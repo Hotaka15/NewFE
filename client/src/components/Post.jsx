@@ -31,6 +31,7 @@ import { userfriendSuggest, usergetFriends } from "../until/user";
 import UserTiitle from "./UserTiitle";
 import VideoPlayer from "./VideoPlayer";
 import { generateImg, generatetext } from "../until/suggestfr";
+import { FaRegCopy } from "react-icons/fa";
 import { botsuggestRequest } from "../until/bot";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
@@ -107,15 +108,42 @@ const Post = ({ setPage }) => {
     // }
 
     try {
+      setLoading(true);
       const prompt = textsp;
       console.log(prompt);
       const res = await botsuggestRequest(prompt);
       console.log(res);
+      if (res?.type == "image prompt") {
+        setIsText(false);
+        setResText("");
+        // await handFileUpload(`data:image/png;base64,${res?.image}`);
+        setResImg(`data:image/png;base64,${res?.image}`);
+      } else {
+        setIsText(true);
+        setResImg(null);
+        setResText(res?.text);
+      }
       // setResText(res);
     } catch (error) {
       console.log(error);
     }
     setLoading(false);
+  };
+
+  const copyImage = async () => {
+    try {
+      // Fetch hình ảnh từ URL và chuyển thành Blob
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      // Tạo ClipboardItem và ghi vào clipboard
+      const clipboardItem = new ClipboardItem({ [blob.type]: blob });
+      await navigator.clipboard.write([clipboardItem]);
+
+      alert("Hình ảnh đã được sao chép vào clipboard!");
+    } catch (error) {
+      console.error("Lỗi sao chép hình ảnh:", error);
+    }
   };
 
   const handlebg = (e) => {
@@ -130,6 +158,18 @@ const Post = ({ setPage }) => {
     reader.readAsDataURL(e.target.files[0]);
     setPreview(true);
   };
+
+  const handlebgbase64 = () => {
+    setVideoUpload(null);
+    setVideoFile(null);
+    // console.log(e.target.files[0]);
+    setFile(resImg);
+
+    setReview(resImg);
+
+    setPreview(true);
+  };
+
   const pushList = (id) => {
     let memo = [...lists];
     console.log(memo);
@@ -413,7 +453,11 @@ const Post = ({ setPage }) => {
                                 className="flex relative w-full justify-center items-center rounded-xl overflow-hidden"
                                 onClick={() => {}}
                               >
-                                <img src={review} alt="Something wrong" />
+                                <img
+                                  src={review}
+                                  alt="Something wrong"
+                                  className="max-h-56"
+                                />
                                 <div
                                   onClick={() => {
                                     setReview(null);
@@ -823,14 +867,14 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                 </div>
               </div>
             </form>
-            <div
-              className="absolute bottom-10 right-10 text-ascent-1 rounded-full px-2 py-2 bg-primary/50 hover:bg-primary"
+            {/* <div
+              className="fixed bottom-10 right-10 text-ascent-1 rounded-full px-2 py-2 bg-primary/50 hover:bg-primary"
               onClick={() => {
                 handleisSuggest();
               }}
             >
               <TbMessageChatbot size={40} />
-            </div>
+            </div> */}
             {suggestpost && (
               <div className="fixed top-0 right-0 z-20 w-full h-full flex items-center justify-center">
                 <div className="absolute w-full h-full bg-gradient-to-r opacity-40 from-[#0099ff] from-25% to-[#9966ff] to-60%"></div>
@@ -906,7 +950,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                         <textarea
                           value={resText}
                           onChange={(e) => {
-                            setResText(e);
+                            setResText(e.target.value);
                           }}
                           className="w-full h-52 bg-primary  border-none
             outline-none text-xl text-ascent-1 
@@ -918,7 +962,21 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                     {!isText && (
                       <div className="mt-10 w-full flex justify-center items-center rounded-xl overflow-hidden border border-[#66666690] relative ">
                         {resImg && (
-                          <img src={resImg} className="max-h-44 object-cover" />
+                          <div className="w-full flex flex-col items-center gap-2">
+                            <img
+                              src={resImg}
+                              className="max-h-52 object-cover rounded-lg"
+                            />
+                            <div
+                              className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
+                              onClick={() => {
+                                handlebgbase64();
+                              }}
+                            >
+                              <FaRegCopy />
+                              Copy
+                            </div>
+                          </div>
                         )}
                       </div>
                     )}

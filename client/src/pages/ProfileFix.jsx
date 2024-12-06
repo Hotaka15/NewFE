@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { EditProfile, Loading, PostCard, TopBar } from "../components";
+import { EditProfile, Hobby, Loading, PostCard, TopBar } from "../components";
 import { NoProfile } from "../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -24,6 +24,7 @@ import {
 } from "../until/post";
 import { io } from "socket.io-client";
 import { handFileUpload } from "../until";
+
 const ProfileFix = () => {
   const { id } = useParams();
   const { user, edit } = useSelector((state) => state.user);

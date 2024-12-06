@@ -34,6 +34,7 @@ import VideoPlayer from "./VideoPlayer";
 import LinkPr from "./LinkPr";
 import Managergroup from "./Managergroup";
 import AddUserCard from "./AddUserCard";
+import Hobby from "./Hobby";
 export {
   TextInput,
   Loading,
@@ -71,4 +72,5 @@ export {
   LinkPr,
   Managergroup,
   AddUserCard,
+  Hobby,
 };

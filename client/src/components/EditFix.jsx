@@ -433,14 +433,14 @@ const EditFix = () => {
                   })}
                   error={errors.location ? errors.location?.message : ""}
                 /> */}
-                <TextInput
+                {/* <TextInput
                   label="Hobby"
                   placeholder="Hobby"
                   type="text"
                   styles="w-full"
                   register={register("hobby")}
                   error={errors.location ? errors.location?.message : ""}
-                />
+                /> */}
                 <label className="w-full flex justify-center items-center">
                   <div className="cursor-pointer h-fit w-fit px-2 py-2 relative bg-secondary rounded-full">
                     <div className="absolute right-1 bottom-1 bg-primary px-1 py-1 rounded-full text-ascent-1">
