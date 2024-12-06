@@ -23,6 +23,7 @@ import ReportCard from "./ReportCard";
 import { aichecktext } from "../until/ai";
 import { FaEye } from "react-icons/fa";
 import VideoPlayer from "./VideoPlayer";
+import NewEdit from "./NewEdit";
 const getPostComments = async (id, user) => {
   console.log(user?.token);
 
@@ -655,8 +656,18 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
       )}
       {/* {editp && <Editpost onClick={()=>{setEditp(!editp)} }/>} */}
 
-      {editp && (
+      {/* {editp && (
         <Editpost
+          post={post}
+          setPost={handleupdatepost}
+          onClick={() => {
+            setEditp(!editp);
+          }}
+        />
+      )}
+       */}
+      {editp && (
+        <NewEdit
           post={post}
           setPost={handleupdatepost}
           onClick={() => {

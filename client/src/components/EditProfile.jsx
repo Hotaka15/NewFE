@@ -106,7 +106,7 @@ const EditProfile = () => {
     "Học kỹ năng mềm",
   ];
   const [birthDate, setBirthDate] = useState(
-    user && user?.birthDate.split("T")[0]
+    user && user?.birthDate && user?.birthDate.split("T")[0]
   );
   const [selecthobby, setSelecthobby] = useState([]);
   const handlebg = (e) => {
@@ -126,7 +126,10 @@ const EditProfile = () => {
     formState: { errors },
   } = useForm({
     mode: "onChange",
-    defaultValues: { ...user, birthDate: user?.birthDate.split("T")[0] },
+    defaultValues: {
+      ...user,
+      birthDate: user?.birthDate && user?.birthDate.split("T")[0],
+    },
   });
 
   // const onSubmit = async (data) => {

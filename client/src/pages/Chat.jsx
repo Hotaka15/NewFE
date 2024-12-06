@@ -26,7 +26,9 @@ import { MdClose } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
+import { RiSendPlane2Fill } from "react-icons/ri";
 import { BsBriefcase } from "react-icons/bs";
+import { IoAddCircleSharp } from "react-icons/io5";
 import {
   formatDistanceToNow,
   differenceInHours,
@@ -694,7 +696,7 @@ const RangeChat = forwardRef(
             )}
           </div>
           {review && (
-            <div className="relative flex h-20 w-20 bg-bgColor rounded-2xl overflow-hidden mx-2 my-2">
+            <div className="absolute bottom-full flex h-20 w-20 bg-bgColor rounded-2xl overflow-hidden mx-2 my-2">
               <div className="overflow-hidden ">
                 <img
                   src={review}
@@ -718,13 +720,13 @@ const RangeChat = forwardRef(
             </div>
           )}
 
-          <div className="flex w-full mb-3 justify-center items-center">
+          <div className="flex w-full mb-3 justify-center relative items-center">
             <div
               className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center"
               onClick={() => {}}
             >
-              <label className="bg-primary rounded-xl cursor-pointer">
-                <CiCirclePlus size={35} />
+              <label className="absolute left-4 rounded-xl text-blue cursor-pointer">
+                <IoAddCircleSharp size={35} />
                 <input
                   type="file"
                   className="hidden"
@@ -736,7 +738,7 @@ const RangeChat = forwardRef(
               </label>
             </div>
             <form className="w-full flex" onSubmit={(e) => handleSend(e)}>
-              <div className=" overflow-hidden w-full h-full flex justify-center items-center border bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
+              <div className="overflow-hidden w-full h-full flex justify-center items-center bg-bgColor rounded-full focus:outline-none focus:ring focus:border-blue">
                 <input
                   type="text"
                   value={chat}
@@ -744,23 +746,23 @@ const RangeChat = forwardRef(
                     setChat(e.target.value);
                   }}
                   placeholder="Type your message..."
-                  className="w-full flex-1 py-2 px-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
+                  className="w-full flex-1 py-1 pl-14 pr-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
                 />
                 <div
-                  className="h-full w-fit text-ascent-1 px-1 py-2 flex justify-center items-center  "
+                  className="h-full w-fit text-ascent-1 px-3 py-2 flex justify-center items-center "
                   onClick={() => {
                     setShowPicker(!showPicker);
                   }}
                 >
-                  <MdEmojiEmotions size={35} />
+                  <MdEmojiEmotions size={30} />
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 bg-blue "
+                className="bg-blue-500 text-white px-4 py-1 rounded-lg ml-2 bg-blue select-none"
               >
-                Send
+                <RiSendPlane2Fill />
               </button>
             </form>
           </div>
@@ -1114,18 +1116,30 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                         chat?.status == "sent" || chat?.status == "read"
                           ? "bg-blue"
                           : "bg-secondary/70"
-                      } p-2 rounded-xl ml-2 max-w-2xl `}
+                      } p-2 rounded-xl ml-2 max-w-2xl relative group`}
                     >
                       <p
                         className={`${
                           chat?.status == "sent" || chat?.status == "read"
                             ? "text-white"
-                            : "text-ascent-2"
+                            : "text-[#f64949fe]"
                         } text-justify  px-2 py-1 break-words`}
                       >
                         {chat?.text}
                       </p>
-                      <div
+                      {/* {chat?.status !== "sent" ||
+                        (chat?.status !== "read" && (
+                          <div
+                        className={`flex justify-end w-full 
+                          text-[#f64949fe]
+                        } text-xs pt-1 py-2 `}
+                      >
+                        Sensitive
+                        
+                      </div>
+                        ))} */}
+
+                      {/* <div
                         className={`flex justify-end w-full ${
                           chat?.status == "sent" || chat?.status == "read"
                             ? "text-white"
@@ -1135,7 +1149,12 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                         {chat?.status == "sent" || chat?.status == "read"
                           ? handleTime(chat?.timestamp)
                           : "Sensitive"}
-                      </div>
+                      </div> */}
+                      {chat?.timestamp && (
+                        <div className="absolute top-0 w-fit whitespace-nowrap right-full  h-fit mt-2 hidden group-hover:flex bg-white text-[#000000] items-center justify-center text-sm rounded shadow-lg py-1 px-2">
+                          {handleTime(chat?.timestamp)}
+                        </div>
+                      )}
                     </div>
                     {chat?.file_url && (
                       <img
@@ -1184,13 +1203,18 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                         <ChatUser id={listchat[index].senderId} />
                       )}
                   </div>
-                  <div className="bg-[#66666645] p-2 rounded-xl ml-2 max-w-2xl w-fit">
+                  <div className="bg-[#66666645] relative p-2 rounded-xl group ml-2 max-w-2xl w-fit">
                     <p className="text-justify text-ascent-1 px-2 py-1 break-words">
                       {chat?.text}
                     </p>
-                    <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
+                    {/* <div className="flex justify-end w-full text-ascent-2 text-xs pt-1 py-2">
                       {handleTime(chat?.timestamp)}
-                    </div>
+                    </div> */}
+                    {chat?.timestamp && (
+                      <div className="absolute top-0 w-fit whitespace-nowrap left-full  h-fit mt-2 hidden group-hover:flex bg-white text-[#000000] items-center justify-center text-sm rounded shadow-lg py-1 px-2">
+                        {handleTime(chat?.timestamp)}
+                      </div>
+                    )}
                   </div>
                   {chat?.file_url && (
                     <img

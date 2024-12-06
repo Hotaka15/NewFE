@@ -15,6 +15,8 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 
 import { postedit, postfetchPosts } from "../until/post";
+import UserTiitle from "./UserTiitle";
+import { usergetFriends } from "../until/user";
 const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -30,10 +32,12 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const [file, setFile] = useState(null);
   const [posting, setPosting] = useState(false);
   const [review, setReview] = useState(post?.image ? post?.image : null);
+
   const [tem, setTem] = useState();
+  const [friends, setFriends] = useState([]);
   const [lists, setLists] = useState([]);
   const [option, setOption] = useState("public");
-  // console.log(post);
+  console.log(post);
   // console.log(review);
   const set = setPost;
   // post?.image && setPreview(true);
@@ -80,6 +84,16 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
       // console.log(file);
       await setFile(file);
       setPreview(true);
+    }
+  };
+
+  const fetchFriends = async () => {
+    try {
+      const res = await usergetFriends(user?.token);
+      setFriends(res?.friends);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -156,6 +170,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   useEffect(() => {
     review ? setPreview(true) : setPreview(false);
     fetchPost();
+    fetchFriends();
   }, []);
 
   return (
@@ -332,7 +347,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
                             />
                           </label>
-                          {/* <label
+                          <label
                             htmlFor="default-radio-2"
                             className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
                           >
@@ -357,7 +372,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               }}
                               className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                             />
-                          </label> */}
+                          </label>
                           <label
                             htmlFor="default-radio-3"
                             className="items-center mb-4 select-none w-full bg-primary flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl"
@@ -456,7 +471,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             placeholder="Search"
                           />
                           <div className="w-full flex items-center justify-center">
-                            <div className="flex flex-wrap gap-2 justify-start mb-2">
+                            <div className="flex flex-wrap gap-2 justify-center mb-2 items-center">
                               {lists.length > 0 &&
                                 lists?.map((friend) => {
                                   var check = lists.includes(friend?._id);
@@ -465,52 +480,72 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                       key={friend?._id}
                                       onClick={() => {
                                         pushList(friend);
-                                        // console.log(lists);
+                                        console.log(lists);
                                       }}
-                                      className="flex flex-col justify-center items-center"
                                     >
-                                      <img
-                                        src={friend?.profileUrl ?? NoProfile}
-                                        alt=""
-                                        className="h-16 w-full object-contain rounded-full"
-                                      />
-                                      <span>{friend?.firstName}</span>
+                                      <UserTiitle useradd={friend} />
                                     </div>
                                   );
                                 })}
                             </div>
                           </div>
                           <div className="w-full h-full ">
-                            {user?.friends.map((friend) => {
-                              var check = lists.includes(friend?._id);
+                            {friends &&
+                              friends.map((friend) => {
+                                var check = lists.includes(friend?._id);
 
-                              return (
-                                <div
-                                  onClick={() => {
-                                    pushList(friend);
-                                    // console.log(lists);
-                                  }}
-                                  className={`${
-                                    check ? "bg-ascent-3/10" : ""
-                                  }  items-center mb-4 select-none w-full flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl`}
-                                >
-                                  <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
-                                    <img
-                                      src={friend?.profileUrl ?? NoProfile}
-                                      alt=""
-                                      className="h-16 w-16 object-cover rounded-full mr-3"
-                                    />
-                                    <div
-                                      id={friend._id}
-                                      className="h-full flex justify-center items-center"
-                                    >
-                                      {friend.firstName} {friend.lastName}
-                                      <br />
+                                return (
+                                  <div
+                                    onClick={() => {
+                                      pushList(friend?._id);
+                                      console.log(lists);
+                                    }}
+                                    className={`${
+                                      check ? "bg-ascent-3/10" : ""
+                                    }  items-center mb-4 select-none w-full flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl`}
+                                  >
+                                    <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
+                                      <img
+                                        src={friend?.profileUrl || NoProfile}
+                                        alt=""
+                                        className="h-12 w-12 object-cover rounded-full mr-3"
+                                      />
+                                      <div
+                                        id={friend._id}
+                                        className="h-full flex justify-center items-center"
+                                      >
+                                        {friend.firstName} {friend.lastName}
+                                        <br />
+                                        {/* <span className="text-ascent-2 text-base">
+      Anyone can see
+    </span> */}
+                                      </div>
                                     </div>
+                                    {/* <input
+      id={friend._id}
+      type="radio"
+      value="public"
+      name="auth"
+      onClick={(e) => {
+        // setOption(e.target.value);
+        pushList(friend._id);
+      }}
+      className={`${}w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
+dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
+    /> */}
                                   </div>
-                                </div>
-                              );
-                            })}
+                                  // <ListCard
+                                  //   friend={friend}
+                                  //   onClick={() => {
+                                  //     pushList(friend);
+                                  //     console.log(lists);
+                                  //     // handleCheck(friend._id, check);
+                                  //   }}
+                                  //   check={check}
+                                  //   lists={lists}
+                                  // />
+                                );
+                              })}
                           </div>
                         </div>
                       </div>
@@ -520,6 +555,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             type=""
                             Post
                             onClick={() => {
+                              setLists([]);
                               setSpecific(!specific);
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
@@ -527,7 +563,20 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             tittle="Back"
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
-                            <div className="w-full flex justify-end"></div>
+                            <div className="w-full flex justify-end">
+                              <CustomButton
+                                type=""
+                                Post
+                                onClick={() => {
+                                  // setAudience(!audience);
+                                  setSpecific(!specific);
+                                  console.log("press");
+                                }}
+                                containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
+                  py-3 text-sm font-medium text-white outline-none`}
+                                tittle="Done"
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>

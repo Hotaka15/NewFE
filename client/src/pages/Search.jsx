@@ -107,7 +107,7 @@ lg:rounded-lg h-screen overflow-hidden"
       >
         <TopBar user={user} setKey={setKey} />
         <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-10 h-full justify-between">
-          <div className="w-1/5 h-full md:flex flex-col gap-2 overflow-y-auto flex-initial bg-primary rounded-lg px-7">
+          {/* <div className="w-1/5 h-full md:flex flex-col gap-2 overflow-y-auto flex-initial bg-primary rounded-lg px-7">
             <span className="text-ascent-1 text-2xl font-bold w-full  pt-5 border-b border-[#66666645]">
               Search
             </span>
@@ -152,8 +152,8 @@ lg:rounded-lg h-screen overflow-hidden"
                 </span>
               </Link>
             </div>
-          </div>
-          <div className=" justify-center h-full flex-initial w-4/5 flex-wrap px-4 py-4 flex gap-6 overflow-y-auto rounded-lg">
+          </div> */}
+          <div className=" justify-center h-full flex-initial w-full flex-wrap px-4 py-4 flex gap-6 overflow-y-auto rounded-lg">
             <div>
               <div className="w-full h-fit flex flex-wrap gap-2 select-none">
                 {/* <span className="text-ascent-1 font-bold text-3xl">

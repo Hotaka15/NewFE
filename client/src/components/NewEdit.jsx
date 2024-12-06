@@ -22,6 +22,7 @@ import { TbMessageChatbot } from "react-icons/tb";
 import { PiShootingStarFill } from "react-icons/pi";
 import {
   postapiRequest,
+  postedit,
   postfetchPosts,
   postrenewfetchPosts,
 } from "../until/post";
@@ -33,13 +34,15 @@ import VideoPlayer from "./VideoPlayer";
 import { generateImg, generatetext } from "../until/suggestfr";
 import { FaRegCopy } from "react-icons/fa";
 import { botsuggestRequest } from "../until/bot";
-const Post = ({ setPage }) => {
-  const { user, post } = useSelector((state) => state.user);
+const NewEdit = ({ setPage, post, onClick, setPost }) => {
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [errMsg, seterrMsg] = useState("");
   const [isSubmitting, setisSubmitting] = useState(false);
   const [picture, setPicuter] = useState(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(
+    post?.description ? post.description : ""
+  );
   const [images, setImages] = useState([]);
   const [preview, setPreview] = useState(false);
   const [write, setWrite] = useState(true);
@@ -47,11 +50,17 @@ const Post = ({ setPage }) => {
   const [specific, setSpecific] = useState(false);
   const [file, setFile] = useState(null);
   const [posting, setPosting] = useState(false);
-  const [review, setReview] = useState(null);
+  const [review, setReview] = useState(post?.image ? post?.image : null);
   const [tem, setTem] = useState();
-  const [lists, setLists] = useState([]);
-  const [option, setOption] = useState("public");
-  const [videoFile, setVideoFile] = useState(null);
+  const [lists, setLists] = useState(
+    post?.specifiedUsers ? post.specifiedUsers : []
+  );
+  const [option, setOption] = useState(
+    post?.visibility ? post.visibility : "public"
+  );
+  const [videoFile, setVideoFile] = useState(
+    post?.urlVideo ? post?.urlVideo : null
+  );
   const [videoUpload, setVideoUpload] = useState(null);
   const [err, setErr] = useState("");
   const [isSuggest, setIsSuggest] = useState(false);
@@ -63,6 +72,8 @@ const Post = ({ setPage }) => {
   const [resText, setResText] = useState("");
   const [loading, setLoading] = useState(false);
   const [resImg, setResImg] = useState(null);
+  console.log(post);
+
   const handleTextsp = (e) => {
     console.log(e.target.value);
 
@@ -257,41 +268,34 @@ const Post = ({ setPage }) => {
       try {
         const uri = file && (await handFileUpload(file));
         const uriv = videoUpload && (await handFileUpload(videoUpload));
-        const newData = uri
-          ? { ...data, image: uri }
-          : uriv
-          ? { ...data, urlVideo: uriv }
-          : data;
-
+        // const datafile = uri
+        //   ? { ...data, image: uri, urlVideo: "" }
+        //   : uriv
+        //   ? { ...data, urlVideo: uriv, image: "" }
+        //   : data;
+        //   let datafile;
+        let datafile;
+        if (uri) {
+          datafile = { ...data, image: uri, urlVideo: "" };
+        } else if (uriv) {
+          datafile = { ...data, urlVideo: uriv, image: "" };
+        } else {
+          datafile = { ...data, image: "", urlVideo: "" };
+        }
+        const newData = { ...datafile, specifiedUsers: [] };
+        const token = user?.token;
         const checked = await checkpost(newData);
         console.log(checked);
 
         if (checked && checked?.sensitive == false) {
           setErr("");
           setPreview(false);
-          const res = await postapiRequest({
-            url: "",
-            data: { ...newData, specifiedUsers: [] },
-            token: user?.token,
-            method: "POST",
-          });
+          const postId = post?._id;
+          const res = await postedit(postId, token, newData);
           console.log(res);
-
-          if (res?.status === "failed") {
-            seterrMsg(res);
-          } else {
-            reset({
-              description: "",
-            });
-            setFile(null);
-            seterrMsg("");
-            // await postrenewfetchPosts(user?.token, dispatch, 1);
-            await setPage();
-          }
-          setPosting(false);
-          setFile(null);
-          setPreview(false);
-          handleClose();
+          set(res?.updatedPost);
+          const close = onClick;
+          close();
         } else {
           setPosting(false);
           setErr("Sensitive content");
@@ -366,7 +370,7 @@ const Post = ({ setPage }) => {
                     Create Post
                   </label>
 
-                  <button className="text-ascent-1" onClick={handleClose}>
+                  <button className="text-ascent-1" onClick={onClick}>
                     <MdClose size={22} />
                   </button>
                 </div>
@@ -972,4 +976,4 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
   );
 };
 
-export default Post;
+export default NewEdit;
