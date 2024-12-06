@@ -275,11 +275,14 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
         //   : data;
         //   let datafile;
         let datafile;
-        if (uri) {
+        if (review) {
           datafile = { ...data, image: uri, urlVideo: "" };
-        } else if (uriv) {
+        } else if (videoFile) {
           datafile = { ...data, urlVideo: uriv, image: "" };
         } else {
+          console.log(review);
+
+          console.log(videoFile);
           datafile = { ...data, image: "", urlVideo: "" };
         }
         const newData = { ...datafile, specifiedUsers: [] };
@@ -293,7 +296,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
           const postId = post?._id;
           const res = await postedit(postId, token, newData);
           console.log(res);
-          set(res?.updatedPost);
+          setPost(res?.updatedPost);
           const close = onClick;
           close();
         } else {

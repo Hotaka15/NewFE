@@ -32,7 +32,12 @@ import {
 // import { requests, suggest } from "../assets/data";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";
-import { BsPersonFillAdd, BsFiletypeGif } from "react-icons/bs";
+import {
+  BsPersonFillAdd,
+  BsPersonFillCheck,
+  BsFiletypeGif,
+} from "react-icons/bs";
+
 import { useForm } from "react-hook-form";
 import { BiImages, BiSolidVideo } from "react-icons/bi";
 import {
@@ -87,6 +92,7 @@ const Home = () => {
   const [preview, setPreview] = useState(false);
   const [search, setSearch] = useState("");
   const [posting, setPosting] = useState(false);
+  const [listAdd, setlistAdd] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
@@ -270,6 +276,7 @@ const Home = () => {
   const handleFriendRequest = async (id) => {
     try {
       const res = await usersendFriendRequest(user.token, id);
+      setlistAdd((pre) => [...pre, id]);
       await fetchSuggestFriends();
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
@@ -930,46 +937,57 @@ const Home = () => {
 
               <div className="w-full h-full flex flex-col pt-4 overflow-auto ">
                 {suggestedFriends &&
-                  suggestedFriends?.map((friend) => (
-                    <div
-                      className="flex items-center justify-between  py-2 px-2 select-none"
-                      key={friend._id}
-                    >
-                      <Link
-                        to={"/profile/" + friend?._id}
+                  suggestedFriends?.map((friend) => {
+                    return (
+                      <div
+                        className="flex items-center justify-between  py-2 px-2 select-none"
                         key={friend._id}
-                        className="w-full flex gap-4 items-center 
-                  cursor-pointer"
                       >
-                        <img
-                          src={friend?.profileUrl ?? NoProfile}
-                          alt={friend?.firstName}
-                          className="w-10 h-10 object-cover rounded-full"
-                        />
-
-                        <div className="flex-1">
-                          <p className="text-base font-medium text-ascent-1">
-                            {friend?.firstName} {friend?.lastName}
-                          </p>
-                          <span className="text-sm text-ascent-2">
-                            {friend?.profession ?? "No Profession"}
-                          </span>
-                        </div>
-                      </Link>
-
-                      <div className="flex gap-1">
-                        <button
-                          className="bg-[#0444a430] text-sm text-white p-1 rounded"
-                          onClick={() => handleFriendRequest(friend?._id)}
+                        <Link
+                          to={"/profile/" + friend?._id}
+                          key={friend._id}
+                          className="w-full flex gap-4 items-center 
+                  cursor-pointer"
                         >
-                          <BsPersonFillAdd
-                            size={20}
-                            className="text-[#0f52b6]"
+                          <img
+                            src={friend?.profileUrl ?? NoProfile}
+                            alt={friend?.firstName}
+                            className="w-10 h-10 object-cover rounded-full"
                           />
-                        </button>
+
+                          <div className="flex-1">
+                            <p className="text-base font-medium text-ascent-1">
+                              {friend?.firstName} {friend?.lastName}
+                            </p>
+                            <span className="text-sm text-ascent-2">
+                              {friend?.profession ?? "No Profession"}
+                            </span>
+                          </div>
+                        </Link>
+
+                        <div className="flex gap-1">
+                          {listAdd && !listAdd.includes(friend?._id) ? (
+                            <button
+                              className="bg-[#0444a430] text-sm text-white p-1 rounded"
+                              onClick={() => handleFriendRequest(friend?._id)}
+                            >
+                              <BsPersonFillAdd
+                                size={20}
+                                className="text-[#0f52b6]"
+                              />
+                            </button>
+                          ) : (
+                            <button className="bg-ascent-2/30 text-sm text-white p-1 rounded">
+                              <BsPersonFillCheck
+                                size={20}
+                                className="text-ascent-2"
+                              />
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
               </div>
             </div>
           </div>

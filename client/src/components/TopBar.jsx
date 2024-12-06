@@ -105,7 +105,7 @@ const TopBar = ({ user, setKey }) => {
           } catch (error) {
             console.log(error);
           }
-        }, 1000);
+        }, 2000);
 
         // const prompt = value.replace(/^@searchuser\s*/, "");
         // const res = await botsuggestsearchRequest(prompt);

@@ -17,7 +17,7 @@ import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
 import { RiFolderVideoFill } from "react-icons/ri";
 import { CiVideoOn } from "react-icons/ci";
-
+import { ColorRing } from "react-loader-spinner";
 import { TbMessageChatbot } from "react-icons/tb";
 import { PiShootingStarFill } from "react-icons/pi";
 import {
@@ -425,7 +425,7 @@ const Post = ({ setPage }) => {
                             }
                             className="w-full h-72 bg-primary rounded-3xl border-none
             outline-none text-xl text-ascent-1 
-            px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
+            px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
                             value={content}
                             placeholder="Write something about post"
                             onChange={(ev) => {
@@ -851,7 +851,11 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
             {suggestpost && (
               <div className="fixed top-0 right-0 z-20 w-full h-full flex items-center justify-center">
                 <div className="absolute w-full h-full bg-gradient-to-r opacity-40 from-[#0099ff] from-25% to-[#9966ff] to-60%"></div>
-                <div className="w-1/4 h-2/3 bg-primary rounded-2xl z-10 overflow-hidden relative">
+                <div
+                  className={`w-1/4 h-fit bg-primary rounded-2xl z-10 ${
+                    loading ? "overflow-hidden" : "overflow-auto"
+                  }  relative `}
+                >
                   <div
                     className="text-ascent-1  py-4 px-4 flex justify-end cursor-pointer"
                     onClick={() => {
@@ -867,9 +871,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                         onChange={(e) => {
                           handleTextsp(e);
                         }}
-                        className="w-full h-52 bg-primary  border-none
-            outline-none text-xl text-ascent-1 
-            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
+                        className="w-full h-32 bg-primary  border-none outline-none text-xl text-ascent-1 px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
                         placeholder="Write something about post"
                       />
                       <div className="flex justify-between px-4 pb-4">
@@ -919,23 +921,21 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                       </div>
                     </div>
                     {isText && (
-                      <div className="mt-10 w-full rounded-xl overflow-hidden border border-[#66666690] relative ">
+                      <div className="mt-10 w-full rounded-xl overflow-hidden border border-[#66666690] relative mb-5">
                         <textarea
                           value={resText}
                           onChange={(e) => {
                             setResText(e.target.value);
                           }}
-                          className="w-full h-52 bg-primary  border-none
-            outline-none text-xl text-ascent-1 
-            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
+                          className="w-full h-52 bg-primary border-none outline-none text-xl text-ascent-1 px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
                           placeholder="Text"
                         />
                       </div>
                     )}
                     {!isText && (
-                      <div className="mt-10 w-full flex justify-center items-center rounded-xl overflow-hidden border border-[#66666690] relative ">
+                      <div className="mt-5 w-full flex justify-center items-center rounded-xl overflow-hidden relative ">
                         {resImg && (
-                          <div className="w-full flex flex-col items-center gap-2">
+                          <div className="w-full flex flex-col items-center gap-2 mb-5">
                             <img
                               src={resImg}
                               className="max-h-52 object-cover rounded-lg"
@@ -947,13 +947,33 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               }}
                             >
                               <FaRegCopy />
-                              Copy
+                              Choose
                             </div>
                           </div>
                         )}
                       </div>
                     )}
                   </div>
+                  {loading && (
+                    <div className="bg-primary absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center">
+                      <ColorRing
+                        visible={true}
+                        height="80"
+                        width="80"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={[
+                          "#0b9fe3",
+                          "#0b4de6",
+                          "#0b9fe3",
+                          "#0b4de6",
+                          "#0b9fe3",
+                        ]}
+                      />
+                      <div className="text-ascent-2">Loading...</div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -962,11 +982,16 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
           {/* &#8203; */}
 
           {isSuggest && (
-            <div className="fixed w-[425px] h-[620px] z-10 bottom-10 right-10">
+            <div className="absolute w-full h-full z-10">
               <SuggestPost handleisSuggest={handleisSuggest} />
             </div>
           )}
         </div>
+        {/* {loading && (
+          <div className="z-50 absolute top-0 left-0 flex items-center justify-center w-full h-full">
+            <Loading />
+          </div>
+        )} */}
       </div>
     </div>
   );
