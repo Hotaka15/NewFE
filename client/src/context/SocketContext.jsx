@@ -12,8 +12,10 @@ export const SocketProvider = ({ children }) => {
     transports: ["websocket"],
   });
   const userId = user?._id;
+
   useEffect(() => {
     socket.emit("userOnline", { userId });
+    socket.emit("joinGroup", { userId, groupId: userId });
     return () => {
       socket.emit("userOffline", { userId });
       socket.disconnect(); // Ngắt kết nối khi Context bị hủy

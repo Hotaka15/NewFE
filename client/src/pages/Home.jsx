@@ -593,7 +593,7 @@ const Home = () => {
               <FriendsCard friend={user?.friends} />;
             })} */}
             <Lastactive />
-            <div className="w-full shadow-sm pb-5">
+            {/* <div className="w-full shadow-sm pb-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
             pb-2 "
@@ -601,7 +601,6 @@ const Home = () => {
                 <span className="font-medium text-lg text-ascent-2">
                   Friend Request
                 </span>
-                {/* <span>{friendRequest?.length}</span> */}
               </div>
 
               <div className="w-full flex flex-col gap-4 pt-4">
@@ -627,7 +626,6 @@ const Home = () => {
                           </p>
                           <span className="text-sm text-ascent-2">
                             Request
-                            {/* {from?.profession ?? "No Profession"} */}
                           </span>
                         </div>
                       </Link>
@@ -648,7 +646,7 @@ const Home = () => {
                     </div>
                   ))}
               </div>
-            </div>
+            </div> */}
           </div>
           {/* {CENTTER} bg-primary */}
           <div
@@ -787,29 +785,16 @@ const Home = () => {
                 </div>
               ))
             ) : (
-              // <Postrange />
               <div className="flex w-full h-full items-center justify-center">
                 <p className="text-lg text-ascent-2">No Post Available</p>
               </div>
             )}
-            {/* <div className="absolute bg-blue overflow-y-auto">
-              <h3>Visible Posts:</h3>
-              <ul>
-                {visiblePosts.length > 0 ? (
-                  visiblePosts.map((postId) => (
-                    <li key={postId}>Post ID: {postId}</li>
-                  ))
-                ) : (
-                  <p>No post is visible yet.</p>
-                )}
-              </ul>
-            </div> */}
             {posts && posts?.length > 0 && !loading && <Loading />}
           </div>
           {/* {RIGHT} */}
           <div className="hidden w-1/5 h-full lg:flex flex-col gap-2 flex-initial px-2 pb-4">
             {/* {FRIEND REQUEST} */}
-            {/* <div className="w-full border-b border-ascent-2 shadow-sm   py-5">
+            <div className="w-full border-b border-ascent-2 shadow-sm max-h-[50%] flex flex-col py-5">
               <div
                 className="flex items-center justify-between text-sm text-ascent-1 
             pb-2 "
@@ -817,10 +802,9 @@ const Home = () => {
                 <span className="font-medium text-lg text-ascent-2">
                   Friend Request
                 </span>
-                
               </div>
 
-              <div className="w-full flex flex-col gap-4 pt-4">
+              <div className="w-full flex flex-col gap-4 pt-4 h-full overflow-auto">
                 {friendRequest &&
                   friendRequest?.map(({ _id, sender }) => (
                     <div
@@ -841,10 +825,7 @@ const Home = () => {
                           <p className="text-base font-medium text-ascent-1">
                             {sender?.firstName} {sender?.lastName}
                           </p>
-                          <span className="text-sm text-ascent-2">
-                            Request
-                            
-                          </span>
+                          <span className="text-sm text-ascent-2">Request</span>
                         </div>
                       </Link>
                       <div className="flex gap-1">
@@ -864,16 +845,16 @@ const Home = () => {
                     </div>
                   ))}
               </div>
-            </div> */}
+            </div>
             {/* <Lastactive /> */}
-            <div className="w-full h-fit max-h-1/2 shadow-sm ">
+            {/* <div className="w-full h-fit max-h-1/2 shadow-sm ">
               <span className="font-medium text-lg text-ascent-2 select-none">
                 Friends
               </span>
               <div className="w-full h-full overflow-y-auto pb-7">
                 <FriendsCard friend={user.friends} />
               </div>
-            </div>
+            </div> */}
 
             {/* {user?.friends?.map((friend) => {
               console.log(friend);

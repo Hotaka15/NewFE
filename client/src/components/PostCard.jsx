@@ -24,6 +24,7 @@ import { aichecktext } from "../until/ai";
 import { FaEye } from "react-icons/fa";
 import VideoPlayer from "./VideoPlayer";
 import NewEdit from "./NewEdit";
+import { useSocket } from "../context/SocketContext";
 const getPostComments = async (id, user) => {
   // console.log(user?.token);
 
@@ -40,12 +41,13 @@ const getPostComments = async (id, user) => {
   }
 };
 
-const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
+const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
   //console.log(user, id, replyAt, getComments);
   // console.log(id);
 
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const socket = useSocket();
   const {
     register,
     handleSubmit,
@@ -54,6 +56,19 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
   } = useForm({
     mode: "onChange",
   });
+
+  const handleemit = async () => {
+    const data = {
+      user_id: user?._id,
+      friendId: post?.userId,
+      post_id: post?._id,
+      post_category: post?.category ?? "music",
+      action: "comment",
+    };
+
+    console.log("Emitting user_interaction:", data);
+    await socket.emit("interactPost", data);
+  };
   const onSubmit = async (data) => {
     // console.log(data);
     // console.log(replyAt);
@@ -83,7 +98,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
           method: "POST",
         });
         // console.log(res);
-
+        handleemit();
         if (res?.status === "failed") {
           setErrMsg(res);
         } else {
@@ -278,7 +293,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
   );
 };
 
-const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
+const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
   const [showAll, setShowAll] = useState(0);
   const [showReply, setshowReply] = useState(0);
   const [comments, setComments] = useState([]);
@@ -294,6 +309,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
   const [upost, setUpost] = useState();
   const [isLiking, setIsLiking] = useState(false);
   const [isreport, setIsreport] = useState(false);
+  const socket = useSocket();
 
   const handleupdatepost = (res) => {
     setPost(res);
@@ -306,7 +322,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
         token: user?.token,
         method: "GET",
       });
-      // console.log(res);
+      console.log(res);
 
       setPost(res);
     } catch (error) {
@@ -351,11 +367,21 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
   };
   const handleLike = async (uri) => {
     try {
-      if (isLiking) return; // Nếu đang trong quá trình "like", không làm gì
+      if (isLiking) return;
       setIsLiking(true);
       await likePost(uri);
       await getComments(post?._id);
       await getPost();
+      const data = {
+        user_id: user?._id,
+        friendId: post?.userId,
+        post_id: post?._id,
+        post_category: post?.category ?? "music",
+        action: "like",
+      };
+
+      console.log("Emitting user_interaction:", data);
+      await socket.emit("interactPost", data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -545,6 +571,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
               <CommentForm
                 user={user}
                 postid={post?._id}
+                post={post}
                 getComments={() => getComments(post?._id)}
               />
               {loading ? (
@@ -602,6 +629,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
                         <CommentForm
                           user={user}
                           postid={post?._id}
+                          post={post}
                           id={comment?._id}
                           replyAt={comment?.user?.lastName}
                           getComments={() => getComments(post?._id)}

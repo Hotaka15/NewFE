@@ -36,7 +36,7 @@ const ReportCard = ({ post, handlerp }) => {
     <div>
       <div className="fixed z-50 inset-0 overflow-y-auto">
         <div className="w-full h-full bg-primary/30 flex  justify-center items-center">
-          <div className="w-1/4 h-fit bg-primary rounded-xl px-4 py-5 flex gap-3 flex-col">
+          <div className="w-1/5 h-1/2 bg-primary rounded-xl px-4 pt-5 flex gap-3 flex-col">
             <span className="text-ascent-1 font-medium text-2xl flex justify-between">
               Report
               <button className="text-ascent-1" onClick={handlerp}>
@@ -50,7 +50,7 @@ const ReportCard = ({ post, handlerp }) => {
               value={info}
               onChange={(e) => setInfo(e.target.value)}
             /> */}
-            <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
+            <div className=" border-b content-start border-[#66666645] py-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
               <label
                 htmlFor="Offensive"
                 className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
@@ -168,7 +168,7 @@ const ReportCard = ({ post, handlerp }) => {
               <CustomButton
                 tittle={"Submit"}
                 onClick={handlereport}
-                containerStyles="bg-blue text-white w-fit h-fit px-4 py-2 rounded-xl"
+                containerStyles="bg-blue text-white w-full flex item-center justify-center h-fit px-4 py-2 rounded-xl"
               />
             </div>
           </div>

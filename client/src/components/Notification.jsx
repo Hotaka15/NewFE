@@ -18,9 +18,9 @@ const Notification = ({ notify, fetchNotification }) => {
   // const [bg, setBG] = useState();
   const [isAll, setIsAll] = useState(true);
   const [listNotification, setListNotifications] = useState([...notify]);
-  const check = () => {
-    all ? setBG("bg-blue") : setBG(" hover:bg-ascent-3");
-  };
+  // const check = () => {
+  //   all ? setBG("bg-blue") : setBG(" hover:bg-ascent-3");
+  // };
 
   const handlelist = () => {
     setIsAll(false);

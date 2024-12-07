@@ -83,10 +83,8 @@ const NewFeed = () => {
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
   const socket = useSocket();
-  const videoRef = useRef(null);
   const timeoutIds = {};
   // console.log(user);
-  let pages = 1;
   const {
     register,
     handleSubmit,
@@ -306,7 +304,7 @@ const NewFeed = () => {
       };
 
       console.log("Emitting user_interaction:", data);
-      await socket.emit("user_interaction", data);
+      await socket.emit("interactPost", data);
     };
 
     const observer = new IntersectionObserver(
@@ -317,19 +315,16 @@ const NewFeed = () => {
           const category = entry.target.dataset.postCategory;
 
           if (entry.isIntersecting) {
-            // Nếu phần tử vào viewport, bắt đầu đếm thời gian
             if (timeoutIds[postId]) {
-              clearTimeout(timeoutIds[postId]); // Hủy timeout cũ nếu có
+              clearTimeout(timeoutIds[postId]);
             }
 
-            // Đặt timeout 5 giây
             timeoutIds[postId] = setTimeout(() => {
               console.log(postId);
               sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
             }, 3000);
           } else {
-            // Nếu phần tử rời khỏi viewport, hủy timeout
             if (timeoutIds[postId]) {
               clearTimeout(timeoutIds[postId]);
               delete timeoutIds[postId];
@@ -337,17 +332,15 @@ const NewFeed = () => {
           }
         });
       },
-      { threshold: 0.8 } // Kích hoạt khi 100% phần tử vào viewport
+      { threshold: 0.8 }
     );
 
-    // Theo dõi các phần tử
     const divElements = document.querySelectorAll(".itempost");
     divElements.forEach((div) => observer.observe(div));
 
-    // Dọn dẹp khi component bị unmount
     return () => {
       observer.disconnect();
-      Object.values(timeoutIds).forEach(clearTimeout); // Hủy tất cả timeout
+      Object.values(timeoutIds).forEach(clearTimeout);
     };
   }, [posts, loading]);
 
@@ -384,7 +377,6 @@ const NewFeed = () => {
     setPage(1);
     setTrigger(!trigger);
   };
-  // await postrenewfetchPosts(user?.token, dispatch, 1);
 
   useEffect(() => {
     const postRange = document.getElementById("post_range");
