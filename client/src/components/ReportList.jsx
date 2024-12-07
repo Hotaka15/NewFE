@@ -47,7 +47,7 @@ const Reportlist = ({ user, sl }) => {
     console.log(user);
 
     const res = await admingetPostreport(user?.token);
-    const getdetal = await getDetail(res);
+    const getdetal = res && (await getDetail(res));
     console.log(getdetal);
 
     console.log(res);
@@ -56,17 +56,19 @@ const Reportlist = ({ user, sl }) => {
   };
 
   const getDetail = async (res) => {
-    const get = await Promise.all(
-      res.map(async (resp) => {
-        const getPostDetail = await getPost(resp?.postId);
-        console.log(getPostDetail);
+    const get =
+      res &&
+      (await Promise.all(
+        res.map(async (resp) => {
+          const getPostDetail = await getPost(resp?.postId);
+          console.log(getPostDetail);
 
-        return {
-          ...resp,
-          ...getPostDetail,
-        };
-      })
-    );
+          return {
+            ...resp,
+            ...getPostDetail,
+          };
+        })
+      ));
     return get;
   };
 

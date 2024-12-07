@@ -10,7 +10,7 @@ export const API = axios.create({
 
 export const postapiRequest = async ({ url, token, data, method }) => {
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -19,7 +19,7 @@ export const postapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
+    // console.log(result);
 
     return result?.data;
   } catch (error) {

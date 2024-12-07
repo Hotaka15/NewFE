@@ -40,7 +40,7 @@ const UserChart = () => {
     handlefill(filter);
   }, [filter]);
   return (
-    <div className="w-full h-full bg-primary py-4 ga">
+    <div className="w-full h-full bg-primary py-4 flex flex-col">
       <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <IoPeople size={35} />
@@ -75,8 +75,8 @@ const UserChart = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex gap-4 mb-4">
-        <div className="relative w-full ">
+      <div className="w-full flex gap-4 mb-4 h-full">
+        <div className="relative w-full h-full flex">
           <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
             <div
               className={`${

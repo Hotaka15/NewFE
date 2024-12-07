@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { checksafelink } from "../until/checkapi";
-
+import { Loading } from "../components";
+import { TailSpin } from "react-loader-spinner";
+import { after } from "lodash";
 const Check = () => {
   const [searchParams] = useSearchParams();
   const url = searchParams.get("url");
+  const [loading, setLoading] = useState(true);
   console.log(url);
   const [notSafe, setNotSafe] = useState(false);
   const checkLink = async (url) => {
@@ -20,6 +23,8 @@ const Check = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,8 +32,31 @@ const Check = () => {
     checkLink(url);
   }, []);
   return (
-    <div>
+    <div className="w-screen h-screen bg-[#000000] flex items-center justify-center">
       {notSafe && (
+        <div className="text-ascent-2 w-1/6 h-1/5 border border-ascent-2 rounded-xl flex flex-col px-3 py-4">
+          <div className="w-full flex items-center justify-center h-full text-xl font-bold">
+            The link address is not safe.
+          </div>
+          <div className="py-2 flex items-center justify-center bg-ascent-3/30 rounded-md">
+            <a href={url}>Do you want to continue?</a>
+          </div>
+        </div>
+      )}
+
+      {loading && (
+        <TailSpin
+          visible={true}
+          height="80"
+          width="80"
+          color="blue"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      )}
+      {/* {notSafe && (
         <div>
           The{" "}
           <a className="text-blue underline " href={url}>
@@ -36,7 +64,7 @@ const Check = () => {
           </a>{" "}
           is not safe.
         </div>
-      )}
+      )} */}
     </div>
   );
 };

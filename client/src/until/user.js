@@ -9,7 +9,7 @@ export const API = axios.create({
 
 export const userapiRequest = async ({ url, token, data, method }) => {
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -18,7 +18,7 @@ export const userapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
+    // console.log(result);
 
     return result?.data;
   } catch (error) {
@@ -32,8 +32,8 @@ export const userapiRequest = async ({ url, token, data, method }) => {
 
 export const usergetUserInfo = async (token, id) => {
   try {
-    console.log(id);
-    console.log(token);
+    // console.log(id);
+    // console.log(token);
     // const uri = id === undefined ? "/users/get-user" : "/users/get-user/" + id;
     const uri = id;
     // console.log(token);
@@ -43,7 +43,7 @@ export const usergetUserInfo = async (token, id) => {
       token: token,
       method: "GET",
     });
-    console.log(res);
+    // console.log(res);
     if (res?.message === "Authetication fail") {
       localStorage.removeItem("user");
       window.alert("User session expired .Login again");
@@ -110,7 +110,7 @@ export const searchUserName = async (token, search) => {
       method: "GET",
     });
 
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -142,7 +142,7 @@ export const useracceptFriendRequest = async (
   user,
   status
 ) => {
-  console.log(token, requestId, user, status);
+  // console.log(token, requestId, user, status);
   const newdata = { requestId: requestId, newStatus: status };
   try {
     const res = await userapiRequest({
@@ -174,14 +174,14 @@ export const usersendFriendRequest = async (token, id) => {
 
 export const usergetlistUserInfo = async (token, list) => {
   try {
-    console.log(list);
-    console.log(token);
+    // console.log(list);
+    // console.log(token);
     const res = await userapiRequest({
       url: "getUsersBulk?userIds=" + list,
       token: token,
       method: "GET",
     });
-    console.log(res);
+    // console.log(res);
 
     return res;
   } catch (error) {

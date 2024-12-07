@@ -72,9 +72,9 @@ const Chart = () => {
           </div>
         </div>
       </div> */}
-      <div className="w-full h-1/2 flex gap-4 mb-4">
+      <div className="w-full h-full flex gap-4 mb-4">
         <div className="relative w-full ">
-          <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
+          <div className="absolute right-1 top-1 bg-primary flex rounded-lg">
             <div
               className={` text-ascent-2 cursor-pointer py-1 px-2 ${
                 filter == "year" && "bg-bgColor"
@@ -114,10 +114,10 @@ const Chart = () => {
 
         <PieChartRpP resaon={resaon} />
       </div>
-      <div className="w-full flex h-1/2 justify-center shrink-0">
-        {/* <RecentRp /> */}
+      {/* <div className="w-full flex h-1/2 justify-center shrink-0">
+        
         <Reportlist user={user} sl={true} />
-      </div>
+      </div> */}
     </div>
   );
 };

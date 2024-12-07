@@ -25,7 +25,7 @@ import { FaEye } from "react-icons/fa";
 import VideoPlayer from "./VideoPlayer";
 import NewEdit from "./NewEdit";
 const getPostComments = async (id, user) => {
-  console.log(user?.token);
+  // console.log(user?.token);
 
   try {
     const res = await postapiRequest({
@@ -42,7 +42,7 @@ const getPostComments = async (id, user) => {
 
 const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
   //console.log(user, id, replyAt, getComments);
-  console.log(id);
+  // console.log(id);
 
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -55,8 +55,8 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
     mode: "onChange",
   });
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(replyAt);
+    // console.log(data);
+    // console.log(replyAt);
 
     setLoading(true);
     setErrMsg("");
@@ -64,7 +64,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
       const URL = !replyAt
         ? `/${postid}/comment/`
         : `/${postid}/comment?commentId=` + id;
-      console.log(URL);
+      // console.log(URL);
       const newData = {
         comment: data?.comment,
         from: user?.firstName + " " + user?.lastName,
@@ -82,7 +82,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
           token: user?.token,
           method: "POST",
         });
-        console.log(res);
+        // console.log(res);
 
         if (res?.status === "failed") {
           setErrMsg(res);
@@ -150,13 +150,13 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
 };
 
 const ReplyCard = ({ reply, user, handleLike }) => {
-  console.log(reply);
+  // console.log(reply);
 
   const [userP, setUserP] = useState();
   const getUser = async () => {
     try {
       const res = await usergetUserInfo(user?.token, reply?.userId);
-      console.log(res);
+      // console.log(res);
 
       setUserP(res);
       // dispatch(UserLogin(newData));
@@ -214,8 +214,8 @@ const ReplyCard = ({ reply, user, handleLike }) => {
 const Opt = ({ post, onClick, report, handlerp }) => {
   const { user } = useSelector((state) => state.user);
   const [save, setSave] = useState(false);
-  console.log(post);
-  console.log(user?._id);
+  // console.log(post);
+  // console.log(user?._id);
   const handlereport = report;
   // const handle = () => {
   //   const report = report
@@ -306,7 +306,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck, socket }) => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+      // console.log(res);
 
       setPost(res);
     } catch (error) {

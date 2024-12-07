@@ -46,6 +46,7 @@ const TopBar = ({ user, setKey }) => {
   const [inputValue, setInputValue] = useState("");
   const [listUser, setListUser] = useState([]);
   const [listSearchUser, setListSearchUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const debounceTimeout = useRef(null);
   const wordLimit = 100;
   const {
@@ -90,7 +91,8 @@ const TopBar = ({ user, setKey }) => {
       setInputValue(value);
     }
 
-    if (value.startsWith("@searchuser")) {
+    if (value.startsWith("@user")) {
+      setLoading(true);
       try {
         if (debounceTimeout.current) {
           clearTimeout(debounceTimeout.current);
@@ -98,14 +100,15 @@ const TopBar = ({ user, setKey }) => {
 
         debounceTimeout.current = setTimeout(async () => {
           try {
-            const prompt = value.replace(/^@searchuser\s*/, "");
-            const res = await botsuggestsearchRequest(prompt);
-            setListSearchUser(res && res?.info);
+            const prompt = value.replace(/^@user\s*/, "");
+            // const res = await botsuggestsearchRequest(prompt);
+            const res = await searchUserName(user?.token, prompt);
+            setListSearchUser(res && res.slice(0, 5));
             console.log(res);
           } catch (error) {
             console.log(error);
           }
-        }, 2000);
+        }, 1000);
 
         // const prompt = value.replace(/^@searchuser\s*/, "");
         // const res = await botsuggestsearchRequest(prompt);
@@ -113,6 +116,8 @@ const TopBar = ({ user, setKey }) => {
         // console.log(res);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -120,11 +125,24 @@ const TopBar = ({ user, setKey }) => {
   const handleSearch = async (data) => {
     console.log(data);
     const key = data?.search;
-    try {
-      await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
-      navigate(`/search/${key ? key : ""}`);
-    } catch (error) {
-      console.log(error);
+    console.log(key);
+
+    if (key != "" && !key.startsWith("@searchuser")) {
+      try {
+        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
+        navigate(`/search/${key ? key : ""}`);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (key != "" && key.startsWith("@searchuser")) {
+      try {
+        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
+        navigate(
+          `/searchuser/${key ? key.replace(/^@searchuser\s*/, "") : ""}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
   const handleLogout = () => {
@@ -259,6 +277,7 @@ const TopBar = ({ user, setKey }) => {
             />
           </form>
           {inputValue.startsWith("@") &&
+            !inputValue.startsWith("@user") &&
             !inputValue.startsWith("@searchuser") && (
               <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
                 {listUser &&
@@ -288,29 +307,23 @@ const TopBar = ({ user, setKey }) => {
                         </Link>
                       );
                     })}
-                {/* <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div> */}
-                <div className="w-full py-5 flex items-center justify-center">
-                  <Oval
-                    visible={true}
-                    height="30"
-                    width="30"
-                    color="blue"
-                    ariaLabel="oval-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                </div>
+                {/* <div className="w-full py-5 flex items-center justify-center">
+                <Oval
+                  visible={true}
+                  height="30"
+                  width="30"
+                  color="blue"
+                  ariaLabel="oval-loading"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                />
+              </div> */}
               </div>
             )}
 
           {inputValue.startsWith("@") &&
-            inputValue.startsWith("@searchuser") && (
+            inputValue.startsWith("@user") &&
+            !inputValue.startsWith("@searchuser") && (
               <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
                 {listSearchUser &&
                   listSearchUser.length > 0 &&
@@ -327,24 +340,19 @@ const TopBar = ({ user, setKey }) => {
                       </Link>
                     );
                   })}
-                {/* <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div>
-              <div className="px-5 py-2 text-ascent-1">name</div> */}
-                <div className="w-full py-5 flex items-center justify-center">
-                  <Oval
-                    visible={true}
-                    height="30"
-                    width="30"
-                    color="blue"
-                    ariaLabel="oval-loading"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                </div>
+                {loading && (
+                  <div className="w-full py-5 flex items-center justify-center">
+                    <Oval
+                      visible={true}
+                      height="30"
+                      width="30"
+                      color="blue"
+                      ariaLabel="oval-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  </div>
+                )}
               </div>
             )}
         </div>

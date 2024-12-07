@@ -85,7 +85,7 @@ export default function BarRpP({ month }) {
     }));
 
   return (
-    <div className="h-[25rem] bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">
+    <div className="h-full bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">
       <strong className="text-gray-700 font-medium text-ascent-1">
         Reports
       </strong>

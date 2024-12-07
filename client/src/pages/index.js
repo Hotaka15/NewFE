@@ -16,6 +16,7 @@ import Save from "./Save";
 import Demo from "./Demo";
 import NewFeed from "./NewFeed";
 import Check from "./Check";
+import SearchUser from "./SearchUser";
 export {
   Home,
   Register,
@@ -35,4 +36,5 @@ export {
   Demo,
   NewFeed,
   Check,
+  SearchUser,
 };

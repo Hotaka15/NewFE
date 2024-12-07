@@ -16,6 +16,8 @@ export const authsafeRequest = async ({ url }) => {
     console.log(url);
 
     const key = process.env.REACT_APP_LINK_VIRUSTOTAL_ID;
+    console.log(key);
+
     const result = await APIs({
       method: "POST",
       headers: {
@@ -68,6 +70,7 @@ export const checksafelink = async (url) => {
     const res = await authsafeRequest({
       url: url,
     });
+    console.log(res);
     console.log(res);
 
     return res.status;
