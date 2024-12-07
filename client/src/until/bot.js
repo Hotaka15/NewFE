@@ -36,6 +36,8 @@ export const botsuggestRequest = async (prompt) => {
       method: "GET",
       data: {},
     });
+    console.log(res);
+
     return res?.data;
   } catch (error) {
     console.log(error);
