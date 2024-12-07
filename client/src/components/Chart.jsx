@@ -114,7 +114,7 @@ const Chart = () => {
 
         <PieChartRpP resaon={resaon} />
       </div>
-      <div className="w-full ">
+      <div className="w-full flex h-1/2 justify-center shrink-0">
         {/* <RecentRp /> */}
         <Reportlist user={user} sl={true} />
       </div>

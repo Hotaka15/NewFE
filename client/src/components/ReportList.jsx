@@ -104,7 +104,7 @@ const Reportlist = ({ user, sl }) => {
     fetchReport();
   }, []);
   return (
-    <div className="px-4 py-2 h-full overflow-x-auto">
+    <div className="px-4 py-2 h-full w-full overflow-x-auto">
       {loading ? (
         <div className="w-full h-full">
           <Loading />
