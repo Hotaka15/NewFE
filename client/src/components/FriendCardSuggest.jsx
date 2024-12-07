@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import { usersendFriendRequest } from "../until/user";
+import { useTranslation } from "react-i18next";
 const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
   console.log(friend);
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // const handleFriendRequest = async (id) => {
@@ -57,7 +59,7 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
           </span>
           <div className="w-4/5">
             <CustomButton
-              tittle="Add"
+              tittle={t("Add")}
               onClick={() => handleFriendRequest(friend?._id)}
               containerStyles="text-white bg-blue w-full rounded-lg inline-flex justify-center py-2"
             />

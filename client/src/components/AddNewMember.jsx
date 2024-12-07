@@ -12,6 +12,7 @@ import { NoProfile } from "../assets";
 import { addMemberGroup, createGroup } from "../until/group";
 
 import AddUserCard from "./AddUserCard";
+import { useTranslation } from "react-i18next";
 const AddNewMember = ({ idroom, setAddu }) => {
   const { user } = useSelector((state) => state.user);
   const [listsuggest, setListsuggest] = useState([]);
@@ -20,6 +21,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
   const [name, setName] = useState();
   const [search, setSearch] = useState("");
   const [description, setDescription] = useState("");
+  const { t } = useTranslation();
   const fetchSuggestFriends = async () => {
     try {
       const res = await userfriendSuggest(user?.token, user);

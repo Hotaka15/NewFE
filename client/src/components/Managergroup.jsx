@@ -8,6 +8,7 @@ import { chatfetchDetail } from "../until/chat";
 import { usergetUserInfo } from "../until/user";
 import { Link } from "react-router-dom";
 import { changeRoleGroup, deleteMemberGroup } from "../until/group";
+import { useTranslation } from "react-i18next";
 
 // const UserDetail = ({}) => {
 //   return (
@@ -119,6 +120,7 @@ export default function Managergroup({ setRoleo, idroom }) {
   const [listadmin, setListadmin] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
   const [inforRoom, setInforRoom] = useState();
+  const { t } = useTranslation();
   const token = user?.token;
   const getDetail = async (idroom) => {
     const res = await chatfetchDetail(user?.token, idroom);
@@ -206,7 +208,7 @@ export default function Managergroup({ setRoleo, idroom }) {
           placeholder="Search"
         /> */}
         <div className="w-full px-2">
-          <span className="text-ascent-2">Member:</span>
+          <span className="text-ascent-2">{t("Member")}:</span>
         </div>
         <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
           {member &&
@@ -322,7 +324,7 @@ export default function Managergroup({ setRoleo, idroom }) {
                 rel="noopener noreferrer"
               >
                 <div className="font-normal select-none text-ascent-1 w-full hover:bg-ascent-3/30 flex justify-center text-base py-1 bg-secondary rounded-lg ">
-                  PROFILE
+                  {t("PROFILE")}
                 </div>
               </a>
             </div>
@@ -348,8 +350,8 @@ export default function Managergroup({ setRoleo, idroom }) {
                   onChange={(e) => setRole(e.target.value)}
                   className="text-ascent-1 rounded-lg outline-none w-full bg-secondary  border border-[#66666690] px-4 py-3"
                 >
-                  <option value="admin">Admin</option>
-                  <option value="member">Member</option>
+                  <option value="admin">{t("Admin")}</option>
+                  <option value="member">{t("Member")}</option>
                 </select>
               </div>
             )}
@@ -357,7 +359,7 @@ export default function Managergroup({ setRoleo, idroom }) {
             {isAdmin && (
               <div className="w-full flex justify-between px-4 absolute bottom-5">
                 <CustomButton
-                  tittle="Delete"
+                  tittle={t("Delete")}
                   onClick={() => {
                     handleDelete(info._id);
                   }}
@@ -369,7 +371,7 @@ export default function Managergroup({ setRoleo, idroom }) {
                     onClick={() => {
                       handlechangeRole(info._id);
                     }}
-                    tittle="Update"
+                    tittle={t("Update")}
                     containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
                   />
                 )}

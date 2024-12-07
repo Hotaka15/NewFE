@@ -10,6 +10,7 @@ import { apiRequest, handFileUpload } from "../until";
 import { NoProfile } from "../assets";
 import { userapiRequest } from "../until/user";
 import { FaFileImage } from "react-icons/fa6";
+import { t } from "i18next";
 const EditProfile = () => {
   const { user, edit } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -294,7 +295,7 @@ const EditProfile = () => {
                 htmlFor="name"
                 className="block font-medium text-xl text-ascent-1 text-left"
               >
-                Edit Profile
+                {t("Edit Profile")}
               </label>
 
               <button className="text-ascent-1" onClick={handleClose}>
@@ -310,7 +311,7 @@ const EditProfile = () => {
                 }  `}
                 onClick={() => setEditor(1)}
               >
-                Profile
+                {t("Profile")}
               </span>
               {/* <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
@@ -350,7 +351,7 @@ const EditProfile = () => {
                 }  `}
                 onClick={() => setEditor(2)}
               >
-                Hobby
+                {t("Hobby")}
               </span>
             </div>
             {editor == 1 && (
@@ -360,22 +361,22 @@ const EditProfile = () => {
               >
                 <div className="flex gap-4">
                   <TextInput
-                    label="First Name"
-                    placeholder="First Name"
+                    label={t("First Name")}
+                    placeholder={t("First Name")}
                     type="text"
                     styles="w-full"
                     register={register("firstName", {
-                      required: "First name is required",
+                      required: t("First name is required"),
                     })}
                     error={errors.firstName ? errors.firstName?.message : ""}
                   />
                   <TextInput
-                    label="Last Name"
-                    placeholder="Last Name"
+                    label={t("Last Name")}
+                    placeholder={t("Last Name")}
                     type="text"
                     styles="w-full"
                     register={register("lastName", {
-                      required: "Last name is required!",
+                      required: t("Last name is required!"),
                     })}
                     error={errors.lastName ? errors.lastName?.message : ""}
                   />

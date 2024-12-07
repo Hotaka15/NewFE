@@ -3,8 +3,10 @@ import FriendCard from "./FriendCardRequest";
 import { FaUserFriends } from "react-icons/fa";
 import { GiThreeFriends } from "react-icons/gi";
 import { FaAngleRight } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const FriendMain = (user) => {
+  const { t } = useTranslation();
   const crollright = () => {
     let position = document.getElementById("request");
     position.scrollLeft += 200;
@@ -18,7 +20,7 @@ const FriendMain = (user) => {
     <div>
       <div className="flex flex-col gap-2 h-fit relative select-none">
         <span className="text-ascent-1 font-bold text-3xl">
-          Friend Requests
+          {t("Friend Requests")}
         </span>
         <div
           onClick={() => {
@@ -47,7 +49,7 @@ const FriendMain = (user) => {
       </div>
       <div className="w-full h-fit flex flex-wrap gap-2 select-none">
         <span className="text-ascent-1 font-bold text-3xl">
-          People you may know
+          {t("People you may know")}
         </span>
         <div className="flex justify-center items-center flex-col">
           <div className="w-2/3 h-fit flex gap-2 flex-wrap">

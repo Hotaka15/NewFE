@@ -5,8 +5,10 @@ import { NoProfile } from "../assets";
 import moment from "moment";
 import { notifetchNotifications } from "../until/noti";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const Lastactive = () => {
   const [notifications, setNotifications] = useState([]);
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -33,7 +35,7 @@ const Lastactive = () => {
             pb-2 "
       >
         <span className="font-medium text-lg text-ascent-2">
-          Last Activities
+          {t("Last Activities")}
         </span>
       </div>
 

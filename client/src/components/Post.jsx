@@ -587,10 +587,10 @@ const Post = ({ setPage }) => {
                               htmlFor="default-radio-1"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Public
+                              {t("Public")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Anyone can see
+                                {t("Anyone can see")}
                               </span>
                             </label>
                             <input
@@ -614,10 +614,10 @@ const Post = ({ setPage }) => {
                               htmlFor="default-radio-2"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Specific friends
+                              {t("Specific friends")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to some friends
+                                {t("Only show to some friends")}
                               </span>
                             </label>
                             <input
@@ -640,10 +640,10 @@ const Post = ({ setPage }) => {
                               htmlFor="default-radio-3"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Friend
+                              {t("Friends")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Your friends
+                                {t("Your friends")}
                               </span>
                             </label>
                             <input
@@ -666,10 +666,10 @@ const Post = ({ setPage }) => {
                               htmlFor="default-radio-4"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Only me
+                              {t("Only me")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to you
+                                {t("Only show to you")}
                               </span>
                             </label>
                             <input
@@ -696,7 +696,7 @@ const Post = ({ setPage }) => {
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                     py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -710,7 +710,7 @@ const Post = ({ setPage }) => {
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>
@@ -821,7 +821,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -835,7 +835,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>
@@ -864,7 +864,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                 >
                   <div className="text-ascent-1 py-4 px-4 flex justify-between">
                     <div className="flex items-center justify-center text-ascent-1 font-semibold text-2xl">
-                      Suggest
+                      {t("Suggest")}
                     </div>
                     <div
                       onClick={() => {
@@ -884,11 +884,11 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             handleTextsp(e);
                           }}
                           className="w-full h-40 bg-primary  border-none outline-none text-xl text-ascent-1 px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
-                          placeholder="Write something about post"
+                          placeholder={t("Write something about post")}
                         />
                         <div className="flex justify-between px-4 pb-4">
                           <div className=" text-ascent-2">
-                            Word: {counttext}
+                            {t("Word")}: {counttext}
                           </div>
 
                           {loading && (
@@ -905,7 +905,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                   handleSendText(textsp);
                                 }}
                               >
-                                Submit
+                                {t("Submit")}
                               </div>
                             </div>
                           )}
@@ -930,7 +930,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             }}
                           >
                             <FaRegCopy />
-                            Choose
+                            {t("Choose")}
                           </div>
                           <div
                             className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
@@ -939,7 +939,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             }}
                           >
                             <FaRegCopy />
-                            Try Again
+                            {t("Try Again")}
                           </div>
                         </div>
                       </div>
@@ -959,7 +959,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               }}
                             >
                               <FaRegCopy />
-                              Choose
+                              {t("Choose")}
                             </div>
                             <div
                               className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
@@ -968,7 +968,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               }}
                             >
                               <FaRegCopy />
-                              Try Again
+                              {t("Try Again")}
                             </div>
                           </div>
                         )}
@@ -992,7 +992,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                           "#0b9fe3",
                         ]}
                       />
-                      <div className="text-ascent-2">Loading...</div>
+                      <div className="text-ascent-2">{t("Loading...")}</div>
                     </div>
                   )}
                 </div>

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { checklink } from "../until/checkapi";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 export default function LinkPr({ text }) {
   const [pr, setPr] = useState(null);
   const [url, setUrl] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const fetchurl = async (url) => {
     const res = await checklink(url);

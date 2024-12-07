@@ -34,12 +34,14 @@ import VideoPlayer from "./VideoPlayer";
 import { generateImg, generatetext } from "../until/suggestfr";
 import { FaRegCopy } from "react-icons/fa";
 import { botsuggestRequest } from "../until/bot";
+import { useTranslation } from "react-i18next";
 const NewEdit = ({ setPage, post, onClick, setPost }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [errMsg, seterrMsg] = useState("");
   const [isSubmitting, setisSubmitting] = useState(false);
   const [picture, setPicuter] = useState(null);
+  const { t } = useTranslation();
   const [content, setContent] = useState(
     post?.description ? post.description : ""
   );
@@ -245,7 +247,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
 
           // Giới hạn độ phân giải: ví dụ, giới hạn tối đa 1280x720
           if (width > 1280 || height > 720) {
-            setErr("Video resolution exceeds the limit of 1280x720");
+            setErr(t("Video resolution exceeds the limit of 1280x720"));
           } else {
             setErr("");
             setVideoUpload(filevideo);
@@ -301,7 +303,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
           close();
         } else {
           setPosting(false);
-          setErr("Sensitive content");
+          setErr(t("Sensitive content"));
         }
       } catch (error) {
         console.log(error);
@@ -370,7 +372,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                     htmlFor="name"
                     className="block w-full  text-xl text-ascent-1 text-center font-bold"
                   >
-                    Create Post
+                    {t("Edit Post")}
                   </label>
 
                   <button className="text-ascent-1" onClick={onClick}>
@@ -434,7 +436,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
             outline-none text-xl text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
                             value={content}
-                            placeholder="Write something about post"
+                            placeholder={t("Write something about post")}
                             onChange={(ev) => {
                               setContent(ev.target.value);
                             }}
@@ -447,7 +449,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               >
                                 <img
                                   src={review}
-                                  alt="Something wrong"
+                                  alt={t("Something wrong")}
                                   className="max-h-56"
                                 />
                                 <div
@@ -488,7 +490,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                   <div className="">Tags</div>
                                 </div> */}
                               <div className="text-ascent-2 ">
-                                Add to your post
+                                {t("Add to your post")}
                               </div>
                               <div className="flex gap-2 items-center">
                                 <div
@@ -565,7 +567,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                 // }}
                                 containerStyles={`inline-flex justify-center rounded-xl mt-2 bg-blue w-full
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Post"
+                                tittle={t("Post")}
                               />
                             )}
                           </div>
@@ -588,10 +590,10 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               htmlFor="default-radio-1"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Public
+                              {t("Public")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Anyone can see
+                                {t("Anyone can see")}
                               </span>
                             </label>
                             <input
@@ -615,10 +617,10 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               htmlFor="default-radio-2"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Specific friends
+                              {t("Specific friends")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to some friends
+                                {t("Only show to some friends")}
                               </span>
                             </label>
                             <input
@@ -641,10 +643,10 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               htmlFor="default-radio-3"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Friend
+                              {t("Friends")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Your friends
+                                {t("Your friends")}
                               </span>
                             </label>
                             <input
@@ -667,10 +669,10 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               htmlFor="default-radio-4"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Only me
+                              {t("Only me")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to you
+                                {t("Only show to you")}
                               </span>
                             </label>
                             <input
@@ -697,7 +699,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                     py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -711,7 +713,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>
@@ -822,7 +824,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -836,7 +838,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>
@@ -880,7 +882,9 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                         placeholder="Write something about post"
                       />
                       <div className="flex justify-between px-4 pb-4">
-                        <div className=" text-ascent-2">Word: {counttext}</div>
+                        <div className=" text-ascent-2">
+                          {t("Word")}: {counttext}
+                        </div>
 
                         {loading && (
                           <div className="flex justify-center items-center">
@@ -919,7 +923,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 handleSendText(textsp);
                               }}
                             >
-                              Submit
+                              {t("Submit")}
                             </div>
                           </div>
                         )}
@@ -935,7 +939,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                           className="w-full h-52 bg-primary  border-none
             outline-none text-xl text-ascent-1 
             px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
-                          placeholder="Text"
+                          placeholder={t("Text")}
                         />
                       </div>
                     )}
@@ -954,7 +958,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               }}
                             >
                               <FaRegCopy />
-                              Copy
+                              {t("Copy")}
                             </div>
                           </div>
                         )}

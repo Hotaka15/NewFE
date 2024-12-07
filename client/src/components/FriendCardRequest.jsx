@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useracceptFriendRequest, usergetUserpInfo } from "../until/user";
+import { useTranslation } from "react-i18next";
 const FriendCardRequest = ({
   user,
   fetchFriendRequest,
@@ -16,6 +17,7 @@ const FriendCardRequest = ({
   // console.log(title);
   console.log(friend);
   const [userr, setUserr] = useState();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const acceptFriendRequest = async (id, status) => {
     try {
@@ -68,12 +70,12 @@ const FriendCardRequest = ({
           </span>
           <div className="w-4/5">
             <CustomButton
-              tittle="Accept"
+              tittle={t("Accept")}
               onClick={() => acceptFriendRequest(friend?._id, "accepted")}
               containerStyles="text-white bg-blue w-full rounded-lg inline-flex justify-center px-5 py-2"
             />
             <CustomButton
-              tittle="Delete"
+              tittle={t("Delete")}
               onClick={() => acceptFriendRequest(friend?._id, "rejected")}
               // onClick={handle}
               containerStyles="text-ascent-1 bg-ascent-3/10 w-full rounded-lg inline-flex justify-center px-5 py-2"

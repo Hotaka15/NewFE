@@ -78,11 +78,11 @@ import { IoMdClose } from "react-icons/io";
 import { checklink } from "../until/checkapi";
 import { io } from "socket.io-client";
 import { useSocket } from "../context/SocketContext";
+import { useTranslation } from "react-i18next";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
-
   // const [postlist, setPostlist] = useState();
-
+  const { t } = useTranslation();
   const { user, edit, notification, post } = useSelector((state) => state.user);
   const [friendRequest, setfriendRequest] = useState([]);
   const [notifications, setNotifications] = useState();
@@ -514,7 +514,7 @@ const Home = () => {
                   <div className="w-10 h-10 flex items-center justify-center">
                     <FaUserFriends size={30} />
                   </div>
-                  Friends
+                  {t("friends")}
                 </span>
               </Link>
 
@@ -582,7 +582,7 @@ const Home = () => {
                   <div className="w-10 h-10 flex items-center justify-center">
                     <FaFacebookMessenger size={25} />
                   </div>
-                  Messenger
+                  {t("messenger")}
                 </span>
               </Link>
             </div>
@@ -680,7 +680,9 @@ const Home = () => {
                     dispatch(UpdatePost(true));
                   }}
                 >
-                  <div className="px-8 text-lg">What's on your mind....</div>
+                  <div className="px-8 text-lg">
+                    {t("what's on your mind....")}
+                  </div>
                 </div>
               </div>
 
@@ -704,7 +706,7 @@ const Home = () => {
                     accept=".jpg, .png, .jpeg"
                   /> */}
                     <BiImages />
-                    <span>Image</span>
+                    <span>{t("image")}</span>
                   </label>
 
                   <label
@@ -786,7 +788,9 @@ const Home = () => {
               ))
             ) : (
               <div className="flex w-full h-full items-center justify-center">
-                <p className="text-lg text-ascent-2">No Post Available</p>
+                <p className="text-lg text-ascent-2">
+                  {t("no post pvailable")}
+                </p>
               </div>
             )}
             {posts && posts?.length > 0 && !loading && <Loading />}
@@ -800,7 +804,7 @@ const Home = () => {
             pb-2 "
               >
                 <span className="font-medium text-lg text-ascent-2">
-                  Friend Request
+                  {t("friend request")}
                 </span>
               </div>
 
@@ -830,13 +834,13 @@ const Home = () => {
                       </Link>
                       <div className="flex gap-1">
                         <CustomButton
-                          tittle="Accept"
+                          tittle={t("accept")}
                           onClick={() => acceptFriendRequest(_id, "accepted")}
                           containerStyles="bg-[#0444a4] text-xs text-white px-1.5
                     py-1 rounded-full"
                         />
                         <CustomButton
-                          tittle="Deny"
+                          tittle={t("deny")}
                           onClick={() => acceptFriendRequest(_id, "rejected")}
                           containerStyles="border border-[#666] text-xs
                     text-ascent-1 px-1.5 py-1 rounded-full"

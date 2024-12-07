@@ -15,9 +15,11 @@ import PieChartRpP from "./PieChartRpP";
 import BarRpP from "./BarRpP";
 import { useSelector } from "react-redux";
 import Reportlist from "./ReportList";
+import { useTranslation } from "react-i18next";
 
 const Chart = () => {
   const { user } = useSelector((state) => state?.user);
+  const { t } = useTranslation();
   const [resaon, SetReason] = useState([]);
   const [month, setMonth] = useState([]);
   const [bypost, setBypost] = useState([]);
@@ -84,7 +86,7 @@ const Chart = () => {
                 setFilter("year");
               }}
             >
-              Year
+              {t("Year")}
             </div>
             <div
               className={`${
@@ -95,7 +97,7 @@ const Chart = () => {
                 setFilter("month");
               }}
             >
-              Month
+              {t("Month")}
             </div>
             <div
               className={` text-ascent-2 cursor-pointer py-1 px-2 ${
@@ -106,7 +108,7 @@ const Chart = () => {
                 setFilter("day");
               }}
             >
-              Day
+              {t("Day")}
             </div>
           </div>
           <BarRpP month={month} />

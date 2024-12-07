@@ -16,7 +16,7 @@ import { setTheme } from "../redux/theme";
 import { Logout, Setnotification, UserLogin } from "../redux/userSlice";
 import { fetchNotifications, fetchPosts } from "../until";
 import Notification from "./Notification";
-import { CiSettings } from "react-icons/ci";
+import { MdOutlineGTranslate } from "react-icons/md";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { UpdateProfile } from "../redux/userSlice";
 import { GoSun } from "react-icons/go";
@@ -26,7 +26,7 @@ import { notifetchNotifications } from "../until/noti";
 import { postsearchfetchPosts } from "../until/post";
 import { IoLogOut } from "react-icons/io5";
 import { Oval } from "react-loader-spinner";
-
+import { useTranslation } from "react-i18next";
 import {
   searchUserName,
   userapiRequest,
@@ -38,6 +38,7 @@ const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
   const [notifications, setNotifications] = useState([]);
+  const { i18n } = useTranslation();
   const [profilecard, setProfilecard] = useState();
   const [ava, setAva] = useState();
   const [value, setvalue] = useState("");
@@ -62,6 +63,11 @@ const TopBar = ({ user, setKey }) => {
 
   const setAvatar = () => {
     setAva(!ava);
+  };
+
+  const changelanguage = () => {
+    const key = i18n.language == "vi" ? "en" : "vi";
+    i18n.changeLanguage(key);
   };
 
   console.log(user?.friends);
@@ -374,6 +380,14 @@ const TopBar = ({ user, setKey }) => {
           >
             {theme == "dark" ? <GoSun size={25} /> : <MdDarkMode size={25} />}
           </button>
+          {/* <div
+            className=" px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
+            onClick={() => {
+              changelanguage();
+            }}
+          >
+            <MdOutlineGTranslate size={25} />
+          </div> */}
           <div
             onClick={() => {
               navigate(`/chat`);

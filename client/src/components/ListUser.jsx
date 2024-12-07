@@ -6,9 +6,12 @@ import { apiRequest } from "../until";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import moment from "moment";
 import { admindeleteUser, admingetUserId } from "../until/admin";
+import { useTranslation } from "react-i18next";
+import { useTransition } from "react";
 
 const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
   // console.log(user);
 
   // {
@@ -62,12 +65,12 @@ const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
         />
         <div className="flex w-full gap-4">
           <div className="flex flex-col text-right">
-            <span className="text-ascent-2">Name: </span>
+            <span className="text-ascent-2">{t("Name")}: </span>
             <span className="text-ascent-2">Id: </span>
             <span className="text-ascent-2">Email: </span>
             {/* <span className="text-ascent-2">Join at: </span> */}
-            <span className="text-ascent-2">Verified: </span>
-            <span className="text-ascent-2">Activity: </span>
+            <span className="text-ascent-2">{t("Verified")}: </span>
+            <span className="text-ascent-2">(t{"Activity"}): </span>
           </div>
           <div className="w-full text-ascent-1 text-base flex flex-col items-start">
             <span className="max-h-6 overflow-hidden">
@@ -100,9 +103,9 @@ const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
               ) : (
                 <div className="">
                   {user?.statusActive === true ? (
-                    <div>Active</div>
+                    <div>{t("Active")}</div>
                   ) : (
-                    <div>Wait</div>
+                    <div>{t("Wait")}</div>
                   )}
                   {/* <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
                 <CiLock /> Lock
@@ -153,6 +156,7 @@ const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
 const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
   // const [info, setInfo] = useState();
   // setInfo(userInfo.friends);
+  const { t } = useTranslation();
   console.log(userInfo);
   // console.log(userInfo.friends);
   // console.log(user);
@@ -201,13 +205,13 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
           }
         />
         <div className="flex flex-col w-1/6 items-end">
-          <span className="text-ascent-2">First name: </span>
-          <span className="text-ascent-2">Last name: </span>
+          <span className="text-ascent-2">{t("First name")}: </span>
+          <span className="text-ascent-2">{t("Last name")}: </span>
           <span className="text-ascent-2">Id: </span>
           <span className="text-ascent-2">Email: </span>
           {/* <span className="text-ascent-2">Password: </span> */}
           {/* <span className="text-ascent-2">Join at: </span> */}
-          <span className="text-ascent-2">Verified: </span>
+          <span className="text-ascent-2">{t("Verified")}: </span>
         </div>
         <div className="w-full text-ascent-1 text-base flex flex-col items-start">
           <span className="max-h-6 overflow-hidden">
@@ -243,11 +247,11 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
           >
             {userInfo?.statusActive ? (
               <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
-                <CiLock /> Delete
+                <CiLock /> {t("Delete")}
               </div>
             ) : (
               <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
-                <CiUnlock /> Unlock
+                <CiUnlock /> {t("Unlock")}
               </div>
             )}
           </div>
@@ -256,7 +260,7 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
             onClick={setDetails}
             className="inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full"
           >
-            Back
+            {t("Back")}
           </button>
         </div>
       </div>
@@ -278,6 +282,7 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
 
 const History = ({ user, userInfo, handleHistory }) => {
   const [info, setInfo] = useState();
+  const { t } = useTranslation();
   const fetchHistory = async () => {
     // http://localhost:8800/admin/history-activity/:idUser
     const url = "/admin/history-activity/" + userInfo?._id;
@@ -308,16 +313,16 @@ const History = ({ user, userInfo, handleHistory }) => {
           onClick={handleHistory}
           className="w-full justify-center inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full"
         >
-          Back
+          {t("Back")}
         </button>
       </div>
       <div className="w-full flex justify-center">
         <table className="table-fixed w-full text-center border rounded-full">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Content</th>
+              <th>{t("Date")}</th>
+              <th>{t("Time")}</th>
+              <th>{t("Content")}</th>
             </tr>
           </thead>
           <tbody>
@@ -340,6 +345,7 @@ const History = ({ user, userInfo, handleHistory }) => {
 const ListUser = ({ listUser, fetchUser, setListUser }) => {
   const { user } = useSelector((state) => state.user);
   const [detail, setDetails] = useState(false);
+  const { t } = useTranslation();
   const [history, setHistory] = useState(false);
   const [userInfo, setUserInfo] = useState();
   const [search, setSearch] = useState("");
@@ -434,7 +440,7 @@ const ListUser = ({ listUser, fetchUser, setListUser }) => {
                       type={"submit"}
                       className={`inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full `}
                     >
-                      Search
+                      {t("Search")}
                     </button>
                   </form>
                 </div>

@@ -20,7 +20,7 @@ export const authapiRequest = async ({ url, token, data, method }) => {
     });
     console.log(result);
 
-    return result?.data;
+    return result;
   } catch (error) {
     const err = error.response.data;
 

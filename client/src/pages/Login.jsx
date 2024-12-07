@@ -34,10 +34,11 @@ const Login = () => {
         method: "POST",
       });
       console.log(res);
-      if (res?.message === "Đăng nhập thành công") {
+      if (res?.status === 200) {
         seterrMsg("");
         console.log(res);
-        const newData = { token: res?.token, ...res?.user };
+        const getres = res?.data;
+        const newData = { token: getres?.token, ...getres?.user };
         dispatch(UserLogin(newData));
         window.location.replace("/");
       } else {

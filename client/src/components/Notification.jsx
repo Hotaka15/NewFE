@@ -9,11 +9,13 @@ import { notideleteNotifications, notireadNotifications } from "../until/noti";
 import { TiDelete } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
 import { MdDelete } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 const Notification = ({ notify, fetchNotification }) => {
   console.log(notify);
   const [all, setAll] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   // const [bg, setBG] = useState();
   const [isAll, setIsAll] = useState(true);
@@ -58,7 +60,7 @@ const Notification = ({ notify, fetchNotification }) => {
         className="flex flex-col text-2xl text-ascent-1 
               mx-6 gap-2 mb-2"
       >
-        <span className="font-medium pb-4">Notifications</span>
+        <span className="font-medium pb-4">{t("Notifications")}</span>
         <div className="font-normal text-base pb-2">
           <span
             onClick={() => {
@@ -68,7 +70,7 @@ const Notification = ({ notify, fetchNotification }) => {
               isAll ? "bg-blue text-white" : "text-ascent-1"
             }`}
           >
-            All
+            {t("All")}
           </span>
           <span
             onClick={() => {
@@ -219,13 +221,13 @@ const Notification = ({ notify, fetchNotification }) => {
               }}
               className="w-full flex justify-center items-start text-blue"
             >
-              SHOW MORE
+              {t("SHOW MORE")}
             </div>
           )}
         </div>
       ) : (
         <div className="w-full flex flex-col gap-4 pb-2 justify-center items-center text-ascent-2">
-          No Notifications
+          {t("No Notifications")}
         </div>
       )}
     </div>

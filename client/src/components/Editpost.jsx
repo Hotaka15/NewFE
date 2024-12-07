@@ -17,6 +17,7 @@ import { NoProfile } from "../assets";
 import { postedit, postfetchPosts } from "../until/post";
 import UserTiitle from "./UserTiitle";
 import { usergetFriends } from "../until/user";
+import { useTranslation } from "react-i18next";
 const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const [picture, setPicuter] = useState(null);
   const [content, setContent] = useState(post.description);
   const [images, setImages] = useState([]);
+  const { t } = useTranslation();
   const [preview, setPreview] = useState(false);
   const [write, setWrite] = useState(true);
   const [audience, setAudience] = useState(false);
@@ -38,12 +40,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const [lists, setLists] = useState([]);
   const [option, setOption] = useState("public");
   console.log(post);
-  // console.log(review);
+
   const set = setPost;
-  // post?.image && setPreview(true);
 
   const handlebg = (e) => {
-    // console.log(e.target.files[0]);
     setFile(e.target.files[0]);
     const reader = new FileReader();
     reader.onload = () => {
@@ -61,16 +61,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
       : memo.push(id);
 
     setLists(memo);
-
-    // console.log(memo);
   };
-  // const fetchPost = async () => {
-  //   try {
-  //     await fetchPosts(user?.token, dispatch);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const {
     register,
@@ -81,7 +72,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
 
   const handlePreview = async (file) => {
     if (file) {
-      // console.log(file);
       await setFile(file);
       setPreview(true);
     }
@@ -100,20 +90,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const fetchPost = async () => {
     try {
       await postfetchPosts(user?.token, dispatch);
-      // setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({
-  //   mode: "onChange",
-  //   defaultValues: { ...user },
-  // });
 
   const handlePostSubmit = async (data) => {
     setPosting(true);
@@ -126,7 +106,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
       const uri = file ? await handFileUpload(file) : post?.image;
 
       const newData = uri ? { ...data, image: uri } : data;
-      // const data = newData;
 
       console.log(newData);
       console.log(user);
@@ -135,9 +114,9 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
 
       const res = await postedit(postId, user?.token, newData);
       console.log(res);
-      // setContent(res?.updatedPost?.description);
+
       set(res?.updatedPost);
-      // setReview(res?.updatedPost?.image ? res?.updatedPost?.image : null);
+
       if (res?.status === "failed") {
         seterrMsg(res);
       } else {
@@ -146,12 +125,11 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
         });
         setFile(null);
         seterrMsg("");
-        // await onEvent();
       }
       setPosting(false);
       setFile(null);
       setPreview(false);
-      // fetchPost();
+
       const close = onClick;
       close();
     } catch (error) {
@@ -163,7 +141,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const handleClose = () => {
     dispatch(UpdatePost(false));
   };
-  //delete
   const handleSelect = (e) => {
     setPicuter(e.target.files[0]);
   };
@@ -198,7 +175,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                     htmlFor="name"
                     className="block w-full  text-xl text-ascent-1 text-center font-bold"
                   >
-                    Edit Post
+                    {t("Edit Post")}
                   </label>
 
                   <button className="text-ascent-1" onClick={onClick}>
@@ -286,7 +263,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                     accept=".jpg, .png, .jpeg"
                                   />
                                   <CiImageOn />
-                                  Image
+                                  {t("Image")}
                                 </label>
                               </div>
                             </div>
@@ -329,10 +306,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               htmlFor="default-radio-1"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Public
+                              {t("Public")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Anyone can see
+                                {t("Anyone can see")}
                               </span>
                             </label>
                             <input
@@ -355,10 +332,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               htmlFor="default-radio-2"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Specific friends
+                              {t("Specific friends")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to some friends
+                                {t("Only show to some friends")}
                               </span>
                             </label>
                             <input
@@ -381,10 +358,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               htmlFor="default-radio-3"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Friend
+                              {t("Friends")}
                               <br />
                               <span className="text-ascent-3 text-base">
-                                Your friends
+                                {t("Your friends")}
                               </span>
                             </label>
                             <input
@@ -406,10 +383,10 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                               htmlFor="default-radio-4"
                               className="ms-2 text-gray-900 dark:text-gray-300 font-medium"
                             >
-                              Only me
+                              {t("Only me")}
                               <br />
                               <span className="text-ascent-2 text-base">
-                                Only show to you
+                                {t("Only show to you")}
                               </span>
                             </label>
                             <input
@@ -436,7 +413,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                     py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -450,7 +427,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>
@@ -560,7 +537,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                             }}
                             containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
-                            tittle="Back"
+                            tittle={t("Back")}
                           />
                           <div className="w-full h-full flex-col-reverse gap-80">
                             <div className="w-full flex justify-end">
@@ -574,7 +551,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Done"
+                                tittle={t("Done")}
                               />
                             </div>
                           </div>

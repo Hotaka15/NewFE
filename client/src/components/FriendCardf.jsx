@@ -4,9 +4,11 @@ import { NoProfile } from "../assets";
 import { Login } from "../pages";
 import { usergetUserInfo } from "../until/user";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const FriendCardf = ({ friend }) => {
   const { user } = useSelector((state) => state.user);
+  const { t } = useTranslation();
   const [info, setInfo] = useState();
   console.log(friend);
   const getInfor = async () => {

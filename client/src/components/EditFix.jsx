@@ -10,7 +10,9 @@ import { apiRequest, handFileUpload } from "../until";
 import { NoProfile } from "../assets";
 import { userapiRequest } from "../until/user";
 import { FaFileImage } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 const EditFix = () => {
+  const { t } = useTranslation();
   const { user, edit } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [errMsg, seterrMsg] = useState("");
@@ -268,7 +270,7 @@ const EditFix = () => {
                 htmlFor="name"
                 className="block text-xl text-ascent-1 font-bold w-full text-center"
               >
-                Edit Profile
+                {t("edit profile")}
               </label>
 
               <button className="text-ascent-1" onClick={handleClose}>
@@ -284,38 +286,9 @@ const EditFix = () => {
                 }  `}
                 onClick={() => setEditor(1)}
               >
-                Profile
+                {t("Profile")}
               </span>
-              {/* <span
-                className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
-                  editor == 2
-                    ? "bg-blue text-ascent-1"
-                    : "text-ascent-2 outline outline-1"
-                }  `}
-                onClick={() => setEditor(2)}
-              >
-                Social
-              </span>
-              <span
-                className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer   ${
-                  editor == 3
-                    ? "bg-blue text-ascent-1"
-                    : "text-ascent-2 outline outline-1"
-                }  `}
-                onClick={() => setEditor(3)}
-              >
-                Expertise
-              </span>
-              <span
-                className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
-                  editor == 4
-                    ? "bg-blue text-ascent-1"
-                    : "text-ascent-2 outline outline-1"
-                }  `}
-                onClick={() => setEditor(4)}
-              >
-                Experience
-              </span> */}
+
               <span
                 className={` px-2 w-full text-center py-2 rounded-2xl hover:cursor-pointer  ${
                   editor == 5
@@ -324,7 +297,7 @@ const EditFix = () => {
                 }  `}
                 onClick={() => setEditor(5)}
               >
-                Password
+                {t("Password")}
               </span>
             </div>
             {editor == 1 ? (
@@ -334,42 +307,44 @@ const EditFix = () => {
               >
                 <div className="flex gap-4">
                   <TextInput
-                    label="First Name"
-                    placeholder="First Name"
+                    label={t("First Name")}
+                    placeholder={t("First Name")}
                     type="text"
                     styles="w-full"
                     register={register("firstName", {
-                      required: "First name is required",
+                      required: t("First name is required"),
                     })}
                     error={errors.firstName ? errors.firstName?.message : ""}
                   />
                   <TextInput
-                    label="Last Name"
-                    placeholder="Last Name"
+                    label={t("Last Name")}
+                    placeholder={t("Last Name")}
                     type="text"
                     styles="w-full"
                     register={register("lastName", {
-                      required: "Last name is required!",
+                      required: t("Last name is required!"),
                     })}
                     error={errors.lastName ? errors.lastName?.message : ""}
                   />
                 </div>
                 <div className="flex gap-4">
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Gender</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Gender")}
+                    </p>
                     <select
                       {...register("gender")}
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
                     >
                       <option selected value="male">
-                        Male
+                        {t("Male")}
                       </option>
-                      <option value="female">Female</option>
-                      <option value="other">Orther</option>
+                      <option value="female">{t("Female")}</option>
+                      <option value="other">{t("Orther")}</option>
                     </select>
                   </div>
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>{t("Date")}</p>
                     <input
                       {...register("birthDate")}
                       type="date"
@@ -387,7 +362,9 @@ const EditFix = () => {
 
                 <div className="flex gap-4 w-full items-center justify-center">
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Location</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Location")}
+                    </p>
                     <select
                       {...register("location")}
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
@@ -401,24 +378,26 @@ const EditFix = () => {
                   </div>
 
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Address")}
+                    </p>
                     <input
                       {...register("address")}
                       type="text"
                       onChange={(e) => {}}
-                      placeholder="Address"
+                      placeholder={t("Address")}
                       className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
                     />
                   </div>
                 </div>
 
                 <TextInput
-                  label="Profession"
-                  placeholder="Profession"
+                  label={t("Profession")}
+                  placeholder={t("Profession")}
                   type="text"
                   styles="w-full"
                   register={register("profession", {
-                    required: "Profession is required!",
+                    required: t("Profession is required!"),
                   })}
                   error={errors.profession ? errors.profession?.message : ""}
                 />
@@ -501,7 +480,7 @@ const EditFix = () => {
             ) : editor == 5 ? (
               <div className="bg-primary w-ful px-6 py-8 shadow-md rounded-lg">
                 <p className="text-ascent-1 text-lg font-semibold">
-                  Change Password
+                  {t("Change Password")}
                 </p>
                 {/* Enter email address used during registration */}
                 {/* <span className="text-sm text-ascent-2">
@@ -516,19 +495,19 @@ const EditFix = () => {
                   <div className="w-full flex flex-col lg:flex-col gap-1 md:gap-2">
                     <TextInput
                       name="password"
-                      label="Password"
-                      placeholder="Password"
+                      label={t("Password")}
+                      placeholder={t("Password")}
                       type="password"
                       styles="w-full"
                       register={register("password", {
-                        required: "Password is required!",
+                        required: t("Password is required!"),
                       })}
                       error={errors.password ? errors.password?.message : ""}
                     />
 
                     <TextInput
-                      label="Confirm Password"
-                      placeholder="Password"
+                      label={t("Confirm Password")}
+                      placeholder={t("Confirm Password")}
                       type="password"
                       styles="w-full"
                       register={register("cPassword", {
@@ -536,7 +515,7 @@ const EditFix = () => {
                           const { password } = getValues();
 
                           if (password != value) {
-                            return "Passwords do no match";
+                            return t("Passwords do no match");
                           }
                         },
                       })}
@@ -569,7 +548,7 @@ const EditFix = () => {
                       containerStyles={`inline-flex justify-center
                rounded-md bg-blue px-8 py-3 text-sm font-medium 
                text-white outline-non`}
-                      tittle="Submit"
+                      tittle={t("Submit")}
                     />
                   )}
                 </form>

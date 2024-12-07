@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { searchUserName, userfriendSuggest } from "../until/user";
 import { NoProfile } from "../assets";
 import { createGroup } from "../until/group";
+import { useTranslation } from "react-i18next";
 const CreateGroup = ({ fetchList, setCreatg }) => {
   const { user } = useSelector((state) => state.user);
   const [listsuggest, setListsuggest] = useState([]);
@@ -18,6 +19,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
   const [name, setName] = useState();
   const [search, setSearch] = useState("");
   const [description, setDescription] = useState("");
+  const { t } = useTranslation();
   const fetchSuggestFriends = async () => {
     try {
       const res = await userfriendSuggest(user?.token, user);
@@ -111,7 +113,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
         <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-[60%] rounded-2xl">
           <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
             <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-              Create Group
+              {t("Create Group")}
               <div
                 className="text-ascent-1 h-full flex items-center cursor-pointer"
                 onClick={() => {
@@ -124,29 +126,29 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
           </div>
 
           <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">Name </span>
+            <span className="text-ascent-1">{t("Name")} </span>
             <input
               type="text"
               onChange={(e) => {
                 setName(e.target.value);
               }}
               className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Name"
+              placeholder={t("Name")}
             />
           </div>
           <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">Description </span>
+            <span className="text-ascent-1">{t("Description")} </span>
             <input
               type="text"
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
               className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Description"
+              placeholder={t("Description")}
             />
           </div>
           <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1">Member</span>
+            <span className="text-ascent-1">{t("Member")}</span>
 
             <input
               type="text"
@@ -154,7 +156,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
                 setSearch(e.target.value);
               }}
               className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Search"
+              placeholder={t("Search")}
             />
           </div>
 
