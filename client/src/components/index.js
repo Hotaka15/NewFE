@@ -35,6 +35,7 @@ import LinkPr from "./LinkPr";
 import Managergroup from "./Managergroup";
 import AddUserCard from "./AddUserCard";
 import Hobby from "./Hobby";
+import Rowtb from "./Rowtb";
 export {
   TextInput,
   Loading,
@@ -73,4 +74,5 @@ export {
   Managergroup,
   AddUserCard,
   Hobby,
+  Rowtb,
 };

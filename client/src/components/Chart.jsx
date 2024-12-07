@@ -24,16 +24,14 @@ const Chart = () => {
   const [filter, setFilter] = useState("month");
   const fetchdashboard = async () => {
     const byreason = await reportsbyreasonDashboard();
-    console.log(byreason);
+
     SetReason(byreason);
     const bypost = await reportsbypostDashboard();
     setBypost(bypost);
-    console.log(bypost);
   };
   const handlefill = async (filter) => {
     const report = await dayreportDashboard(filter);
     setMonth(report);
-    console.log(report);
   };
   useEffect(() => {
     fetchdashboard();
@@ -74,7 +72,7 @@ const Chart = () => {
           </div>
         </div>
       </div> */}
-      <div className="w-full flex gap-4 mb-4">
+      <div className="w-full h-1/2 flex gap-4 mb-4">
         <div className="relative w-full ">
           <div className="absolute right-1 top-1 bg-primary flex   rounded-lg">
             <div

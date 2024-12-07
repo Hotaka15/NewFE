@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminaprrovePostreport, admingetPostreport } from "../until/admin";
 import Loading from "./Loading";
+import { postapiRequest } from "../until/post";
+import { usergetUserpInfo } from "../until/user";
+import Rowtb from "./Rowtb";
 const Reportlist = ({ user, sl }) => {
   const nevigate = useNavigate();
   const id = "67276cedbdf484bf88585a44";
@@ -15,7 +18,7 @@ const Reportlist = ({ user, sl }) => {
   //   { id: "67010eaa85310d03039570f4", count: 1, reason: "Spam" },
   // ]);
   const [listreport, setListreport] = useState([]);
-  console.log(listreport);
+  // console.log(listreport);
   // const handlereport = (idreport) => {
   //   console.log(idreport);
 
@@ -44,10 +47,59 @@ const Reportlist = ({ user, sl }) => {
     console.log(user);
 
     const res = await admingetPostreport(user?.token);
+    const getdetal = await getDetail(res);
+    console.log(getdetal);
+
     console.log(res);
-    setListreport(res);
+    setListreport(getdetal);
     setLoading(false);
   };
+
+  const getDetail = async (res) => {
+    const get = await Promise.all(
+      res.map(async (resp) => {
+        const getPostDetail = await getPost(resp?.postId);
+        console.log(getPostDetail);
+
+        return {
+          ...resp,
+          ...getPostDetail,
+        };
+      })
+    );
+    return get;
+  };
+
+  const getUser = async (userId) => {
+    try {
+      const res = await usergetUserpInfo(user?.token, userId);
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getPost = async (_id) => {
+    try {
+      const res = await postapiRequest({
+        url: `/${_id}`,
+        token: user?.token,
+        method: "GET",
+      });
+      console.log(res);
+      const userpost = await getUser(res?.userId);
+
+      return {
+        userId: res?.userId,
+        createdAt: res?.createdAt?.split("T")[0],
+        username: userpost?.firstName,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchReport();
   }, []);
@@ -63,7 +115,7 @@ const Reportlist = ({ user, sl }) => {
           <thead className="text-ascent-1">
             <tr>
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4 ">
-                id Post
+                Id
               </th>
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
                 Report count
@@ -99,44 +151,57 @@ const Reportlist = ({ user, sl }) => {
           </tr> */}
             {sl &&
               listreport &&
-              listreport.slice(0, 5).map((report) => (
-                <tr>
-                  <th
-                    onClick={() => {
-                      nevigate(`/post/${report.postId}`);
-                    }}
-                    className="border border-[#66666645] py-2 px-3 underline underline-offset-2 cursor-pointer"
-                  >
-                    {report.postId}
-                  </th>
-                  <th className="border border-[#66666645] py-2 px-3">
-                    {report.reportCount}
-                  </th>
-                  <th className="border border-[#66666645] py-2 px-3 text-wrap">
-                    {report && report.reasons.map((rp) => rp + ", ")}
-                  </th>
-                  <th className="select-none  border border-[#66666645] py-2 px-3">
-                    <div className="flex justify-center gap-2">
-                      <div
-                        onClick={() => {
-                          handlereportapprove(report.postId);
-                        }}
-                        className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
-                      >
-                        Approve
+              listreport.slice(0, 4).map((report) => {
+                // const res = await getPost(report.postId);
+                // console.log(res);
+
+                return (
+                  // <Rowtb
+                  //   report={report}
+                  //   user={user}
+                  //   fetchReport={fetchReport}
+                  // />
+                  <tr key={report.postId}>
+                    <th
+                      onClick={() => {
+                        nevigate(`/post/${report.postId}`);
+                      }}
+                      className="border border-[#66666645] py-2 px-3  cursor-pointer w-1/5"
+                      // underline underline-offset-2
+                    >
+                      {/* {report.postId}  */}
+                      {report.username} <br />
+                      Create At: {report.createdAt}
+                    </th>
+                    <th className="border border-[#66666645] py-2 px-3 w-1/12">
+                      {report.reportCount}
+                    </th>
+                    <th className="border border-[#66666645] py-2 px-3 text-wrap">
+                      {report && report.reasons.map((rp) => rp + ", ")}
+                    </th>
+                    <th className="select-none  border border-[#66666645] py-2 px-3">
+                      <div className="flex justify-center gap-2">
+                        <div
+                          onClick={() => {
+                            handlereportapprove(report.postId);
+                          }}
+                          className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
+                        >
+                          Approve
+                        </div>
+                        <div
+                          onClick={() => {
+                            handlereportdelete(report.postId);
+                          }}
+                          className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
+                        >
+                          Delete
+                        </div>
                       </div>
-                      <div
-                        onClick={() => {
-                          handlereportdelete(report.postId);
-                        }}
-                        className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
-                      >
-                        Delete
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-              ))}
+                    </th>
+                  </tr>
+                );
+              })}
             {!sl &&
               listreport &&
               listreport.map((report) => (
@@ -145,14 +210,16 @@ const Reportlist = ({ user, sl }) => {
                     onClick={() => {
                       nevigate(`/post/${report.postId}`);
                     }}
-                    className="border border-[#66666645] py-2 px-3 underline underline-offset-2 cursor-pointer"
+                    className="border border-[#66666645] py-2 px-3 underline underline-offset-2 cursor-pointer w-1/5"
                   >
-                    {report.postId}
+                    {/* {report.postId} */}
+                    {report.username} <br />
+                    Create At: {report.createdAt}
                   </th>
-                  <th className="border border-[#66666645] py-2 px-3">
+                  <th className="border border-[#66666645] py-2 px-3 w-1/12">
                     {report.reportCount}
                   </th>
-                  <th className="border border-[#66666645] py-2 px-3 text-wrap">
+                  <th className="border border-[#66666645] py-2 px-3 text-wrap  ">
                     {report && report.reasons.map((rp) => rp + ", ")}
                   </th>
                   <th className="select-none  border border-[#66666645] py-2 px-3">

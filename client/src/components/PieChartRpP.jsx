@@ -57,7 +57,7 @@ export default function PieChartRpP({ resaon }) {
       totalReports: item.totalReports,
     }));
   return (
-    <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
+    <div className="w-[20rem] h-[25rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
       <strong className="text-gray-700 font-medium text-ascent-1">
         Activities
       </strong>
