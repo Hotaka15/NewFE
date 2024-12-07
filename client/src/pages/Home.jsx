@@ -77,6 +77,7 @@ import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { checklink } from "../until/checkapi";
 import { io } from "socket.io-client";
+import { useSocket } from "../context/SocketContext";
 const Home = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -102,7 +103,8 @@ const Home = () => {
   const [timeoutId, setTimeoutId] = useState(null);
   const timeoutIdRef = useRef(null);
   const [isSearch, setIsSearch] = useState(false);
-  const [socket, setSocket] = useState();
+  const socket = useSocket();
+  // const [socket, setSocket] = useState();
   const timeoutIds = {};
   let pages = 1;
   const {
@@ -459,23 +461,23 @@ const Home = () => {
     fetchSuggestFriends();
   }, []);
 
-  useEffect(() => {
-    const newSocket = io("ws://localhost:3005", {
-      reconnection: true,
-      transports: ["websocket"],
-    });
+  // useEffect(() => {
+  //   const newSocket = io("ws://localhost:3005", {
+  //     reconnection: true,
+  //     transports: ["websocket"],
+  //   });
 
-    setSocket(newSocket);
+  //   setSocket(newSocket);
 
-    let userId = user?._id;
-    newSocket.emit("userOnline", { userId });
+  //   let userId = user?._id;
+  //   newSocket.emit("userOnline", { userId });
 
-    return () => {
-      let userId = user?._id;
-      newSocket.emit("userOffline", { userId });
-      newSocket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     let userId = user?._id;
+  //     newSocket.emit("userOffline", { userId });
+  //     newSocket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <div>

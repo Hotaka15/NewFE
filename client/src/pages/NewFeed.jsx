@@ -60,6 +60,7 @@ import {
 import { debounce } from "lodash";
 import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 import { io } from "socket.io-client";
+import { useSocket } from "../context/SocketContext";
 const NewFeed = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -81,7 +82,7 @@ const NewFeed = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
-  const [socket, setSocket] = useState();
+  const socket = useSocket();
   const videoRef = useRef(null);
   const timeoutIds = {};
   // console.log(user);
@@ -404,24 +405,6 @@ const NewFeed = () => {
 
     // fetchNotification();
     fetchSuggestFriends();
-  }, []);
-
-  useEffect(() => {
-    const newSocket = io("ws://localhost:3005", {
-      reconnection: true,
-      transports: ["websocket"],
-    });
-
-    setSocket(newSocket);
-
-    let userId = user?._id;
-    newSocket.emit("userOnline", { userId });
-
-    return () => {
-      let userId = user?._id;
-      newSocket.emit("userOffline", { userId });
-      newSocket.disconnect();
-    };
   }, []);
 
   return (

@@ -67,6 +67,7 @@ import ChatUser from "../components/ChatUser";
 import AddNewMember from "../components/AddNewMember";
 import FriendCardf from "../components/FriendCardf";
 import FriendCardfChat from "../components/FriendCardfChat";
+import { useSocket } from "../context/SocketContext";
 
 const RangeChat = forwardRef(
   (
@@ -1263,7 +1264,7 @@ const Chat = () => {
   const [block, setBlock] = useState(false);
 
   const [listsuggest, setListsuggest] = useState();
-  const [socket, setSocket] = useState();
+
   const [listchat, setListchat] = useState([]);
   const [listgroup, setListgroup] = useState([]);
   const [addu, setAddu] = useState(false);
@@ -1278,6 +1279,7 @@ const Chat = () => {
   const [member, setMember] = useState([]);
   const [listfriend, setListfriend] = useState(false);
   const [type, setType] = useState("inbox");
+  const socket = useSocket();
   const userChat = (user) => {
     setUserinfo(user);
   };
@@ -1401,28 +1403,11 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const newSocket = io("ws://localhost:3005", {
-      reconnection: true,
-      transports: ["websocket"],
-    });
-    setSocket(newSocket);
     let userId = id_1;
-    newSocket.emit("userOnline", { userId });
-
     fetchList();
     fetchSuggestFriends();
 
-    // newSocket.on("receiveMessage", (data) => {
-    //   console.log(data);
-    //   fetchList();
-    //   fetchchatforchild();
-
-    // });
-
-    return () => {
-      newSocket.emit("userOffline", { id_1 });
-      newSocket.disconnect();
-    };
+    return () => {};
   }, []);
   // useEffect(() => {
   //   console.log(idroom);
