@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CustomButton, Loading, TextInput } from "../components";
 import { apiRequest } from "../until";
+import { useTranslation } from "react-i18next";
 
 const ResetPassword = () => {
   const [errMsg, seterrMsg] = useState("");
   const [isSubmitting, setisSubmitting] = useState(false);
-
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -41,10 +42,12 @@ const ResetPassword = () => {
     justify-center p-6"
     >
       <div className="bg-primary w-ful md:w-1/3 2xl:w-1/4 px-6 py-8 shadow-md rounded-lg">
-        <p className="text-ascent-1 text-lg font-semibold">Email Address</p>
+        <p className="text-ascent-1 text-lg font-semibold">
+          {t("Email Address")}
+        </p>
 
         <span className="text-sm text-ascent-2">
-          Enter email address used during registration
+          {t("Enter email address used during registration")}
         </span>
 
         <form
@@ -56,7 +59,7 @@ const ResetPassword = () => {
             placeholder="email@example.com"
             type="email"
             register={register("email", {
-              required: "Email Address is required!",
+              required: t("Email Address is required!"),
             })}
             styles="w-full rounded-lg"
             labelStyles="ml-2"
@@ -83,7 +86,7 @@ const ResetPassword = () => {
               containerStyles={`inline-flex justify-center
                rounded-md bg-blue px-8 py-3 text-sm font-medium 
                text-white outline-non`}
-              tittle="Submit"
+              tittle={t("Submit")}
             />
           )}
         </form>

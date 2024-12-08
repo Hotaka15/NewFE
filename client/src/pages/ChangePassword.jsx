@@ -5,12 +5,14 @@ import { CustomButton, Loading, TextInput } from "../components";
 import { apiRequest, checkresetpassword } from "../until";
 import { redirect, useParams } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
+import { useTranslation } from "react-i18next";
 
 const ChangePassword = () => {
   const [errMsg, seterrMsg] = useState("");
   const [checkpassword, setcheckpassword] = useState("");
   const [isSubmitting, setisSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
   const [status, setStatus] = useState(false);
   const {
     register,
@@ -100,11 +102,11 @@ justify-center p-6"
             >
               <div className="bg-primary w-ful md:w-1/3 2xl:w-1/4 px-6 py-8 shadow-md rounded-lg">
                 <p className="text-ascent-1 text-lg font-semibold">
-                  Reset Password
+                  {t("Reset Password")}
                 </p>
 
                 <span className="text-sm text-ascent-2">
-                  Enter the new password
+                  {t("Enter the new password")}
                 </span>
 
                 <form
@@ -113,10 +115,10 @@ justify-center p-6"
                 >
                   <TextInput
                     name="pass"
-                    placeholder="New Password"
+                    placeholder={t("New Password")}
                     type="password"
                     register={register("pass", {
-                      required: "Required!",
+                      required: t("Required!"),
                     })}
                     styles="w-full rounded-lg"
                     labelStyles="ml-2"
@@ -137,10 +139,10 @@ justify-center p-6"
 
                   <TextInput
                     name="repass"
-                    placeholder="Enter the password"
+                    placeholder={t("Enter the password")}
                     type="password"
                     register={register("repass", {
-                      required: "Required!",
+                      required: t("Required!"),
                     })}
                     styles="w-full rounded-lg "
                     labelStyles="ml-2"
@@ -180,7 +182,7 @@ justify-center p-6"
                       containerStyles={`inline-flex justify-center
                  rounded-md bg-blue px-8 py-3 text-sm font-medium 
                  text-white outline-non`}
-                      tittle="Submit"
+                      tittle={t("Submit")}
                     />
                   )}
                 </form>

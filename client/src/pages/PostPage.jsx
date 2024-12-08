@@ -17,6 +17,7 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 
 const getPostComments = async (id) => {
   try {
@@ -34,7 +35,7 @@ const getPostComments = async (id) => {
 const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
   //console.log(user, id, replyAt, getComments);
   console.log(id);
-
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const {
@@ -98,9 +99,11 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
         <TextInput
           name="comment"
           styles="w-full rounded-full py-3"
-          placeholder={replyAt ? `Reply @${replyAt}` : "Comment this post"}
+          placeholder={
+            replyAt ? `${t(Reply)} @${"replyAt"}` : t("Comment this post")
+          }
           register={register("comment", {
-            required: "Comment can't be empty",
+            required: t("Comment can't be empty"),
           })}
           error={errors.comment ? errors.comment.message : ""}
         />
@@ -123,7 +126,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
           <Loading />
         ) : (
           <CustomButton
-            tittle={"Submit"}
+            tittle={t("Submit")}
             type="submit"
             containerStyles="bg-[#0444a4] text-white py-1 px-3 rounded-full font-semibold text-sm"
           />
@@ -135,7 +138,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
 
 const ReplyCard = ({ reply, user, handleLike }) => {
   console.log(reply);
-
+  const { t } = useTranslation();
   const [userP, setUserP] = useState();
   const getUser = async () => {
     try {
@@ -187,7 +190,7 @@ const ReplyCard = ({ reply, user, handleLike }) => {
             ) : (
               <BiLike size={20} />
             )}
-            {reply?.likes?.length} Likes
+            {reply?.likes?.length} {t("Likes")}
           </p>
         </div>
       </div>
@@ -203,6 +206,7 @@ const PostPage = () => {
   const [showReply, setshowReply] = useState(0);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   const [replyComments, setReplyComments] = useState(0);
   const [showComments, setShowComments] = useState(0);
   const [reviewcheck, setReviewcheck] = useState(false);
@@ -366,7 +370,7 @@ lg:rounded-lg h-screen overflow-hidden"
                     ) : (
                       <BiLike size={20} />
                     )}
-                    {post?.likes?.length} Likes
+                    {post?.likes?.length} {t("Likes")}
                   </p>
 
                   {/* <p
@@ -388,7 +392,7 @@ lg:rounded-lg h-screen overflow-hidden"
                         onClick={() => handleDeletePost(post?._id)}
                       >
                         <MdOutlineDeleteOutline size={20} />
-                        <span>Delete</span>
+                        <span>{t("Delete")}</span>
                       </div>
                     </Link>
                   )}
@@ -450,13 +454,13 @@ lg:rounded-lg h-screen overflow-hidden"
                               ) : (
                                 <BiLike size={20} />
                               )}
-                              {comment?.likes?.length} Likes
+                              {comment?.likes?.length} {t("Likes")}
                             </p>
                             <span
                               onClick={() => setReplyComments(comment?._id)}
                               className="text-blue cursor-pointer"
                             >
-                              Reply
+                              {t("Reply")}
                             </span>
                           </div>
 
@@ -484,7 +488,7 @@ lg:rounded-lg h-screen overflow-hidden"
                                 )
                               }
                             >
-                              Show Replies ({comment?.replies?.length})
+                              {t("Show Replies")} ({comment?.replies?.length})
                             </p>
                           )}
                           {showReply === comment?.replies?._id &&
@@ -508,7 +512,7 @@ lg:rounded-lg h-screen overflow-hidden"
                     ))
                   ) : (
                     <span className="flex text-sm py-4 text-ascent-2 text-center">
-                      No comments, be first to comment
+                      {t("No comments, be first to comment")}
                     </span>
                   )}
                 </div>

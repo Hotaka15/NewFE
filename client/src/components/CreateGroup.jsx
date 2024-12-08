@@ -201,7 +201,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
 
           <div className="w-full flex justify-end">
             <CustomButton
-              tittle="Submit"
+              tittle={t("Submit")}
               containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
               onClick={creatGrp}
             />

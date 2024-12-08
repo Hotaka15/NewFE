@@ -15,9 +15,11 @@ import {
   monthregisterDashboard,
   userDashboard,
 } from "../until/dashboard";
+import { useTranslation } from "react-i18next";
 const UserChart = () => {
   const [genders, setGenders] = useState([]);
   const [monthlys, setMonthlys] = useState([]);
+  const { t } = useTranslation();
   const [total, setTotal] = useState([]);
   const [filter, setFilter] = useState("month");
   const fetchuserdashboard = async () => {
@@ -87,7 +89,7 @@ const UserChart = () => {
                 setFilter("month");
               }}
             >
-              Month
+              {t("Month")}
             </div>
             <div
               className={` text-ascent-2 cursor-pointer py-1 px-2 ${
@@ -98,7 +100,7 @@ const UserChart = () => {
                 setFilter("week");
               }}
             >
-              Week
+              {t("Week")}
             </div>
             <div
               className={` text-ascent-2 cursor-pointer py-1 px-2  ${
@@ -109,7 +111,7 @@ const UserChart = () => {
                 setFilter("day");
               }}
             >
-              Day
+              {t("Day")}
             </div>
           </div>
           <BarRp monthly={monthlys} />

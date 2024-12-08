@@ -33,6 +33,8 @@ import VideoPlayer from "./VideoPlayer";
 import { generateImg, generatetext } from "../until/suggestfr";
 import { FaRegCopy } from "react-icons/fa";
 import { botsuggestRequest } from "../until/bot";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 const Post = ({ setPage }) => {
   const { user, post } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -63,6 +65,7 @@ const Post = ({ setPage }) => {
   const [resText, setResText] = useState("");
   const [loading, setLoading] = useState(false);
   const [resImg, setResImg] = useState(null);
+  const { t } = useTranslation();
   const handleTextsp = (e) => {
     console.log(e.target.value);
 
@@ -369,7 +372,7 @@ const Post = ({ setPage }) => {
                     htmlFor="name"
                     className="block w-full  text-xl text-ascent-1 text-center font-bold"
                   >
-                    Create Post
+                    {t("Create Post")}
                   </label>
 
                   <button className="text-ascent-1" onClick={handleClose}>
@@ -433,7 +436,7 @@ const Post = ({ setPage }) => {
             outline-none text-xl text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
                             value={content}
-                            placeholder="Write something about post"
+                            placeholder={t("Write something about post")}
                             onChange={(ev) => {
                               setContent(ev.target.value);
                             }}
@@ -446,7 +449,7 @@ const Post = ({ setPage }) => {
                               >
                                 <img
                                   src={review}
-                                  alt="Something wrong"
+                                  alt={t("Something wrong")}
                                   className="max-h-56"
                                 />
                                 <div
@@ -487,7 +490,7 @@ const Post = ({ setPage }) => {
                                   <div className="">Tags</div>
                                 </div> */}
                               <div className="text-ascent-2 ">
-                                Add to your post
+                                {t("Add to your post")}
                               </div>
                               <div className="flex gap-2 items-center">
                                 <div
@@ -564,7 +567,7 @@ const Post = ({ setPage }) => {
                                 // }}
                                 containerStyles={`inline-flex justify-center rounded-xl mt-2 bg-blue w-full
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Post"
+                                tittle={t("Post")}
                               />
                             )}
                           </div>
@@ -729,7 +732,7 @@ const Post = ({ setPage }) => {
                           <input
                             type="text"
                             className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
-                            placeholder="Search"
+                            placeholder={t("Search")}
                           />
                           <div className="w-full flex items-center justify-center">
                             <div className="flex flex-wrap gap-2 justify-center mb-2 items-center">

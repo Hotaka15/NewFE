@@ -24,6 +24,7 @@ import {
 } from "../until/post";
 import { io } from "socket.io-client";
 import { handFileUpload } from "../until";
+import { useTranslation } from "react-i18next";
 
 const ProfileFix = () => {
   const { id } = useParams();
@@ -35,7 +36,7 @@ const ProfileFix = () => {
   const [userInfor, setUserInfor] = useState(user);
   const [banner, setBanner] = useState(user?.profileUrl ?? NoProfile);
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
     await getPosts(userInfor);
@@ -138,7 +139,7 @@ const ProfileFix = () => {
                 className="object-cover h-full w-full
               overflow-hidden rounded-xl z-0"
               />
-              {id == user?._id && (
+              {/* {id == user?._id && (
                 <label className="absolute right-4 bottom-2 z-30 bg-primary/50 px-6 py-2 rounded-xl border border-[#66666690] cursor-pointer">
                   Edit
                   <input
@@ -151,7 +152,7 @@ const ProfileFix = () => {
                     }}
                   />
                 </label>
-              )}
+              )} */}
             </div>
 
             <div
@@ -180,10 +181,10 @@ const ProfileFix = () => {
               </div>
               <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2 border-t border-[#66666645]">
                 <div className=" px-4 border-b border-blue h-full flex justify-center items-center rounded-lg text-blue font-medium">
-                  Post
+                  {t("Post")}
                 </div>
                 <div className="text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg">
-                  Friends
+                  {t("Friends")}
                 </div>
               </div>
 
@@ -192,7 +193,7 @@ const ProfileFix = () => {
                   onClick={() => handleedit()}
                   className="absolute right-4 bottom-2 z-30 bg-primary px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
                 >
-                  Edit Profile
+                  {t("Edit Profile")}
                 </div>
               ) : (
                 <div className="absolute right-4 bottom-2 flex gap-4">
@@ -203,7 +204,7 @@ const ProfileFix = () => {
                       }}
                       className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
                     >
-                      Add Friend
+                      {t("Add Friend")}
                     </div>
                   )}
                   <Link to={`/chat/${id}`}>
@@ -252,7 +253,7 @@ const ProfileFix = () => {
                   ) : (
                     <div className="flex w-full h-full items-center justify-center">
                       <p className="text-lg text-ascent-2 ">
-                        No Post Available
+                        {t("No Post Available")}
                       </p>
                     </div>
                   )}
@@ -263,20 +264,20 @@ const ProfileFix = () => {
                   <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
                     <div className="flex gap-2 items-center text-ascent-2">
                       <CiLocationOn className="text-xl text-ascent-1" />
-                      <span>{userInfor?.location ?? "Add Location"}</span>
+                      <span>{userInfor?.location ?? ""}</span>
                     </div>
 
                     <div className="flex gap-2 items-center text-ascent-2">
                       <BsBriefcase className="text-lg text-ascent-1" />
-                      <span>{userInfor?.profession ?? "Add Profession"}</span>
+                      <span>{userInfor?.profession ?? ""}</span>
                     </div>
                     <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
                       <p className="text-xl text-ascent-1 font-semibold">
-                        {userInfor?.friends?.length} Friends
+                        {userInfor?.friends?.length} {t("Friends")}
                       </p>
                       <div className="flex items-center justify-between w-full">
                         <span className="text-ascent-2">
-                          Who viewed your profile
+                          {t("Who viewed your profile")}
                         </span>
                         <span className="text-ascent-1 text-lg">
                           {userInfor?.views?.length}
@@ -284,11 +285,11 @@ const ProfileFix = () => {
                       </div>
 
                       <span className="text-base text-blue">
-                        {userInfor?.verified ? "Verified Account" : " "}
+                        {userInfor?.verified ? t("Verified Account") : " "}
                       </span>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-ascent-2">Joined</span>
+                        <span className="text-ascent-2">{t("Joined")}</span>
                         <span className="text-ascent-1 text-base">
                           {moment(userInfor?.createdAt).fromNow()}
                         </span>

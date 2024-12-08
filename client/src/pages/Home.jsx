@@ -755,7 +755,7 @@ const Home = () => {
                   <div className="w-full flex items-end justify-end">
                     <CustomButton
                       type="submit"
-                      tittle="Post"
+                      tittle={t("Post")}
                       containerStyles="bg-[#0444a4] text-white py-1 px-6 rounded-full font-semibold text-sm "
                     />
                   </div>
@@ -829,7 +829,9 @@ const Home = () => {
                           <p className="text-base font-medium text-ascent-1">
                             {sender?.firstName} {sender?.lastName}
                           </p>
-                          <span className="text-sm text-ascent-2">Request</span>
+                          <span className="text-sm text-ascent-2">
+                            {t("Request")}
+                          </span>
                         </div>
                       </Link>
                       <div className="flex gap-1">
@@ -870,7 +872,7 @@ const Home = () => {
               {!isSearch && (
                 <div className="flex items-center justify-between text-sm text-ascent-1 ">
                   <span className="font-medium text-lg text-ascent-2 select-none">
-                    Friend Suggestion
+                    {t("friend suggestion")}
                   </span>
                   <div
                     className="flex items-center justify-center text-ascent-2 cursor-pointer"
@@ -893,7 +895,7 @@ const Home = () => {
                   <input
                     className="bg-bgColor placeholder:text-[#666] border-[#66666690] border-b w-4/5 
                       outline-none text-ascent-2"
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -947,7 +949,7 @@ const Home = () => {
                               {friend?.firstName} {friend?.lastName}
                             </p>
                             <span className="text-sm text-ascent-2">
-                              {friend?.profession ?? "No Profession"}
+                              {friend?.profession ?? t("No Profession")}
                             </span>
                           </div>
                         </Link>

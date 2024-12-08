@@ -862,7 +862,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                 <div className="absolute w-full h-full bg-gradient-to-r opacity-40 from-[#0099ff] from-25% to-[#9966ff] to-60%"></div>
                 <div className="w-1/4 h-2/3 bg-primary rounded-2xl z-10 overflow-hidden relative">
                   <div
-                    className="text-ascent-1  py-4 px-4 flex justify-end cursor-pointer"
+                    className="text-ascent-1 py-4 px-4 flex justify-end cursor-pointer"
                     onClick={() => {
                       setSuggestpost(false);
                     }}
@@ -879,7 +879,7 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                         className="w-full h-52 bg-primary  border-none
             outline-none text-xl text-ascent-1 
             px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
-                        placeholder="Write something about post"
+                        placeholder={t("Write something about post")}
                       />
                       <div className="flex justify-between px-4 pb-4">
                         <div className=" text-ascent-2">

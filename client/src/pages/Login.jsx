@@ -11,10 +11,12 @@ import { ImConnection } from "react-icons/im";
 import { apiRequest } from "../until";
 import { UserLogin } from "../redux/userSlice";
 import { authapiRequest } from "../until/auth";
+import { useTranslation } from "react-i18next";
 const Login = () => {
   const [errMsg, seterrMsg] = useState("");
   const [isAdmin, setIsAdmin] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
     register,
@@ -72,9 +74,11 @@ const Login = () => {
           </div>
 
           <p className="text-ascent-1 text-base font semibold">
-            Login to your account
+            {t("Login to your account")}
           </p>
-          <span className="text-sm mt-2 text-ascent-2">Welcome Back</span>
+          <span className="text-sm mt-2 text-ascent-2">
+            {t("Welcome Back")}
+          </span>
           <form
             className="py-8 flex flex-col gap-5"
             onSubmit={handleSubmit(onSubmmit)}
@@ -82,10 +86,10 @@ const Login = () => {
             <TextInput
               name="email"
               placeholder="email@example.com"
-              label="Email Address"
+              label={t("Email Address")}
               type="email"
               register={register("email", {
-                required: "Email Address is required",
+                required: t("Email Address is required"),
               })}
               styles="w-full rounded-full"
               labelStyle="m1-2"
@@ -94,8 +98,8 @@ const Login = () => {
 
             <TextInput
               name="password"
-              placeholder="Password"
-              label="PassWord"
+              placeholder={t("Password")}
+              label={t("PassWord")}
               type="password"
               register={register("password", {
                 required: "Password is required",
@@ -109,7 +113,7 @@ const Login = () => {
               to={"/reset-password"}
               className="text-sm text-right text-blue font-semibold"
             >
-              Forgot Password ?
+              {t("Forgot Password ?")}
             </Link>
 
             {errMsg?.message && (
@@ -130,18 +134,18 @@ const Login = () => {
               <CustomButton
                 type="submit"
                 containerStyles={`inline-flex justify-center rounded-md bg-blue px-8 py-3 text-sm font-medium text-white outline-none`}
-                tittle="Login"
+                tittle={t("Login")}
               />
             )}
           </form>
 
           <p className="text-ascent-2 text-sm text-center">
-            Don't have am account?
+            (t{"Don't have am account?"})
             <Link
               to="/register"
               className="text-[#065ad8] font-semibold ml-2 curson-pointer"
             >
-              Create Account
+              {t("Create Account")}
             </Link>
           </p>
         </div>
@@ -169,10 +173,10 @@ const Login = () => {
           </div>
           <div className="mt-16 text-center">
             <p className="text-white text-base">
-              Connect with friends & have share for fun
+              {t("Connect with friends & have share for fun")}
             </p>
             <span className="text-sm text-white/80">
-              Share memories with friends and the world.
+              {t("Share memories with friends and the world.")}
             </span>
           </div>
         </div>

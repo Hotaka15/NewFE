@@ -283,7 +283,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                                tittle="Submit"
+                                tittle={t("Submit")}
                               />
                             )}
                           </div>
@@ -445,7 +445,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                           <input
                             type="text"
                             className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
-                            placeholder="Search"
+                            placeholder={t("Search")}
                           />
                           <div className="w-full flex items-center justify-center">
                             <div className="flex flex-wrap gap-2 justify-center mb-2 items-center">
@@ -483,7 +483,7 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                   >
                                     <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
                                       <img
-                                        src={friend?.profileUrl || NoProfile}
+                                        src={friend?.profileUrl ?? NoProfile}
                                         alt=""
                                         className="h-12 w-12 object-cover rounded-full mr-3"
                                       />

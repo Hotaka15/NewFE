@@ -13,11 +13,12 @@ import {
   postsearchfetchPosts,
 } from "../until/post";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
   console.log("main key:" + key);
-
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -65,8 +66,6 @@ const Search = () => {
     };
   }, [keyword]);
 
-  
-
   return (
     <div>
       <div
@@ -95,7 +94,7 @@ lg:rounded-lg h-screen overflow-hidden"
                       ) : (
                         <div className="flex w-full h-full items-center justify-center">
                           <p className="text-lg text-ascent-2">
-                            No Post Available
+                            {t("No Post Available")}
                           </p>
                         </div>
                       )}

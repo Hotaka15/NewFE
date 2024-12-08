@@ -10,9 +10,11 @@ import { CustomButton, Loading, TextInput } from "../components";
 import { BgImage } from "../assets";
 import { apiRequest } from "../until";
 import { authapiRequest } from "../until/auth";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
+  const { t } = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -62,7 +64,7 @@ const Register = () => {
           </div>
 
           <p className="text-ascent-1 text-base font-semibold">
-            Create your account
+            {t("Create your account")}
           </p>
 
           <form
@@ -72,23 +74,23 @@ const Register = () => {
             <div className="w-full flex flex-col lg:flex-row gap-1 md:gap-2">
               <TextInput
                 name="firstName"
-                label="First Name"
-                placeholder="First Name"
+                label={t("First Name")}
+                placeholder={t("First Name")}
                 type="text"
                 styles="w-full"
                 register={register("firstName", {
-                  required: "First Name is required!",
+                  required: t("First Name is required!"),
                 })}
                 error={errors.firstName ? errors.firstName?.message : ""}
               />
 
               <TextInput
-                label="Last Name"
-                placeholder="Last Name"
+                label={t("Last Name")}
+                placeholder={t("Last Name")}
                 type="lastName"
                 styles="w-full"
                 register={register("lastName", {
-                  required: "Last Name do no match",
+                  required: t("Last Name do no match"),
                 })}
                 error={errors.lastName ? errors.lastName?.message : ""}
               />
@@ -97,10 +99,10 @@ const Register = () => {
             <TextInput
               name="email"
               placeholder="email@example.com"
-              label="Email Address"
+              label={t("Email Address")}
               type="email"
               register={register("email", {
-                required: "Email Address is required",
+                required: t("Email Address is required"),
               })}
               styles="w-full"
               error={errors.email ? errors.email.message : ""}
@@ -109,19 +111,19 @@ const Register = () => {
             <div className="w-full flex flex-col lg:flex-row gap-1 md:gap-2">
               <TextInput
                 name="password"
-                label="Password"
-                placeholder="Password"
+                label={t("Password")}
+                placeholder={t("Password")}
                 type="password"
                 styles="w-full"
                 register={register("password", {
-                  required: "Password is required!",
+                  required: t("Password is required!"),
                 })}
                 error={errors.password ? errors.password?.message : ""}
               />
 
               <TextInput
-                label="Confirm Password"
-                placeholder="Password"
+                label={t("Confirm Password")}
+                placeholder={t("Password")}
                 type="password"
                 styles="w-full"
                 register={register("cPassword", {
@@ -129,7 +131,7 @@ const Register = () => {
                     const { password } = getValues();
 
                     if (password != value) {
-                      return "Passwords do no match";
+                      return t("Passwords do no match");
                     }
                   },
                 })}
@@ -159,18 +161,18 @@ const Register = () => {
               <CustomButton
                 type="submit"
                 containerStyles={`inline-flex justify-center rounded-md bg-blue px-8 py-3 text-sm font-medium text-white outline-none`}
-                tittle="Create Account"
+                tittle={t("Create Account")}
               />
             )}
           </form>
 
           <p className="text-ascent-2 text-sm text-center">
-            Already has an account?{" "}
+            {t("Already has an account?")}
             <Link
               to="/login"
               className="text-[#065ad8] font-semibold ml-2 cursor-pointer"
             >
-              Login
+              {t("Login")}
             </Link>
           </p>
         </div>
@@ -201,10 +203,10 @@ const Register = () => {
 
           <div className="mt-16 text-center">
             <p className="text-white text-base">
-              Connect with friedns & have share for fun
+              {t("Connect with friends & have share for fun")}
             </p>
             <span className="text-sm text-white/80">
-              Share memories with friends and the world.
+              {t("Share memories with friends and the world.")}
             </span>
           </div>
         </div>

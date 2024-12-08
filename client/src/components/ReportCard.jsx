@@ -15,8 +15,10 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
 import { postreason } from "../until/post";
+import { useTranslation } from "react-i18next";
 const ReportCard = ({ post, handlerp }) => {
   const [info, setInfo] = useState();
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   console.log(post);
   // console.log(review);
@@ -38,7 +40,7 @@ const ReportCard = ({ post, handlerp }) => {
         <div className="w-full h-full bg-primary/30 flex  justify-center items-center">
           <div className="w-1/5 h-1/2 bg-primary rounded-xl px-4 pt-5 flex gap-3 flex-col">
             <span className="text-ascent-1 font-medium text-2xl flex justify-between">
-              Report
+              {t("Report")}
               <button className="text-ascent-1" onClick={handlerp}>
                 <MdClose size={22} />
               </button>
@@ -166,7 +168,7 @@ const ReportCard = ({ post, handlerp }) => {
             </div>
             <div className="w-full flex items-end justify-end">
               <CustomButton
-                tittle={"Submit"}
+                tittle={t("Submit")}
                 onClick={handlereport}
                 containerStyles="bg-blue text-white w-full flex item-center justify-center h-fit px-4 py-2 rounded-xl"
               />

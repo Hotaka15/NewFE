@@ -5,8 +5,10 @@ import Loading from "./Loading";
 import { postapiRequest } from "../until/post";
 import { usergetUserpInfo } from "../until/user";
 import Rowtb from "./Rowtb";
+import { useTranslation } from "react-i18next";
 const Reportlist = ({ user, sl }) => {
   const nevigate = useNavigate();
+  const { t } = useTranslation();
   const id = "67276cedbdf484bf88585a44";
   const [loading, setLoading] = useState(true);
   // const [listreport, setListreport] = useState([
@@ -120,13 +122,13 @@ const Reportlist = ({ user, sl }) => {
                 Id
               </th>
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
-                Report count
+                {t("Report count")}
               </th>
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
-                Reasson
+                {t("Reasson")}
               </th>
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
-                Action
+                {t("Action")}
               </th>
             </tr>
           </thead>
@@ -173,7 +175,7 @@ const Reportlist = ({ user, sl }) => {
                     >
                       {/* {report.postId}  */}
                       {report.username} <br />
-                      Create At: {report.createdAt}
+                      {t("Create At")}: {report.createdAt}
                     </th>
                     <th className="border border-[#66666645] py-2 px-3 w-1/12">
                       {report.reportCount}
@@ -189,7 +191,7 @@ const Reportlist = ({ user, sl }) => {
                           }}
                           className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
                         >
-                          Approve
+                          {t("Approve")}
                         </div>
                         <div
                           onClick={() => {
@@ -197,7 +199,7 @@ const Reportlist = ({ user, sl }) => {
                           }}
                           className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
                         >
-                          Delete
+                          {t("Delete")}
                         </div>
                       </div>
                     </th>
@@ -216,7 +218,7 @@ const Reportlist = ({ user, sl }) => {
                   >
                     {/* {report.postId} */}
                     {report.username} <br />
-                    Create At: {report.createdAt}
+                    {t("Create At")}: {report.createdAt}
                   </th>
                   <th className="border border-[#66666645] py-2 px-3 w-1/12">
                     {report.reportCount}
@@ -232,7 +234,7 @@ const Reportlist = ({ user, sl }) => {
                         }}
                         className="px-4 rounded-lg py-1 bg-blue cursor-pointer text-white"
                       >
-                        Approve
+                        {t("Approve")}
                       </div>
                       <div
                         onClick={() => {
@@ -240,7 +242,7 @@ const Reportlist = ({ user, sl }) => {
                         }}
                         className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
                       >
-                        Delete
+                        {t("Delete")}
                       </div>
                     </div>
                   </th>

@@ -48,7 +48,7 @@ const FriendCardf = ({ friend }) => {
                 {info?.firstName} {info?.lastName}
               </p>
               <span className="text-sm text-ascent-2">
-                {info?.profession ?? "No Profession"}
+                {info?.profession ?? t("No Profession")}
               </span>
             </div>
           </Link>

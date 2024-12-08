@@ -472,7 +472,7 @@ const EditFix = () => {
                       type="submit"
                       containerStyles={`inline-flex justify-center rounded-md bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                      tittle="Submit"
+                      tittle={t("Submit")}
                     />
                   )}
                 </div>

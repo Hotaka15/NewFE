@@ -105,7 +105,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
         <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-[50%] rounded-2xl">
           <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
             <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-              Add Member
+              {t("Add Member")}
               <div
                 className="text-ascent-1 h-full flex items-center cursor-pointer"
                 onClick={() => {
@@ -117,7 +117,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
             </span>
           </div>
           <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1">Member</span>
+            <span className="text-ascent-1">{t("Member")}</span>
 
             <input
               type="text"
@@ -125,7 +125,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
                 setSearch(e.target.value);
               }}
               className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
-              placeholder="Search"
+              placeholder={t("Search")}
             />
           </div>
 
@@ -171,7 +171,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
 
           <div className="w-full flex justify-end">
             <CustomButton
-              tittle="Submit"
+              tittle={t("Submit")}
               containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
               onClick={() => {
                 handleSubmit();

@@ -19,7 +19,9 @@ const Notification = ({ notify, fetchNotification }) => {
   const { user } = useSelector((state) => state.user);
   // const [bg, setBG] = useState();
   const [isAll, setIsAll] = useState(true);
-  const [listNotification, setListNotifications] = useState([...notify]);
+  const [listNotification, setListNotifications] = useState(
+    notify && [...notify]
+  );
   // const check = () => {
   //   all ? setBG("bg-blue") : setBG(" hover:bg-ascent-3");
   // };
@@ -80,7 +82,7 @@ const Notification = ({ notify, fetchNotification }) => {
               !isAll ? "bg-blue text-white" : "text-ascent-1"
             }`}
           >
-            Unread
+            {t("Unread")}
           </span>
         </div>
       </div>

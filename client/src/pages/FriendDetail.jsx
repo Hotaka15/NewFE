@@ -19,12 +19,14 @@ import { UpdateProfile } from "../redux/userSlice";
 import { usergetFriends, usergetUserInfo } from "../until/user";
 import { postfetchuserPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 const ProfileDetail = ({ title }) => {
   const [friend, setFriend] = useState();
   const { user, edit } = useSelector((state) => state.user);
   const { posts } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [uid, setUid] = useState(user?._id);
   const [userInfor, setUserInfor] = useState();
@@ -104,7 +106,7 @@ const ProfileDetail = ({ title }) => {
       <div className="w-full h-full flex justify-center pt-5 pb-32">
         <div className="bg-primary h-full w-1/5 rounded-lg">
           <div className="w-full h-full flex flex-col gap-4 pt-4 px-4 select-none overflow-auto">
-            <span className="text-xl font-semibold">All Friend</span>
+            <span className="text-xl font-semibold">{t("All Friends")}</span>
             <form
               className="hidden md:flex items-center justify-center gap-5"
               onSubmit={(e) => handleSearch(e)}
@@ -117,7 +119,7 @@ const ProfileDetail = ({ title }) => {
               <input
                 className="bg-primary placeholder:text-[#666] px-5 py-1 border-[#66666690] border rounded-full w-full 
                       outline-none text-ascent-2"
-                placeholder="Search"
+                placeholder={t("Search")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -157,13 +159,13 @@ const ProfileDetail = ({ title }) => {
                       {friend?.firstName} {friend?.lastName}
                     </p>
                     <span className="text-sm text-ascent-2">
-                      {friend?.profession ?? "No Profession"}
+                      {friend?.profession ?? t("No Profession")}
                     </span>
                   </div>
-                  <CustomButton
+                  {/* <CustomButton
                     containerStyles="bg-blue px-3 rounded-xl py-1 text-white"
                     tittle="Unfriend"
-                  />
+                  /> */}
                 </div>
               );
             })}
@@ -253,7 +255,7 @@ const ProfileDetail = ({ title }) => {
                       ) : (
                         <div className="flex w-full h-full items-center justify-center">
                           <p className="text-lg text-ascent-2 ">
-                            No Post Available
+                            {t("No Post Available")}
                           </p>
                         </div>
                       )}
@@ -264,22 +266,20 @@ const ProfileDetail = ({ title }) => {
                       <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
                         <div className="flex gap-2 items-center text-ascent-2">
                           <CiLocationOn className="text-xl text-ascent-1" />
-                          <span>{userInfor?.location ?? "Add Location"}</span>
+                          <span>{userInfor?.location ?? ""}</span>
                         </div>
 
                         <div className="flex gap-2 items-center text-ascent-2">
                           <BsBriefcase className="text-lg text-ascent-1" />
-                          <span>
-                            {userInfor?.profession ?? "Add Profession"}
-                          </span>
+                          <span>{userInfor?.profession ?? ""}</span>
                         </div>
                         <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
                           <p className="text-xl text-ascent-1 font-semibold">
-                            {userInfor?.friends?.length} Friends
+                            {userInfor?.friends?.length} {t("Friends")}
                           </p>
                           <div className="flex items-center justify-between w-full">
                             <span className="text-ascent-2">
-                              Who viewed your profile
+                              {t("Who viewed your profile")}
                             </span>
                             <span className="text-ascent-1 text-lg">
                               {userInfor?.views?.length}
@@ -287,11 +287,11 @@ const ProfileDetail = ({ title }) => {
                           </div>
 
                           <span className="text-base text-blue">
-                            {userInfor?.verified ? "Verified Account" : " "}
+                            {userInfor?.verified ? t("Verified Account") : " "}
                           </span>
 
                           <div className="flex items-center justify-between">
-                            <span className="text-ascent-2">Joined</span>
+                            <span className="text-ascent-2">{t("Joined")}</span>
                             <span className="text-ascent-1 text-base">
                               {moment(userInfor?.createdAt).fromNow()}
                             </span>

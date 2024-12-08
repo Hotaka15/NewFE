@@ -13,6 +13,7 @@ import { apiRequest, fetchNotifications } from "../until";
 import Chart from "../components/Chart";
 import { admingetlistUser } from "../until/admin";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 
 const Admin = () => {
   const [notifications, setNotifications] = useState([]);
@@ -21,6 +22,7 @@ const Admin = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [type, setType] = useState("");
+  const { t } = useTranslation();
   const [suggestedFriends, setsuggestedFriends] = useState();
   const fetchUser = async () => {
     // const uri = "/admin/show-all-user";
@@ -105,7 +107,7 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              DashBoard User
+              {t("DashBoard User")}
             </div>
             <div
               onClick={() => {
@@ -113,7 +115,7 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              DashBoard Report
+              (t{"DashBoard Report"})
             </div>
             <div
               onClick={() => {
@@ -121,7 +123,7 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              List User
+              {t("List User")}
             </div>
             <div
               onClick={() => {
@@ -129,7 +131,7 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              Manager Report
+              {t("Manager Report")}
             </div>
           </div>
           {/* {CENTTER} */}

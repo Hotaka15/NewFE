@@ -10,9 +10,11 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { setTheme } from "../redux/theme";
 import { Logout, Setnotification } from "../redux/userSlice";
 import { fetchPosts } from "../until";
+import { useTranslation } from "react-i18next";
 const TopBarAdmin = ({ user }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification } = useSelector((state) => state.user);
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   // const {
   //   register,
@@ -60,7 +62,7 @@ const TopBarAdmin = ({ user }) => {
 
         <CustomButton
           onClick={() => dispatch(Logout())}
-          tittle={"Logout"}
+          tittle={t("Logout")}
           containerStyles={
             "text-sm text-ascent-1 px-4 md:px-6 py-1 md:py-2 border border-[#666] rounded-full"
           }

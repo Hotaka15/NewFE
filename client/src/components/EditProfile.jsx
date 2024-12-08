@@ -11,6 +11,7 @@ import { NoProfile } from "../assets";
 import { userapiRequest } from "../until/user";
 import { FaFileImage } from "react-icons/fa6";
 import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 const EditProfile = () => {
   const { user, edit } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const EditProfile = () => {
   const [file, setFile] = useState(null);
   const [editor, setEditor] = useState(1);
   const [review, setReview] = useState();
+  const { t } = useTranslation();
   const provinces = [
     "An Giang",
     "Bà Rịa - Vũng Tàu",
@@ -383,20 +385,22 @@ const EditProfile = () => {
                 </div>
                 <div className="flex gap-4">
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Gender</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Gender")}
+                    </p>
                     <select
                       {...register("gender")}
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3 outline-none"
                     >
                       <option selected value="male">
-                        Male
+                        {t("Male")}
                       </option>
-                      <option value="female">Female</option>
-                      <option value="other">Orther</option>
+                      <option value="female">{t("Female")}</option>
+                      <option value="other">{t("Orther")}</option>
                     </select>
                   </div>
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Date</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>{t("Date")}</p>
                     <input
                       {...register("birthDate")}
                       type="date"
@@ -410,7 +414,9 @@ const EditProfile = () => {
                 </div>
                 <div className="flex gap-4 w-full items-center justify-center">
                   <div className="w-1/2 max-h-40 overflow-hidden">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Location</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Location")}
+                    </p>
                     <select
                       {...register("province")}
                       className="text-ascent-1 w-full outline-none bg-secondary rounded border border-[#66666690] px-4 py-3 "
@@ -424,23 +430,25 @@ const EditProfile = () => {
                   </div>
 
                   <div className="w-1/2">
-                    <p className={`text-ascent-2 text-sm mb-2`}>Address</p>
+                    <p className={`text-ascent-2 text-sm mb-2`}>
+                      {t("Address")}
+                    </p>
                     <input
                       {...register("adress")}
                       type="text"
                       onChange={(e) => {}}
-                      placeholder="Address"
+                      placeholder={t("Address")}
                       className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
                     />
                   </div>
                 </div>
                 <TextInput
-                  label="profession"
-                  placeholder="Profession"
+                  label={t("Profession")}
+                  placeholder={t("Profession")}
                   type="text"
                   styles="w-full"
                   register={register("profession", {
-                    required: "Profession is required!",
+                    required: t("Profession is required!"),
                   })}
                   error={errors.profession ? errors.profession?.message : ""}
                 />
@@ -508,7 +516,7 @@ const EditProfile = () => {
                       type="submit"
                       containerStyles={`inline-flex justify-center rounded-md bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                      tittle="Submit"
+                      tittle={t("Submit")}
                     />
                   )}
                 </div>
@@ -553,7 +561,7 @@ const EditProfile = () => {
                       type="submit"
                       containerStyles={`inline-flex justify-center rounded-md bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
-                      tittle="Submit"
+                      tittle={t("Submit")}
                     />
                   )}
                 </div>

@@ -4,9 +4,11 @@ import { checksafelink } from "../until/checkapi";
 import { Loading } from "../components";
 import { TailSpin } from "react-loader-spinner";
 import { after } from "lodash";
+import { useTranslation } from "react-i18next";
 const Check = () => {
   const [searchParams] = useSearchParams();
   const url = searchParams.get("url");
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   console.log(url);
   const [notSafe, setNotSafe] = useState(false);
@@ -36,10 +38,10 @@ const Check = () => {
       {notSafe && (
         <div className="text-ascent-2 w-1/6 h-1/5 border border-ascent-2 rounded-xl flex flex-col px-3 py-4">
           <div className="w-full flex items-center justify-center h-full text-xl font-bold">
-            The link address is not safe.
+            {t("The link address is not safe.")}
           </div>
           <div className="py-2 flex items-center justify-center bg-ascent-3/30 rounded-md">
-            <a href={url}>Do you want to continue?</a>
+            <a href={url}>{t("Do you want to continue?")}</a>
           </div>
         </div>
       )}

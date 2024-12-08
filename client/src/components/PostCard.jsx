@@ -25,6 +25,7 @@ import { FaEye } from "react-icons/fa";
 import VideoPlayer from "./VideoPlayer";
 import NewEdit from "./NewEdit";
 import { useSocket } from "../context/SocketContext";
+import { useTranslation } from "react-i18next";
 const getPostComments = async (id, user) => {
   // console.log(user?.token);
 
@@ -47,6 +48,7 @@ const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
 
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const { t } = useTranslation();
   const socket = useSocket();
   const {
     register,
@@ -134,7 +136,7 @@ const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
           styles="w-full rounded-full py-3"
           placeholder={replyAt ? `Reply @${replyAt}` : "Comment this post"}
           register={register("comment", {
-            required: "Comment can't be empty",
+            required: t("Comment can't be empty"),
           })}
           error={errors.comment ? errors.comment.message : ""}
         />
@@ -154,7 +156,7 @@ const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
           <Loading />
         ) : (
           <CustomButton
-            tittle={"Submit"}
+            tittle={t("Submit")}
             type="submit"
             containerStyles="bg-[#0444a4] text-white py-1 px-3 rounded-full font-semibold text-sm"
           />
@@ -166,6 +168,8 @@ const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
 
 const ReplyCard = ({ reply, user, handleLike }) => {
   // console.log(reply);
+
+  const { t } = useTranslation();
 
   const [userP, setUserP] = useState();
   const getUser = async () => {
@@ -218,7 +222,7 @@ const ReplyCard = ({ reply, user, handleLike }) => {
             ) : (
               <BiLike size={20} />
             )}
-            {reply?.likes?.length} Likes
+            {reply?.likes?.length} {t("Likes")}
           </p>
         </div>
       </div>
@@ -228,6 +232,7 @@ const ReplyCard = ({ reply, user, handleLike }) => {
 
 const Opt = ({ post, onClick, report, handlerp }) => {
   const { user } = useSelector((state) => state.user);
+  const { t } = useTranslation();
   const [save, setSave] = useState(false);
   // console.log(post);
   // console.log(user?._id);
@@ -272,7 +277,7 @@ const Opt = ({ post, onClick, report, handlerp }) => {
           className="text-ascent-1 flex  bg-primary justify-start items-center px-3 py-4 gap-2 hover:bg-ascent-3/30"
         >
           <MdEdit />
-          Edit
+          {t("Edit")}
         </span>
       )}
       <div>
@@ -282,9 +287,10 @@ const Opt = ({ post, onClick, report, handlerp }) => {
         >
           <MdEdit />
           <div className="text-ascent-1 flex flex-col">
-            <span>Report</span>
+            <span>{t("Report")}</span>
             <span className="text-xs text-ascent-2">
-              We won't let {post?.userId?.lastName} know who reported this.
+              {t("We won't let")} {post?.userId?.lastName}{" "}
+              {t("know who reported this.")}
             </span>
           </div>
         </span>
@@ -299,6 +305,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState(posts);
+  const { t } = useTranslation();
   const [option, setOption] = useState(false);
   const [replyComments, setReplyComments] = useState(0);
   const [showComments, setShowComments] = useState(0);
@@ -488,14 +495,14 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                       className="text-blue ml-2 font-medium curson-pointer"
                       onClick={() => setShowAll(0)}
                     >
-                      Show Less
+                      {t("Show Less")}
                     </span>
                   ) : (
                     <span
                       className="text-blue ml-2 font-medium curson-pointer"
                       onClick={() => setShowAll(post?._id)}
                     >
-                      Show More
+                      {t("Show More")}
                     </span>
                   ))}
               </p>
@@ -540,7 +547,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
               ) : (
                 <BiLike size={20} />
               )}
-              {post?.likes?.length} Likes
+              {post?.likes?.length} {t("Likes")}
             </p>
 
             <p
@@ -551,7 +558,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
               }}
             >
               <BiComment size={20} />
-              {post?.comments?.length} Comments
+              {post?.comments?.length} {t("Comments")}
             </p>
             {user?._id === post?.userId && (
               <div
@@ -559,7 +566,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                 onClick={() => handleDeletePost(post?._id)}
               >
                 <MdOutlineDeleteOutline size={20} />
-                <span>Delete</span>
+                <span>{t("Delete")}</span>
               </div>
             )}
           </div>
@@ -621,7 +628,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                           onClick={() => setReplyComments(comment?._id)}
                           className="text-blue cursor-pointer"
                         >
-                          Reply
+                          {t("Reply")}
                         </span>
                       </div>
 
@@ -650,7 +657,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                             )
                           }
                         >
-                          Show Replies ({comment?.replies?.length})
+                          {t("Show Replies")} ({comment?.replies?.length})
                         </p>
                       )}
                       {showReply === comment?.replies?._id &&
@@ -675,7 +682,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                 ))
               ) : (
                 <span className="flex text-sm py-4 text-ascent-2 text-center">
-                  No comments, be first to comment
+                  {t("No comments, be first to comment")}
                 </span>
               )}
             </div>

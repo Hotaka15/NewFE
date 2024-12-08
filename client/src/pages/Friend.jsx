@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { FriendCardSuggest, Loading, TopBar } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";
@@ -17,6 +17,7 @@ import {
   usersendFriendRequest,
 } from "../until/user";
 import { io } from "socket.io-client";
+import { useTranslation } from "react-i18next";
 const Friend = () => {
   const [right, setRight] = useState(false);
   const [left, setLeft] = useState(true);
@@ -25,6 +26,7 @@ const Friend = () => {
   const [suggestedFriends, setsuggestedFriends] = useState([]);
   const [checkl, setCheckl] = useState("hidden");
   const [friendRequest, setfriendRequest] = useState([]);
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const check = () => {
     let position = document.getElementById("request");
@@ -194,11 +196,11 @@ lg:rounded-lg h-screen overflow-hidden"
               >
                 <div className="w-full flex items-end justify-between">
                   <span className="text-ascent-1 font-bold text-3xl">
-                    Friend Requests
+                    {t("Friend Requests")}
                   </span>
                   <Link to={"/friendrequest"}>
                     <span className=" hover:underline hover:underline-offset-2 text-blue font-medium text-xl">
-                      See more
+                      {t("See more")}
                     </span>
                   </Link>
                 </div>
@@ -240,76 +242,6 @@ lg:rounded-lg h-screen overflow-hidden"
                         />
                       </div>
                     ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
-                    {friendRequest?.map((friend) => (
-                      <div className=" overflow-hidden shrink-0">
-                        <FriendCardRequest
-                          user={user}
-                          fetchFriendRequest={fetchFriendRequest}
-                          setfriendRequest={setfriendRequest}
-                          friend={friend}
-                        />
-                      </div>
-                    ))}
                   </div>
                 ) : (
                   <div
@@ -317,7 +249,7 @@ lg:rounded-lg h-screen overflow-hidden"
                     className="relative flex w-full h-full justify-start grow-0 overflow-x-auto gap-2 scroll-smooth rounded-xl overflow-hidden"
                   >
                     <div className="absolute w-full h-full bg-primary rounded-xl flex justify-center items-center text-lg text-ascent-2">
-                      No Request
+                      {t("No Request")}
                     </div>
                     <div className="h-fit w-fit flex-shrink-0">
                       <FriendCardRequest />
@@ -328,11 +260,11 @@ lg:rounded-lg h-screen overflow-hidden"
               <div className="w-full h-fit flex flex-wrap gap-2 select-none">
                 <div className="w-full flex items-end justify-between">
                   <span className="text-ascent-1 font-bold text-3xl">
-                    People you may know
+                    {t("People you may know")}
                   </span>
                   <Link to={"/friendsuggest"}>
                     <span className=" hover:underline hover:underline-offset-2 text-blue font-medium text-xl">
-                      See more
+                      {t("See more")}
                     </span>
                   </Link>
                 </div>
@@ -368,7 +300,7 @@ lg:rounded-lg h-screen overflow-hidden"
                                   <FriendCardRequest
                                     key={i}
                                     friend={user}
-                                    title="Add"
+                                    title={t("Add")}
                                   />
                                 </div>
                               );

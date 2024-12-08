@@ -6,12 +6,13 @@ import moment from "moment";
 import { notifetchNotifications } from "../until/noti";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useSocket } from "../context/SocketContext";
 const Lastactive = () => {
   const [notifications, setNotifications] = useState([]);
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
+  const socket = useSocket();
   const fetchNotification = async () => {
     try {
       const res = await notifetchNotifications({
@@ -27,6 +28,9 @@ const Lastactive = () => {
   };
   useEffect(() => {
     fetchNotification();
+    socket.on("receiveNotification", (notification) => {
+      fetchNotification();
+    });
   }, []);
   return (
     <div className="w-full shadow-sm border-b border-ascent-2 pb-5">
@@ -53,7 +57,7 @@ const Lastactive = () => {
                 <p className="text-base font-medium text-ascent-1">
                   {/* {user?.lastName}{" "} */}
                   <span className="text-sm text-ascent-2">
-                    {notifications[index]?.message ?? "No Profession"}
+                    {notifications[index]?.message ?? ""}
                   </span>
                 </p>
                 <span className="hidden md:flex text-ascent-2 text-xs">

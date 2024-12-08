@@ -18,12 +18,14 @@ import { FaTwitterSquare } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import { sendFriendRequest } from "../until";
 import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
 
 const ProfileCard = ({ user }) => {
   // const { user: data, edit } = useSelector((state) => state.user);
   const token = useSelector((state) => state.user);
   // console.log(token?.user?.token);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   // console.log(user);
   const navigate = useNavigate();
 
@@ -46,7 +48,7 @@ const ProfileCard = ({ user }) => {
                 {user?.firstName} {user?.lastName}
               </p>
               <span className="text-ascent-2">
-                {user?.profession ?? "No Profession"}{" "}
+                {user?.profession ?? t("No Profession")}{" "}
               </span>
             </div>
           </Link>
@@ -73,21 +75,23 @@ const ProfileCard = ({ user }) => {
         <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
           <div className="flex gap-2 items-center text-ascent-2">
             <CiLocationOn className="text-xl text-ascent-1" />
-            <span>{user?.location ?? "Add Location"}</span>
+            <span>{user?.location ?? ""}</span>
           </div>
 
           <div className="flex gap-2 items-center text-ascent-2">
             <BsBriefcase className="text-lg text-ascent-1" />
-            <span>{user?.profession ?? "Add Profession"}</span>
+            <span>{user?.profession ?? ""}</span>
           </div>
         </div>
 
         <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
           <p className="text-xl text-ascent-1 font-semibold">
-            {user?.friends?.length} Friends
+            {user?.friends?.length} {t("Friends")}
           </p>
           <div className="flex items-center justify-between">
-            <span className="text-ascent-2">Who viewed your profile</span>
+            <span className="text-ascent-2">
+              {t("Who viewed your profile")}
+            </span>
             <span className="text-ascent-1 text-lg">{user?.views?.length}</span>
           </div>
 
@@ -96,7 +100,7 @@ const ProfileCard = ({ user }) => {
           </span>
 
           <div className="flex items-center justify-between">
-            <span className="text-ascent-2">Joined</span>
+            <span className="text-ascent-2">{t("Joined")}</span>
             <span className="text-ascent-1 text-base">
               {moment(user?.createdAt).fromNow()}
             </span>

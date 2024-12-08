@@ -4,10 +4,13 @@ import { NoProfile } from "../assets";
 import { Login } from "../pages";
 import { usergetUserInfo } from "../until/user";
 import { useSelector } from "react-redux";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const FriendCardfChat = ({ friend, hanldeUserchat }) => {
   const { user } = useSelector((state) => state.user);
   const [info, setInfo] = useState();
+  const { t } = useTranslation();
   console.log(friend);
   const getInfor = async () => {
     try {
@@ -46,7 +49,7 @@ const FriendCardfChat = ({ friend, hanldeUserchat }) => {
               {info?.firstName} {info?.lastName}
             </p>
             <span className="text-sm text-ascent-2">
-              {info?.profession ?? "No Profession"}
+              {info?.profession ?? t("No Profession")}
             </span>
           </div>
         </div>

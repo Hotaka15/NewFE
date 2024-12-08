@@ -18,6 +18,7 @@ import {
   postfetchuserPosts,
   postlikePost,
 } from "../until/post";
+import { useTranslation } from "react-i18next";
 // import { posts } from "../assets/data";
 
 const Profile = () => {
@@ -27,6 +28,7 @@ const Profile = () => {
   const { posts } = useSelector((state) => state.posts);
   const [userInfor, setUserInfor] = useState(user);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   const uri = id;
   const navigate = useNavigate();
   // const getUser = async () => {
@@ -133,7 +135,7 @@ const Profile = () => {
                 ))
               ) : (
                 <div className="text-lg text-ascent-2 w-full flex justify-center items-center h-full">
-                  No Post Available
+                  {t("No Post Available")}
                 </div>
               )}
             </div>

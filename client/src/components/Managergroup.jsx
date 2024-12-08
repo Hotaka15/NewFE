@@ -341,7 +341,7 @@ export default function Managergroup({ setRoleo, idroom }) {
             )}
             {isAdmin && (
               <div className="px-4 relative bottom-4">
-                <span className="text-ascent-2 mp-2">Select role:</span>
+                <span className="text-ascent-2 mp-2">{t("Select role")}:</span>
 
                 <select
                   defaultValue={
@@ -377,7 +377,7 @@ export default function Managergroup({ setRoleo, idroom }) {
                 )}
                 {isSuccess && (
                   <div className="px-3 text-[#2ba150fe] flex justify-center items-center">
-                    Success
+                    {t("Success")}
                   </div>
                 )}
               </div>

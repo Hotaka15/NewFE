@@ -61,6 +61,7 @@ import { debounce } from "lodash";
 import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
 import { io } from "socket.io-client";
 import { useSocket } from "../context/SocketContext";
+import { useTranslation } from "react-i18next";
 const NewFeed = () => {
   const { posts } = useSelector((state) => state.posts);
 
@@ -80,6 +81,7 @@ const NewFeed = () => {
   const [loading, setLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [trigger, setTrigger] = useState(false);
   const socket = useSocket();
@@ -442,7 +444,9 @@ const NewFeed = () => {
                 ))
               ) : (
                 <div className="flex w-full h-full items-center justify-center">
-                  <p className="text-lg text-ascent-2">No Post Available</p>
+                  <p className="text-lg text-ascent-2">
+                    {t("No Post Available")}
+                  </p>
                 </div>
               )}
               {posts?.length > 0 && !loading && <Loading />}

@@ -34,6 +34,7 @@ import {
 } from "../until/user";
 import Loading from "./Loading";
 import { botsuggestsearchRequest } from "../until/bot";
+import { useTransition } from "react";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -42,6 +43,7 @@ const TopBar = ({ user, setKey }) => {
   const [profilecard, setProfilecard] = useState();
   const [ava, setAva] = useState();
   const [value, setvalue] = useState("");
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
@@ -267,7 +269,7 @@ const TopBar = ({ user, setKey }) => {
               className={`bg-secondary rounded border border-[#66666690] 
             outline-none text-sm text-ascent-1 
             px-4 py-3 placeholder:text-ascent-2 w-[18rem] lg:w-[38rem] rounded-l-full `}
-              placeholder="Search post or @user,@searchuser"
+              placeholder={t("Search post or @user,@searchuser")}
               type="text"
               {...register("search")}
               value={inputValue}
@@ -277,7 +279,7 @@ const TopBar = ({ user, setKey }) => {
             />
 
             <CustomButton
-              tittle="search"
+              tittle={t("Search")}
               type="submit"
               containerStyles="bg-[#0444a4] text-white px-6 py-2.5  rounded-r-full"
             />
@@ -380,14 +382,14 @@ const TopBar = ({ user, setKey }) => {
           >
             {theme == "dark" ? <GoSun size={25} /> : <MdDarkMode size={25} />}
           </button>
-          {/* <div
+          <div
             className=" px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
             onClick={() => {
               changelanguage();
             }}
           >
             <MdOutlineGTranslate size={25} />
-          </div> */}
+          </div>
           <div
             onClick={() => {
               navigate(`/chat`);
@@ -449,7 +451,7 @@ const TopBar = ({ user, setKey }) => {
                       setAvatar();
                     }}
                   />
-                  Profile
+                  {t("Profile")}
                 </div>
               </div>
             </Link>
@@ -469,7 +471,7 @@ const TopBar = ({ user, setKey }) => {
             >
               <div className="flex justify-center items-center">
                 <IoMdSettings size={25} />
-                Setting
+                {t("Setting")}
               </div>
             </div>
             <div
@@ -478,7 +480,7 @@ const TopBar = ({ user, setKey }) => {
             >
               <div className="flex justify-center items-center ">
                 <IoLogOut size={25} />
-                Logout
+                (t{"Logout"})
               </div>
             </div>
           </div>

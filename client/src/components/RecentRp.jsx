@@ -1,6 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 // import { getOrderStatus } from "../lib/helpers";
 
 const recentOrderData = [
@@ -67,6 +68,7 @@ const recentOrderData = [
 ];
 
 export default function RecentRp() {
+  const { t } = useTranslation();
   return (
     <div className="bg-ascent-3/10 px-4 pt-3 pb-4 rounded-md border border-gray-200 flex-1">
       <strong className="text-ascent-1 font-medium">Recent Report</strong>

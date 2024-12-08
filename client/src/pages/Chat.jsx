@@ -68,6 +68,7 @@ import AddNewMember from "../components/AddNewMember";
 import FriendCardf from "../components/FriendCardf";
 import FriendCardfChat from "../components/FriendCardfChat";
 import { useSocket } from "../context/SocketContext";
+import { useTranslation } from "react-i18next";
 
 const RangeChat = forwardRef(
   (
@@ -99,6 +100,7 @@ const RangeChat = forwardRef(
     const [file, setFile] = useState(null);
     const [faild, setFald] = useState([]);
     const [after, setAfter] = useState([]);
+    const { t } = useTranslation();
     const [onScreen, setOnscreen] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
     const thisRoom = useRef("");
@@ -581,7 +583,7 @@ const RangeChat = forwardRef(
         <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
           <div className="text-ascent-1 font-bold text-3xl">
             {type == "inbox" ? (
-              <div className=" flex text-ascent-1 text-sm items-center gap-1">
+              <div className="flex text-ascent-1 text-sm items-center gap-1">
                 <img
                   src={userinfo?.profileUrl ?? NoProfile}
                   alt="post image"
@@ -634,7 +636,7 @@ const RangeChat = forwardRef(
                   }}
                   className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
                 >
-                  Manager
+                  {t("Manager")}
                 </div>
                 <div
                   onClick={() => {
@@ -642,7 +644,7 @@ const RangeChat = forwardRef(
                   }}
                   className="w-full h-1/3 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
                 >
-                  Add User
+                  {t("Add User")}
                 </div>
               </div>
             )}
@@ -671,7 +673,7 @@ const RangeChat = forwardRef(
               type={type}
             />
           ) : (
-            <div className="w-full h-[1000px]">Select Conversation</div>
+            <div className="w-full h-[1000px]">{t("Select Conversation")}</div>
           )}
 
           {/* {loading ? (
@@ -746,7 +748,7 @@ const RangeChat = forwardRef(
                   onChange={(e) => {
                     setChat(e.target.value);
                   }}
-                  placeholder="Type your message..."
+                  placeholder={t("Type your message...")}
                   className="w-full flex-1 py-1 pl-14 pr-5 text-ascent-1 rounded-full bg-bgColor focus:outline-0 text-wrap"
                 />
                 <div
@@ -800,6 +802,7 @@ const UserCard = forwardRef(
     const userId = user?._id;
     const [time, setTime] = useState("");
     const [idroom, setIdroom] = useState("");
+    const { t } = useTranslation();
     console.log(itemchat);
     const id = itemchat?.members
       ? itemchat.members.find((member) => member !== user?._id)
@@ -925,7 +928,7 @@ const UserCard = forwardRef(
               ? itemchat?.lastMessage?.content?.length > 20
                 ? itemchat?.lastMessage?.content.slice(0, 20) + "..."
                 : itemchat?.lastMessage?.content
-              : "New chat"}
+              : t("New chat")}
           </span>
         </div>
       </div>
@@ -938,7 +941,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
   const [isme, setIsme] = useState(true);
   const [visibleChats, setVisibleChats] = useState([]);
   const chatRefs = useRef([]);
-
+  const { t } = useTranslation();
   console.log(listchat);
   const id_1 = user?._id;
   {
@@ -1242,7 +1245,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
         </div>
       ) : (
         <div className="text-ascent-2 text-xl w-full h-full flex justify-center items-start">
-          New Conversation
+          {t("New Conversation")}
         </div>
       )}
     </div>
@@ -1253,7 +1256,7 @@ const Chat = () => {
   const { user, edit } = useSelector((state) => state.user);
   const { id } = useParams();
   console.log(id);
-
+  const { t } = useTranslation();
   const [showPicker, setShowPicker] = useState(false);
   const [review, setReview] = useState();
   const [reviewcheck, setReviewcheck] = useState(false);
@@ -1474,7 +1477,7 @@ const Chat = () => {
                       type="text"
                       className="px-5 bg-secondary text-ascent-2 rounded-full w-full border border-[#66666690] 
         outline-none text-sm  py-2 placeholder:text-ascent-2"
-                      placeholder="Search"
+                      placeholder={t("Search")}
                       onChange={(e) => setSearch(e.target.value)}
                     />
                   </form>
@@ -1506,7 +1509,7 @@ const Chat = () => {
                       setCreatg(true);
                     }}
                   >
-                    Create Group
+                    {t("Create Group")}
                   </div>
                 </div>
               )}
@@ -1592,7 +1595,7 @@ const Chat = () => {
             >
               <div>
                 <div className="w-full font-bold text-ascent-1 text-3xl px-5 py-5">
-                  Friends
+                  {t("Friends")}
                 </div>
               </div>
 
@@ -1662,7 +1665,7 @@ const Chat = () => {
             </div>
           ) : (
             <div className="flex-1 h-full bg-primary px-4 flex flex-col gap-6 overflow-hidden rounded-lg justify-center items-center text-ascent-2 text-xl">
-              Choose Conversation
+              {t("Choose Conversation")}
             </div>
           )}
         </div>
