@@ -18,7 +18,7 @@ export const SocketProvider = ({ children }) => {
     socket.emit("joinGroup", { userId, groupId: userId });
     return () => {
       socket.emit("userOffline", { userId });
-      socket.disconnect(); // Ngắt kết nối khi Context bị hủy
+      socket.disconnect();
     };
   }, []);
 

@@ -122,7 +122,7 @@ const ProfileFix = () => {
     getUser();
   }, [id]);
 
-  console.log(user?.friends.includes(id));
+  // console.log(user?.friends.includes(id));
 
   return (
     <div className="home w-full bg-bgColor text-ascent-1 overflow-hidden lg:rounded-lg h-screen items-center px-0 lg:px-10">
