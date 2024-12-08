@@ -300,7 +300,7 @@ const TopBar = ({ user, setKey }) => {
             !inputValue.startsWith("@user") &&
             !inputValue.startsWith("@searchuser") && (
               <div className="absolute top-full rounded-lg mt-4 w-full max-h-60 h-fit overflow-auto shadow-xl bg-secondary">
-                {listUser &&
+                {listUser.length > 0 &&
                   listUser
                     .filter(
                       (item) =>

@@ -838,11 +838,11 @@ const Home = () => {
                         <CustomButton
                           tittle={t("accept")}
                           onClick={() => acceptFriendRequest(_id, "accepted")}
-                          containerStyles="bg-[#0444a4] text-xs text-white px-1.5 
+                          containerStyles="bg-[#0444a4] flex items-center justify-center w-[60px] text-xs text-white px-1.5 
                     py-1 rounded-full"
                         />
                         <CustomButton
-                          tittle={t("deny")}
+                          tittle={t("Delete")}
                           onClick={() => acceptFriendRequest(_id, "rejected")}
                           containerStyles="border border-[#666] text-xs
                     text-ascent-1 px-1.5 py-1 rounded-full"

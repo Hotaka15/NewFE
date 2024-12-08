@@ -259,9 +259,10 @@ const RangeChat = forwardRef(
         }
         setOnscreen(true);
         position();
-        setLoading(false);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -609,7 +610,7 @@ const RangeChat = forwardRef(
             )}
           </div>
           <div className="flex relative justify-center items-center text-ascent-1 gap-2">
-            <IoCallSharp size={25} />
+            {/* <IoCallSharp size={25} /> */}
             {type == "group" && (
               <div
                 className="flex items-center justify-center"

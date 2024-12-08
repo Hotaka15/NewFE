@@ -117,7 +117,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
             </span>
           </div>
           <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1">{t("Member")}</span>
+            <span className="text-ascent-1 w-[150px]">{t("Member")}</span>
 
             <input
               type="text"

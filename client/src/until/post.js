@@ -44,7 +44,7 @@ export const postfetchPosts = async (token, dispatch, page) => {
     });
     console.log(res);
 
-    dispatch(SetPosts(res?.data?.latestPosts));
+    dispatch(SetPosts(res?.data));
     // res?.data?.return;
   } catch (error) {
     console.log(error);
@@ -64,7 +64,7 @@ export const postrenewfetchPosts = async (token, dispatch, page) => {
     });
     console.log(res);
 
-    dispatch(UpdatePosts(res?.data?.latestPosts));
+    dispatch(UpdatePosts(res?.data));
     // dispatch(SetPosts(res?.data?.latestPosts));
     // res?.data?.return;
   } catch (error) {

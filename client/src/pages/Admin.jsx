@@ -115,7 +115,7 @@ lg:rounded-lg h-screen overflow-hidden"
               }}
               className="w-full text-ascent-1 flex flex-col px-5 py-6 font-semibold text-lg hover:bg-ascent-3/30 rounded-xl justify-center items-start"
             >
-              (t{"DashBoard Report"})
+              {t("DashBoard Report")}
             </div>
             <div
               onClick={() => {

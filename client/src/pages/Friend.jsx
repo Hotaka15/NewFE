@@ -160,7 +160,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   <div className="w-10 h-10 flex items-center justify-center">
                     <FaUserFriends size={30} />
                   </div>
-                  Friend Request
+                  {t("Friend Request")}
                 </span>
               </Link>
 
@@ -172,7 +172,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   <div className="w-10 h-10 flex items-center justify-center  ">
                     <FaUserFriends size={30} />
                   </div>
-                  Suggestions
+                  {t("Suggestions")}
                 </span>
               </Link>
               <Link
@@ -183,7 +183,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   <div className="w-10 h-10 flex items-center justify-center  ">
                     <GiThreeFriends size={30} />
                   </div>
-                  All Friends
+                  {t("All Friends")}
                 </span>
               </Link>
             </div>

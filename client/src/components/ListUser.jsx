@@ -69,8 +69,8 @@ const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
             <span className="text-ascent-2">Id: </span>
             <span className="text-ascent-2">Email: </span>
             {/* <span className="text-ascent-2">Join at: </span> */}
-            <span className="text-ascent-2">{t("Verified")}: </span>
-            <span className="text-ascent-2">(t{"Activity"}): </span>
+            <span className="text-ascent-2">Verified: </span>
+            <span className="text-ascent-2">Activity: </span>
           </div>
           <div className="w-full text-ascent-1 text-base flex flex-col items-start">
             <span className="max-h-6 overflow-hidden">
@@ -438,7 +438,7 @@ const ListUser = ({ listUser, fetchUser, setListUser }) => {
                     <button
                       onClick={() => {}}
                       type={"submit"}
-                      className={`inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full `}
+                      className={`inline-flex items-center text-base justify-center bg-[#0444a4] text-white px-5 py-1 w-[125px] mt-2 rounded-full `}
                     >
                       {t("Search")}
                     </button>

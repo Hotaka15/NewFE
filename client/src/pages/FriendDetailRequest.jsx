@@ -263,13 +263,13 @@ const FriendDetailRequest = ({ title }) => {
                           acceptFriendRequest(friend?._id, "accepted");
                         }}
                         containerStyles="bg-blue px-3 rounded-xl py-1 text-white"
-                        tittle={t("Accept")}
+                        tittle={t("accept")}
                       />
                       <CustomButton
                         onClick={() => {
                           acceptFriendRequest(friend?._id, "rejected");
                         }}
-                        containerStyles="bg-ascent-3/20 px-3 rounded-xl py-1 text-ascent-1"
+                        containerStyles="bg-ascent-3/20 px-3 rounded-xl py-1 text-ascent-1 flex items-center justify-center"
                         tittle={t("Delete")}
                       />
                     </div>
