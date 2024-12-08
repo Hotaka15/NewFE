@@ -193,6 +193,7 @@ const EditProfile = () => {
         province,
         adress,
       } = data;
+      console.log(selecthobby);
 
       const res = await userapiRequest({
         url: "",
@@ -205,7 +206,7 @@ const EditProfile = () => {
           gender,
           adress,
           birthDate,
-          hobby: selecthobby,
+          interests: selecthobby,
         },
         method: "PUT",
         token: user?.token,
@@ -214,7 +215,7 @@ const EditProfile = () => {
       console.log(res);
       if (res?.status === "failed" && undefined) {
         seterrMsg(res);
-      } else {
+      } else if (res?._id) {
         seterrMsg(res);
 
         const newUser = { token: user?.token, ...res };
@@ -392,11 +393,18 @@ const EditProfile = () => {
                       {...register("gender")}
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3 outline-none"
                     >
-                      <option selected value="male">
+                      <option selected={user?.gender == "male"} value="male">
                         {t("Male")}
                       </option>
-                      <option value="female">{t("Female")}</option>
-                      <option value="other">{t("Orther")}</option>
+                      <option
+                        selected={user?.gender == "female"}
+                        value="female"
+                      >
+                        {t("Female")}
+                      </option>
+                      <option selected={user?.gender == "other"} value="other">
+                        {t("Orther")}
+                      </option>
                     </select>
                   </div>
                   <div className="w-1/2">
@@ -419,10 +427,14 @@ const EditProfile = () => {
                     </p>
                     <select
                       {...register("province")}
-                      className="text-ascent-1 w-full outline-none bg-secondary rounded border border-[#66666690] px-4 py-3 "
+                      className="text-ascent-1 w-full outline-none bg-secondary rounded border border-[#66666690] px-4 py-3 max-h-44"
                     >
                       {provinces.map((province, index) => (
-                        <option key={index} value={province}>
+                        <option
+                          selected={user?.province == province}
+                          key={index}
+                          value={province}
+                        >
                           {province}
                         </option>
                       ))}

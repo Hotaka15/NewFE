@@ -7,6 +7,7 @@
   "no post pvailable": "No Post Available",
   "No Post Available": "No Post Available",
   "accept": "Accept",
+  "Suggestions": "Suggestions",
   "deny": "Deny",
   "Recent Report": "Recent Report",
   "Friend Sugguest": "Friend Sugguest",
@@ -160,5 +161,12 @@
   "New chat": "New chat",
   "Add User": "Add User",
   "Select Conversation": "Select Conversation",
-  "Type your message...": "Type your message..."
+  "Type your message...": "Type your message...",
+  "User login": "User login",
+  "Total Admins": "Total Admins",
+  "Total Users": "Total Users",
+  "Regular Users": "Regular Users",
+  "Verified Users": "Verified Users",
+  "Friend Request": "Friend Request",
+  "Posts": "Posts"
 }

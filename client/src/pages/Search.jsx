@@ -1,48 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { FriendCard, FriendMain, TopBar } from "../components";
-import { Link, redirect, useNavigate, useParams } from "react-router-dom";
-import { NoProfile } from "../assets";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { TopBar } from "../components";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { Loading, PostCard } from "../components/index";
 import { useDispatch } from "react-redux";
 import {
-  postdeletePost,
   postfetchPosts,
   postlikePost,
   postsearchfetchPosts,
 } from "../until/post";
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
+import { UpdatePosts } from "../redux/postSlice";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
   console.log("main key:" + key);
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const [from, setFrom] = useState(null);
+  const [to, setTo] = useState(null);
+  const [categori, setCategori] = useState("");
   const { posts } = useSelector((state) => state.posts);
   const [searchPost, setSearchPost] = useState(true);
-  const handleSearch = async (keyword) => {
+  const [isFetching, setIsFetching] = useState(true);
+  const [page, setPage] = useState(1);
+  const keycurent = useRef({});
+  const handleSearch = async (keyword, page) => {
     try {
-      const data = keyword;
+      const data = {
+        keyword: keyword,
+        from: from,
+        to: to,
+        categori: categori,
+        page: page,
+      };
       console.log(data);
 
       if (data) {
         await postsearchfetchPosts(user.token, dispatch, "", data ? data : "");
+        keycurent.current = data;
       }
-
+      setIsFetching(false);
       setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const fetchPost = async () => {
-    try {
-      await postfetchPosts(user?.token, dispatch);
-      setLoading(false);
-      console.log(posts);
     } catch (error) {
       console.log(error);
     }
@@ -51,21 +55,65 @@ const Search = () => {
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
   };
-  useEffect(() => {
-    setLoading(true);
 
-    handleSearch(keyword);
-    // fetchPost();
-    let timeoutId;
-    timeoutId = setTimeout(() => {
-      keyword && handleSearch(keyword);
-    }, 3000);
+  const handleScroll = useCallback(
+    debounce((e) => {
+      const target = e.target;
+
+      if (
+        target.scrollTop + target.clientHeight >= target.scrollHeight * 0.7 &&
+        !isFetching
+      ) {
+        // handleSearch(keyword);
+        setPage((prevPage) => prevPage + 1);
+        console.log(page);
+        console.log(posts);
+      }
+    }, 500),
+    [isFetching, page]
+  );
+
+  useEffect(() => {
+    const postRange = document.getElementById("post_range");
+    postRange.addEventListener("scroll", handleScroll);
 
     return () => {
-      clearTimeout(timeoutId);
+      postRange.removeEventListener("scroll", handleScroll);
     };
-  }, [keyword]);
+  }, [handleScroll]);
 
+  // useEffect(() => {
+  //   console.log(page);
+  //   page !== 1 && handleSearch(keyword);
+  // }, [page]);
+
+  useEffect(() => {
+    console.log(page);
+
+    page > 1 && handleSearch(keyword, page);
+  }, [page]);
+
+  useEffect(() => {
+    setPage(2);
+    setLoading(true);
+    dispatch(UpdatePosts([]));
+    handleSearch(keyword, 1);
+    console.log(keyword, to, from, categori);
+  }, [keyword, to, from, categori]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+
+  //   handleSearch(keyword);
+  //   let timeoutId;
+  //   timeoutId = setTimeout(() => {
+  //     keyword && handleSearch(keyword);
+  //   }, 3000);
+
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, [keyword, to, from, categori]);
   return (
     <div>
       <div
@@ -73,13 +121,105 @@ const Search = () => {
 lg:rounded-lg h-screen overflow-hidden"
       >
         <TopBar user={user} setKey={setKey} />
-        <div className="w-full flex gap-2 lg:gap-4 pt-5 pb-10 h-full justify-between">
-          <div className=" justify-center h-full flex-initial w-full flex-wrap px-4 py-4 flex gap-6 overflow-y-auto rounded-lg">
-            <div>
-              <div className="w-full h-fit flex flex-wrap gap-2 select-none">
-                <div className="flex justify-center items-center flex-col">
-                  <div className="w-full h-fit flex gap-2 flex-wrap justify-center">
-                    <div className=" max-w-2xl h-fit flex flex-col">
+        <div className="w-full flex gap-2 lg:gap-4 pt-5 h-full justify-between">
+          <div className=" justify-center h-full flex-initial w-full flex-wrap px-4 py-4 flex gap-6 rounded-lg ">
+            <div className="w-full h-full">
+              <div className="w-full h-full flex flex-wrap gap-2 select-none">
+                <div className="flex w-full h-full items-start justify-between">
+                  <div className="w-1/4 h-full text-ascent-2 bg-primary rounded-lg px-4 py-8 flex flex-col gap-4 ">
+                    <span className=" text-ascent-1 font-medium text-2xl">
+                      Filter
+                    </span>
+                    <div className="gap-2 flex flex-col">
+                      Category:
+                      <select
+                        onChange={(e) => {
+                          setCategori(e.target.value);
+                          setPage(1);
+                        }}
+                        className="bg-secondary text-ascent-1 px-4 py-2 outline-none rounded-lg"
+                      >
+                        <option value="News and Events">News and Events</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Health and Fitness">
+                          Health and Fitness
+                        </option>
+                        <option value="Travel">Travel</option>
+                        <option value="Fashion and Beauty">
+                          Fashion and Beauty
+                        </option>
+                        <option value="Technology and Innovation">
+                          Technology and Innovation
+                        </option>
+                        <option value="Education and Learning">
+                          Education and Learning
+                        </option>
+                        <option value="Business and Entrepreneurship">
+                          Business and Entrepreneurship
+                        </option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Art and Creativity">
+                          Art and Creativity
+                        </option>
+                        <option value="Environment and Nature Conservation">
+                          Environment and Nature Conservation
+                        </option>
+                        <option value="Love and Relationships">
+                          Love and Relationships
+                        </option>
+                        <option value="Pets">Pets</option>
+                      </select>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="h-full">
+                        <div className="h-1/2 flex items-center justify-end">
+                          From:
+                        </div>
+                        <div className="h-1/2 flex items-center justify-end">
+                          To:
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div>
+                          <input
+                            type="date"
+                            onChange={(e) => {
+                              setFrom(e.target.value);
+                              setPage(1);
+                            }}
+                            className="datepicker-input bg-secondary rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
+                          />
+                        </div>
+                        <div>
+                          <input
+                            type="date"
+                            onChange={(e) => {
+                              setTo(e.target.value);
+                              setPage(1);
+                            }}
+                            className="datepicker-input bg-secondary rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className=" w-full bg-secondary text-ascent-1 hover:bg-ascent-3/30 py-2 flex justify-center items-center rounded-xl"
+                      onClick={() => {
+                        setFrom(null);
+                        setTo(null);
+                        setCategori("");
+                        setPage(1);
+                      }}
+                    >
+                      Clear
+                    </div>
+                  </div>
+                  <div className="w-full h-full flex gap-2 flex-wrap justify-center ">
+                    <div
+                      id="post_range"
+                      className=" max-w-2xl h-full overflow-y-auto flex flex-col"
+                    >
                       {loading && searchPost ? (
                         <Loading />
                       ) : posts?.length > 0 ? (
@@ -98,6 +238,7 @@ lg:rounded-lg h-screen overflow-hidden"
                           </p>
                         </div>
                       )}
+                      {posts && posts?.length > 0 && !loading && <Loading />}
                     </div>
                   </div>
                 </div>

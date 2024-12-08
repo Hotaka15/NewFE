@@ -12,6 +12,7 @@ export const SocketProvider = ({ children }) => {
     transports: ["websocket"],
   });
   const userId = user?._id;
+  console.log(process.env.REACT_APP_CLOUDINARY_ID);
 
   useEffect(() => {
     socket.emit("userOnline", { userId });

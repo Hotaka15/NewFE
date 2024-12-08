@@ -363,6 +363,7 @@ const Home = () => {
         friendId: friendId,
         post_id: postId,
         post_category: category ?? "music",
+        action: "seen",
       };
 
       console.log("Emitting user_interaction:", data);

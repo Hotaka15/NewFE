@@ -35,10 +35,10 @@ const Register = () => {
         method: "POST",
       });
       console.log(res);
-      if (res?.status === "failed") {
+      if (res?.status == undefined) {
         setErrMsg(res);
       } else {
-        setErrMsg(res);
+        setErrMsg(res?.data);
         setTimeout(() => {
           window.location.replace("/login");
         }, 5000);
@@ -146,7 +146,7 @@ const Register = () => {
             {errMsg?.message && (
               <span
                 className={`text-sm ${
-                  errMsg?.status == "failed"
+                  errMsg?.status == undefined
                     ? "text-[#f64949fe]"
                     : "text-[#2ba150fe]"
                 } mt-0.5`}

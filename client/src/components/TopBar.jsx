@@ -23,7 +23,7 @@ import { GoSun } from "react-icons/go";
 import { IoMdSettings } from "react-icons/io";
 import { NoProfile } from "../assets";
 import { notifetchNotifications } from "../until/noti";
-import { postsearchfetchPosts } from "../until/post";
+
 import { IoLogOut } from "react-icons/io5";
 import { Oval } from "react-loader-spinner";
 import { useTranslation } from "react-i18next";
@@ -35,6 +35,7 @@ import {
 import Loading from "./Loading";
 import { botsuggestsearchRequest } from "../until/bot";
 import { useTransition } from "react";
+import { useSocket } from "../context/SocketContext";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
   const { notification, edit } = useSelector((state) => state.user);
@@ -51,6 +52,7 @@ const TopBar = ({ user, setKey }) => {
   const [listSearchUser, setListSearchUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const debounceTimeout = useRef(null);
+  const socket = useSocket();
   const wordLimit = 100;
   const {
     register,
@@ -149,7 +151,6 @@ const TopBar = ({ user, setKey }) => {
       }
     } else if (key != "" && key.startsWith("@searchuser")) {
       try {
-        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
         navigate(
           `/searchuser/${key ? key.replace(/^@searchuser\s*/, "") : ""}`
         );
@@ -158,7 +159,6 @@ const TopBar = ({ user, setKey }) => {
       }
     } else if (key != "" && key.startsWith("@user")) {
       try {
-        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
         navigate(`/user/${key ? key.replace(/^@user\s*/, "") : ""}`);
       } catch (error) {
         console.log(error);
@@ -221,6 +221,9 @@ const TopBar = ({ user, setKey }) => {
   useEffect(() => {
     fetchNotification();
     fetchlistUser();
+    socket.on("receiveNotification", (notification) => {
+      fetchNotification();
+    });
   }, []);
   return (
     <div className="flex-col flex items-end select-none ">
@@ -417,7 +420,7 @@ const TopBar = ({ user, setKey }) => {
             className=" px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
             onClick={() => {
               dispatch(Setnotification(!notification));
-              fetchNotification();
+              // fetchNotification();
             }}
           >
             <IoNotifications size={25} />

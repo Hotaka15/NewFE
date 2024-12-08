@@ -6,12 +6,7 @@ import { useSelector } from "react-redux";
 
 import { Loading, PostCard } from "../components/index";
 import { useDispatch } from "react-redux";
-import {
-  postdeletePost,
-  postfetchPosts,
-  postlikePost,
-  postsearchfetchPosts,
-} from "../until/post";
+import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
 import { botsuggestsearchRequest } from "../until/bot";
 import { usersendFriendRequest } from "../until/user";

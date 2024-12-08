@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { FriendCard, FriendMain, TopBar } from "../components";
-import { Link, redirect, useNavigate, useParams } from "react-router-dom";
+import { TopBar } from "../components";
+import { Link, useParams } from "react-router-dom";
 import { NoProfile } from "../assets";
 import { useSelector } from "react-redux";
 
-import { Loading, PostCard } from "../components/index";
+import { Loading } from "../components/index";
 import { useDispatch } from "react-redux";
-import {
-  postdeletePost,
-  postfetchPosts,
-  postlikePost,
-  postsearchfetchPosts,
-} from "../until/post";
-import { io } from "socket.io-client";
-import { botsuggestsearchRequest } from "../until/bot";
+import { postlikePost } from "../until/post";
+
 import { searchUserName, usersendFriendRequest } from "../until/user";
 import { useTranslation } from "react-i18next";
 

@@ -9,6 +9,7 @@ import { notideleteNotifications, notireadNotifications } from "../until/noti";
 import { TiDelete } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
 import { MdDelete } from "react-icons/md";
+import { FaAndroid } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 const Notification = ({ notify, fetchNotification }) => {
   console.log(notify);
@@ -62,7 +63,13 @@ const Notification = ({ notify, fetchNotification }) => {
         className="flex flex-col text-2xl text-ascent-1 
               mx-6 gap-2 mb-2"
       >
-        <span className="font-medium pb-4">{t("Notifications")}</span>
+        <div className="pb-4 flex items-center justify-between">
+          <span className="font-medium pb-4">{t("Notifications")}</span>
+          <spa className="">
+            {listNotification.filter((noti) => !noti.isRead).length}
+          </spa>
+        </div>
+
         <div className="font-normal text-base pb-2">
           <span
             onClick={() => {
@@ -115,11 +122,20 @@ const Notification = ({ notify, fetchNotification }) => {
                       className="w-full flex gap-4 items-center "
                     >
                       <Link to={`${redirectUrl}`} className="flex gap-4">
-                        <img
+                        {/* <img
                           src={from?.avatar ?? NoProfile}
                           alt={from?.name}
                           className="w-12 h-12  object-cover rounded-full"
-                        />
+                        /> */}
+                        {from?.userId == "system" ? (
+                          <FaAndroid size={40} />
+                        ) : (
+                          <img
+                            src={from?.avatar ?? NoProfile}
+                            alt={from?.name}
+                            className="w-12 h-12  object-cover rounded-full"
+                          />
+                        )}
                         <div className="flex-1 ">
                           <p className="text-base font-bold text-ascent-1 flex">
                             {from?.name}{" "}
@@ -174,14 +190,18 @@ const Notification = ({ notify, fetchNotification }) => {
                       dispatch(Setnotification(false));
                       handleRead(_id);
                     }}
-                    className="w-full flex gap-4 items-center "
+                    className="w-full flex gap-4 items-center"
                   >
                     <Link to={`${redirectUrl}`} className="flex gap-4">
-                      <img
-                        src={from?.avatar ?? NoProfile}
-                        alt={from?.name}
-                        className="w-12 h-12  object-cover rounded-full"
-                      />
+                      {from?.userId == "system" ? (
+                        <FaAndroid size={40} />
+                      ) : (
+                        <img
+                          src={from?.avatar ?? NoProfile}
+                          alt={from?.name}
+                          className="w-12 h-12  object-cover rounded-full"
+                        />
+                      )}
                       <div className="flex-1 ">
                         <p className="text-base font-bold text-ascent-1 flex">
                           {from?.name}{" "}

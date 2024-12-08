@@ -33,7 +33,8 @@ const Lastactive = () => {
     });
   }, []);
   return (
-    <div className="w-full shadow-sm border-b border-ascent-2 pb-5">
+    <div className="w-full shadow-sm  pb-5">
+      {/* border-b border-ascent-2 */}
       <div
         className="flex items-center justify-between text-sm text-ascent-1 
             pb-2 "

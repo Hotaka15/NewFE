@@ -71,7 +71,9 @@ export default function RecentRp() {
   const { t } = useTranslation();
   return (
     <div className="bg-ascent-3/10 px-4 pt-3 pb-4 rounded-md border border-gray-200 flex-1">
-      <strong className="text-ascent-1 font-medium">Recent Report</strong>
+      <strong className="text-ascent-1 font-medium">
+        {t("Recent Report")}
+      </strong>
       <div className="border-x border-gray-200 rounded-sm mt-3">
         <table className="w-full text-ascent-1">
           <thead>

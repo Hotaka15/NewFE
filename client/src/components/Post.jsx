@@ -8,8 +8,7 @@ import CustomButton from "./CustomButton";
 import { UpdatePost, UpdateProfile, UserLogin } from "../redux/userSlice";
 import { apiRequest, handFileUpload } from "../until";
 import { FaEarthAfrica } from "react-icons/fa6";
-import { TiDeleteOutline } from "react-icons/ti";
-import { CiImageOn, CiShoppingTag } from "react-icons/ci";
+import { ColorRing } from "react-loader-spinner";
 import { MdImage } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -17,7 +16,6 @@ import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
 import { RiFolderVideoFill } from "react-icons/ri";
 import { CiVideoOn } from "react-icons/ci";
-import { ColorRing } from "react-loader-spinner";
 import { TbMessageChatbot } from "react-icons/tb";
 import { PiShootingStarFill } from "react-icons/pi";
 import {
@@ -272,39 +270,31 @@ const Post = ({ setPage }) => {
           ? { ...data, urlVideo: uriv }
           : data;
 
-        const checked = await checkpost(newData);
-        console.log(checked);
+        setErr("");
+        setPreview(false);
+        const res = await postapiRequest({
+          url: "",
+          data: { ...newData, specifiedUsers: [] },
+          token: user?.token,
+          method: "POST",
+        });
+        console.log(res);
 
-        if (checked && checked?.sensitive == false) {
-          setErr("");
-          setPreview(false);
-          const res = await postapiRequest({
-            url: "",
-            data: { ...newData, specifiedUsers: [] },
-            token: user?.token,
-            method: "POST",
-          });
-          console.log(res);
-
-          if (res?.status === "failed") {
-            seterrMsg(res);
-          } else {
-            reset({
-              description: "",
-            });
-            setFile(null);
-            seterrMsg("");
-            // await postrenewfetchPosts(user?.token, dispatch, 1);
-            await setPage();
-          }
-          setPosting(false);
-          setFile(null);
-          setPreview(false);
-          handleClose();
+        if (res?.status === "failed") {
+          seterrMsg(res);
         } else {
-          setPosting(false);
-          setErr("Sensitive content");
+          reset({
+            description: "",
+          });
+          setFile(null);
+          seterrMsg("");
+
+          await setPage();
         }
+        setPosting(false);
+        setFile(null);
+        setPreview(false);
+        handleClose();
       } catch (error) {
         console.log(error);
         setPosting(false);

@@ -47,14 +47,14 @@ const UserChart = () => {
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <IoPeople size={35} />
           <div>
-            <div className="text-ascent-2 text-sm">Total Users</div>
+            <div className="text-ascent-2 text-sm">{t("Total Users")}</div>
             <div className="text-ascent-1 text-xl">{total?.totalUsers}</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaUser size={25} />
           <div>
-            <div className="text-ascent-2 text-sm">Regular Users:</div>
+            <div className="text-ascent-2 text-sm">{t("Regular Users")}</div>
             <div className="text-ascent-1 text-xl">
               {total?.totalRegularUsers}
             </div>
@@ -63,14 +63,14 @@ const UserChart = () => {
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <MdAdminPanelSettings size={40} />
           <div>
-            <div className="text-ascent-2 text-sm">Total Admins:</div>
+            <div className="text-ascent-2 text-sm">{t("Total Admins")}</div>
             <div className="text-ascent-1 text-xl">{total?.totalAdmins}</div>
           </div>
         </div>
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaCheckCircle size={35} />
           <div>
-            <div className="text-ascent-2 text-sm">Verified Users:</div>
+            <div className="text-ascent-2 text-sm">{t("Verified Users")}</div>
             <div className="text-ascent-1 text-xl">
               {total?.totalVerifiedUsers}
             </div>

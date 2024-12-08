@@ -26,6 +26,7 @@ import {
   postfetchPosts,
   postrenewfetchPosts,
 } from "../until/post";
+import { ColorRing } from "react-loader-spinner";
 import { aicheckpost } from "../until/ai";
 import SuggestPost from "./SuggestPost";
 import { userfriendSuggest, usergetFriends } from "../until/user";
@@ -90,6 +91,10 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
       setTextsp();
       setCounttext(100);
     }
+  };
+  const handlerenew = () => {
+    setResText("");
+    setResImg(null);
   };
 
   const handleSendText = async (textsp) => {
@@ -289,22 +294,15 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
         }
         const newData = { ...datafile, specifiedUsers: [] };
         const token = user?.token;
-        const checked = await checkpost(newData);
-        console.log(checked);
 
-        if (checked && checked?.sensitive == false) {
-          setErr("");
-          setPreview(false);
-          const postId = post?._id;
-          const res = await postedit(postId, token, newData);
-          console.log(res);
-          setPost(res?.updatedPost);
-          const close = onClick;
-          close();
-        } else {
-          setPosting(false);
-          setErr(t("Sensitive content"));
-        }
+        setErr("");
+        setPreview(false);
+        const postId = post?._id;
+        const res = await postedit(postId, token, newData);
+        console.log(res);
+        setPost(res?.updatedPost);
+        const close = onClick;
+        close();
       } catch (error) {
         console.log(error);
         setPosting(false);
@@ -860,93 +858,97 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
             {suggestpost && (
               <div className="fixed top-0 right-0 z-20 w-full h-full flex items-center justify-center">
                 <div className="absolute w-full h-full bg-gradient-to-r opacity-40 from-[#0099ff] from-25% to-[#9966ff] to-60%"></div>
-                <div className="w-1/4 h-2/3 bg-primary rounded-2xl z-10 overflow-hidden relative">
-                  <div
-                    className="text-ascent-1 py-4 px-4 flex justify-end cursor-pointer"
-                    onClick={() => {
-                      setSuggestpost(false);
-                    }}
-                  >
-                    <MdClose size={22} />
+                <div
+                  className={`w-1/4 h-fit bg-primary rounded-2xl z-10 ${
+                    loading ? "overflow-hidden" : "overflow-auto"
+                  }  relative pb-5`}
+                >
+                  <div className="text-ascent-1 py-4 px-4 flex justify-between">
+                    <div className="flex items-center justify-center text-ascent-1 font-semibold text-2xl">
+                      {t("Suggest")}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSuggestpost(false);
+                      }}
+                      className="flex justify-center items-center  cursor-pointer"
+                    >
+                      <MdClose size={22} />
+                    </div>
                   </div>
                   <div className="px-4 w-full ">
-                    <div className="w-full rounded-xl overflow-hidden border border-[#66666690] relative ">
-                      <textarea
-                        value={textsp}
-                        onChange={(e) => {
-                          handleTextsp(e);
-                        }}
-                        className="w-full h-52 bg-primary  border-none
-            outline-none text-xl text-ascent-1 
-            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
-                        placeholder={t("Write something about post")}
-                      />
-                      <div className="flex justify-between px-4 pb-4">
-                        <div className=" text-ascent-2">
-                          {t("Word")}: {counttext}
-                        </div>
-
-                        {loading && (
-                          <div className="flex justify-center items-center">
-                            <Loading />
+                    {!resText && !resImg && (
+                      <div className="w-full rounded-xl overflow-hidden border border-[#66666690] relative">
+                        <textarea
+                          value={textsp}
+                          onChange={(e) => {
+                            handleTextsp(e);
+                          }}
+                          className="w-full h-40 bg-primary  border-none outline-none text-xl text-ascent-1 px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
+                          placeholder={t("Write something about post")}
+                        />
+                        <div className="flex justify-between px-4 pb-4">
+                          <div className=" text-ascent-2">
+                            {t("Word")}: {counttext}
                           </div>
-                        )}
 
-                        {!loading && (
-                          <div className="flex justify-center items-center">
-                            {/* <div className="flex py-2  bg-primary rounded-md select-none">
-                              <div
-                                className={`${
-                                  isText && "bg-ascent-1/10"
-                                } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
-                                onClick={() => {
-                                  setIsText(true);
-                                }}
-                              >
-                                Text
-                              </div>
-                              <div
-                                className={`${
-                                  !isText && "bg-ascent-1/10"
-                                } px-2 py-1 rounded-md text-ascent-1 cursor-pointer`}
-                                onClick={() => {
-                                  setIsText(false);
-                                }}
-                              >
-                                Images
-                              </div>
-                            </div> */}
-
-                            <div
-                              className="bg-blue px-2 py-1 text-white rounded-lg"
-                              onClick={() => {
-                                handleSendText(textsp);
-                              }}
-                            >
-                              {t("Submit")}
+                          {loading && (
+                            <div className="flex justify-center items-center">
+                              <Loading />
                             </div>
-                          </div>
-                        )}
+                          )}
+
+                          {!loading && (
+                            <div className="flex justify-center items-center">
+                              <div
+                                className="bg-blue px-2 py-1 text-white rounded-lg"
+                                onClick={() => {
+                                  handleSendText(textsp);
+                                }}
+                              >
+                                {t("Submit")}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    {isText && (
-                      <div className="mt-10 w-full rounded-xl overflow-hidden border border-[#66666690] relative ">
+                    )}
+                    {isText && resText && (
+                      <div className=" w-full rounded-xl overflow-hidden border border-[#66666690] relative pb-2">
                         <textarea
                           value={resText}
                           onChange={(e) => {
                             setResText(e.target.value);
                           }}
-                          className="w-full h-52 bg-primary  border-none
-            outline-none text-xl text-ascent-1 
-            px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none"
-                          placeholder={t("Text")}
+                          className="w-full h-52 bg-primary border-none outline-none text-xl text-ascent-1 px-4 pt-3 placeholder:text-ascent-2 placeholder:text-xl resize-none "
+                          placeholder="Text"
                         />
+                        <div className="w-full flex gap-2 justify-center items-center ">
+                          <div
+                            className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
+                            onClick={() => {
+                              setContent(resText);
+                            }}
+                          >
+                            <FaRegCopy />
+                            {t("Choose")}
+                          </div>
+                          <div
+                            className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
+                            onClick={() => {
+                              handlerenew();
+                            }}
+                          >
+                            <FaRegCopy />
+                            {t("Try Again")}
+                          </div>
+                        </div>
                       </div>
                     )}
-                    {!isText && (
-                      <div className="mt-10 w-full flex justify-center items-center rounded-xl overflow-hidden border border-[#66666690] relative ">
+                    {!isText && resImg && (
+                      <div className="mt-5 w-full flex justify-center items-center rounded-xl overflow-hidden relative ">
                         {resImg && (
-                          <div className="w-full flex flex-col items-center gap-2">
+                          <div className="w-full flex flex-col items-center gap-2 mb-5">
                             <img
                               src={resImg}
                               className="max-h-52 object-cover rounded-lg"
@@ -958,13 +960,42 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               }}
                             >
                               <FaRegCopy />
-                              {t("Copy")}
+                              {t("Choose")}
+                            </div>
+                            <div
+                              className="text-ascent-2 border rounded-lg border-[#66666690] px-1 py-1 flex justify-center items-center"
+                              onClick={() => {
+                                handlerenew();
+                              }}
+                            >
+                              <FaRegCopy />
+                              {t("Try Again")}
                             </div>
                           </div>
                         )}
                       </div>
                     )}
                   </div>
+                  {loading && (
+                    <div className="bg-primary absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center">
+                      <ColorRing
+                        visible={true}
+                        height="80"
+                        width="80"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={[
+                          "#0b9fe3",
+                          "#0b4de6",
+                          "#0b9fe3",
+                          "#0b4de6",
+                          "#0b9fe3",
+                        ]}
+                      />
+                      <div className="text-ascent-2">{t("Loading...")}</div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

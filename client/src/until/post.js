@@ -37,7 +37,7 @@ export const postfetchPosts = async (token, dispatch, page) => {
 
   try {
     const res = await postapiRequest({
-      url: page ? "/newsfeed?page=" + page : "/newsfeed",
+      url: page ? "/newsfeed?page=" + page : "&limit=20",
       // url: "/newsfeed",
       token: token,
       method: "GET",
@@ -157,16 +157,20 @@ export const postdeletePost = async (id, token) => {
 };
 
 export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
-  console.log("Data: " + data);
+  console.log(data);
   try {
+    const { keyword, from, to, categori, page } = data;
     const res = await postapiRequest({
-      url: "/search?keyword=" + data,
+      url: `/search?keyword=${keyword}&startDate=${from ?? ""}&endDate=${
+        to ?? ""
+      }&categories=${categori ?? ""}&page=${page ?? "1"}&limit=10`,
       token: token,
       method: "GET",
       data: data || {},
     });
     console.log(res);
-    dispatch(UpdatePosts(res?.posts));
+    // dispatch(UpdatePosts(res?.posts));
+    dispatch(SetPosts(res?.posts));
     return;
   } catch (error) {
     console.log(error);

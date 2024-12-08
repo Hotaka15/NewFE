@@ -182,11 +182,11 @@ const ProfileFix = () => {
               </div>
               <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2 border-t border-[#66666645]">
                 <div className=" px-4 border-b border-blue h-full flex justify-center items-center rounded-lg text-blue font-medium">
-                  {t("Post")}
+                  {t("Posts")}
                 </div>
-                <div className="text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg">
+                {/* <div className="text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg">
                   {t("Friends")}
-                </div>
+                </div> */}
               </div>
 
               {id == user?._id ? (

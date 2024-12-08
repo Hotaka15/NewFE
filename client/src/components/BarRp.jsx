@@ -80,7 +80,7 @@ export default function BarRp({ monthly }) {
   return (
     <div className="h-full bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">
       <strong className="text-gray-700 font-medium text-ascent-1">
-        {t("Reports")}
+        {t("User login")}
       </strong>
       <div className="mt-3 w-full flex-1 text-ascent-1 text-xs">
         <ResponsiveContainer width="100%" height="100%">

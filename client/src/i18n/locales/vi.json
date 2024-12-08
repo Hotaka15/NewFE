@@ -160,5 +160,12 @@
   "New chat": "Tin nhắn mới",
   "Add User": "Thêm người dùng",
   "Select Conversation": "Chọn cuộc trò chuyện",
-  "Type your message...": "Nhập tin nhắn..."
+  "Type your message...": "Nhập tin nhắn...",
+  "User login": "Người dùng đăng nhập",
+  "Total Admins": "Quản lý",
+  "Total Users": "Số người dùng",
+  "Regular Users": "Gần đây",
+  "Verified Users": "Đã xác thực",
+  "Friend Request": "Yêu cầu",
+  "Posts": "Bài viết"
 }
