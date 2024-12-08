@@ -621,7 +621,7 @@ const RangeChat = forwardRef(
               </div>
             )}
             {toggle && (
-              <div className="absolute w-40 h-30 bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
+              <div className="absolute w-40 h-30 bg-secondary border z-10 border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
                 {/* <div
                   onClick={() => {
                     setCreatg(!createg);

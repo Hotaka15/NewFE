@@ -100,7 +100,7 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
           name="comment"
           styles="w-full rounded-full py-3"
           placeholder={
-            replyAt ? `${t(Reply)} @${"replyAt"}` : t("Comment this post")
+            replyAt ? `${t("Reply")} @${"replyAt"}` : t("Comment this post")
           }
           register={register("comment", {
             required: t("Comment can't be empty"),
