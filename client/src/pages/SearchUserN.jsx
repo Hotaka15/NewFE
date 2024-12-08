@@ -14,7 +14,7 @@ import {
 } from "../until/post";
 import { io } from "socket.io-client";
 import { botsuggestsearchRequest } from "../until/bot";
-import { usersendFriendRequest } from "../until/user";
+import { searchUserName, usersendFriendRequest } from "../until/user";
 import { useTranslation } from "react-i18next";
 
 const UserCard = ({ token, user }) => {
@@ -82,7 +82,7 @@ const UserCard = ({ token, user }) => {
   );
 };
 
-const SearchUser = () => {
+const SearchUserN = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
   console.log("main key:" + key);
@@ -96,7 +96,7 @@ const SearchUser = () => {
       const prompt = keyword;
       console.log(prompt);
 
-      const res = await botsuggestsearchRequest(prompt);
+      const res = await searchUserName(user?.token, prompt);
       console.log(res);
       setListUser(res);
       setLoading(false);
@@ -112,6 +112,7 @@ const SearchUser = () => {
     setLoading(true);
 
     handleSearch(keyword);
+    // fetchPost();
     // let timeoutId;
     // timeoutId = setTimeout(() => {
     //   keyword && handleSearch(keyword);
@@ -162,4 +163,4 @@ lg:rounded-lg h-screen overflow-hidden"
   );
 };
 
-export default SearchUser;
+export default SearchUserN;

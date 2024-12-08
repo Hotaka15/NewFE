@@ -112,7 +112,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
       <div className="absolute w-full h-full flex justify-center items-center ">
         <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/5 h-[60%] rounded-2xl">
           <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-            <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
+            <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium whitespace-nowraps">
               {t("Create Group")}
               <div
                 className="text-ascent-1 h-full flex items-center cursor-pointer"
@@ -126,36 +126,42 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
           </div>
 
           <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">{t("Name")} </span>
+            <span className="text-ascent-1 whitespace-nowraps">
+              {t("Name")}{" "}
+            </span>
             <input
               type="text"
               onChange={(e) => {
                 setName(e.target.value);
               }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
               placeholder={t("Name")}
             />
           </div>
           <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1">{t("Description")} </span>
+            <span className="text-ascent-1 whitespace-nowraps">
+              {t("Description")}
+            </span>
             <input
               type="text"
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
               placeholder={t("Description")}
             />
           </div>
           <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1">{t("Member")}</span>
+            <span className="text-ascent-1 whitespace-nowraps">
+              {t("Member")}
+            </span>
 
             <input
               type="text"
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
+              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1  "
               placeholder={t("Search")}
             />
           </div>

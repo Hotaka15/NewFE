@@ -135,9 +135,14 @@ const TopBar = ({ user, setKey }) => {
     const key = data?.search;
     console.log(key);
 
-    if (key != "" && !key.startsWith("@searchuser")) {
+    if (
+      key != "" &&
+      !key.startsWith("@searchuser") &&
+      !key.startsWith("@user")
+    ) {
       try {
-        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
+        console.log(key);
+
         navigate(`/search/${key ? key : ""}`);
       } catch (error) {
         console.log(error);
@@ -148,6 +153,13 @@ const TopBar = ({ user, setKey }) => {
         navigate(
           `/searchuser/${key ? key.replace(/^@searchuser\s*/, "") : ""}`
         );
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (key != "" && key.startsWith("@user")) {
+      try {
+        // await postsearchfetchPosts(user.token, dispatch, "", key ? key : "");
+        navigate(`/user/${key ? key.replace(/^@user\s*/, "") : ""}`);
       } catch (error) {
         console.log(error);
       }
@@ -480,7 +492,7 @@ const TopBar = ({ user, setKey }) => {
             >
               <div className="flex justify-center items-center ">
                 <IoLogOut size={25} />
-                (t{"Logout"})
+                {t("Logout")}
               </div>
             </div>
           </div>

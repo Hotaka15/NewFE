@@ -212,7 +212,7 @@ const EditProfile = () => {
       });
 
       console.log(res);
-      if (res?.status === "failed") {
+      if (res?.status === "failed" && undefined) {
         seterrMsg(res);
       } else {
         seterrMsg(res);

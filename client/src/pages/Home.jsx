@@ -689,9 +689,9 @@ const Home = () => {
               {
                 <div
                   className="flex items-center justify-start gap-2 py-4"
-                  onClick={() => {
-                    dispatch(UpdatePost(true));
-                  }}
+                  // onClick={() => {
+                  //   dispatch(UpdatePost(true));
+                  // }}
                 >
                   <label
                     htmlFor="imgUpload"
@@ -706,7 +706,7 @@ const Home = () => {
                     accept=".jpg, .png, .jpeg"
                   /> */}
                     <BiImages />
-                    <span>{t("image")}</span>
+                    <div className="w-[70px]">{t("image")}</div>
                   </label>
 
                   <label
@@ -838,7 +838,7 @@ const Home = () => {
                         <CustomButton
                           tittle={t("accept")}
                           onClick={() => acceptFriendRequest(_id, "accepted")}
-                          containerStyles="bg-[#0444a4] text-xs text-white px-1.5
+                          containerStyles="bg-[#0444a4] text-xs text-white px-1.5 
                     py-1 rounded-full"
                         />
                         <CustomButton

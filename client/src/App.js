@@ -19,6 +19,7 @@ import {
   NewFeed,
   Check,
   SearchUser,
+  SearchUserN,
 } from "./pages";
 import { useSelector } from "react-redux";
 import PrivateRoute from "./until/privateroute";
@@ -61,11 +62,12 @@ function App() {
               <Route path="/frienddetails" element={<ProfileDetail />} />
               <Route path="/friendsuggest" element={<FriendDetailSuggest />} />
               <Route path="/friendrequest" element={<FriendDetailRequest />} />
-              {/* <Route path="/profile/:id?" element={<Profile />} /> */}
+              <Route path="/profile/:id?" element={<ProfileFix />} />
               <Route path="/chat/:id?" element={<Chat />} />
               <Route path="/post/:id?" element={<PostPage />} />
               <Route path="/search/:keyword?" element={<Search />} />
               <Route path="/searchuser/:keyword?" element={<SearchUser />} />
+              <Route path="/user/:keyword?" element={<SearchUserN />} />
               <Route path="/save" element={<Save />} />
               <Route path="/demo" element={<Demo />} />
               <Route path="/newfeed" element={<NewFeed />} />
@@ -76,12 +78,14 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/friend" element={<Friend />} />
               <Route path="/frienddetails" element={<ProfileDetail />} />
+
               <Route path="/friendsuggest" element={<FriendDetailSuggest />} />
               <Route path="/friendrequest" element={<FriendDetailRequest />} />
-              {/* <Route path="/profile/:id?" element={<Profile />} /> */}
+              <Route path="/profile/:id?" element={<ProfileFix />} />
               <Route path="/chat/:id?" element={<Chat />} />
               <Route path="/post/:id?" element={<PostPage />} />
               <Route path="/search/:keyword?" element={<Search />} />
+              <Route path="/user/:keyword?" element={<SearchUserN />} />
               <Route path="/searchuser/:keyword?" element={<SearchUser />} />
               <Route path="/save" element={<Save />} />
               <Route path="/demo" element={<Demo />} />
@@ -96,7 +100,7 @@ function App() {
             path="/reset-password/:id/:token"
             element={<ChangePassword />}
           />
-          <Route path="/profile/:id?" element={<ProfileFix />} />
+
           <Route path="/check" element={<Check />} />
         </Routes>
       </SocketProvider>
