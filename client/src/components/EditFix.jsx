@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import TextInput from "./TextInput";
 import Loading from "./Loading";
 import CustomButton from "./CustomButton";
-import { UpdateProfile, UserLogin } from "../redux/userSlice";
+import { Logout, UpdateProfile, UserLogin } from "../redux/userSlice";
 import { apiRequest, handFileUpload } from "../until";
 import { NoProfile } from "../assets";
-import { userapiRequest } from "../until/user";
+import { userapiRequest, userChangePasswordRequest } from "../until/user";
 import { FaFileImage } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 const EditFix = () => {
@@ -208,7 +208,24 @@ const EditFix = () => {
   // };
   const validateemail = (email) => {};
   const handlerechangePass = async (data) => {
-    setisSubmitting(false);
+    console.log(data);
+    const { oldpassword, newpassword } = data;
+    // setisSubmitting(true);
+    try {
+      const res = await userChangePasswordRequest(
+        user?.token,
+        oldpassword,
+        newpassword
+      );
+      if (res?.status == 400) {
+        seterrMsg(res);
+      } else {
+        dispatch(Logout());
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // const handleresetSubmit = async (data) => {
@@ -284,7 +301,10 @@ const EditFix = () => {
                     ? "bg-blue text-white"
                     : "text-ascent-2 outline outline-1"
                 }  `}
-                onClick={() => setEditor(1)}
+                onClick={() => {
+                  setEditor(1);
+                  seterrMsg("");
+                }}
               >
                 {t("Profile")}
               </span>
@@ -295,7 +315,10 @@ const EditFix = () => {
                     ? "bg-blue text-white"
                     : "text-ascent-2 outline outline-1"
                 }  `}
-                onClick={() => setEditor(5)}
+                onClick={() => {
+                  setEditor(5);
+                  seterrMsg("");
+                }}
               >
                 {t("Password")}
               </span>
@@ -460,7 +483,7 @@ const EditFix = () => {
                   <span
                     role="alert"
                     className={`text-sm ${
-                      errMsg?.status === "failed"
+                      errMsg?.status === 400
                         ? "text-[#f64949fe]"
                         : "text-[#2ba150fe]"
                     } mt-0.5`}
@@ -499,12 +522,24 @@ const EditFix = () => {
                 >
                   <div className="w-full flex flex-col lg:flex-col gap-1 md:gap-2">
                     <TextInput
-                      name="password"
-                      label={t("Password")}
-                      placeholder={t("Password")}
+                      name="oldpassword"
+                      label={t("Old Password")}
+                      placeholder={t("Old Password")}
                       type="password"
                       styles="w-full"
-                      register={register("password", {
+                      register={register("oldpassword", {
+                        required: t("Password is required!"),
+                      })}
+                      error={errors.password ? errors.password?.message : ""}
+                    />
+
+                    <TextInput
+                      name="newpassword"
+                      label={t("New Password")}
+                      placeholder={t("NewPassword")}
+                      type="password"
+                      styles="w-full"
+                      register={register("newpassword", {
                         required: t("Password is required!"),
                       })}
                       error={errors.password ? errors.password?.message : ""}
@@ -517,9 +552,9 @@ const EditFix = () => {
                       styles="w-full"
                       register={register("cPassword", {
                         validate: (value) => {
-                          const { password } = getValues();
+                          const { newpassword } = getValues();
 
-                          if (password != value) {
+                          if (newpassword != value) {
                             return t("Passwords do no match");
                           }
                         },
@@ -536,7 +571,7 @@ const EditFix = () => {
                     <span
                       role="alert"
                       className={`text-sm ${
-                        errMsg?.status === "failed"
+                        errMsg?.status === 400
                           ? "text-[#f64949fe] "
                           : "text-[#2ba150fe]"
                       } mt-0.5`}

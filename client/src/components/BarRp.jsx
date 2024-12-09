@@ -75,7 +75,6 @@ const data = [
 ];
 
 export default function BarRp({ monthly }) {
-  console.log(monthly);
   const { t } = useTranslation();
   return (
     <div className="h-full bg-ascent-3/10 p-4 rounded-sm  flex flex-col flex-1">

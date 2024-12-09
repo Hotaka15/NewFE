@@ -36,7 +36,7 @@ const Login = () => {
         method: "POST",
       });
 
-      if (res?.status === 200) {
+      if (res?.data?.message == "Login success") {
         seterrMsg("");
 
         const getres = res?.data;
@@ -118,11 +118,13 @@ const Login = () => {
 
             {errMsg?.message && (
               <span
-                className={`text-sm ${
-                  errMsg?.status == "failed"
-                    ? "text-[#f64949fe]"
-                    : "text-[#2ba150fe]"
-                } mt-0.5`}
+                className={`text-sm  text-[#f64949fe] mt-0.5`}
+                // className={`text-sm
+                //   ${
+                //   errMsg?.status == "failed"
+                //     ? "text-[#f64949fe]"
+                //     : "text-[#2ba150fe]"
+                // } mt-0.5`}
               >
                 {errMsg?.message}
               </span>

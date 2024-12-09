@@ -24,10 +24,43 @@ export const userapiRequest = async ({ url, token, data, method }) => {
     return result?.data;
   } catch (error) {
     const err = error.response.data;
+    console.log(error);
 
     console.log(err);
 
-    return { status: err.status, message: err.message };
+    return { status: error.request.status, message: err.message };
+  }
+};
+
+export const userResetRequest = async (data) => {
+  try {
+    const res = await userapiRequest({
+      url: "/reset-password",
+      token: "",
+      data: data,
+      method: "POST",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const userChangePasswordRequest = async (token, oldpass, newpass) => {
+  try {
+    const res = await userapiRequest({
+      url: "/change-password",
+      token: token,
+      data: { oldPassword: oldpass, newPassword: newpass },
+      method: "PUT",
+    });
+    console.log(res);
+
+    return res;
+  } catch (error) {
+    console.log(error);
   }
 };
 

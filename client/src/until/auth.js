@@ -18,7 +18,7 @@ export const authapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    // console.log(result);
+    console.log(result);
 
     return result;
   } catch (error) {

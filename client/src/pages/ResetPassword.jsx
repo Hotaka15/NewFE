@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { CustomButton, Loading, TextInput } from "../components";
 import { apiRequest } from "../until";
 import { useTranslation } from "react-i18next";
+import { userResetRequest } from "../until/user";
 
 const ResetPassword = () => {
   const [errMsg, seterrMsg] = useState("");
@@ -19,13 +20,14 @@ const ResetPassword = () => {
   const handleresetSubmit = async (data) => {
     setisSubmitting(true);
     try {
-      const res = await apiRequest({
-        url: "/users/request-passwordreset",
-        data: data,
-        method: "POST",
-      });
-      if (res?.status === "failed") {
+      const res = await userResetRequest(data);
+      console.log(res);
+
+      if (res?.message === "Password reset have send email  successful") {
         seterrMsg(res);
+        setTimeout(() => {
+          window.location.replace("/login");
+        }, 5000);
       } else {
         seterrMsg(res);
       }
@@ -68,9 +70,9 @@ const ResetPassword = () => {
             <span
               role="alert"
               className={`text-sm ${
-                errMsg?.status === "failed"
-                  ? "text-[#f64949fe] "
-                  : "text-[#2ba150fe]"
+                errMsg?.message === "Password reset have send email  successful"
+                  ? "text-[#2ba150fe]"
+                  : "text-[#f64949fe] "
               } mt-0.5`}
             >
               {errMsg?.message}

@@ -35,7 +35,7 @@ const Register = () => {
         method: "POST",
       });
 
-      if (res?.status == undefined) {
+      if (res?.status == 500) {
         setErrMsg(res);
       } else {
         setErrMsg(res?.data);
@@ -146,7 +146,7 @@ const Register = () => {
             {errMsg?.message && (
               <span
                 className={`text-sm ${
-                  errMsg?.status == undefined
+                  errMsg?.status == 500
                     ? "text-[#f64949fe]"
                     : "text-[#2ba150fe]"
                 } mt-0.5`}

@@ -29,6 +29,7 @@ const Notification = ({ notify, fetchNotification }) => {
   const handlelist = () => {
     setIsAll(false);
     const list = notify && notify.filter((noti) => !noti.isRead);
+
     setListNotifications(list);
   };
   const handlelistAll = () => {
