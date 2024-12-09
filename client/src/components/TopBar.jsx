@@ -407,13 +407,14 @@ const TopBar = ({ user, setKey }) => {
             }}
           >
             <IoNotifications size={30} />
-            {notifications.filter((noti) => !noti.isRead).length > 0 && (
-              <div className="w-4 h-4 rounded-full flex items-center justify-center absolute top-2 right-2 bg-[#e22222] text-sm text-white">
-                {notifications.filter((noti) => !noti.isRead).length < 10
-                  ? notifications.filter((noti) => !noti.isRead).length
-                  : "9+"}
-              </div>
-            )}
+            {notifications &&
+              notifications.filter((noti) => !noti.isRead).length > 0 && (
+                <div className="w-4 h-4 rounded-full flex items-center justify-center absolute top-2 right-2 bg-[#e22222] text-sm text-white">
+                  {notifications.filter((noti) => !noti.isRead).length < 10
+                    ? notifications.filter((noti) => !noti.isRead).length
+                    : "9+"}
+                </div>
+              )}
           </div>
           <img
             src={user?.profileUrl ?? NoProfile}

@@ -28,7 +28,7 @@ const Notification = ({ notify, fetchNotification }) => {
 
   const handlelist = () => {
     setIsAll(false);
-    const list = notify.filter((noti) => !noti.isRead);
+    const list = notify && notify.filter((noti) => !noti.isRead);
     setListNotifications(list);
   };
   const handlelistAll = () => {
@@ -65,7 +65,8 @@ const Notification = ({ notify, fetchNotification }) => {
         <div className="pb-4 flex items-center justify-between">
           <span className="font-medium pb-4">{t("Notifications")}</span>
           <spa className="text-sm">
-            {listNotification.filter((noti) => !noti.isRead).length}
+            {listNotification &&
+              listNotification.filter((noti) => !noti.isRead).length}
           </spa>
         </div>
 
