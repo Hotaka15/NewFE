@@ -127,7 +127,7 @@ const RangeChat = forwardRef(
     const fetchchat = async (idroom) => {
       try {
         const res = await fetchChat(user?.token, idroom, 1);
-        console.log(res);
+
         console.log(faild);
         try {
           console.log(res?.data?.messages[0]);
@@ -163,7 +163,7 @@ const RangeChat = forwardRef(
 
           // console.log(res?.data?.messages);
           // setListchat((pre) => [...pre, ...res?.data?.messages]);
-          // setListchat(res?.data?.messages);
+          setListchat(res?.data?.messages);
           setPage(2);
         } catch (error) {
           console.log(error);
@@ -1287,6 +1287,8 @@ const Chat = () => {
     try {
       const userId = user?._id;
       const res = await chatfetchListpersonal(user?.token, userId);
+      console.log(res);
+
       if (res?.message == "Conversation not found") {
         setListchat([]);
       } else {
