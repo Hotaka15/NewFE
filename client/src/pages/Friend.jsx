@@ -258,12 +258,12 @@ lg:rounded-lg h-screen overflow-hidden"
                   </Link>
                 </div>
 
-                <div className="flex justify-center items-center flex-col w-full">
-                  <div className="w-2/3 h-fit flex gap-4 flex-wrap">
+                <div className="flex justify-start items-center flex-col w-full">
+                  <div className="w-3/4  h-fit flex gap-4 flex-wrap">
                     {suggestedFriends && suggestedFriends.length > 0 ? (
-                      suggestedFriends.map((friend) => {
+                      suggestedFriends.map((friend, index) => {
                         return (
-                          <div className="w-44 h-fit">
+                          <div key={index} className="w-44 h-fit">
                             <FriendCardSuggest
                               user={user}
                               fetchSuggestFriends={fetchSuggestFriends}
@@ -275,7 +275,6 @@ lg:rounded-lg h-screen overflow-hidden"
                     ) : (
                       <div>
                         <div className="w-full h-full bg-primary rounded-2xl ">
-                          {" "}
                           <Loading />
                         </div>
                         <div className="w-full h-fit flex gap-2 flex-wrap">

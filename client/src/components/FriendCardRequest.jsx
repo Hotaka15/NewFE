@@ -7,13 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useracceptFriendRequest, usergetUserpInfo } from "../until/user";
 import { useTranslation } from "react-i18next";
-const FriendCardRequest = ({
-  user,
-  fetchFriendRequest,
-  setfriendRequest,
-  friend,
-  title,
-}) => {
+const FriendCardRequest = ({ user, fetchFriendRequest, friend }) => {
   // console.log(title);
 
   const [userr, setUserr] = useState();

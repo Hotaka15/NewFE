@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import {
   CustomButton,
   EditProfile,
+  FriendDRq,
   Loading,
   PostCard,
   TopBar,
@@ -165,38 +166,63 @@ const FriendDetailSuggest = ({ title }) => {
             {suggestedFriends ? (
               suggestedFriends.map((friend) => {
                 return (
-                  <div
-                    className="w-full flex gap-4 items-center cursor-pointer"
-                    onClick={() => {
-                      setLoading(true);
-                      getUser(friend?._id);
-                      setUid(friend?._id);
-                    }}
-                  >
-                    <img
-                      src={friend?.profileUrl ?? NoProfile}
-                      alt={friend?.firstName}
-                      className="w-16 h-16 object-cover rounded-full"
-                    />
-                    <div className="flex-1">
-                      <p className="text-base font-medium text-ascent-1">
-                        {friend?.firstName} {friend?.lastName}
-                      </p>
-                      <span className="text-sm text-ascent-2">
-                        {friend?.profession ?? t("No Profession")}
-                      </span>
-                    </div>
-                    <CustomButton
-                      onClick={() => {
-                        handleFriendRequest(friend?._id);
-                      }}
-                      containerStyles="bg-blue px-3 rounded-xl py-1 text-white"
-                      tittle={t("Add")}
-                    />
-                  </div>
+                  <FriendDRq
+                    friend={friend}
+                    setLoading={setLoading}
+                    getUser={getUser}
+                    setUid={setUid}
+                    handleFriendRequest={handleFriendRequest}
+                  />
                 );
               })
             ) : (
+              //     return (
+              //       <div className="w-full flex gap-4 items-center cursor-pointer">
+              //         <img
+              //           onClick={() => {
+              //             setLoading(true);
+              //             getUser(friend?._id);
+              //             setUid(friend?._id);
+              //           }}
+              //           src={friend?.profileUrl ?? NoProfile}
+              //           alt={friend?.firstName}
+              //           className="w-16 h-16 object-cover rounded-full"
+              //         />
+              //         <div
+              //           className="flex-1"
+              //           onClick={() => {
+              //             setLoading(true);
+              //             getUser(friend?._id);
+              //             setUid(friend?._id);
+              //           }}
+              //         >
+              //           <p className="text-base font-medium text-ascent-1">
+              //             {friend?.firstName} {friend?.lastName}
+              //           </p>
+              //           <span className="text-sm text-ascent-2">
+              //             {friend?.profession ?? t("No Profession")}
+              //           </span>
+              //         </div>
+              //         {!sent ? (
+              //           <CustomButton
+              //             onClick={() => {
+              //               sent = false;
+              //               handleFriendRequest(friend?._id);
+              //             }}
+              //             containerStyles="bg-blue px-3 rounded-xl py-1 text-white"
+              //             tittle={t("Add")}
+              //           />
+              //         ) : (
+              //           <CustomButton
+              //             onClick={() => {}}
+              //             containerStyles="bg-blue px-3 rounded-xl py-1 text-white"
+              //             tittle={t("Sent")}
+              //           />
+              //         )}
+              //       </div>
+              //     );
+              //   })
+              // )
               <div></div>
             )}
             {/* {(() => {
@@ -249,7 +275,7 @@ const FriendDetailSuggest = ({ title }) => {
                   />
                 </div>
 
-                <div className="select-none relative text-ascent-1 w-full rounded-xl mb-5 py-7 text-center bg-primary pb-8 border-b-2 border-[#66666645] flex flex-col items-center">
+                <div className="select-none relative text-ascent-1 w-full rounded-xl mb-2 py-7 text-center bg-primary pb-8 border-b-2 border-[#66666645] flex flex-col items-center">
                   <div className="">
                     <img
                       src={userInfor?.profileUrl ?? NoProfile}
@@ -262,9 +288,9 @@ const FriendDetailSuggest = ({ title }) => {
                     {userInfor?.firstName} {userInfor?.lastName}
                   </div>
                 </div>
-                <div className="w-full flex gap-6 ">
+                <div className="w-full flex gap-2 ">
                   <div className="w-2/3 h-full">
-                    <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl  items-center">
+                    <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl items-center">
                       {loading ? (
                         <div className="w-full justify-center h-full flex">
                           <Loading />

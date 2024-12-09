@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -111,6 +111,7 @@ const EditProfile = () => {
   const [birthDate, setBirthDate] = useState(
     user && user?.birthDate && user?.birthDate.split("T")[0]
   );
+  const [maxDate, setMaxDate] = useState("");
   const [selecthobby, setSelecthobby] = useState([]);
   const handlebg = (e) => {
     setPicuter(e.target.files[0]);
@@ -220,6 +221,11 @@ const EditProfile = () => {
   const handleSelect = (e) => {
     setPicuter(e.target.files[0]);
   };
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setMaxDate(today);
+  }, []);
 
   return (
     <div>
@@ -360,6 +366,7 @@ const EditProfile = () => {
                     <input
                       {...register("birthDate")}
                       type="date"
+                      max={maxDate}
                       value={birthDate}
                       className="datepicker-input bg-secondary rounded border w-full border-[#66666690] text-ascent-1 px-4 py-3"
                       onChange={(e) => {

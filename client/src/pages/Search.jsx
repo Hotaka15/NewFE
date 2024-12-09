@@ -17,7 +17,7 @@ import { UpdatePosts } from "../redux/postSlice";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
-
+  const [maxDate, setMaxDate] = useState("");
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
@@ -83,6 +83,10 @@ const Search = () => {
   //   console.log(page);
   //   page !== 1 && handleSearch(keyword);
   // }, [page]);
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setMaxDate(today);
+  }, []);
 
   useEffect(() => {
     page > 1 && handleSearch(keyword, page);
@@ -191,6 +195,7 @@ lg:rounded-lg h-screen overflow-hidden"
                         <div>
                           <input
                             type="date"
+                            max={maxDate}
                             onChange={(e) => {
                               setTo(e.target.value);
                               setPage(1);

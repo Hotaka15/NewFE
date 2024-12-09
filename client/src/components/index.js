@@ -36,6 +36,7 @@ import Managergroup from "./Managergroup";
 import AddUserCard from "./AddUserCard";
 import Hobby from "./Hobby";
 import Rowtb from "./Rowtb";
+import FriendDRq from "./FriendDRq";
 export {
   TextInput,
   Loading,
@@ -75,4 +76,5 @@ export {
   AddUserCard,
   Hobby,
   Rowtb,
+  FriendDRq,
 };

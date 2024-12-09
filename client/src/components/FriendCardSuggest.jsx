@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const [sended, setSended] = useState(false);
   // const handleFriendRequest = async (id) => {
   //   try {
   //     const res = await sendFriendRequest(user.token, id);
@@ -34,6 +34,7 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
+      setSended(true);
     } catch (error) {
       console.log(error);
     }
@@ -56,11 +57,18 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
             {friend?.firstName} {friend?.lastName}
           </span>
           <div className="w-4/5">
-            <CustomButton
-              tittle={t("Add")}
-              onClick={() => handleFriendRequest(friend?._id)}
-              containerStyles="text-white bg-blue w-full rounded-lg inline-flex justify-center py-2"
-            />
+            {!sended ? (
+              <CustomButton
+                tittle={t("Add")}
+                onClick={() => handleFriendRequest(friend?._id)}
+                containerStyles="text-white bg-blue w-full rounded-lg inline-flex justify-center py-2"
+              />
+            ) : (
+              <CustomButton
+                tittle={t("Sent")}
+                containerStyles="text-ascent-2 bg-secondary w-full rounded-lg inline-flex justify-center py-2"
+              />
+            )}
             {/* <CustomButton
               tittle="Delete"
               onClick={() => acceptFriendRequest(friend?._id, "Denied")}

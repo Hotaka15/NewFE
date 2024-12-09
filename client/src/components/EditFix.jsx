@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,7 @@ const EditFix = () => {
   const [birthDate, setBirthDate] = useState(
     user && user?.birthDate && user?.birthDate.split("T")[0]
   );
-
+  const [maxDate, setMaxDate] = useState("");
   const provinces = [
     "An Giang",
     "Bà Rịa - Vũng Tàu",
@@ -145,6 +145,7 @@ const EditFix = () => {
         method: "PUT",
         token: user?.token,
       });
+      console.log(res);
 
       if (res?.status === "failed") {
         seterrMsg(res);
@@ -238,6 +239,11 @@ const EditFix = () => {
   const handleSelect = (e) => {
     setPicuter(e.target.files[0]);
   };
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setMaxDate(today);
+  }, []);
 
   return (
     <div>
@@ -342,6 +348,7 @@ const EditFix = () => {
                     <input
                       {...register("birthDate")}
                       type="date"
+                      max={maxDate}
                       value={birthDate}
                       onChange={(e) => {
                         setBirthDate(e.target.value);
@@ -364,7 +371,11 @@ const EditFix = () => {
                       className="text-ascent-1 w-full bg-secondary rounded border border-[#66666690] px-4 py-3"
                     >
                       {provinces.map((province, index) => (
-                        <option key={index} value={province}>
+                        <option
+                          selected={user?.province == province}
+                          key={index}
+                          value={province}
+                        >
                           {province}
                         </option>
                       ))}
@@ -441,7 +452,7 @@ const EditFix = () => {
                     onInput={(e) => {
                       e.target.value[0] && handlebg(e);
                     }}
-                    accept=".jpg, .png, .jpeg"
+                    accept=".jpg, .png, .jpeg, .gif"
                   />
                 </label>
 
