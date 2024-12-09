@@ -514,9 +514,10 @@ const RangeChat = forwardRef(
             fetchchat(idroom);
             setPage(1);
           } else {
+            console.log(after);
+
             // console.log(data);
             // fetchchatSeen(idroom);
-            console.log(trigger);
 
             setTrigger((prevTrigger) => !prevTrigger);
             // fetchList();

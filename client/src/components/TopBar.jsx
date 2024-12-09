@@ -11,7 +11,7 @@ import { MdDarkMode } from "react-icons/md";
 
 import { FaTools } from "react-icons/fa";
 import { IoNotifications } from "react-icons/io5";
-
+import { TfiAngleRight } from "react-icons/tfi";
 import { setTheme } from "../redux/theme";
 import { Logout, Setnotification, UserLogin } from "../redux/userSlice";
 import { fetchNotifications, fetchPosts } from "../until";
@@ -32,9 +32,7 @@ import {
   userapiRequest,
   usergetlistUserInfo,
 } from "../until/user";
-import Loading from "./Loading";
-import { botsuggestsearchRequest } from "../until/bot";
-import { useTransition } from "react";
+import { TbChevronRight } from "react-icons/tb";
 import { useSocket } from "../context/SocketContext";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
@@ -408,7 +406,7 @@ const TopBar = ({ user, setKey }) => {
               // fetchNotification();
             }}
           >
-            <IoNotifications size={25} />
+            <IoNotifications size={30} />
             {notifications.filter((noti) => !noti.isRead).length > 0 && (
               <div className="w-4 h-4 rounded-full flex items-center justify-center absolute top-2 right-2 bg-[#e22222] text-sm text-white">
                 {notifications.filter((noti) => !noti.isRead).length < 10
@@ -447,13 +445,16 @@ const TopBar = ({ user, setKey }) => {
       )}
       {ava && (
         <div className="bg-primary">
-          <div className=" right-20 z-50 absolute w-fit overflow-auto border rounded-xl text-ascent-1 h-fit border-[#66666690] justify-center flex flex-col">
-            <Link to={"/profile/" + user?._id} className="flex gap-2">
-              <div className="w-full px-10 text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex flex-col justify-evenly">
-                <div className="flex justify-center items-center">
+          <div className=" right-20 z-50 absolute w-1/6 overflow-auto border rounded-xl text-ascent-1 h-fit border-[#66666690] justify-center flex flex-col">
+            <Link to={"/profile/" + user?._id} className="flex gap-2 w-full">
+              <div
+                className="w-full px-4 text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor
+                             flex flex-col justify-evenly"
+              >
+                <div className="w-full flex justify-start items-center gap-2">
                   <img
                     src={user?.profileUrl ?? NoProfile}
-                    className="w-10 h-10 object-cover rounded-full px-1 py-1 z-10"
+                    className="w-10 h-10 object-cover rounded-full z-10"
                     onClick={() => {
                       setAvatar();
                     }}
@@ -462,32 +463,34 @@ const TopBar = ({ user, setKey }) => {
                 </div>
               </div>
             </Link>
-            {/* <div
-              className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex justify-evenly"
-              onClick={() => {
-                onSubmit();
-              }}
-            >
-              <div className="flex justify-center items-center">
-                Active: {user?.statusActive ? "ON" : "OFF"}
-              </div>
-            </div> */}
             <div
-              className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor  flex justify-evenly"
+              className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor flex px-4"
               onClick={() => dispatch(UpdateProfile(true))}
             >
-              <div className="flex justify-center items-center">
-                <IoMdSettings size={25} />
+              <div className="flex justify-start items-center w-full gap-2">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70 ">
+                  <IoMdSettings size={30} />
+                </div>
+
                 {t("Setting")}
+              </div>
+              <div className="flex h-full text-ascent-2 py-2 items-center justify-center">
+                <TfiAngleRight size={20} />
               </div>
             </div>
             <div
-              className="w-full text-center py-3 font-medium cursor-pointer bg-primary hover:bg-bgColor flex justify-evenly"
+              className="w-full text-center py-2 font-medium cursor-pointer bg-primary hover:bg-bgColor flex px-4"
               onClick={() => handleLogout()}
             >
-              <div className="flex justify-center items-center ">
-                <IoLogOut size={25} />
+              <div className="flex justify-start items-center w-full gap-2">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70 ">
+                  <IoLogOut size={30} />
+                </div>
+
                 {t("Logout")}
+              </div>
+              <div className="flex h-full text-ascent-2 py-2 items-center justify-center">
+                <TfiAngleRight size={20} />
               </div>
             </div>
           </div>
