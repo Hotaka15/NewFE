@@ -68,7 +68,7 @@ const CommentForm = ({ user, postid, id, post, replyAt, getComments }) => {
       action: "comment",
     };
 
-    console.log("Emitting user_interaction:", data);
+    // console.log("Emitting user_interaction:", data);
     await socket.emit("interactPost", data);
   };
   const onSubmit = async (data) => {
@@ -329,7 +329,6 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
 
       setPost(res);
     } catch (error) {
@@ -391,7 +390,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
         action: "like",
       };
 
-      console.log("Emitting user_interaction:", data);
+      // console.log("Emitting user_interaction:", data);
       await socket.emit("interactPost", data);
     } catch (error) {
       console.log(error);

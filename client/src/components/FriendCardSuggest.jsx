@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 import { usersendFriendRequest } from "../until/user";
 import { useTranslation } from "react-i18next";
 const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
-  console.log(friend);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -35,7 +34,6 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

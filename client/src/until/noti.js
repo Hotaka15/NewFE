@@ -9,7 +9,7 @@ export const API = axios.create({
 
 export const notiapiRequest = async ({ url, token, data, method }) => {
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -54,7 +54,7 @@ export const notifetchNotifications = async ({
 };
 
 export const notireadNotifications = async ({ token, _id }) => {
-  console.log(_id);
+  // console.log(_id);
 
   try {
     const res = await notiapiRequest({
@@ -72,7 +72,7 @@ export const notireadNotifications = async ({ token, _id }) => {
 };
 
 export const notideleteNotifications = async ({ token, _id }) => {
-  console.log(_id);
+  // console.log(_id);
 
   try {
     const res = await notiapiRequest({

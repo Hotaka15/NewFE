@@ -7,15 +7,13 @@ const UserTiitle = ({ useradd }) => {
   const { user } = useSelector((state) => state.user);
   const [avatar, setAvatar] = useState();
   const id = useradd;
-  console.log(user);
+
   const getUser = async (id) => {
     const res = await usergetUserInfo(user?.token, id);
-    console.log(res);
+
     setAvatar(res);
   };
   useEffect(() => {
-    console.log(useradd);
-
     getUser(id);
   }, [useradd]);
   return (

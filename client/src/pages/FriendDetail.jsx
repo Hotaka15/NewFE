@@ -36,7 +36,6 @@ const ProfileDetail = ({ title }) => {
     await deletePost(id, user.token);
     await getPosts(uid);
   };
-  console.log(user);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -44,14 +43,13 @@ const ProfileDetail = ({ title }) => {
       //   fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
         const res = await apiRequest({
           url: `/users/search/${search}`,
           token: user?.token,
           data: {},
           method: "POST",
         });
-        console.log(res);
+
         // setsuggestedFriends(res);
       } catch (error) {
         console.log(error);
@@ -64,8 +62,6 @@ const ProfileDetail = ({ title }) => {
     // await getPosts(uid);
   };
   const getPosts = async (uri, res) => {
-    console.log(uri);
-    console.log(res);
     await postfetchuserPosts(user.token, res, dispatch, uri);
     setLoading(false);
   };
@@ -76,8 +72,6 @@ const ProfileDetail = ({ title }) => {
       const newData = { token: user?.token, ...res };
       setBanner(res?.profileUrl);
       setUserInfor(res);
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -85,14 +79,13 @@ const ProfileDetail = ({ title }) => {
 
   const getFriend = async () => {
     const res = await usergetFriends(user?.token);
-    console.log(res);
+
     setFriend(res?.friends);
   };
 
   const handleedit = () => {
     dispatch(UpdateProfile(true));
   };
-  console.log(userInfor);
 
   useEffect(() => {
     setLoading(true);
@@ -138,7 +131,6 @@ const ProfileDetail = ({ title }) => {
               </button> */}
             </form>
             {friend?.map((friend) => {
-              console.log(friend);
               return (
                 <div
                   className="w-full flex gap-4 items-center cursor-pointer"

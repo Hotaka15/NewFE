@@ -17,7 +17,7 @@ import { UpdatePosts } from "../redux/postSlice";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
-  console.log("main key:" + key);
+
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,6 @@ const Search = () => {
         categori: categori,
         page: page,
       };
-      console.log(data);
 
       if (data) {
         await postsearchfetchPosts(user.token, dispatch, "", data ? data : "");
@@ -66,8 +65,6 @@ const Search = () => {
       ) {
         // handleSearch(keyword);
         setPage((prevPage) => prevPage + 1);
-        console.log(page);
-        console.log(posts);
       }
     }, 500),
     [isFetching, page]
@@ -88,8 +85,6 @@ const Search = () => {
   // }, [page]);
 
   useEffect(() => {
-    console.log(page);
-
     page > 1 && handleSearch(keyword, page);
   }, [page]);
 
@@ -98,7 +93,6 @@ const Search = () => {
     setLoading(true);
     dispatch(UpdatePosts([]));
     handleSearch(keyword, 1);
-    console.log(keyword, to, from, categori);
   }, [keyword, to, from, categori]);
 
   // useEffect(() => {

@@ -27,15 +27,13 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setListsuggest(res?.suggestedFriends);
     } catch (error) {
       console.log(error);
     }
   };
   const handledelete = (id) => {
-    console.log(id);
-
     const array = [...listAdd];
     let newarray = array.filter((item) => item !== id);
     setListAdd(newarray);
@@ -50,7 +48,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
     } else {
       try {
         const res = await searchUserName(user?.token, search);
-        console.log(res);
+
         setListsuggest(res);
       } catch (error) {
         console.log(error);
@@ -63,7 +61,6 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
     try {
       if (userId) {
         if (name) {
-          console.log(name);
           if (description) {
             if (listAdd.length > 1) {
               await createGroup(
@@ -85,10 +82,8 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
   };
 
   const handdlelistadd = (id) => {
-    console.log(listAdd);
     const lista = [...listAdd];
     !lista?.includes(id) && lista.push(id);
-    console.log(id);
 
     setListAdd(lista);
   };

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 
 import UserTiitle from "./UserTiitle";
 import CustomButton from "./CustomButton";
-import { IoIosAddCircle } from "react-icons/io";
+
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { MdClose } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { searchUserName, userfriendSuggest } from "../until/user";
-import { NoProfile } from "../assets";
-import { addMemberGroup, createGroup } from "../until/group";
+
+import { addMemberGroup } from "../until/group";
 
 import AddUserCard from "./AddUserCard";
 import { useTranslation } from "react-i18next";
@@ -29,15 +29,13 @@ const AddNewMember = ({ idroom, setAddu }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setListsuggest(res?.suggestedFriends);
     } catch (error) {
       console.log(error);
     }
   };
   const handledelete = (id) => {
-    console.log(id);
-
     const array = [...listAdd];
     let newarray = array.filter((item) => item !== id);
     setListAdd(newarray);
@@ -52,7 +50,7 @@ const AddNewMember = ({ idroom, setAddu }) => {
     } else {
       try {
         const res = await searchUserName(user?.token, search);
-        console.log(res);
+
         setListsuggest(res);
       } catch (error) {
         console.log(error);
@@ -62,14 +60,12 @@ const AddNewMember = ({ idroom, setAddu }) => {
 
   const handleSubmit = async () => {
     try {
-      console.log(idroom, listAdd);
-
       const id_1 = user?._id;
 
       const res =
         listAdd.length > 0 &&
         (await addMemberGroup(user?.token, id_1, idroom, listAdd));
-      console.log(res);
+
       setAddu(false);
     } catch (error) {
       console.log(error);
@@ -77,10 +73,8 @@ const AddNewMember = ({ idroom, setAddu }) => {
   };
 
   const handdlelistadd = (id) => {
-    console.log(listAdd);
     const lista = [...listAdd];
     !lista?.includes(id) && lista.push(id);
-    console.log(id);
 
     setListAdd(lista);
   };

@@ -17,7 +17,6 @@ const ResetPassword = () => {
   });
 
   const handleresetSubmit = async (data) => {
-    console.log(data);
     setisSubmitting(true);
     try {
       const res = await apiRequest({

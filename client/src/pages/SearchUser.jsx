@@ -17,10 +17,7 @@ const UserCard = ({ token, user }) => {
   const { t } = useTranslation();
   const handleFriendRequest = async (id) => {
     try {
-      console.log(token);
-
       const res = await usersendFriendRequest(token, id);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +77,6 @@ const UserCard = ({ token, user }) => {
 const SearchUser = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
-  console.log("main key:" + key);
 
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
@@ -89,10 +85,9 @@ const SearchUser = () => {
   const handleSearch = async (keyword) => {
     try {
       const prompt = keyword;
-      console.log(prompt);
 
       const res = await botsuggestsearchRequest(prompt);
-      console.log(res);
+
       setListUser(res);
       setLoading(false);
     } catch (error) {

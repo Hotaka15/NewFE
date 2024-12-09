@@ -59,58 +59,20 @@ const FriendDetailSuggest = ({ title }) => {
     // await getPosts(uid);
   };
   const getPosts = async (uri, res) => {
-    console.log(uri);
-    console.log(res);
     await postfetchuserPosts(user.token, res, dispatch, uri);
     setLoading(false);
   };
   const getUser = async (userid) => {
-    console.log(userid);
-
     try {
       const res = await usergetUserInfo(user?.token, userid);
       getPosts(userid, res);
       const newData = { token: user?.token, ...res };
       setBanner(res?.profileUrl);
       setUserInfor(res);
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log(userInfor);
-  // const handleFriendRequest = async (id) => {
-  //   try {
-  //     const res = await sendFriendRequest(user.token, id);
-  //     await fetchSuggestFriends();
-  //     if (res?.status === "failed") {
-  //       Cookies.set("message", res?.message, { expires: 7 });
-  //       navigate("/error");
-  //     }
-  //     console.log(res);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // const fetchSuggestFriends = async () => {
-  //   try {
-  //     const res = await apiRequest({
-  //       url: "/users/suggested-friends",
-  //       token: user?.token,
-  //       method: "POST",
-  //     });
-  //     if (res?.status === "failed") {
-  //       Cookies.set("message", res?.message, { expires: 7 });
-  //       navigate("/error");
-  //     }
-  //     console.log(res);
-  //     setsuggestedFriends(res);
-  //   } catch (error) {
-  //     //console.log(error);
-  //   }
-  // };
 
   const fetchSuggestFriends = async () => {
     try {
@@ -119,46 +81,22 @@ const FriendDetailSuggest = ({ title }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setsuggestedFriends(res?.suggestedFriends);
     } catch (error) {
-      //console.log(error);
+      console.log(error);
     }
   };
 
-  // const handleSearch = async (e) => {
-  //   console.log(e.target.value);
-  //   // e.key === "Enter";
-  //   // e.preventDefault();
-  //   if (e === "") {
-  //     fetchSuggestFriends();
-  //   } else {
-  //     try {
-  //       // console.log(`/users/search/${e.target.value}`);
-  //       const res = await apiRequest({
-  //         url: `/users/search/${e.target.value}`,
-  //         token: user?.token,
-  //         data: {},
-  //         method: "POST",
-  //       });
-  //       console.log(res);
-  //       setsuggestedFriends(res);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
   const handleSearch = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
 
     if (e.target.value === "") {
       fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
         const res = await searchUserName(user?.token, e.target.value);
-        console.log(res);
+
         setsuggestedFriends(res);
       } catch (error) {
         console.log(error);
@@ -174,7 +112,6 @@ const FriendDetailSuggest = ({ title }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

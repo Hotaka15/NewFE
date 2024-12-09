@@ -35,10 +35,10 @@ const Login = () => {
         data: data,
         method: "POST",
       });
-      console.log(res);
+
       if (res?.status === 200) {
         seterrMsg("");
-        console.log(res);
+
         const getres = res?.data;
         const newData = { token: getres?.token, ...getres?.user };
         dispatch(UserLogin(newData));

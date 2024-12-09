@@ -75,7 +75,6 @@ const data = [
 ];
 
 export default function BarRpP({ month }) {
-  console.log(month);
   const { t } = useTranslation();
   const updatedData =
     month &&

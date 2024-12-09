@@ -84,21 +84,19 @@ const FriendDetailRequest = ({ title }) => {
       //   fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
         const res = await apiRequest({
           url: `/users/search/${search}`,
           token: user?.token,
           data: {},
           method: "POST",
         });
-        console.log(res);
+
         // setsuggestedFriends(res);
       } catch (error) {
         console.log(error);
       }
     }
   };
-  console.log(id);
 
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
@@ -110,8 +108,6 @@ const FriendDetailRequest = ({ title }) => {
   //   setLoading(false);
   // };
   const getPosts = async (uri, res) => {
-    console.log(uri);
-    console.log(res);
     await postfetchuserPosts(user.token, res, dispatch, uri);
     setLoading(false);
   };
@@ -130,8 +126,6 @@ const FriendDetailRequest = ({ title }) => {
       const newData = { token: user?.token, ...res };
       setBanner(res?.profileUrl);
       setUserInfor(res);
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +142,7 @@ const FriendDetailRequest = ({ title }) => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setsuggestedFriends(res);
     } catch (error) {
       //console.log(error);
@@ -180,7 +174,7 @@ const FriendDetailRequest = ({ title }) => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
@@ -190,8 +184,6 @@ const FriendDetailRequest = ({ title }) => {
       console.log(error);
     }
   };
-
-  console.log(userInfor);
 
   useEffect(() => {
     setLoading(true);

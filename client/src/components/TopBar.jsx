@@ -74,18 +74,15 @@ const TopBar = ({ user, setKey }) => {
     i18n.changeLanguage(key);
   };
 
-  console.log(user?.friends);
-  console.log(user);
-
   // const handlegetFriend = async() => {
   //   const res = await
   // }
   const fetchlistUser = async () => {
     try {
       const list = user?.friends.join(",");
-      console.log(list);
+
       const res = await usergetlistUserInfo(user?.token, list);
-      console.log(res);
+
       setListUser(res && res);
     } catch (error) {
       console.log(error);
@@ -96,8 +93,6 @@ const TopBar = ({ user, setKey }) => {
     const value = e.target.value;
     const wordCount = value.split(/\s+/).filter(Boolean).length;
     if (wordCount <= wordLimit && wordCount >= 0) {
-      console.log(wordCount);
-
       setInputValue(value);
     }
 
@@ -114,7 +109,6 @@ const TopBar = ({ user, setKey }) => {
             // const res = await botsuggestsearchRequest(prompt);
             const res = await searchUserName(user?.token, prompt);
             setListSearchUser(res && res.slice(0, 5));
-            console.log(res);
           } catch (error) {
             console.log(error);
           }
@@ -133,9 +127,7 @@ const TopBar = ({ user, setKey }) => {
   };
 
   const handleSearch = async (data) => {
-    console.log(data);
     const key = data?.search;
-    console.log(key);
 
     if (
       key != "" &&
@@ -143,8 +135,6 @@ const TopBar = ({ user, setKey }) => {
       !key.startsWith("@user")
     ) {
       try {
-        console.log(key);
-
         navigate(`/search/${key ? key : ""}`);
       } catch (error) {
         console.log(error);
@@ -182,7 +172,7 @@ const TopBar = ({ user, setKey }) => {
         dispatch,
         data: newData,
       });
-      console.log(res);
+
       setNotifications(res);
     } catch (error) {
       console.log(error);
@@ -200,7 +190,6 @@ const TopBar = ({ user, setKey }) => {
         token: user?.token,
       });
 
-      console.log(res);
       if (res?.status === "failed") {
       } else {
         const newUser = { token: user?.token, ...res };
@@ -212,11 +201,7 @@ const TopBar = ({ user, setKey }) => {
     } catch (error) {
       console.log(error);
     }
-
-    console.log("submits");
   };
-
-  console.log(user?.statusActive);
 
   useEffect(() => {
     fetchNotification();

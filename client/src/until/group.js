@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_CHAT_PORT}/group`;
-console.log(process.env.REACT_APP_CHAT_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -9,10 +8,8 @@ export const API = axios.create({
 });
 
 export const groupapiRequest = async ({ url, token, data, method }) => {
-  console.log(data);
-
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -21,8 +18,8 @@ export const groupapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log("result");
-    console.log(result);
+    // console.log("result");
+    // console.log(result);
 
     return result;
   } catch (error) {
@@ -55,7 +52,7 @@ export const createGroup = async (
       },
       method: "POST",
     });
-    console.log(res);
+
     //   dispatch(SetPosts(res?.data?.latestPosts));
     return res;
   } catch (error) {
@@ -76,7 +73,6 @@ export const sendMessageGroup = async (token, idroom, id_1, chat, uri) => {
       },
       method: "POST",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -86,8 +82,6 @@ export const sendMessageGroup = async (token, idroom, id_1, chat, uri) => {
 
 export const changeRoleGroup = async (token, idroom, id_1, id_2, role) => {
   try {
-    console.log(idroom, id_1, id_2, role);
-
     const res = await groupapiRequest({
       url: "/change-role",
       token: token,
@@ -99,7 +93,6 @@ export const changeRoleGroup = async (token, idroom, id_1, id_2, role) => {
       },
       method: "PUT",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -109,8 +102,6 @@ export const changeRoleGroup = async (token, idroom, id_1, id_2, role) => {
 
 export const addMemberGroup = async (token, id_1, idroom, listAdd) => {
   try {
-    console.log(idroom, id_1, listAdd);
-
     const res = await groupapiRequest({
       url: "/add-member",
       token: token,
@@ -121,7 +112,6 @@ export const addMemberGroup = async (token, id_1, idroom, listAdd) => {
       },
       method: "POST",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -131,8 +121,6 @@ export const addMemberGroup = async (token, id_1, idroom, listAdd) => {
 
 export const deleteMemberGroup = async (token, idroom, id_1, id_2) => {
   try {
-    console.log(idroom, id_1, id_2);
-
     const res = await groupapiRequest({
       url: "/remove-member",
       token: token,
@@ -143,7 +131,6 @@ export const deleteMemberGroup = async (token, idroom, id_1, id_2) => {
       },
       method: "DELETE",
     });
-    console.log(res);
 
     return res;
   } catch (error) {

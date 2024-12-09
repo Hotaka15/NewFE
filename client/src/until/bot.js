@@ -2,7 +2,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_BOT_PORT}/api`;
-console.log(process.env.REACT_APP_BOT_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -11,12 +10,12 @@ export const API = axios.create({
 
 export const botapiRequest = async ({ url, data, method }) => {
   try {
-    console.log(url, data, method);
+    // console.log(url, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data || {},
     });
-    console.log(result);
+    // console.log(result);
 
     return result;
   } catch (error) {
@@ -29,15 +28,13 @@ export const botapiRequest = async ({ url, data, method }) => {
 };
 
 export const botsuggestRequest = async (prompt) => {
-  console.log(prompt);
-
   try {
     const res = await botapiRequest({
       url: `/ai-assist/ai-process?prompt=${prompt}`,
       method: "GET",
       data: {},
     });
-    console.log(res);
+    // console.log(res);
 
     return res?.data;
   } catch (error) {
@@ -46,15 +43,13 @@ export const botsuggestRequest = async (prompt) => {
 };
 
 export const botsuggestsearchRequest = async (prompt) => {
-  console.log(prompt);
-
   try {
     const res = await botapiRequest({
       url: `/ai-assist/ai-process?prompt=tìm người ${prompt}`,
       method: "GET",
       data: {},
     });
-    console.log(res);
+    // console.log(res);
 
     return res?.data?.info;
   } catch (error) {

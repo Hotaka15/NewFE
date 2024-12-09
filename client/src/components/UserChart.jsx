@@ -87,7 +87,6 @@ const UserChart = () => {
                 filter == "month" && "bg-bgColor"
               } text-ascent-2 cursor-pointer py-1 px-2  rounded-lg`}
               onClick={() => {
-                console.log("month");
                 setFilter("month");
               }}
             >
@@ -98,7 +97,6 @@ const UserChart = () => {
                 filter == "week" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
-                console.log("week");
                 setFilter("week");
               }}
             >
@@ -109,7 +107,6 @@ const UserChart = () => {
                 filter == "day" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
-                console.log("day");
                 setFilter("day");
               }}
             >

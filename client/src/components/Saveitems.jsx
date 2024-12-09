@@ -3,8 +3,6 @@ import { NoProfile } from "../assets";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
 const SaveCard = ({ post, user }) => {
-  console.log(post);
-
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <div className="flex justify-center h-full w-2/4 py-2 items-center">

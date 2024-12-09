@@ -183,7 +183,7 @@ const NewFeed = () => {
     });
     if (res?.status === "failed") {
       const message = res?.message?.message;
-      console.log(res?.message);
+
       Cookies.set("message", message, { expires: 7 });
       dispatch(Logout());
       navigate("/login");
@@ -199,7 +199,7 @@ const NewFeed = () => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
@@ -234,7 +234,7 @@ const NewFeed = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setsuggestedFriends(res?.suggestedFriends);
     } catch (error) {
       //console.log(error);
@@ -249,7 +249,6 @@ const NewFeed = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -274,7 +273,6 @@ const NewFeed = () => {
       const newData = { token: user?.token, ...res };
 
       dispatch(UserLogin(newData));
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -286,9 +284,8 @@ const NewFeed = () => {
       fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
         const res = await searchUserName(user?.token, search);
-        console.log(res);
+
         setsuggestedFriends(res);
       } catch (error) {
         console.log(error);
@@ -305,7 +302,7 @@ const NewFeed = () => {
         post_category: category ?? "music",
       };
 
-      console.log("Emitting user_interaction:", data);
+      // console.log("Emitting user_interaction:", data);
       await socket.emit("interactPost", data);
     };
 
@@ -322,7 +319,6 @@ const NewFeed = () => {
             }
 
             timeoutIds[postId] = setTimeout(() => {
-              console.log(postId);
               sendInteraction(user?._id, postId, friendId, category);
               dispatch(CheckedPosts([postId]));
             }, 3000);
@@ -349,7 +345,6 @@ const NewFeed = () => {
   useEffect(() => {
     if (page) {
       if (page == 1) {
-        console.log("hey");
         dispatch(UpdatePosts([]));
         fetchPost();
       } else fetchPost();
@@ -366,15 +361,12 @@ const NewFeed = () => {
         !isFetching
       ) {
         setPage((prevPage) => prevPage + 1);
-        console.log(page);
-        console.log(posts);
       }
     }, 500),
     [isFetching]
   );
 
   const handlePage = async () => {
-    console.log();
     setLoading(true);
     setPage(1);
     setTrigger(!trigger);

@@ -65,8 +65,6 @@ const Post = ({ setPage }) => {
   const [resImg, setResImg] = useState(null);
   const { t } = useTranslation();
   const handleTextsp = (e) => {
-    console.log(e.target.value);
-
     const inputText = e.target.value;
     const words = inputText.trim().split(/\s+/);
     const count = words[0] === "" ? 0 : words.length;
@@ -111,9 +109,9 @@ const Post = ({ setPage }) => {
     try {
       setLoading(true);
       const prompt = textsp;
-      console.log(prompt);
+
       const res = await botsuggestRequest(prompt);
-      console.log(res);
+
       if (res?.type == "image prompt") {
         setIsText(false);
         setResText("");
@@ -163,15 +161,12 @@ const Post = ({ setPage }) => {
 
   const pushList = (id) => {
     let memo = [...lists];
-    console.log(memo);
 
     lists.includes(id)
       ? (memo = lists.filter((memo) => memo != id))
       : memo.push(id);
 
     setLists(memo);
-
-    console.log(memo);
   };
 
   const {
@@ -183,7 +178,6 @@ const Post = ({ setPage }) => {
 
   const handlePreview = async (file) => {
     if (file) {
-      console.log(file);
       await setFile(file);
       setPreview(true);
     }
@@ -199,17 +193,13 @@ const Post = ({ setPage }) => {
   // });
 
   const handleCheck = (id, check) => {
-    console.log(check);
-
     lists.includes(id) ? (check = true) : (check = false);
   };
 
   const checkpost = async (data) => {
-    console.log(data);
-
     try {
       const res = await aicheckpost(data);
-      console.log(res);
+
       return res?.data;
     } catch (error) {
       console.log(error);
@@ -220,8 +210,8 @@ const Post = ({ setPage }) => {
     setReview(null);
     setFile(null);
     const maxFileSize = 50 * 1024 * 1024;
-    console.log(e.target.files[0]);
-    console.log(e.target.files[0].size);
+    // console.log(e.target.files[0]);
+    // console.log(e.target.files[0].size);
 
     const filevideo = e.target.files[0];
     if (filevideo) {
@@ -236,8 +226,6 @@ const Post = ({ setPage }) => {
         videoElement.onloadedmetadata = () => {
           const width = videoElement.videoWidth;
           const height = videoElement.videoHeight;
-
-          console.log("Width:", width, "Height:", height);
 
           // Giới hạn độ phân giải: ví dụ, giới hạn tối đa 1280x720
           if (width > 1280 || height > 720) {
@@ -258,7 +246,7 @@ const Post = ({ setPage }) => {
       setPosting(true);
 
       data.visibility = option;
-      console.log(data);
+
       // await checkpost(data);
 
       try {
@@ -278,7 +266,6 @@ const Post = ({ setPage }) => {
           token: user?.token,
           method: "POST",
         });
-        console.log(res);
 
         if (res?.status === "failed") {
           seterrMsg(res);
@@ -317,7 +304,6 @@ const Post = ({ setPage }) => {
     try {
       const res = await usergetFriends(user?.token);
       setFriends(res?.friends);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -699,7 +685,6 @@ const Post = ({ setPage }) => {
                                 onClick={() => {
                                   setAudience(!audience);
                                   // setWrite(!write);
-                                  console.log("press");
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
@@ -734,7 +719,6 @@ const Post = ({ setPage }) => {
                                       key={friend?._id}
                                       onClick={() => {
                                         pushList(friend);
-                                        console.log(lists);
                                       }}
                                     >
                                       <UserTiitle useradd={friend} />
@@ -752,7 +736,6 @@ const Post = ({ setPage }) => {
                                   <div
                                     onClick={() => {
                                       pushList(friend?._id);
-                                      console.log(lists);
                                     }}
                                     className={`${
                                       check ? "bg-ascent-3/10" : ""
@@ -824,7 +807,6 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 onClick={() => {
                                   // setAudience(!audience);
                                   setSpecific(!specific);
-                                  console.log("press");
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}

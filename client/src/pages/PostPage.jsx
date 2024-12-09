@@ -34,7 +34,7 @@ const getPostComments = async (id) => {
 
 const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
   //console.log(user, id, replyAt, getComments);
-  console.log(id);
+
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
@@ -47,16 +47,13 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
     mode: "onChange",
   });
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(replyAt);
-
     setLoading(true);
     setErrMsg("");
     try {
       const URL = !replyAt
         ? `/${postid}/comment/`
         : `/${postid}/comment?commentId=` + id;
-      console.log(URL);
+
       const newData = {
         comment: data?.comment,
         from: user?.firstName + " " + user?.lastName,
@@ -68,7 +65,6 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
         token: user?.token,
         method: "POST",
       });
-      console.log(res);
 
       if (res?.status === "failed") {
         setErrMsg(res);
@@ -137,13 +133,11 @@ const CommentForm = ({ user, postid, id, replyAt, getComments }) => {
 };
 
 const ReplyCard = ({ reply, user, handleLike }) => {
-  console.log(reply);
   const { t } = useTranslation();
   const [userP, setUserP] = useState();
   const getUser = async () => {
     try {
       const res = await usergetUserInfo(user?.token, reply?.userId);
-      console.log(res);
 
       setUserP(res);
       // dispatch(UserLogin(newData));
@@ -223,7 +217,6 @@ const PostPage = () => {
     }
   };
   const handleLike = async (uri) => {
-    console.log(uri);
     const token = user?.token;
     await postlikePost({ uri: uri, token: user?.token });
     // await likePost({ uri, token });
@@ -251,7 +244,6 @@ const PostPage = () => {
       getUser(res?.userId);
       setPost(res);
 
-      console.log(res);
       setpLoading(false);
       // if (res?.status === "failed") {
       //     Cookies.set("message", res?.message, { expires: 7 });
@@ -264,7 +256,6 @@ const PostPage = () => {
   };
 
   const getUser = async (userId) => {
-    console.log("post id " + userId);
     try {
       const res = await usergetUserpInfo(user?.token, userId);
       // const newData = { token: user?.token, ...res };
@@ -285,7 +276,6 @@ const PostPage = () => {
         url: `/${id}/comments`,
         token: user?.token,
       });
-      console.log(result);
 
       setComments(result?.comments);
       setLoading(false);

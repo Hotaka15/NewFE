@@ -3,7 +3,6 @@ import { DefaultPlayer as Video } from "react-html5video";
 import "react-html5video/dist/styles.css";
 import { useTranslation } from "react-i18next";
 const VideoPlayer = ({ source }) => {
-  console.log(source);
   const { t } = useTranslation();
 
   return (

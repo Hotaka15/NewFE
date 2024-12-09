@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_USER_PORT}/api/admin`;
-console.log(process.env.REACT_APP_USER_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -19,7 +18,7 @@ export const adminapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
+    // console.log(result);
 
     return result?.data;
   } catch (error) {
@@ -32,8 +31,6 @@ export const adminapiRequest = async ({ url, token, data, method }) => {
 };
 
 export const admingetlistUser = async ({ token }) => {
-  console.log(token);
-
   try {
     const res = await adminapiRequest({
       url: "/users",
@@ -47,8 +44,6 @@ export const admingetlistUser = async ({ token }) => {
 };
 
 export const admingetPostreport = async (token) => {
-  console.log(token);
-
   try {
     const res = await adminapiRequest({
       url: "/reported/posts",
@@ -62,15 +57,13 @@ export const admingetPostreport = async (token) => {
 };
 
 export const adminaprrovePostreport = async (token, postid) => {
-  console.log(token);
-
   try {
     const res = await adminapiRequest({
       url: `/${postid}` + "/approve",
       token: token,
       method: "POST",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -78,15 +71,13 @@ export const adminaprrovePostreport = async (token, postid) => {
 };
 
 export const admindeletePostreport = async (token, postid) => {
-  console.log(token);
-
   try {
     const res = await adminapiRequest({
       url: `/${postid}` + "/delete-violate",
       token: token,
       method: "POST",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -94,15 +85,13 @@ export const admindeletePostreport = async (token, postid) => {
 };
 
 export const admindeleteUser = async ({ token, userId }) => {
-  console.log(userId);
-
   try {
     const res = await adminapiRequest({
       url: "/users/" + userId,
       token: token,
       method: "DELETE",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -110,15 +99,13 @@ export const admindeleteUser = async ({ token, userId }) => {
 };
 
 export const admingetUserId = async ({ token, userId }) => {
-  console.log(userId);
-
   try {
     const res = await adminapiRequest({
       url: "/users/" + userId,
       token: token,
       method: "GET",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -126,15 +113,13 @@ export const admingetUserId = async ({ token, userId }) => {
 };
 
 export const adminBlockUserId = async ({ token, userId }) => {
-  console.log(userId);
-
   try {
     const res = await adminapiRequest({
       url: "/users/" + userId + "/toggle-status",
       token: token,
       method: "PUT",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);

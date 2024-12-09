@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_AUTH_PORT}/api/auth`;
-console.log(process.env.REACT_APP_AUTH_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -10,7 +9,7 @@ export const API = axios.create({
 
 export const authapiRequest = async ({ url, token, data, method }) => {
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -19,7 +18,7 @@ export const authapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
+    // console.log(result);
 
     return result;
   } catch (error) {

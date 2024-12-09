@@ -10,15 +10,13 @@ const Check = () => {
   const url = searchParams.get("url");
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  console.log(url);
+
   const [notSafe, setNotSafe] = useState(false);
   const checkLink = async (url) => {
     try {
       const res = await checksafelink(url);
-      console.log(res);
-      if (res == 200) {
-        console.log(1);
 
+      if (res == 200) {
         window.location.href = url;
       } else {
         setNotSafe(true);

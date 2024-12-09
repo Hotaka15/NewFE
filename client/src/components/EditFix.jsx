@@ -124,8 +124,6 @@ const EditFix = () => {
   // );
   // console.log(partialEmail);
   const onSubmit = async (data) => {
-    console.log(data);
-
     setisSubmitting(true);
     seterrMsg("");
     try {
@@ -148,7 +146,6 @@ const EditFix = () => {
         token: user?.token,
       });
 
-      console.log(res);
       if (res?.status === "failed") {
         seterrMsg(res);
       } else {
@@ -169,10 +166,6 @@ const EditFix = () => {
       console.log(error);
       setisSubmitting(false);
     }
-    const { firstName, lastName, location, profession } = data;
-    console.log("submits");
-
-    console.log(data);
   };
 
   // const handleresetSubmit = async (data) => {
@@ -214,9 +207,7 @@ const EditFix = () => {
   // };
   const validateemail = (email) => {};
   const handlerechangePass = async (data) => {
-    console.log("submits");
     setisSubmitting(false);
-    console.log(data);
   };
 
   // const handleresetSubmit = async (data) => {

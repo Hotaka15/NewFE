@@ -9,7 +9,7 @@ const ChatUser = ({ id }) => {
   const getUser = async (id) => {
     try {
       const res = await usergetUserInfo(user?.token, id);
-      console.log(res);
+
       setInfor(res);
     } catch (error) {
       console.log(error);

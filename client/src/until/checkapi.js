@@ -13,10 +13,7 @@ export const APIs = axios.create({
 });
 export const authsafeRequest = async ({ url }) => {
   try {
-    console.log(url);
-
     const key = process.env.REACT_APP_LINK_VIRUSTOTAL_ID;
-    console.log(key);
 
     const result = await APIs({
       method: "POST",
@@ -27,7 +24,7 @@ export const authsafeRequest = async ({ url }) => {
       },
       data: new URLSearchParams({ url: url }),
     });
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (error) {
     console.log(error);
@@ -35,14 +32,12 @@ export const authsafeRequest = async ({ url }) => {
 };
 export const authcheckRequest = async ({ url, method }) => {
   try {
-    console.log(url, method);
-
     const key = process.env.REACT_APP_LINK_PREVIEW_ID;
     const result = await API(url, {
       method: method || "GET",
       headers: { "X-Linkpreview-Api-Key": key },
     });
-    console.log(result?.data);
+    // console.log(result?.data);
     return result?.data;
   } catch (error) {
     console.log(error);
@@ -50,13 +45,11 @@ export const authcheckRequest = async ({ url, method }) => {
 };
 
 export const checklink = async (url) => {
-  console.log(url);
   try {
     const res = await authcheckRequest({
       url: `/?q=${url}`,
       method: "GET",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -65,13 +58,10 @@ export const checklink = async (url) => {
 };
 
 export const checksafelink = async (url) => {
-  console.log(url);
   try {
     const res = await authsafeRequest({
       url: url,
     });
-    console.log(res);
-    console.log(res);
 
     return res.status;
   } catch (error) {

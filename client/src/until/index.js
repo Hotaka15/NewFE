@@ -8,7 +8,7 @@ export const API = axios.create({
 });
 export const apiRequest = async ({ url, token, data, method }) => {
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -17,7 +17,6 @@ export const apiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
 
     return result?.data;
   } catch (error) {
@@ -38,7 +37,7 @@ export const handFileUpload = async (uploadFile) => {
   const formData = new FormData();
   formData.append("file", uploadFile);
   formData.append("upload_preset", "social media");
-  console.log(formData);
+  // console.log(formData);
   try {
     const reponse = await axios.post(
       `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_ID}/auto/upload/`,
@@ -73,7 +72,7 @@ export const fetchPosts = async (token, dispatch, uri, data) => {
       method: "POST",
       data: data || {},
     });
-    console.log("fetch: " + res?.data);
+    // console.log("fetch: " + res?.data);
     dispatch(SetPosts(res?.data));
     return;
   } catch (error) {
@@ -82,14 +81,12 @@ export const fetchPosts = async (token, dispatch, uri, data) => {
 };
 export const likePost = async ({ uri, token }) => {
   try {
-    console.log(uri);
-
     const res = await apiRequest({
       url: uri,
       token: token,
       method: "POST",
     });
-    console.log(res);
+    // console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -138,7 +135,7 @@ export const sendFriendRequest = async (token, id) => {
       method: "POST",
       data: { requestTo: id },
     });
-    console.log(res);
+
     return;
   } catch (error) {
     console.log(error);
@@ -159,7 +156,6 @@ export const viewUserProfile = async (token, id) => {
 };
 
 export const checktoken = async ({ token }) => {
-  console.log(token);
   try {
     const res = await apiRequest({
       url: "/test/token-valid",
@@ -167,7 +163,7 @@ export const checktoken = async ({ token }) => {
       data: {},
       token: token,
     });
-    console.log(this.res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -194,7 +190,7 @@ export const uploadVideo = async (videoFile) => {
   formData.append("file", videoFile);
   formData.append("upload_preset", "social_media_video"); // Sử dụng một preset cụ thể cho video
   formData.append("resource_type", "video"); // Chỉ định loại tài nguyên là video
-  console.log(formData);
+  // console.log(formData);
 
   try {
     const response = await axios.post(
@@ -202,7 +198,7 @@ export const uploadVideo = async (videoFile) => {
       formData
     );
 
-    console.log(response);
+    // console.log(response);
     return response.data.secure_url;
   } catch (error) {
     console.log(error);

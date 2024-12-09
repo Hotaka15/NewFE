@@ -162,7 +162,7 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
   // setInfo(userInfo.friends);
   const [active, setActive] = useState(userInfo?.statusActive);
   const { t } = useTranslation();
-  console.log(userInfo);
+
   // console.log(userInfo.friends);
 
   // console.log(user);
@@ -177,7 +177,6 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
       await fetchUser();
       // setDetails();
       setActive(!active);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -191,7 +190,6 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
       });
       await fetchUser();
       setDetails();
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -327,8 +325,6 @@ const History = ({ user, userInfo, handleHistory }) => {
       method: "GET",
     });
     setInfo(res?.Activities);
-
-    console.log(res);
   };
 
   useEffect(() => {
@@ -383,32 +379,10 @@ const ListUser = ({ listUser, fetchUser, setListUser }) => {
   const [role, setRole] = useState("email");
   const [type, setType] = useState("asc");
 
-  console.log(listUser);
-
-  // console.log("list12312313123manager");
-  // console.log(listmanager);
-  // console.log(type);
-  console.log(user);
-
   const handledetails = () => {
     setDetails(!detail);
   };
-  // const handleFilter = async () => {
-  //   try {
-  //     const url = `/admin/sort-user?type=${role}&typeSort=${type}`;
-  //     console.log(url);
-  //     const res = await apiRequest({
-  //       url: url,
-  //       token: "",
-  //       data: {},
-  //       method: "GET",
-  //     });
-  //     console.log(res?.users);
-  //     setListUser(res?.users);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
   const handleHistory = () => {
     setHistory(!history);
   };
@@ -423,7 +397,7 @@ const ListUser = ({ listUser, fetchUser, setListUser }) => {
           token: user?.token,
           userId: search,
         });
-        console.log(res);
+
         //setsuggestedFriends(res);
         setListUser([res]);
       } catch (error) {

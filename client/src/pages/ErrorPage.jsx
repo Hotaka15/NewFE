@@ -14,7 +14,7 @@ const ErrorPage = () => {
   const message = cookieValue
     ? decodeURIComponent(cookieValue.split("=")[1])
     : null;
-  console.log(message);
+
   const removeCookie = () => {
     Cookies.remove("message");
   };

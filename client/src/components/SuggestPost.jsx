@@ -21,11 +21,10 @@ const SuggestPost = ({ handleisSuggest }) => {
   const handleSendText = async (content) => {
     setLoading(true);
     const prompt = content;
-    console.log(prompt);
 
     try {
       const res = await generatetext(prompt);
-      console.log(res);
+
       handlehistoryuser();
     } catch (error) {
       console.log(error);

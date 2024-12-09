@@ -40,23 +40,17 @@ const Reportlist = ({ user, sl }) => {
   const handlereportapprove = async (postid) => {
     const res = await adminaprrovePostreport(user?.token, postid);
     fetchReport();
-    console.log(res);
   };
 
   const handlereportdelete = async (postid) => {
     const res = await adminaprrovePostreport(user?.token, postid);
     fetchReport();
-    console.log(res);
   };
 
   const fetchReport = async () => {
-    console.log(user);
-
     const res = await admingetPostreport(user?.token);
     const getdetal = res && (await getDetail(res));
-    console.log(getdetal);
 
-    console.log(res);
     setListreport(getdetal);
     setLoading(false);
   };
@@ -67,7 +61,6 @@ const Reportlist = ({ user, sl }) => {
       (await Promise.all(
         res.map(async (resp) => {
           const getPostDetail = await getPost(resp?.postId);
-          console.log(getPostDetail);
 
           return {
             ...resp,
@@ -81,7 +74,7 @@ const Reportlist = ({ user, sl }) => {
   const getUser = async (userId) => {
     try {
       const res = await usergetUserpInfo(user?.token, userId);
-      console.log(res);
+
       return res;
     } catch (error) {
       console.log(error);
@@ -95,7 +88,7 @@ const Reportlist = ({ user, sl }) => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+
       const userpost = await getUser(res?.userId);
 
       return {
@@ -116,7 +109,6 @@ const Reportlist = ({ user, sl }) => {
         userId: userId,
       });
       fetchReport();
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

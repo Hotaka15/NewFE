@@ -82,7 +82,6 @@ const Chart = () => {
                 filter == "year" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
-                console.log("year");
                 setFilter("year");
               }}
             >
@@ -93,7 +92,6 @@ const Chart = () => {
                 filter == "month" && "bg-bgColor"
               } text-ascent-2 cursor-pointer py-1 px-2  rounded-lg`}
               onClick={() => {
-                console.log("month");
                 setFilter("month");
               }}
             >
@@ -104,7 +102,6 @@ const Chart = () => {
                 filter == "day" && "bg-bgColor"
               } rounded-lg`}
               onClick={() => {
-                console.log("day");
                 setFilter("day");
               }}
             >

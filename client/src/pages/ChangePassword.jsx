@@ -23,14 +23,13 @@ const ChangePassword = () => {
   });
 
   const { id, token } = useParams();
-  console.log(id, token);
 
   const check = async () => {
     try {
       const uri = "/users/reset-password/" + id + "/" + token;
-      console.log(uri);
+
       const res = await checkresetpassword(uri);
-      console.log(res);
+
       if (res.status === "FAILED") {
         document.cookie = res.message;
         setStatus(true);
@@ -46,7 +45,6 @@ const ChangePassword = () => {
   }, []);
 
   const handleresetSubmit = async (data) => {
-    console.log(data);
     if (data.pass !== data.repass) {
       setcheckpassword({ status: "failed", message: "Passwords do not match" });
       return;
@@ -58,7 +56,6 @@ const ChangePassword = () => {
       password: data.pass,
     };
 
-    console.log(newData);
     setisSubmitting(true);
     try {
       const res = await apiRequest({
@@ -66,7 +63,7 @@ const ChangePassword = () => {
         data: newData,
         method: "POST",
       });
-      console.log(res);
+
       if (res?.success === "failed") {
         seterrMsg(res);
       } else {

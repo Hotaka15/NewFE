@@ -34,7 +34,6 @@ const Admin = () => {
         token: user?.token,
       });
       setListUser(res);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +48,6 @@ const Admin = () => {
       });
       //console.log(res);
       setNotifications(res.notifications);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

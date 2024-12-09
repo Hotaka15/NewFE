@@ -113,7 +113,6 @@ const EditProfile = () => {
   );
   const [selecthobby, setSelecthobby] = useState([]);
   const handlebg = (e) => {
-    // console.log(e.target.files[0]);
     setPicuter(e.target.files[0]);
     setFile(e.target.files[0]);
     const reader = new FileReader();
@@ -135,51 +134,7 @@ const EditProfile = () => {
     },
   });
 
-  // const onSubmit = async (data) => {
-  //   setisSubmitting(true);
-  //   seterrMsg("");
-  //   try {
-  //     const uri = picture && (await handFileUpload(picture));
-  //     const { firstName, lastName, location, profession } = data;
-
-  //     const res = await userapiRequest({
-  //       url: "",
-  //       data: {
-  //         firstName,
-  //         lastName,
-  //         location,
-  //         profileUrl: uri ? uri : user?.profileUrl,
-  //         profession,
-  //       },
-  //       method: "PUT",
-  //       token: user?.token,
-  //     });
-
-  //     console.log(res);
-  //     if (res?.status === "failed") {
-  //       seterrMsg(res);
-  //     } else {
-  //       seterrMsg(res);
-
-  //       // const newUser = { token: res?.token, ...res?.user };
-  //       const newUser = { token: user?.token, ...res };
-
-  //       dispatch(UserLogin(newUser));
-
-  //       setTimeout(() => {
-  //         dispatch(UpdateProfile(false));
-  //       }, 3000);
-  //     }
-  //     setisSubmitting(false);
-  //     window.location.reload();
-  //   } catch (error) {
-  //     // console.log(error);
-  //     setisSubmitting(false);
-  //   }
-  // };
   const onSubmit = async (data) => {
-    console.log(data);
-
     setisSubmitting(true);
     seterrMsg("");
     try {
@@ -193,7 +148,6 @@ const EditProfile = () => {
         province,
         adress,
       } = data;
-      console.log(selecthobby);
 
       const res = await userapiRequest({
         url: "",
@@ -212,7 +166,6 @@ const EditProfile = () => {
         token: user?.token,
       });
 
-      console.log(res);
       if (res?.status === "failed" && undefined) {
         seterrMsg(res);
       } else if (res?._id) {
@@ -234,9 +187,6 @@ const EditProfile = () => {
       setisSubmitting(false);
     }
     // const { firstName, lastName, location, profession } = data;
-    console.log("submits");
-
-    console.log(data);
   };
 
   const handleClose = () => {
@@ -244,8 +194,6 @@ const EditProfile = () => {
   };
 
   const handlehobby = (value) => {
-    console.log(selecthobby);
-
     // setSelecthobby((pre) => {
     //   if (pre.includes(value)) {
     //     if (pre.length < 5) {

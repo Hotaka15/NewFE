@@ -24,12 +24,11 @@ const UserCard = ({ token, setChangeRole, user, isAdmin, setInfo }) => {
   const chooseRef = useRef(null);
   const [infor, setInfor] = useState();
   const buttonRef = useRef(null);
-  console.log(token);
 
   const getInfor = async () => {
     const id = user;
     const res = await usergetUserInfo(token, id);
-    console.log(res);
+
     setInfor(res);
   };
 
@@ -110,7 +109,6 @@ const UserCard = ({ token, setChangeRole, user, isAdmin, setInfo }) => {
 };
 
 export default function Managergroup({ setRoleo, idroom }) {
-  console.log(idroom);
   const [member, setMember] = useState([]);
   const { user } = useSelector((state) => state.user);
   const [changeRole, setChangeRole] = useState(false);
@@ -124,13 +122,13 @@ export default function Managergroup({ setRoleo, idroom }) {
   const token = user?.token;
   const getDetail = async (idroom) => {
     const res = await chatfetchDetail(user?.token, idroom);
-    console.log(res);
+
     if (res) {
       setInforRoom(res?.data);
       setListadmin([...res?.data?.admins]);
       const array = [...res?.data?.admins];
       setIsAdmin(array.includes(user?._id));
-      console.log(array.includes(user?._id));
+      // console.log(array.includes(user?._id));
       setMember(res?.data?.members);
     }
   };
@@ -150,17 +148,12 @@ export default function Managergroup({ setRoleo, idroom }) {
   };
 
   const handlechangeRole = async (_id) => {
-    console.log("asdj");
-
-    console.log(_id, role);
-    console.log(user?._id);
-
     try {
       const id_1 = user?._id;
       const id_2 = _id;
       const res = await changeRoleGroup(user?.token, idroom, id_1, id_2, role);
-      console.log(res);
-      console.log(typeof res.status);
+      // console.log(res);
+      // console.log(typeof res.status);
       res.status == 200 && setIsSuccess(true);
       getDetail(idroom);
     } catch (error) {

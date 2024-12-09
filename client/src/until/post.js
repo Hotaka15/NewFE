@@ -2,7 +2,6 @@ import axios from "axios";
 import { SetPosts, UpdatePosts } from "../redux/postSlice";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_POST_PORT}/api/posts`;
-console.log(process.env.REACT_APP_POST_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -34,7 +33,6 @@ export const postapiRequest = async ({ url, token, data, method }) => {
 
 export const postfetchPosts = async (token, dispatch, page) => {
   // console.log("Data: " + data);
-  console.log(page);
 
   try {
     const res = await postapiRequest({
@@ -43,7 +41,6 @@ export const postfetchPosts = async (token, dispatch, page) => {
       token: token,
       method: "GET",
     });
-    console.log(res);
 
     dispatch(SetPosts(res?.data));
     // res?.data?.return;
@@ -54,7 +51,6 @@ export const postfetchPosts = async (token, dispatch, page) => {
 
 export const postrenewfetchPosts = async (token, dispatch, page) => {
   // console.log("Data: " + data);
-  console.log(page);
 
   try {
     const res = await postapiRequest({
@@ -63,7 +59,6 @@ export const postrenewfetchPosts = async (token, dispatch, page) => {
       token: token,
       method: "GET",
     });
-    console.log(res);
 
     dispatch(UpdatePosts(res?.data));
     // dispatch(SetPosts(res?.data?.latestPosts));
@@ -74,7 +69,7 @@ export const postrenewfetchPosts = async (token, dispatch, page) => {
 };
 
 export const postedit = async (postId, token, newData) => {
-  console.log(postId, token, newData);
+  // console.log(postId, token, newData);
 
   try {
     const res = await postapiRequest({
@@ -83,7 +78,7 @@ export const postedit = async (postId, token, newData) => {
       data: newData,
       method: "PUT",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -91,9 +86,6 @@ export const postedit = async (postId, token, newData) => {
 };
 
 export const postreason = async (_id, token, data) => {
-  console.log(data);
-  console.log(_id);
-
   try {
     const res = await postapiRequest({
       url: _id + "/report",
@@ -101,7 +93,6 @@ export const postreason = async (_id, token, data) => {
       data: data,
       method: "POST",
     });
-    console.log(res);
   } catch (error) {
     console.log(error);
   }
@@ -118,7 +109,7 @@ export const postfetchuserPosts = async (token, user, dispatch, uri, data) => {
       method: "GET",
       data: data || {},
     });
-    console.log(res);
+
     dispatch(UpdatePosts(res));
     return;
   } catch (error) {
@@ -128,14 +119,14 @@ export const postfetchuserPosts = async (token, user, dispatch, uri, data) => {
 
 export const postlikePost = async ({ uri, token }) => {
   try {
-    console.log(uri);
+    // console.log(uri);
 
     const res = await postapiRequest({
       url: uri,
       token: token,
       method: "PUT",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -149,7 +140,6 @@ export const postdeletePost = async (id, token) => {
       token: token,
       method: "DELETE",
     });
-    console.log(res);
 
     return;
   } catch (error) {
@@ -158,7 +148,7 @@ export const postdeletePost = async (id, token) => {
 };
 
 export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
-  console.log(data);
+  // console.log(data);
   try {
     const { keyword, from, to, categori, page } = data;
     const res = await postapiRequest({
@@ -169,7 +159,7 @@ export const postsearchfetchPosts = async (token, dispatch, uri, data) => {
       method: "GET",
       data: data || {},
     });
-    console.log(res);
+
     // dispatch(UpdatePosts(res?.posts));
     dispatch(SetPosts(res?.posts));
     return;
@@ -187,7 +177,7 @@ export const postfetchId = async (token, dispatch, postId, data) => {
       method: "GET",
       data: data || {},
     });
-    console.log(res);
+
     // dispatch(SetPosts(res?.posts));
     return;
   } catch (error) {

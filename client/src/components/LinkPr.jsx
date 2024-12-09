@@ -11,7 +11,7 @@ export default function LinkPr({ text }) {
   const { user } = useSelector((state) => state.user);
   const fetchurl = async (url) => {
     const res = await checklink(url);
-    console.log(res);
+
     setPr(res);
     // await fetch(`${res?.url}`)
     //   .then((response) => response.json())
@@ -30,7 +30,6 @@ export default function LinkPr({ text }) {
   const geturl = async (text) => {
     const regex = /https?:\/\/[^\s]+/gi;
     const match = text.match(regex);
-    console.log(match);
 
     await fetchurl(match);
   };

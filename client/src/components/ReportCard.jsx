@@ -20,13 +20,12 @@ const ReportCard = ({ post, handlerp, handleclosereport }) => {
   const [info, setInfo] = useState();
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
-  console.log(post);
+
   // console.log(review);
   const handlereport = async () => {
     try {
       const data = { reason: info };
       const res = await postreason(post?._id, user?.token, data);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

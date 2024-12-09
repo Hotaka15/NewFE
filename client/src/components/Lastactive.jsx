@@ -20,7 +20,7 @@ const Lastactive = () => {
         userId: user?._id,
         dispatch,
       });
-      console.log(res);
+
       setNotifications(res);
     } catch (error) {
       console.log(error);

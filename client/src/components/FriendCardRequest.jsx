@@ -15,7 +15,7 @@ const FriendCardRequest = ({
   title,
 }) => {
   // console.log(title);
-  console.log(friend);
+
   const [userr, setUserr] = useState();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ const FriendCardRequest = ({
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +35,6 @@ const FriendCardRequest = ({
     try {
       const res = await usergetUserpInfo(user?.token, friend?.sender?._id);
       // const newData = { token: user?.token, ...res };
-      console.log(res);
 
       setUserr(res);
       // dispatch(UserLogin(newData));

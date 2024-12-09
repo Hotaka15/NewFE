@@ -39,7 +39,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   const [friends, setFriends] = useState([]);
   const [lists, setLists] = useState([]);
   const [option, setOption] = useState("public");
-  console.log(post);
 
   const set = setPost;
 
@@ -54,7 +53,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
   };
   const pushList = (id) => {
     let memo = [...lists];
-    // console.log(memo);
 
     lists.includes(id)
       ? (memo = lists.filter((memo) => memo != id))
@@ -81,7 +79,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
     try {
       const res = await usergetFriends(user?.token);
       setFriends(res?.friends);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -100,20 +97,15 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
     setPreview(false);
     seterrMsg("");
     data.visibility = option;
-    console.log(data);
 
     try {
       const uri = file ? await handFileUpload(file) : post?.image;
 
       const newData = uri ? { ...data, image: uri } : data;
 
-      console.log(newData);
-      console.log(user);
       const postId = post?._id;
-      console.log(postId);
 
       const res = await postedit(postId, user?.token, newData);
-      console.log(res);
 
       set(res?.updatedPost);
 
@@ -457,7 +449,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                       key={friend?._id}
                                       onClick={() => {
                                         pushList(friend);
-                                        console.log(lists);
                                       }}
                                     >
                                       <UserTiitle useradd={friend} />
@@ -475,7 +466,6 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                   <div
                                     onClick={() => {
                                       pushList(friend?._id);
-                                      console.log(lists);
                                     }}
                                     className={`${
                                       check ? "bg-ascent-3/10" : ""
@@ -493,34 +483,9 @@ const Editpost = ({ onEvent, post, onClick, setPost }) => {
                                       >
                                         {friend.firstName} {friend.lastName}
                                         <br />
-                                        {/* <span className="text-ascent-2 text-base">
-      Anyone can see
-    </span> */}
                                       </div>
                                     </div>
-                                    {/* <input
-      id={friend._id}
-      type="radio"
-      value="public"
-      name="auth"
-      onClick={(e) => {
-        // setOption(e.target.value);
-        pushList(friend._id);
-      }}
-      className={`${}w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
-dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
-    /> */}
                                   </div>
-                                  // <ListCard
-                                  //   friend={friend}
-                                  //   onClick={() => {
-                                  //     pushList(friend);
-                                  //     console.log(lists);
-                                  //     // handleCheck(friend._id, check);
-                                  //   }}
-                                  //   check={check}
-                                  //   lists={lists}
-                                  // />
                                 );
                               })}
                           </div>
@@ -547,7 +512,6 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 onClick={() => {
                                   // setAudience(!audience);
                                   setSpecific(!specific);
-                                  console.log("press");
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}

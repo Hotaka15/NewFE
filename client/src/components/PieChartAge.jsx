@@ -31,7 +31,6 @@ const renderCustomizedLabel = ({
 };
 
 export default function PieChartAge({ age }) {
-  console.log(age);
   const [t] = useTranslation();
   const data = [
     { name: "null", value: 8 },

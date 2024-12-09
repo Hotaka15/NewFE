@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_AI_PORT}`;
-console.log(process.env.REACT_APP_AI_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -10,12 +9,12 @@ export const API = axios.create({
 
 export const aiapiRequest = async ({ url, data, method }) => {
   try {
-    console.log(url, data, method);
+    // console.log(url, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data || {},
     });
-    console.log(result);
+    // console.log(result);
 
     return result;
   } catch (error) {
@@ -28,7 +27,6 @@ export const aiapiRequest = async ({ url, data, method }) => {
 };
 
 export const aicheckpost = async (data) => {
-  console.log(data);
   const text = data?.description;
   const image_url = data?.image;
   try {
@@ -47,7 +45,6 @@ export const aicheckpost = async (data) => {
 };
 
 export const aichecktext = async (chat) => {
-  console.log(chat);
   const text = chat;
   try {
     const res = await aiapiRequest({
@@ -57,7 +54,6 @@ export const aichecktext = async (chat) => {
         text: text || "",
       },
     });
-    console.log(res);
 
     return res?.data?.sensitive;
   } catch (error) {

@@ -12,7 +12,6 @@ import { MdDelete } from "react-icons/md";
 import { FaAndroid } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 const Notification = ({ notify, fetchNotification }) => {
-  console.log(notify);
   const [all, setAll] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const dispatch = useDispatch();

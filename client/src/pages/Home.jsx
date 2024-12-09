@@ -155,8 +155,6 @@ const Home = () => {
     }
   };
 
-  console.log(posts);
-
   // const handlePreview = async (file) => {
   //   if (file) {
   //     console.log(file);
@@ -204,7 +202,7 @@ const Home = () => {
         userId: user?._id,
         dispatch,
       });
-      console.log(res);
+
       setNotifications(res.notifications);
     } catch (error) {
       console.log(error);
@@ -217,7 +215,7 @@ const Home = () => {
     });
     if (res?.status === "failed") {
       const message = res?.message?.message;
-      console.log(res?.message);
+
       Cookies.set("message", message, { expires: 7 });
       dispatch(Logout());
       navigate("/login");
@@ -233,7 +231,7 @@ const Home = () => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
@@ -268,7 +266,7 @@ const Home = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setsuggestedFriends(res?.suggestedFriends);
     } catch (error) {
       //console.log(error);
@@ -284,7 +282,6 @@ const Home = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -308,36 +305,18 @@ const Home = () => {
       const newData = { token: user?.token, ...res };
 
       dispatch(UserLogin(newData));
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // const handleSearch = async (e) => {
-  //   e.preventDefault();
-  //   if (search === "") {
-  //     fetchSuggestFriends();
-  //   } else {
-  //     try {
-  //       console.log(`/users/search/${search}`);
-  //       const res = await searchUserName(user?.token, search);
-  //       console.log(res);
-  //       setsuggestedFriends(res);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
 
   const handleSearch = async () => {
     if (search === "") {
       fetchSuggestFriends();
     } else {
       try {
-        // console.log(`/users/search/${value}`);
         const res = await searchUserName(user?.token, search);
-        console.log(res);
+
         setsuggestedFriends(res);
       } catch (error) {
         console.log(error);
@@ -366,7 +345,7 @@ const Home = () => {
         action: "seen",
       };
 
-      console.log("Emitting user_interaction:", data);
+      // console.log("Emitting user_interaction:", data);
       await socket.emit("interactPost", data);
     };
     const observer = new IntersectionObserver(
@@ -430,15 +409,12 @@ const Home = () => {
         !isFetching
       ) {
         setPage((prevPage) => prevPage + 1);
-        console.log(page);
-        console.log(posts);
       }
     }, 500),
     [isFetching]
   );
 
   const handlePage = async () => {
-    console.log();
     setLoading(true);
     setPage(1);
     setTrigger(!trigger);

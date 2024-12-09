@@ -34,7 +34,7 @@ const Register = () => {
         data: data,
         method: "POST",
       });
-      console.log(res);
+
       if (res?.status == undefined) {
         setErrMsg(res);
       } else {
@@ -43,7 +43,7 @@ const Register = () => {
           window.location.replace("/login");
         }, 5000);
       }
-      console.log(res);
+
       setIsSubmitting(false);
     } catch (error) {
       console.log(error);

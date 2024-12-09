@@ -16,29 +16,24 @@ const postSlice = createSlice({
       const list = action.payload;
       item = item.concat(list);
       // item.push(list[0]);
-      console.log(list[0]);
-      console.log(item);
+      // console.log(list[0]);
+      // console.log(item);
 
       state.posts = item;
       // state.posts = action.payload;
     },
     updatePosts(state, action) {
-      console.log(action.payload);
-
       state.posts = action.payload;
     },
     checkedPosts(state, action) {
       const list = [...state.posts];
-      console.log(action.payload);
 
       const id = action.payload;
-      console.log(id);
 
       let item = list.find((obj) => obj._id == id);
       if (item) {
         item.isCheck = true;
       }
-      console.log(item);
 
       state.editp = list;
       // state.posts = action.payload;

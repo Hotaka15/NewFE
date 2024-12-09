@@ -6,7 +6,6 @@ import { Login } from "../pages";
 import FriendCardf from "./FriendCardf";
 
 const FriendsCard = ({ friend }) => {
-  console.log(friend);
   return (
     <div>
       <div className="w-full shadow-sm rounded-lg">

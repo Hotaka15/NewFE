@@ -29,7 +29,6 @@ const Save = () => {
     try {
       await fetchPosts(user?.token, dispatch);
       setLoading(false);
-      console.log(posts);
     } catch (error) {
       console.log(error);
     }

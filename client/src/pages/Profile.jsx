@@ -42,7 +42,7 @@ const Profile = () => {
   // };
   const getUser = async () => {
     const res = await usergetUserInfo(user?.token, id);
-    console.log(res);
+
     getPosts(res);
 
     // setBanner(res?.profileUrl ?? NoProfile);
@@ -50,24 +50,23 @@ const Profile = () => {
   };
 
   const getPosts = async (res) => {
-    console.log(res);
     const data = { user: { userId: res?._id } };
     await postfetchuserPosts(user.token, res, dispatch, uri, data);
     // setLoading(false);
   };
 
   const test = async () => {
-    console.log(user);
-    const res = await checktoken({
-      token: user?.token,
-    });
-    if (res?.status === "failed") {
-      const message = res?.message?.message;
-      console.log(res?.message);
-      Cookies.set("message", message, { expires: 7 });
-      navigate("/error");
-    }
-    console.log(res);
+    try {
+      const res = await checktoken({
+        token: user?.token,
+      });
+      if (res?.status === "failed") {
+        const message = res?.message?.message;
+
+        Cookies.set("message", message, { expires: 7 });
+        navigate("/error");
+      }
+    } catch (error) {}
   };
 
   // const handleDelete = async (id) => {
@@ -87,8 +86,6 @@ const Profile = () => {
     await postdeletePost(id, user?.token);
     // await fetchPost();
   };
-
-  console.log(posts);
 
   useEffect(() => {
     setLoading(true);

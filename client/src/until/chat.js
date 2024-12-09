@@ -8,10 +8,8 @@ export const API = axios.create({
 });
 
 export const chatapiRequest = async ({ url, token, data, method }) => {
-  console.log(data);
-
   try {
-    console.log(url, token, data, method);
+    // console.log(url, token, data, method);
     const result = await API(url, {
       method: method || "GET",
       data: data,
@@ -20,8 +18,8 @@ export const chatapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log("result");
-    console.log(result);
+
+    // console.log(result);
 
     return result;
   } catch (error) {
@@ -35,14 +33,13 @@ export const chatapiRequest = async ({ url, token, data, method }) => {
 };
 
 export const chatfetchListpersonal = async (token, userId) => {
-  console.log(token, userId);
   try {
     const res = await chatapiRequest({
       url: `/users/${userId}/conversations/`,
       token: token,
       method: "GET",
     });
-    console.log(res);
+
     //   dispatch(SetPosts(res?.data?.latestPosts));
     return res;
   } catch (error) {
@@ -51,14 +48,12 @@ export const chatfetchListpersonal = async (token, userId) => {
 };
 
 export const fetchChat = async (token, idroom, page) => {
-  console.log(idroom);
   try {
     const res = await chatapiRequest({
       url: `/conversation/${idroom}/messages?limit=20&page=${page}`,
       token: token,
       method: "GET",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -67,14 +62,12 @@ export const fetchChat = async (token, idroom, page) => {
 };
 
 export const fetchConversations = async (token, id) => {
-  console.log(id);
   try {
     const res = await chatapiRequest({
       url: `/chat/users/${id}/conversations`,
       token: token,
       method: "GET",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -84,8 +77,6 @@ export const fetchConversations = async (token, id) => {
 
 export const createConversations = async (token, id_1, id_2) => {
   try {
-    console.log(id_1, id_2);
-
     const res = await chatapiRequest({
       url: "/message/create",
       token: token,
@@ -94,7 +85,7 @@ export const createConversations = async (token, id_1, id_2) => {
       },
       method: "POST",
     });
-    console.log(res);
+
     return res?.data?._id;
   } catch (error) {
     console.log(error);
@@ -114,7 +105,6 @@ export const sendMessage = async (token, idroom, id_1, chat, uri) => {
       },
       method: "POST",
     });
-    console.log(res);
 
     return res;
   } catch (error) {
@@ -133,7 +123,6 @@ export const seenMessage = async (token, id_1, id_2) => {
       },
       method: "PUT",
     });
-    console.log(res);
 
     return;
   } catch (error) {
@@ -142,14 +131,13 @@ export const seenMessage = async (token, id_1, id_2) => {
 };
 
 export const chatfetchDetail = async (token, idroom) => {
-  console.log(token, idroom);
   try {
     const res = await chatapiRequest({
       url: `/conversations/${idroom}`,
       token: token,
       method: "GET",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);

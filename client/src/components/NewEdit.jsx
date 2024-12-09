@@ -75,11 +75,8 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
   const [resText, setResText] = useState("");
   const [loading, setLoading] = useState(false);
   const [resImg, setResImg] = useState(null);
-  console.log(post);
 
   const handleTextsp = (e) => {
-    console.log(e.target.value);
-
     const inputText = e.target.value;
     const words = inputText.trim().split(/\s+/);
     const count = words[0] === "" ? 0 : words.length;
@@ -128,9 +125,9 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
     try {
       setLoading(true);
       const prompt = textsp;
-      console.log(prompt);
+
       const res = await botsuggestRequest(prompt);
-      console.log(res);
+
       if (res?.type == "image prompt") {
         setIsText(false);
         setResText("");
@@ -174,15 +171,12 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
 
   const pushList = (id) => {
     let memo = [...lists];
-    console.log(memo);
 
     lists.includes(id)
       ? (memo = lists.filter((memo) => memo != id))
       : memo.push(id);
 
     setLists(memo);
-
-    console.log(memo);
   };
 
   const {
@@ -194,7 +188,6 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
 
   const handlePreview = async (file) => {
     if (file) {
-      console.log(file);
       await setFile(file);
       setPreview(true);
     }
@@ -210,17 +203,13 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
   // });
 
   const handleCheck = (id, check) => {
-    console.log(check);
-
     lists.includes(id) ? (check = true) : (check = false);
   };
 
   const checkpost = async (data) => {
-    console.log(data);
-
     try {
       const res = await aicheckpost(data);
-      console.log(res);
+
       return res?.data;
     } catch (error) {
       console.log(error);
@@ -231,8 +220,8 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
     setReview(null);
     setFile(null);
     const maxFileSize = 50 * 1024 * 1024;
-    console.log(e.target.files[0]);
-    console.log(e.target.files[0].size);
+    // console.log(e.target.files[0]);
+    // console.log(e.target.files[0].size);
 
     const filevideo = e.target.files[0];
     if (filevideo) {
@@ -248,7 +237,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
           const width = videoElement.videoWidth;
           const height = videoElement.videoHeight;
 
-          console.log("Width:", width, "Height:", height);
+          // console.log("Width:", width, "Height:", height);
 
           // Giới hạn độ phân giải: ví dụ, giới hạn tối đa 1280x720
           if (width > 1280 || height > 720) {
@@ -269,7 +258,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
       setPosting(true);
 
       data.visibility = option;
-      console.log(data);
+
       // await checkpost(data);
 
       try {
@@ -287,9 +276,9 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
         } else if (videoFile) {
           datafile = { ...data, urlVideo: uriv, image: "" };
         } else {
-          console.log(review);
+          // console.log(review);
 
-          console.log(videoFile);
+          // console.log(videoFile);
           datafile = { ...data, image: "", urlVideo: "" };
         }
         const newData = { ...datafile, specifiedUsers: [] };
@@ -299,7 +288,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
         setPreview(false);
         const postId = post?._id;
         const res = await postedit(postId, token, newData);
-        console.log(res);
+
         setPost(res?.updatedPost);
         const close = onClick;
         close();
@@ -325,7 +314,6 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
     try {
       const res = await usergetFriends(user?.token);
       setFriends(res?.friends);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -707,7 +695,6 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                 onClick={() => {
                                   setAudience(!audience);
                                   // setWrite(!write);
-                                  console.log("press");
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
@@ -742,7 +729,6 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                       key={friend?._id}
                                       onClick={() => {
                                         pushList(friend);
-                                        console.log(lists);
                                       }}
                                     >
                                       <UserTiitle useradd={friend} />
@@ -760,7 +746,6 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                   <div
                                     onClick={() => {
                                       pushList(friend?._id);
-                                      console.log(lists);
                                     }}
                                     className={`${
                                       check ? "bg-ascent-3/10" : ""
@@ -778,34 +763,9 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                       >
                                         {friend.firstName} {friend.lastName}
                                         <br />
-                                        {/* <span className="text-ascent-2 text-base">
-      Anyone can see
-    </span> */}
                                       </div>
                                     </div>
-                                    {/* <input
-      id={friend._id}
-      type="radio"
-      value="public"
-      name="auth"
-      onClick={(e) => {
-        // setOption(e.target.value);
-        pushList(friend._id);
-      }}
-      className={`${}w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
-dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
-    /> */}
                                   </div>
-                                  // <ListCard
-                                  //   friend={friend}
-                                  //   onClick={() => {
-                                  //     pushList(friend);
-                                  //     console.log(lists);
-                                  //     // handleCheck(friend._id, check);
-                                  //   }}
-                                  //   check={check}
-                                  //   lists={lists}
-                                  // />
                                 );
                               })}
                           </div>
@@ -832,7 +792,6 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                                 onClick={() => {
                                   // setAudience(!audience);
                                   setSpecific(!specific);
-                                  console.log("press");
                                 }}
                                 containerStyles={`inline-flex justify-center rounded-full bg-blue px-8
                   py-3 text-sm font-medium text-white outline-none`}

@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `http://localhost:${process.env.REACT_APP_USER_PORT}/api`;
-console.log(process.env.REACT_APP_USER_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -9,7 +8,6 @@ export const API = axios.create({
 });
 
 const API_URLP = `http://localhost:${process.env.REACT_APP_POST_PORT}/api`;
-console.log(process.env.REACT_APP_POST_PORT);
 
 export const APIp = axios.create({
   baseURL: API_URLP,
@@ -27,7 +25,6 @@ export const dbapiRequestP = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
 
     return result?.data;
   } catch (error) {
@@ -50,7 +47,6 @@ export const dbapiRequest = async ({ url, token, data, method }) => {
         Authorization: token ? `Bearer ${token}` : "",
       },
     });
-    console.log(result);
 
     return result?.data;
   } catch (error) {
@@ -67,7 +63,7 @@ export const ageDashboard = async () => {
     const res = await dbapiRequest({
       url: "/stat/age-stats",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -78,7 +74,7 @@ export const genderDashboard = async () => {
     const res = await dbapiRequest({
       url: "/stat/gender-stats",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -89,7 +85,7 @@ export const monthregisterDashboard = async (filter) => {
     const res = await dbapiRequest({
       url: `/stat/registration-stats?timePeriod=${filter}`,
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -100,7 +96,7 @@ export const userDashboard = async () => {
     const res = await dbapiRequest({
       url: "/stat/user-stats",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -112,7 +108,7 @@ export const reportsbyreasonDashboard = async () => {
     const res = await dbapiRequestP({
       url: "/stat/reports-by-reason",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -123,7 +119,7 @@ export const reportsbypostDashboard = async () => {
     const res = await dbapiRequestP({
       url: "/stat/reports-by-post",
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);
@@ -134,7 +130,7 @@ export const dayreportDashboard = async (filter) => {
     const res = await dbapiRequestP({
       url: `/stat/reports-by-date?groupBy=${filter}`,
     });
-    console.log(res);
+
     return res;
   } catch (error) {
     console.log(error);

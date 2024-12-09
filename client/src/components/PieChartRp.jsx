@@ -31,7 +31,6 @@ const renderCustomizedLabel = ({
 };
 
 export default function PieChartRp({ genders }) {
-  console.log(genders);
   const [t] = useTranslation();
   const data = [
     { name: "null", value: 8 },

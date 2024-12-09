@@ -112,7 +112,7 @@ const RangeChat = forwardRef(
     const id_2 = userinfo?._id;
     const handlebg = (e) => {
       setFile(e.target.files[0]);
-      console.log(e.target.files[0]);
+      // console.log(e.target.files[0]);
       const reader = new FileReader();
       reader.onload = () => {
         setReview(reader.result);
@@ -123,7 +123,6 @@ const RangeChat = forwardRef(
       setChat((prevInput) => prevInput + e.emoji);
       setShowPicker(false);
     };
-    console.log(userinfo);
 
     const fetchchat = async (idroom) => {
       try {
@@ -162,9 +161,9 @@ const RangeChat = forwardRef(
             console.log(error);
           }
 
-          console.log(res?.data?.messages);
+          // console.log(res?.data?.messages);
           // setListchat((pre) => [...pre, ...res?.data?.messages]);
-          setListchat(res?.data?.messages);
+          // setListchat(res?.data?.messages);
           setPage(2);
         } catch (error) {
           console.log(error);
@@ -179,13 +178,8 @@ const RangeChat = forwardRef(
 
     const fetchnextchat = async (idroom) => {
       try {
-        console.log(page);
-        console.log(idroom);
-
         const res = await fetchChat(user?.token, idroom, page);
-        console.log(res);
 
-        console.log(faild);
         try {
           if (
             res?.message != "Không thể lấy tin nhắn trong hội thoại." &&
@@ -273,14 +267,13 @@ const RangeChat = forwardRef(
               .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
               .reverse()
           : listchat;
-      console.log(newList);
+      // console.log(newList);
       setAfter(newList);
     }, [listchat, faild]);
 
     const handlesend = async (id_2, chat) => {
       const recipientId = id_2; // ID người nhận tin nhắn
       const privateMessage = chat;
-      console.log(socket);
 
       await socket.emit("sendMessage", {
         idConversation: idroom,
@@ -292,11 +285,10 @@ const RangeChat = forwardRef(
     const handleSend = async (e) => {
       try {
         e.preventDefault();
-        console.log(file);
-        console.log(chat);
+        // console.log(file);
+        // console.log(chat);
 
         const res = await aichecktext(chat);
-        console.log(res);
 
         if (res) {
           setFald((pre) => [
@@ -309,14 +301,13 @@ const RangeChat = forwardRef(
             },
           ]);
 
-          console.log(faild);
+          // console.log(faild);
         } else {
           const uri = file && (await handFileUpload(file));
           const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
 
           handlesend(id_2, chat);
           setPage(2);
-          console.log(res);
         }
 
         handlePr();
@@ -369,7 +360,7 @@ const RangeChat = forwardRef(
 
         if (target.scrollTop <= target.scrollHeight * 0.4 && !isFetching) {
           setPage((prevPage) => prevPage + 1);
-          console.log(page);
+
           // fetchnextchat(idroom);
         }
       }, 100),
@@ -429,14 +420,14 @@ const RangeChat = forwardRef(
     //   }
     // }, [nextchat]);
     useEffect(() => {
-      console.log(page);
+      // console.log(page);
       setLoading(true);
       // listchat && fetchnextchat(idroom);
     }, [userinfo]);
 
     useEffect(() => {
       // setLoading(true);
-      console.log(idroom);
+      // console.log(idroom);
       if (page == 1) {
         fetchchat(idroom);
       } else {
@@ -455,7 +446,7 @@ const RangeChat = forwardRef(
     }, [idroom, page]);
 
     useEffect(() => {
-      console.log(nextchat);
+      // console.log(nextchat);
 
       listchat && setListchat([...listchat, ...nextchat]);
     }, [nextchat]);
@@ -477,7 +468,7 @@ const RangeChat = forwardRef(
     // }, [onScreen]);
 
     useEffect(() => {
-      console.log("trigger");
+      // console.log("trigger");
       // const listchat = [...after];
       // console.log(listchat);
       // try {
@@ -486,12 +477,10 @@ const RangeChat = forwardRef(
       //   try {
       //     for (let message of listchat || []) {
       //       console.log(message);
-
       //       let check = false;
       //       if (message.senderId === user?._id) {
       //         console.log(message);
       //         console.log(user?._id);
-
       //         message.checked = true;
       //         // ? message.checked.push(message?.userId)
       //         // : (message.checked = [message?.userId]);
@@ -504,7 +493,6 @@ const RangeChat = forwardRef(
       //   } catch (error) {
       //     console.log(error);
       //   }
-
       //   console.log(res?.data?.messages);
       //   // setListchat((pre) => [...pre, ...res?.data?.messages]);
       //   setListchat(res?.data?.messages);
@@ -804,14 +792,13 @@ const UserCard = forwardRef(
     const [time, setTime] = useState("");
     const [idroom, setIdroom] = useState("");
     const { t } = useTranslation();
-    console.log(itemchat);
+    // console.log(itemchat);
     const id = itemchat?.members
       ? itemchat.members.find((member) => member !== user?._id)
       : itemchat?._id;
     // const eventc = event;
 
     const joinroom = async (userId, conversationId) => {
-      console.log(conversationId);
       await socket.emit("joinGroup", { userId, groupId: conversationId });
       // socket.on("receiveMessage", (data) => {
       //   console.log(data);
@@ -823,7 +810,7 @@ const UserCard = forwardRef(
 
     useEffect(() => {
       joinroom(userId, conversationId);
-      console.log(conversationId, idroom);
+      // console.log(conversationId, idroom);
 
       // return () => {
       //   if (idroom != conversationId) {
@@ -839,12 +826,10 @@ const UserCard = forwardRef(
 
     const outRoom = async () => {
       if (idroom != conversationId) {
-        console.log(idroom);
-        console.log(conversationId);
         socket.emit("leaveGroup", { userId, groupId: conversationId });
-        console.log(
-          `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
-        );
+        // console.log(
+        //   `Sent leaveGroup event with userId: ${userId} and groupId: ${conversationId}`
+        // );
       }
     };
 
@@ -875,7 +860,7 @@ const UserCard = forwardRef(
 
     const handle = () => {
       // eventc();
-      console.log(user);
+
       setIdroom(conversationId);
       itemchat?.type == "group" ? hanldeGroupchat() : hanldeUserchat(avatar);
       itemchat?.type == "group" && handlemember();
@@ -883,7 +868,6 @@ const UserCard = forwardRef(
     const getAvatar = async () => {
       try {
         const res = await usergetUserpInfo(user?.token, id);
-        console.log(res);
 
         setAvatar(res);
       } catch (error) {
@@ -943,7 +927,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
   const [visibleChats, setVisibleChats] = useState([]);
   const chatRefs = useRef([]);
   const { t } = useTranslation();
-  console.log(listchat);
+
   const id_1 = user?._id;
   {
     /* <div className="w-full flex justify-center">
@@ -1256,7 +1240,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
 const Chat = () => {
   const { user, edit } = useSelector((state) => state.user);
   const { id } = useParams();
-  console.log(id);
+
   const { t } = useTranslation();
   const [showPicker, setShowPicker] = useState(false);
   const [review, setReview] = useState();
@@ -1289,8 +1273,6 @@ const Chat = () => {
   };
   const id_1 = user?._id;
 
-  console.log(user);
-
   const handlepage = (id) => {
     setPage(id);
   };
@@ -1315,8 +1297,6 @@ const Chat = () => {
         setListchat(listPersonal);
         setListgroup(listGroup);
       }
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -1328,9 +1308,8 @@ const Chat = () => {
       fetchSuggestFriends();
     } else {
       try {
-        console.log(`/users/search/${search}`);
         const res = await searchUserName(user?.token, search);
-        console.log(res);
+
         setListchat(res);
         // setsuggestedFriends(res);
       } catch (error) {
@@ -1346,7 +1325,7 @@ const Chat = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setListsuggest(res?.suggestedFriends);
     } catch (error) {
       console.log(error);
@@ -1354,7 +1333,6 @@ const Chat = () => {
   };
   const handlemember = (members) => {
     setMember([...members]);
-    console.log(members);
   };
   const hanldeUserchat = async (user) => {
     // if (childRef.current) {
@@ -1363,7 +1341,6 @@ const Chat = () => {
     //   console.log("11");
     // }
 
-    console.log(user);
     userChat(user);
 
     // console.log(id_1);
@@ -1371,7 +1348,7 @@ const Chat = () => {
     const id_2 = user?._id;
     try {
       const res = await createConversations(user?.token, id_1, id_2);
-      console.log(res);
+
       setIdroom(res);
     } catch (error) {
       console.log(error);
@@ -1379,13 +1356,11 @@ const Chat = () => {
   };
 
   const hanldeGroupchat = async (itemchat) => {
-    console.log(itemchat);
     userChat(itemchat);
 
     try {
       // const res = await createConversations(user?.token, id_1, id_2);
 
-      console.log(123);
       setIdroom(itemchat?._id);
     } catch (error) {
       console.log(error);
@@ -1394,7 +1369,7 @@ const Chat = () => {
   const getAvatar = async () => {
     try {
       const res = await usergetUserpInfo(user?.token, id);
-      console.log(res);
+
       hanldeUserchat(res);
     } catch (error) {
       console.log(error);
@@ -1402,7 +1377,7 @@ const Chat = () => {
   };
   const fetchchatforchild = async (idroom) => {
     await childRef.current.fetchchat(idroom);
-    console.log(idroom);
+
     childRef.current.position();
   };
 
@@ -1624,7 +1599,6 @@ const Chat = () => {
 
                 {user?.friends &&
                   user.friends.map((friend) => {
-                    console.log(friend);
                     return (
                       <div
                         className="w-full px-4"

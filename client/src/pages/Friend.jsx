@@ -31,12 +31,7 @@ const Friend = () => {
   const check = () => {
     let position = document.getElementById("request");
     let position2 = document.getElementById("fr");
-    // console.log(position.offsetWidth);
-    // console.log(position2.offsetWidth);
-    // console.log(position.scrollWidth);
-    // console.log(position.clientWidth);
-    // console.log(position.scrollHeight);
-    // console.log(position.scrollLeft);
+
     position.scrollLeft <= 25 ? setCheckl("hidden") : setCheckl("");
     // position.scrollLeft == position.scrollWidth - position.clientWidth
     position.scrollLeft >= position.scrollHeight
@@ -54,7 +49,7 @@ const Friend = () => {
   const crollright = () => {
     let position = document.getElementById("request");
     position.scrollLeft += 200;
-    console.log(position.scrollLeft);
+
     position.scrollLeft == 0 ? setCheckl("hidden") : setCheckl("");
     position.scrollLeft >= position.scrollWidth - position.clientWidth - 200
       ? setCheckr("hidden")
@@ -62,10 +57,7 @@ const Friend = () => {
   };
   const crollleft = () => {
     let position = document.getElementById("request");
-    console.log(position.offsetWidth);
-    console.log(position.scrollWidth);
-    console.log(position.clientWidth);
-    console.log(position.scrollLeft);
+
     position.scrollLeft -= 200;
     position.scrollLeft < 100 ? setCheckl("hidden") : setCheckl("");
     position.scrollLeft <= position.scrollWidth - position.clientWidth - 200
@@ -81,7 +73,7 @@ const Friend = () => {
         token: user?.token,
         method: "GET",
       });
-      console.log(res);
+
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
@@ -99,11 +91,9 @@ const Friend = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
+
       setsuggestedFriends(res?.suggestedFriends);
-    } catch (error) {
-      //console.log(error);
-    }
+    } catch (error) {}
   };
 
   const handleFriendRequest = async (id) => {
@@ -114,7 +104,6 @@ const Friend = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -273,8 +262,6 @@ lg:rounded-lg h-screen overflow-hidden"
                   <div className="w-2/3 h-fit flex gap-4 flex-wrap">
                     {suggestedFriends && suggestedFriends.length > 0 ? (
                       suggestedFriends.map((friend) => {
-                        console.log(friend);
-
                         return (
                           <div className="w-44 h-fit">
                             <FriendCardSuggest

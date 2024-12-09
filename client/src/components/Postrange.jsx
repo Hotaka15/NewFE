@@ -16,26 +16,6 @@ const Postrange = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     fetchPost();
-  //   }, [page]);
-
-  //   useEffect(() => {
-  //     const postrange = document.getElementById("post_range");
-  //     const refresh = (e) => {
-  //       // console.log(e);
-  //       // console.log(window.innerHeight);
-  //       // console.log("current" + e.target.scrollHeight);
-  //       // console.log("offsetHeight" + e.target.scrollTop);
-  //       e.target.scrollTop >= (e.target.scrollHeight * 3) / 5 &&
-  //         setPage(page + 1);
-  //     };
-  //     postrange.addEventListener("scroll", refresh);
-
-  //     return () => {
-  //       postrange.removeEventListener("scroll", refresh);
-  //     };
-  //   }, [page]);
   return (
     <div className="">
       {/* {posts?.length > 0 ? (

@@ -11,12 +11,12 @@ const FriendCardfChat = ({ friend, hanldeUserchat }) => {
   const { user } = useSelector((state) => state.user);
   const [info, setInfo] = useState();
   const { t } = useTranslation();
-  console.log(friend);
+
   const getInfor = async () => {
     try {
       const id = friend;
       const res = await usergetUserInfo(user?.token, id);
-      console.log(res);
+
       setInfo(res);
     } catch (error) {
       console.log(error);

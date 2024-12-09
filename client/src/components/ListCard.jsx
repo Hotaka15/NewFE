@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { NoProfile } from "../assets";
 const ListCard = ({ friend, onClick, list, check }) => {
   const [checks, setChecks] = useState(false);
-  console.log(checks);
 
   const handle = () => {};
   //   list.includes(friend.id) ? setCheck("bg-ascent-3/10") : setCheck("");

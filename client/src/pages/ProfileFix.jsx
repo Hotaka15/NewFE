@@ -48,22 +48,17 @@ const ProfileFix = () => {
   };
 
   const getPosts = async (res) => {
-    console.log(res);
     const data = { user: { userId: res?._id } };
     await postfetchuserPosts(user.token, res, dispatch, uri, data);
     setLoading(false);
   };
   const getUser = async () => {
     const res = await usergetUserInfo(user?.token, id);
-    console.log(res);
+
     getPosts(res);
     if (res?.cover_photo) {
-      console.log(1);
-
       setBanner(res.cover_photo);
     } else if (res?.profileUrl) {
-      console.log(2);
-
       setBanner(res.profileUrl);
     } else {
       setBanner(NoProfile);
@@ -80,7 +75,6 @@ const ProfileFix = () => {
         Cookies.set("message", res?.message, { expires: 7 });
         navigate("/error");
       }
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -89,9 +83,8 @@ const ProfileFix = () => {
   const handleedit = () => {
     dispatch(UpdateProfile(true));
   };
-  console.log(userInfor);
+
   const handlebg = (e) => {
-    console.log(e.target.files[0]);
     const reader = new FileReader();
     reader.onload = () => {
       setBanner(reader.result);
@@ -111,9 +104,6 @@ const ProfileFix = () => {
         token: user?.token,
       });
 
-      console.log(res);
-      // const newUser = { token: user?.token, ...res };
-      // dispatch(UserLogin(newUser));
       getUser();
       if (res?.status === "failed") {
       } else {
@@ -128,16 +118,11 @@ const ProfileFix = () => {
     } catch (error) {
       console.log(error);
     }
-
-    console.log("submits");
   };
   useEffect(() => {
     setLoading(true);
     getUser();
   }, [id]);
-
-  console.log(user);
-  console.log(id);
 
   return (
     <div className="home w-full bg-bgColor text-ascent-1 overflow-hidden lg:rounded-lg h-screen items-center px-0 lg:px-10">
