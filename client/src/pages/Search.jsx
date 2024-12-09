@@ -14,6 +14,7 @@ import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 import { UpdatePosts } from "../redux/postSlice";
+import { useSocket } from "../context/SocketContext";
 const Search = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
@@ -30,6 +31,8 @@ const Search = () => {
   const [isFetching, setIsFetching] = useState(true);
   const [page, setPage] = useState(1);
   const keycurent = useRef({});
+  const socket = useSocket();
+  const timeoutIds = {};
   const handleSearch = async (keyword, page) => {
     try {
       const data = {
@@ -99,6 +102,61 @@ const Search = () => {
     handleSearch(keyword, 1);
   }, [keyword, to, from, categori]);
 
+  useEffect(() => {
+    // const timeoutIds = {}; // Đối tượng lưu timeoutId cho từng phần tử
+    const sendInteraction = async (_id, postId, friendId, category) => {
+      const data = {
+        user_id: _id,
+        friendId: friendId,
+        post_id: postId,
+        post_category: category ?? "music",
+        action: "seen",
+      };
+
+      console.log("Emitting user_interaction:", data);
+      await socket.emit("interactPost", data);
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const postId = entry.target.dataset.postId;
+          const friendId = entry.target.dataset.userId;
+          const postCategory = entry.target.dataset.postCategory;
+          const category =
+            postCategory && postCategory.length > 0 ? postCategory : "music";
+          if (entry.isIntersecting) {
+            // Nếu phần tử vào viewport, bắt đầu đếm thời gian
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]); // Hủy timeout cũ nếu có
+            }
+
+            // Đặt timeout 5 giây
+            timeoutIds[postId] = setTimeout(() => {
+              // console.log(category);
+              sendInteraction(user?._id, postId, friendId, category);
+            }, 3000);
+          } else {
+            // Nếu phần tử rời khỏi viewport, hủy timeout
+            if (timeoutIds[postId]) {
+              clearTimeout(timeoutIds[postId]);
+              delete timeoutIds[postId];
+            }
+          }
+        });
+      },
+      { threshold: 0.8 } // Kích hoạt khi 100% phần tử vào viewport
+    );
+
+    // Theo dõi các phần tử
+    const divElements = document.querySelectorAll(".itempost");
+    divElements.forEach((div) => observer.observe(div));
+
+    // Dọn dẹp khi component bị unmount
+    return () => {
+      observer.disconnect();
+      Object.values(timeoutIds).forEach(clearTimeout); // Hủy tất cả timeout
+    };
+  }, [posts, loading]);
   // useEffect(() => {
   //   setLoading(true);
 
@@ -215,7 +273,7 @@ lg:rounded-lg h-screen overflow-hidden"
                         setPage(1);
                       }}
                     >
-                      {t("Clear")}
+                      {t("Clear Filter")}
                     </div>
                   </div>
                   <div className="w-full h-full flex gap-2 flex-wrap justify-center ">
@@ -227,12 +285,21 @@ lg:rounded-lg h-screen overflow-hidden"
                         <Loading />
                       ) : posts?.length > 0 ? (
                         posts?.map((post) => (
-                          <PostCard
+                          <div
+                            className="itempost"
                             key={post._id}
-                            posts={post}
-                            user={user}
-                            likePost={handleLikePost}
-                          />
+                            data-post-id={post._id}
+                            data-post-category={post.categories}
+                            data-user-id={post.userId}
+                            post={post}
+                          >
+                            <PostCard
+                              key={post._id}
+                              posts={post}
+                              user={user}
+                              likePost={handleLikePost}
+                            />
+                          </div>
                         ))
                       ) : (
                         <div className="flex w-full h-full items-center justify-center">

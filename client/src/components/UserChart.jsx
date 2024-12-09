@@ -25,8 +25,8 @@ const UserChart = () => {
   const [total, setTotal] = useState([]);
   const [filter, setFilter] = useState("month");
   const fetchuserdashboard = async () => {
-    const age = await ageDashboard();
-    setAge(age);
+    const ages = await ageDashboard();
+    setAge(ages);
     const gender = await genderDashboard();
     setGenders(gender);
 

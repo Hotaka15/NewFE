@@ -32,13 +32,6 @@ const renderCustomizedLabel = ({
 
 export default function PieChartRp({ genders }) {
   const [t] = useTranslation();
-  const data = [
-    { name: "null", value: 8 },
-    { name: "female", value: 15 },
-    { name: "male", value: 23 },
-    { name: "other", value: 27 },
-    { name: "prefer_not_to_say", value: 43 },
-  ];
 
   const updatedData =
     genders &&
@@ -64,7 +57,7 @@ export default function PieChartRp({ genders }) {
               fill="#8884d8"
               dataKey="value"
             >
-              {data.map((_, index) => (
+              {genders.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

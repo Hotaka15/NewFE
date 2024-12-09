@@ -261,6 +261,89 @@ const RangeChat = forwardRef(
     };
 
     useEffect(() => {
+      socket.on("receiveMessage", (data) => {
+        if (data?.message && data?.message == "seen") {
+          console.log(data?.message);
+          const seenList = [...after];
+          try {
+            console.log(user?._id);
+            try {
+              for (let message of seenList || []) {
+                console.log(message);
+
+                let check = false;
+                if (message.senderId === user?._id) {
+                  for (let obj of message?.readStatus) {
+                    console.log(obj);
+
+                    if (obj.userId != user?._id && message.checked) {
+                      console.log(obj);
+                      console.log(user?._id);
+
+                      message.checked = [];
+                      check = true;
+                      break;
+                    }
+                  }
+                }
+                if (check) {
+                  break;
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            }
+
+            console.log(seenList);
+
+            // setListchat(res?.data?.messages);
+          } catch (error) {
+            console.log(error);
+          }
+
+          try {
+            console.log(user?._id);
+            try {
+              for (let message of seenList || []) {
+                console.log(message);
+
+                let check = false;
+                if (message.senderId === user?._id) {
+                  for (let obj of message?.readStatus) {
+                    console.log(obj);
+
+                    if (obj.userId != user?._id) {
+                      console.log(obj);
+                      console.log(user?._id);
+
+                      message.checked
+                        ? message.checked.push(obj?.userId)
+                        : (message.checked = [obj?.userId]);
+                      check = true;
+                      break;
+                    }
+                  }
+                }
+                if (check) {
+                  break;
+                }
+              }
+            } catch (error) {
+              console.log(error);
+            }
+
+            console.log(seenList);
+
+            // setListchat(res?.data?.messages);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        console.log(after);
+      });
+    }, [after]);
+
+    useEffect(() => {
       const newList =
         faild && faild.length > 0
           ? [...listchat, ...faild]
@@ -1160,12 +1243,14 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                     )}
                   </div>
 
-                  {chat?.checked && type != "group" && (
-                    <div className="flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
-                      <CiCircleCheck />
-                      Seen
-                    </div>
-                  )}
+                  {chat?.checked &&
+                    chat?.checked.length > 0 &&
+                    type != "group" && (
+                      <div className="flex text-ascent-2 text-xs font-normal items-center justify-end gap-2">
+                        <CiCircleCheck />
+                        Seen
+                      </div>
+                    )}
                   {/* {chat?.checked && <div className="bg-blue">Seen </div>} */}
                 </div>
               ) : (
