@@ -123,3 +123,19 @@ export const admingetUserId = async ({ token, userId }) => {
     console.log(error);
   }
 };
+
+export const adminBlockUserId = async ({ token, userId }) => {
+  console.log(userId);
+
+  try {
+    const res = await adminapiRequest({
+      url: "/users/" + userId + "/toggle-status",
+      token: token,
+      method: "PUT",
+    });
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -16,7 +16,7 @@ import { NoProfile } from "../assets";
 import ListCard from "./ListCard";
 import { postreason } from "../until/post";
 import { useTranslation } from "react-i18next";
-const ReportCard = ({ post, handlerp }) => {
+const ReportCard = ({ post, handlerp, handleclosereport }) => {
   const [info, setInfo] = useState();
   const { t } = useTranslation();
   const { user } = useSelector((state) => state.user);
@@ -41,7 +41,7 @@ const ReportCard = ({ post, handlerp }) => {
           <div className="w-1/5 h-1/2 bg-primary rounded-xl px-4 pt-5 flex gap-3 flex-col">
             <span className="text-ascent-1 font-medium text-2xl flex justify-between">
               {t("Report")}
-              <button className="text-ascent-1" onClick={handlerp}>
+              <button className="text-ascent-1" onClick={handleclosereport}>
                 <MdClose size={22} />
               </button>
             </span>
@@ -66,7 +66,7 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Offensive">Offensive Language</label>
+                <label htmlFor="Offensive">{t("Offensive Language")}</label>
               </label>
               <label
                 htmlFor="Misinformation"
@@ -81,7 +81,7 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Misinformation">Misinformation</label>
+                <label htmlFor="Misinformation">{t("Misinformation")}</label>
               </label>
               <label
                 htmlFor="Harassment"
@@ -96,7 +96,7 @@ const ReportCard = ({ post, handlerp }) => {
                   }}
                   value="Harassment"
                 />
-                <label htmlFor="Harassment">Harassment</label>
+                <label htmlFor="Harassment">{t("Harassment")}</label>
               </label>
               <label
                 htmlFor="Violence"
@@ -111,7 +111,7 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Violence">Violence</label>
+                <label htmlFor="Violence">{t("Violence")}</label>
               </label>
               <label
                 htmlFor="Nudity"
@@ -126,7 +126,7 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Nudity">Nudity</label>
+                <label htmlFor="Nudity">{t("Nudity")}</label>
               </label>
               <label
                 htmlFor="Hate_Speech"
@@ -141,7 +141,7 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Hate_Speech">Hate Speech</label>
+                <label htmlFor="Hate_Speech">{t("Hate Speech")}</label>
               </label>
               <label
                 htmlFor="Illegal_Content"
@@ -156,14 +156,14 @@ const ReportCard = ({ post, handlerp }) => {
                     setInfo(e.target.value);
                   }}
                 />
-                <label htmlFor="Illegal_Content">Illegal Content</label>
+                <label htmlFor="Illegal_Content">{t("Illegal Content")}</label>
               </label>
               <label
                 htmlFor="Other"
                 className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
               >
                 <input type="radio" id="Other" name="report" value="Other" />
-                <label htmlFor="Other">Other</label>
+                <label htmlFor="Other">{t("Other")}</label>
               </label>
             </div>
             <div className="w-full flex items-end justify-end">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { FaAndroid } from "react-icons/fa";
 import { NoProfile } from "../assets";
 import moment from "moment";
 import { notifetchNotifications } from "../until/noti";
@@ -49,11 +49,20 @@ const Lastactive = () => {
         notifications?.slice(0, 3).map((notification, index) => (
           <Link key={index} to={`${notifications[index]?.redirectUrl}`}>
             <div className="w-full flex gap-4 items-center cursor-pointer py-2 hover:bg-ascent-3/30  px-2">
-              <img
+              {/* <img
                 src={notifications[index]?.senderInfo?.avatar ?? NoProfile}
                 alt={notifications[index]?.senderInfo?.name}
                 className="w-10 h-10 object-cover rounded-full"
-              />
+              /> */}
+              {notifications[index]?.senderInfo?.userId == "system" ? (
+                <FaAndroid size={40} className="text-[#065ad8]" />
+              ) : (
+                <img
+                  src={notifications[index]?.senderInfo?.avatar ?? NoProfile}
+                  alt={notifications[index]?.senderInfo?.name}
+                  className="w-10 h-10 object-cover rounded-full"
+                />
+              )}
               <div className="flex-1">
                 <p className="text-base font-medium text-ascent-1">
                   {/* {user?.lastName}{" "} */}

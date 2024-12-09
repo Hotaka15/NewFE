@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminaprrovePostreport, admingetPostreport } from "../until/admin";
+import {
+  adminaprrovePostreport,
+  adminBlockUserId,
+  admingetPostreport,
+} from "../until/admin";
 import Loading from "./Loading";
 import { postapiRequest } from "../until/post";
 import { usergetUserpInfo } from "../until/user";
@@ -96,9 +100,23 @@ const Reportlist = ({ user, sl }) => {
 
       return {
         userId: res?.userId,
+        statusActive: userpost?.statusActive,
         createdAt: res?.createdAt?.split("T")[0],
         username: userpost?.firstName,
       };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const changeActiveuser = async (userId) => {
+    try {
+      const res = await adminBlockUserId({
+        token: user?.token,
+        userId: userId,
+      });
+      fetchReport();
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -130,6 +148,9 @@ const Reportlist = ({ user, sl }) => {
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
                 {t("Action")}
               </th>
+              <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
+                {t("Block")}
+              </th>
             </tr>
           </thead>
           <tbody className="text-ascent-1">
@@ -153,18 +174,10 @@ const Reportlist = ({ user, sl }) => {
               </div>
             </th>
           </tr> */}
-            {sl &&
+            {/* {sl &&
               listreport &&
               listreport.slice(0, 4).map((report) => {
-                // const res = await getPost(report.postId);
-                // console.log(res);
-
                 return (
-                  // <Rowtb
-                  //   report={report}
-                  //   user={user}
-                  //   fetchReport={fetchReport}
-                  // />
                   <tr key={report.postId}>
                     <th
                       onClick={() => {
@@ -173,7 +186,6 @@ const Reportlist = ({ user, sl }) => {
                       className="border border-[#66666645] py-2 px-3  cursor-pointer w-1/5"
                       // underline underline-offset-2
                     >
-                      {/* {report.postId}  */}
                       {report.username} <br />
                       {t("Create At")}: {report.createdAt}
                     </th>
@@ -205,11 +217,11 @@ const Reportlist = ({ user, sl }) => {
                     </th>
                   </tr>
                 );
-              })}
+              })} */}
             {!sl &&
               listreport &&
               listreport.map((report) => (
-                <tr>
+                <tr key={report.postId}>
                   <th
                     onClick={() => {
                       nevigate(`/post/${report.postId}`);
@@ -244,6 +256,29 @@ const Reportlist = ({ user, sl }) => {
                       >
                         {t("Delete")}
                       </div>
+                    </div>
+                  </th>
+                  <th className="select-none  border border-[#66666645] py-2 px-3">
+                    <div className="flex justify-center gap-2">
+                      {report?.statusActive ? (
+                        <div
+                          onClick={() => {
+                            changeActiveuser(report.userId);
+                          }}
+                          className="px-4 rounded-lg py-1 bg-[#0444a4] cursor-pointer text-white"
+                        >
+                          {t("Block")}
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => {
+                            changeActiveuser(report.userId);
+                          }}
+                          className="px-4 rounded-lg py-1 bg-[#ff0015b2] cursor-pointer text-white"
+                        >
+                          {t("Unlock")}
+                        </div>
+                      )}
                     </div>
                   </th>
                 </tr>

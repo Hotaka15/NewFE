@@ -128,10 +128,10 @@ lg:rounded-lg h-screen overflow-hidden"
                 <div className="flex w-full h-full items-start justify-between">
                   <div className="w-1/4 h-full text-ascent-2 bg-primary rounded-lg px-4 py-8 flex flex-col gap-4 ">
                     <span className=" text-ascent-1 font-medium text-2xl">
-                      Filter
+                      {t("Filter")}
                     </span>
                     <div className="gap-2 flex flex-col">
-                      Category:
+                      {t("Category")}:
                       <select
                         onChange={(e) => {
                           setCategori(e.target.value);
@@ -139,44 +139,48 @@ lg:rounded-lg h-screen overflow-hidden"
                         }}
                         className="bg-secondary text-ascent-1 px-4 py-2 outline-none rounded-lg"
                       >
-                        <option value="News and Events">News and Events</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Health and Fitness">
-                          Health and Fitness
+                        <option value="News and Events">
+                          {t("News and Events")}
                         </option>
-                        <option value="Travel">Travel</option>
+                        <option value="Entertainment">
+                          {t("Entertainment")}
+                        </option>
+                        <option value="Health and Fitness">
+                          {t("Health and Fitness")}
+                        </option>
+                        <option value="Travel">{t("Travel")}</option>
                         <option value="Fashion and Beauty">
-                          Fashion and Beauty
+                          {t("Fashion and Beauty")}
                         </option>
                         <option value="Technology and Innovation">
-                          Technology and Innovation
+                          {t("Technology and Innovation")}
                         </option>
                         <option value="Education and Learning">
-                          Education and Learning
+                          {t("Education and Learning")}
                         </option>
                         <option value="Business and Entrepreneurship">
-                          Business and Entrepreneurship
+                          {t("Business and Entrepreneurship")}
                         </option>
-                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Lifestyle">{t("Lifestyle")}</option>
                         <option value="Art and Creativity">
-                          Art and Creativity
+                          {t("Art and Creativity")}
                         </option>
                         <option value="Environment and Nature Conservation">
-                          Environment and Nature Conservation
+                          {t("Environment and Nature Conservation")}
                         </option>
                         <option value="Love and Relationships">
-                          Love and Relationships
+                          {t("Love and Relationships")}
                         </option>
-                        <option value="Pets">Pets</option>
+                        <option value="Pets">{t("Pets")}</option>
                       </select>
                     </div>
                     <div className="flex gap-4">
                       <div className="h-full">
                         <div className="h-1/2 flex items-center justify-end">
-                          From:
+                          {t("From")}:
                         </div>
                         <div className="h-1/2 flex items-center justify-end">
-                          To:
+                          {t("To")}:
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">
@@ -212,7 +216,7 @@ lg:rounded-lg h-screen overflow-hidden"
                         setPage(1);
                       }}
                     >
-                      Clear
+                      {t("Clear")}
                     </div>
                   </div>
                   <div className="w-full h-full flex gap-2 flex-wrap justify-center ">
@@ -238,7 +242,7 @@ lg:rounded-lg h-screen overflow-hidden"
                           </p>
                         </div>
                       )}
-                      {posts && posts?.length > 0 && !loading && <Loading />}
+                      {posts && posts?.length >= 10 && !loading && <Loading />}
                     </div>
                   </div>
                 </div>

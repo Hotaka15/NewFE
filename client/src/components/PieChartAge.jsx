@@ -30,8 +30,8 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function PieChartRp({ genders }) {
-  console.log(genders);
+export default function PieChartAge({ age }) {
+  console.log(age);
   const [t] = useTranslation();
   const data = [
     { name: "null", value: 8 },
@@ -42,15 +42,15 @@ export default function PieChartRp({ genders }) {
   ];
 
   const updatedData =
-    genders &&
-    genders.map((item) => ({
-      name: item.gender,
+    age &&
+    age.map((item) => ({
+      name: item.ageGroup,
       value: item.count,
     }));
   return (
     <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">
       <strong className="text-gray-700 font-medium text-ascent-1">
-        {t("Gender")}
+        {t("Age")}
       </strong>
       <div className="mt-3 w-full flex-1 text-xs">
         <ResponsiveContainer width="100%" height="100%">

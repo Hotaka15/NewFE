@@ -16,15 +16,17 @@ import {
   userDashboard,
 } from "../until/dashboard";
 import { useTranslation } from "react-i18next";
+import PieChartAge from "./PieChartAge";
 const UserChart = () => {
   const [genders, setGenders] = useState([]);
   const [monthlys, setMonthlys] = useState([]);
+  const [age, setAge] = useState([]);
   const { t } = useTranslation();
   const [total, setTotal] = useState([]);
   const [filter, setFilter] = useState("month");
   const fetchuserdashboard = async () => {
     const age = await ageDashboard();
-    console.log(age);
+    setAge(age);
     const gender = await genderDashboard();
     setGenders(gender);
 
@@ -42,7 +44,7 @@ const UserChart = () => {
     handlefill(filter);
   }, [filter]);
   return (
-    <div className="w-full h-full bg-primary py-4 flex flex-col">
+    <div className="w-full h-full bg-primary py-1 flex flex-col">
       <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <IoPeople size={35} />
@@ -116,8 +118,10 @@ const UserChart = () => {
           </div>
           <BarRp monthly={monthlys} />
         </div>
-
-        <PieChartRp genders={genders} />
+        <div className="h-full">
+          <PieChartRp genders={genders} />
+          <PieChartAge age={age} />
+        </div>
       </div>
       <div className="w-full ">{/* <RecentRp /> */}</div>
     </div>

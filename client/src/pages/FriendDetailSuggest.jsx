@@ -356,17 +356,17 @@ const FriendDetailSuggest = ({ title }) => {
                   <div className="text-ascent-1 rounded-xl bg-primary h-fit w-1/3 px-7">
                     <div className="w-full h-fit ">
                       <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
-                        <div className="flex gap-2 items-center text-ascent-2">
+                        {/* <div className="flex gap-2 items-center text-ascent-2">
                           <CiLocationOn className="text-xl text-ascent-1" />
                           <span>{userInfor?.location ?? ""}</span>
-                        </div>
+                        </div> */}
 
                         <div className="flex gap-2 items-center text-ascent-2">
                           <BsBriefcase className="text-lg text-ascent-1" />
                           <span>{userInfor?.profession ?? ""}</span>
                         </div>
                         <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
-                          <p className="text-xl text-ascent-1 font-semibold">
+                          {/* <p className="text-xl text-ascent-1 font-semibold">
                             {userInfor?.friends?.length} {t("Friends")}
                           </p>
                           <div className="flex items-center justify-between w-full">
@@ -376,10 +376,12 @@ const FriendDetailSuggest = ({ title }) => {
                             <span className="text-ascent-1 text-lg">
                               {userInfor?.views?.length}
                             </span>
-                          </div>
+                          </div> */}
 
                           <span className="text-base text-blue">
-                            {userInfor?.verified ? t("Verified Account") : " "}
+                            {userInfor?.statusActive
+                              ? t("Verified Account")
+                              : "Block"}
                           </span>
 
                           <div className="flex items-center justify-between">

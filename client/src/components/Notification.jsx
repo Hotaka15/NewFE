@@ -65,7 +65,7 @@ const Notification = ({ notify, fetchNotification }) => {
       >
         <div className="pb-4 flex items-center justify-between">
           <span className="font-medium pb-4">{t("Notifications")}</span>
-          <spa className="">
+          <spa className="text-sm">
             {listNotification.filter((noti) => !noti.isRead).length}
           </spa>
         </div>
@@ -96,6 +96,11 @@ const Notification = ({ notify, fetchNotification }) => {
 
       {listNotification ? (
         <div className="w-full flex flex-col gap-4 pb-2 ">
+          {listNotification.length == 0 && (
+            <div className="w-full h-[200px] flex text-ascent-2 items-center justify-center">
+              {t("No notification")}
+            </div>
+          )}
           {!showAll &&
             listNotification &&
             listNotification.length > 0 &&
@@ -128,7 +133,7 @@ const Notification = ({ notify, fetchNotification }) => {
                           className="w-12 h-12  object-cover rounded-full"
                         /> */}
                         {from?.userId == "system" ? (
-                          <FaAndroid size={40} />
+                          <FaAndroid size={40} className="text-[#065ad8]" />
                         ) : (
                           <img
                             src={from?.avatar ?? NoProfile}
@@ -194,7 +199,7 @@ const Notification = ({ notify, fetchNotification }) => {
                   >
                     <Link to={`${redirectUrl}`} className="flex gap-4">
                       {from?.userId == "system" ? (
-                        <FaAndroid size={40} />
+                        <FaAndroid size={40} className="text-[#065ad8]" />
                       ) : (
                         <img
                           src={from?.avatar ?? NoProfile}
@@ -236,7 +241,7 @@ const Notification = ({ notify, fetchNotification }) => {
                 </div>
               )
             )}
-          {!showAll && (
+          {!showAll && listNotification.length > 0 && (
             <div
               onClick={() => {
                 setShowAll(true);

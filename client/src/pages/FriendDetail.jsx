@@ -220,7 +220,7 @@ const ProfileDetail = ({ title }) => {
                   />
                 </div>
 
-                <div className="select-none relative text-ascent-1 w-full rounded-xl mb-5 py-7 text-center bg-primary pb-8 border-b-2 border-[#66666645] flex flex-col items-center">
+                <div className="select-none relative text-ascent-1 w-full rounded-xl mb-2 py-7 text-center bg-primary pb-8 border-b-2 border-[#66666645] flex flex-col items-center">
                   <div className="">
                     <img
                       src={userInfor?.profileUrl ?? NoProfile}
@@ -233,7 +233,7 @@ const ProfileDetail = ({ title }) => {
                     {userInfor?.firstName} {userInfor?.lastName}
                   </div>
                 </div>
-                <div className="w-full flex gap-6 ">
+                <div className="w-full flex gap-2 ">
                   <div className="w-2/3 h-full">
                     <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl  items-center">
                       {loading ? (
@@ -264,30 +264,32 @@ const ProfileDetail = ({ title }) => {
                   <div className="text-ascent-1 rounded-xl bg-primary h-fit w-1/3 px-7">
                     <div className="w-full h-fit ">
                       <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
-                        <div className="flex gap-2 items-center text-ascent-2">
+                        {/* <div className="flex gap-2 items-center text-ascent-2">
                           <CiLocationOn className="text-xl text-ascent-1" />
                           <span>{userInfor?.location ?? ""}</span>
-                        </div>
+                        </div> */}
 
                         <div className="flex gap-2 items-center text-ascent-2">
                           <BsBriefcase className="text-lg text-ascent-1" />
                           <span>{userInfor?.profession ?? ""}</span>
                         </div>
                         <div className="w-full flex flex-col gap-2 py-4 border-b border-[#66666645]">
-                          <p className="text-xl text-ascent-1 font-semibold">
+                          {/* <p className="text-xl text-ascent-1 font-semibold">
                             {userInfor?.friends?.length} {t("Friends")}
-                          </p>
-                          <div className="flex items-center justify-between w-full">
+                          </p> */}
+                          {/* <div className="flex items-center justify-between w-full">
                             <span className="text-ascent-2">
                               {t("Who viewed your profile")}
                             </span>
                             <span className="text-ascent-1 text-lg">
                               {userInfor?.views?.length}
                             </span>
-                          </div>
+                          </div> */}
 
                           <span className="text-base text-blue">
-                            {userInfor?.verified ? t("Verified Account") : " "}
+                            {userInfor?.statusActive
+                              ? t("Verified Account")
+                              : "Block"}
                           </span>
 
                           <div className="flex items-center justify-between">

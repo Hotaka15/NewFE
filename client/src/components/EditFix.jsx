@@ -22,7 +22,7 @@ const EditFix = () => {
   const [preview, setPreview] = useState();
   const [file, setFile] = useState(null);
   const [birthDate, setBirthDate] = useState(
-    user && user?.birthDate.split("T")[0]
+    user && user?.birthDate && user?.birthDate.split("T")[0]
   );
 
   const provinces = [
@@ -98,10 +98,13 @@ const EditFix = () => {
     formState: { errors },
   } = useForm({
     mode: "onBlur",
-    defaultValues: { ...user, birthDate: user?.birthDate.split("T")[0] },
+    defaultValues: {
+      ...user,
+      birthDate: user?.birthDate && user?.birthDate.split("T")[0],
+    },
   });
 
-  console.log(user && user?.birthDate.split("T")[0]);
+  // console.log(user && user?.birthDate.split("T")[0]);
 
   const [checkpassword, setcheckpassword] = useState("");
   const handlebg = (e) => {

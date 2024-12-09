@@ -5,7 +5,11 @@ import Loading from "./Loading";
 import { apiRequest } from "../until";
 import { CiLock, CiUnlock } from "react-icons/ci";
 import moment from "moment";
-import { admindeleteUser, admingetUserId } from "../until/admin";
+import {
+  adminBlockUserId,
+  admindeleteUser,
+  admingetUserId,
+} from "../until/admin";
 import { useTranslation } from "react-i18next";
 import { useTransition } from "react";
 
@@ -154,15 +158,32 @@ const UserCard = ({ user, setDetails, handleHistory, setUserInfo }) => {
 };
 
 const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
-  // const [info, setInfo] = useState();
+  // const [userInfo, setuserInfo] = useState();
   // setInfo(userInfo.friends);
+  const [active, setActive] = useState(userInfo?.statusActive);
   const { t } = useTranslation();
   console.log(userInfo);
   // console.log(userInfo.friends);
+
   // console.log(user);
   // console.log(info);
 
-  const changeDeleteuser = async () => {
+  const changeActiveuser = async () => {
+    try {
+      const res = await adminBlockUserId({
+        token: user?.token,
+        userId: userInfo?._id,
+      });
+      await fetchUser();
+      // setDetails();
+      setActive(!active);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const Deleteuser = async () => {
     try {
       const res = await admindeleteUser({
         token: user?.token,
@@ -242,12 +263,15 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
         <div className="w-1/5 flex flex-col items-center justify-center gap-2">
           <div
             onClick={() => {
-              changeDeleteuser();
+              changeActiveuser();
             }}
           >
-            {userInfo?.statusActive ? (
+            {active ? (
+              // <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
+              //   <CiLock /> {t("Delete")}
+              // </div>
               <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
-                <CiLock /> {t("Delete")}
+                <CiLock /> {t("Block")}
               </div>
             ) : (
               <div className="flex px-1 items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer border rounded-full justify-center">
@@ -255,7 +279,14 @@ const DetailUser = ({ user, userInfo, setDetails, setUserInfo, fetchUser }) => {
               </div>
             )}
           </div>
-
+          <button
+            onClick={() => {
+              Deleteuser();
+            }}
+            className="inline-flex items-center text-base bg-[#ff2222] text-white px-5 py-1 mt-2 rounded-full"
+          >
+            {t("Delete")}
+          </button>
           <button
             onClick={setDetails}
             className="inline-flex items-center text-base bg-[#0444a4] text-white px-5 py-1 mt-2 rounded-full"

@@ -358,6 +358,10 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
     setIsreport(true);
   };
 
+  const handleclosereport = () => {
+    setReportdetail(!reportdetail);
+  };
+
   const getComments = async (id) => {
     setReplyComments(0);
     try {
@@ -710,7 +714,13 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
           }}
         />
       )}
-      {reportdetail && <ReportCard post={post} handlerp={handlerfpdetail} />}
+      {reportdetail && (
+        <ReportCard
+          post={post}
+          handlerp={handlerfpdetail}
+          handleclosereport={handleclosereport}
+        />
+      )}
     </div>
   );
 };

@@ -1447,17 +1447,17 @@ const Chat = () => {
               >
                 <IoIosContact className="text-ascent-1 " size={30} />
               </div>
-              <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
+              {/* <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
                 <FaVideo className="text-ascent-1 " size={25} />
-              </div>
+              </div> */}
 
               {/* <IoIosSettings className=" text-ascent-1 " size={30} /> */}
             </div>
 
             <div className=" w-full bg-primary flex justify-center items-end py-5">
-              <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
+              {/* <div className="hover:bg-ascent-3/30 py-1 px-1 rounded-xl">
                 <IoIosSettings className=" text-ascent-1 " size={30} />
-              </div>
+              </div> */}
             </div>
           </div>
           {!listfriend && (

@@ -417,13 +417,20 @@ const TopBar = ({ user, setKey }) => {
             </Link> */}
           </div>
           <div
-            className=" px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
+            className="relative px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
             onClick={() => {
               dispatch(Setnotification(!notification));
               // fetchNotification();
             }}
           >
             <IoNotifications size={25} />
+            {notifications.filter((noti) => !noti.isRead).length > 0 && (
+              <div className="w-4 h-4 rounded-full flex items-center justify-center absolute top-2 right-2 bg-[#e22222] text-sm text-white">
+                {notifications.filter((noti) => !noti.isRead).length < 10
+                  ? notifications.filter((noti) => !noti.isRead).length
+                  : "9+"}
+              </div>
+            )}
           </div>
           <img
             src={user?.profileUrl ?? NoProfile}

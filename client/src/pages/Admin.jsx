@@ -136,7 +136,7 @@ lg:rounded-lg h-screen overflow-hidden"
           </div>
           {/* {CENTTER} */}
 
-          <div className=" w-full h-full bg-primary px-4 flex flex-col overflow-y-auto rounded-lg items-center">
+          <div className="w-full h-full bg-primary px-4 flex flex-col overflow-y-auto rounded-lg items-center">
             {page == 1 ? (
               <UserChart />
             ) : page == 2 ? (
