@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001/api/stat";
+const API_URL = `http://localhost:${process.env.REACT_APP_USER_PORT}/api/stat`;
+console.log(process.env.REACT_APP_USER_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,

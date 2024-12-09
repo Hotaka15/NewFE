@@ -109,12 +109,12 @@ const Login = () => {
               error={errors.password ? errors.password.message : ""}
             />
 
-            <Link
+            {/* <Link
               to={"/reset-password"}
               className="text-sm text-right text-blue font-semibold"
             >
               {t("Forgot Password ?")}
-            </Link>
+            </Link> */}
 
             {errMsg?.message && (
               <span

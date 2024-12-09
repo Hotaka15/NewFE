@@ -10,7 +10,7 @@ import { FaTwitterSquare } from "react-icons/fa";
 import { FaFacebookMessenger } from "react-icons/fa";
 import moment from "moment";
 import Cookies from "js-cookie";
-import { UpdateProfile } from "../redux/userSlice";
+import { UpdateProfile, UserLogin } from "../redux/userSlice";
 import {
   userapiRequest,
   usergetUserInfo,
@@ -25,6 +25,7 @@ import {
 import { io } from "socket.io-client";
 import { handFileUpload } from "../until";
 import { useTranslation } from "react-i18next";
+import Login from "./Login";
 
 const ProfileFix = () => {
   const { id } = useParams();
@@ -56,8 +57,18 @@ const ProfileFix = () => {
     const res = await usergetUserInfo(user?.token, id);
     console.log(res);
     getPosts(res);
+    if (res?.cover_photo) {
+      console.log(1);
 
-    setBanner(res?.profileUrl ?? NoProfile);
+      setBanner(res.cover_photo);
+    } else if (res?.profileUrl) {
+      console.log(2);
+
+      setBanner(res.profileUrl);
+    } else {
+      setBanner(NoProfile);
+    }
+    // setBanner(res.cover_photo || res.profileUrl || NoProfile);
     setUserInfor(res);
   };
 
@@ -101,6 +112,9 @@ const ProfileFix = () => {
       });
 
       console.log(res);
+      // const newUser = { token: user?.token, ...res };
+      // dispatch(UserLogin(newUser));
+      getUser();
       if (res?.status === "failed") {
       } else {
         const newUser = { token: user?.token, ...res };
@@ -135,12 +149,12 @@ const ProfileFix = () => {
           <div className="flex flex-col  h-screen w-8/12 items-center ">
             <div className="flex w-full h-1/4 bg-secondary relative select-none items-center justify-center">
               <img
-                src={banner}
+                src={banner ?? NoProfile}
                 alt="Banner Image"
                 className="object-cover h-full w-full
               overflow-hidden rounded-xl z-0"
               />
-              {/* {id == user?._id && (
+              {id == user?._id && (
                 <label className="absolute right-4 bottom-2 z-30 bg-primary/50 px-6 py-2 rounded-xl border border-[#66666690] cursor-pointer">
                   Edit
                   <input
@@ -153,7 +167,7 @@ const ProfileFix = () => {
                     }}
                   />
                 </label>
-              )} */}
+              )}
             </div>
 
             <div

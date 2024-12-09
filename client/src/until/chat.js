@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3007/chat";
+const API_URL = `http://localhost:${process.env.REACT_APP_CHAT_PORT}/chat`;
 
 export const API = axios.create({
   baseURL: API_URL,

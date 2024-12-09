@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3009/";
+const API_URL = `http://localhost:${process.env.REACT_APP_SUGGEST_PORT}/`;
+console.log(process.env.REACT_APP_SUGGEST_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { SetPosts, UpdatePosts } from "../redux/postSlice";
 
-const API_URL = "http://localhost:3002/api/posts";
+const API_URL = `http://localhost:${process.env.REACT_APP_POST_PORT}/api/posts`;
+console.log(process.env.REACT_APP_POST_PORT);
 
 export const API = axios.create({
   baseURL: API_URL,
@@ -37,7 +38,7 @@ export const postfetchPosts = async (token, dispatch, page) => {
 
   try {
     const res = await postapiRequest({
-      url: page ? "/newsfeed?page=" + page : "&limit=20",
+      url: page ? "/newsfeed?page=" + page : "",
       // url: "/newsfeed",
       token: token,
       method: "GET",
