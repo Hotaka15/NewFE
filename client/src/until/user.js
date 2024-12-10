@@ -24,7 +24,7 @@ export const userapiRequest = async ({ url, token, data, method }) => {
     return result?.data;
   } catch (error) {
     const err = error.response.data;
-    console.log(error);
+    // console.log(error);
 
     console.log(err);
 
@@ -56,7 +56,6 @@ export const userChangePasswordRequest = async (token, oldpass, newpass) => {
       data: { oldPassword: oldpass, newPassword: newpass },
       method: "PUT",
     });
-    console.log(res);
 
     return res;
   } catch (error) {

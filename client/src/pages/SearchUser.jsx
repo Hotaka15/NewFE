@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FriendCard, FriendMain, TopBar } from "../components";
+import { EditFix, FriendCard, FriendMain, TopBar } from "../components";
 import { Link, redirect, useNavigate, useParams } from "react-router-dom";
 import { NoProfile } from "../assets";
 import { useSelector } from "react-redux";
@@ -78,7 +78,7 @@ const SearchUser = () => {
   const { keyword } = useParams();
   const [key, setKey] = useState(`${keyword}`);
 
-  const { user } = useSelector((state) => state.user);
+  const { user, edit } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [listUser, setListUser] = useState([]);
@@ -135,7 +135,11 @@ lg:rounded-lg h-screen overflow-hidden"
                           {listUser &&
                             listUser.map((users) => {
                               return (
-                                <UserCard token={user?.token} user={users} />
+                                <UserCard
+                                  key={users?._id}
+                                  token={user?.token}
+                                  user={users}
+                                />
                               );
                             })}
                         </div>
@@ -147,6 +151,7 @@ lg:rounded-lg h-screen overflow-hidden"
             </div>
           </div>
         </div>
+        {edit && <EditFix />}
       </div>
     </div>
   );

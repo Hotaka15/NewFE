@@ -21,7 +21,6 @@ const ResetPassword = () => {
     setisSubmitting(true);
     try {
       const res = await userResetRequest(data);
-      console.log(res);
 
       if (res?.message === "Password reset have send email  successful") {
         seterrMsg(res);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { TopBar } from "../components";
+import { EditFix, TopBar } from "../components";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -20,7 +20,7 @@ const Search = () => {
   const [key, setKey] = useState(`${keyword}`);
   const [maxDate, setMaxDate] = useState("");
   const { t } = useTranslation();
-  const { user } = useSelector((state) => state.user);
+  const { user, edit } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const [from, setFrom] = useState(null);
@@ -113,7 +113,7 @@ const Search = () => {
         action: "seen",
       };
 
-      console.log("Emitting user_interaction:", data);
+      // console.log("Emitting user_interaction:", data);
       await socket.emit("interactPost", data);
     };
     const observer = new IntersectionObserver(
@@ -316,6 +316,8 @@ lg:rounded-lg h-screen overflow-hidden"
             </div>
           </div>
         </div>
+
+        {edit && <EditFix />}
       </div>
     </div>
   );

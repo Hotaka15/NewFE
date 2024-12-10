@@ -145,7 +145,7 @@ const EditFix = () => {
         method: "PUT",
         token: user?.token,
       });
-      console.log(res);
+      // console.log(res);
 
       if (res?.status === "failed") {
         seterrMsg(res);
@@ -222,7 +222,7 @@ const EditFix = () => {
       } else {
         dispatch(Logout());
       }
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -498,7 +498,7 @@ const EditFix = () => {
                   ) : (
                     <CustomButton
                       type="submit"
-                      containerStyles={`inline-flex justify-center rounded-md bg-blue px-8
+                      containerStyles={`inline-flex w-full justify-center rounded-md bg-blue px-8
                     py-3 text-sm font-medium text-white outline-none`}
                       tittle={t("Submit")}
                     />

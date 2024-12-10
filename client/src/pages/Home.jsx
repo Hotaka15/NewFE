@@ -1,27 +1,16 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import Cookies from "js-cookie";
 import { FaUserFriends } from "react-icons/fa";
-import { IoBookmark } from "react-icons/io5";
-import { MdGroups } from "react-icons/md";
-import { FaVideo } from "react-icons/fa";
-import { RiMemoriesFill } from "react-icons/ri";
+
 import { FaFacebookMessenger } from "react-icons/fa";
-import { MdEvent } from "react-icons/md";
+
 import { MdFeed } from "react-icons/md";
 
 import { IoVideocamOutline } from "react-icons/io5";
 import {
   CustomButton,
-  EditProfile,
   EditFix,
-  FriendsCard,
   Loading,
   PostCard,
   TopBar,
@@ -30,7 +19,7 @@ import {
 } from "../components";
 
 // import { requests, suggest } from "../assets/data";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NoProfile } from "../assets";
 import {
   BsPersonFillAdd,
@@ -39,24 +28,18 @@ import {
 } from "react-icons/bs";
 
 import { useForm } from "react-hook-form";
-import { BiImages, BiSolidVideo } from "react-icons/bi";
+import { BiImages } from "react-icons/bi";
 import {
   apiRequest,
   checktoken,
-  deletePost,
   fetchNotifications,
-  fetchPosts,
-  getUserInfo,
   handFileUpload,
-  likePost,
-  sendFriendRequest,
-  uploadVideo,
 } from "../until";
 import { dispatch } from "../redux/store";
 import { Logout, UpdatePost } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { UserLogin } from "../redux/userSlice";
-import { friends } from "../assets/data";
+
 import {
   searchUserName,
   useracceptFriendRequest,
@@ -65,18 +48,12 @@ import {
   usergetUserInfo,
   usersendFriendRequest,
 } from "../until/user";
-import {
-  postdeletePost,
-  postfetchPosts,
-  postlikePost,
-  postrenewfetchPosts,
-} from "../until/post";
+import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
 import { debounce } from "lodash";
-import { CheckedPosts, SetPosts, UpdatePosts } from "../redux/postSlice";
+import { CheckedPosts, UpdatePosts } from "../redux/postSlice";
 import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
-import { checklink } from "../until/checkapi";
-import { io } from "socket.io-client";
+
 import { useSocket } from "../context/SocketContext";
 import { useTranslation } from "react-i18next";
 const Home = () => {
@@ -495,17 +472,6 @@ const Home = () => {
                 </span>
               </Link>
 
-              {/* <Link
-                to={"/save"}
-                className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
-              >
-                <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
-                  <div className="w-10 h-10 flex items-center justify-center  ">
-                    <IoBookmark size={30} />
-                  </div>
-                  Saved
-                </span>
-              </Link> */}
               <Link
                 to={"/newfeed"}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -518,39 +484,6 @@ const Home = () => {
                 </span>
               </Link>
 
-              {/* <Link
-                to={""}
-                className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
-              >
-                <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <FaVideo size={30} />
-                  </div>
-                  Watch
-                </span>
-              </Link>
-              <Link
-                to={""}
-                className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
-              >
-                <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <RiMemoriesFill size={30} />
-                  </div>
-                  Memories
-                </span>
-              </Link>
-              <Link
-                to={""}
-                className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
-              >
-                <span className="text-base font-medium text-ascent-1 flex items-center gap-2">
-                  <div className="w-10 h-10 flex items-center justify-center">
-                    <MdEvent size={30} />
-                  </div>
-                  Event
-                </span>
-              </Link> */}
               <Link
                 to={`/chat/`}
                 className="flex gap-2 hover:bg-ascent-3/30 w-full px-6 py-2"
@@ -570,60 +503,6 @@ const Home = () => {
               <FriendsCard friend={user?.friends} />;
             })} */}
             <Lastactive />
-            {/* <div className="w-full shadow-sm pb-5">
-              <div
-                className="flex items-center justify-between text-sm text-ascent-1 
-            pb-2 "
-              >
-                <span className="font-medium text-lg text-ascent-2">
-                  Friend Request
-                </span>
-              </div>
-
-              <div className="w-full flex flex-col gap-4 pt-4">
-                {friendRequest &&
-                  friendRequest?.map(({ _id, sender }) => (
-                    <div
-                      key={sender?._id}
-                      className="flex items-center justify-between "
-                    >
-                      <Link
-                        to={"/profile/" + sender?._id}
-                        className="w-full flex gap-4 items-center 
-                          cursor-pointer "
-                      >
-                        <img
-                          src={sender?.profileUrl ?? NoProfile}
-                          alt={sender?.firstName}
-                          className="w-10 h-10 object-cover rounded-full"
-                        />
-                        <div className="flex-1">
-                          <p className="text-base font-medium text-ascent-1">
-                            {sender?.firstName} {sender?.lastName}
-                          </p>
-                          <span className="text-sm text-ascent-2">
-                            Request
-                          </span>
-                        </div>
-                      </Link>
-                      <div className="flex gap-1">
-                        <CustomButton
-                          tittle="Accept"
-                          onClick={() => acceptFriendRequest(_id, "accepted")}
-                          containerStyles="bg-[#0444a4] text-xs text-white px-1.5
-                    py-1 rounded-full"
-                        />
-                        <CustomButton
-                          tittle="Deny"
-                          onClick={() => acceptFriendRequest(_id, "rejected")}
-                          containerStyles="border border-[#666] text-xs
-                    text-ascent-1 px-1.5 py-1 rounded-full"
-                        />
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div> */}
           </div>
           {/* {CENTTER} bg-primary */}
           <div
@@ -753,7 +632,7 @@ const Home = () => {
                   post={post}
                 >
                   <PostCard
-                    key={index}
+                    // key={index}
                     posts={post}
                     user={user}
                     deletePost={handleDeletePost}
@@ -911,7 +790,7 @@ const Home = () => {
                       >
                         <Link
                           to={"/profile/" + friend?._id}
-                          key={friend._id}
+                          // key={friend._id}
                           className="w-full flex gap-4 items-center 
                   cursor-pointer"
                         >

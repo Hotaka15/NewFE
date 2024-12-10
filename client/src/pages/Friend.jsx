@@ -178,7 +178,7 @@ lg:rounded-lg h-screen overflow-hidden"
             </div>
           </div>
           <div className=" justify-center h-full flex-initial w-4/5 flex-wrap px-4 py-4 flex gap-6 overflow-y-auto rounded-lg">
-            <div>
+            <div className="w-full h-full">
               <div
                 id="fr"
                 className="flex flex-col gap-2 h-fit relative select-none"
@@ -246,7 +246,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   </div>
                 )}
               </div>
-              <div className="w-full h-fit flex flex-wrap gap-2 select-none">
+              <div className="w-full h-full flex flex-wrap gap-2 select-none">
                 <div className="w-full flex items-end justify-between">
                   <span className="text-ascent-1 font-bold text-3xl">
                     {t("People you may know")}
@@ -258,8 +258,8 @@ lg:rounded-lg h-screen overflow-hidden"
                   </Link>
                 </div>
 
-                <div className="flex justify-start items-center flex-col w-full">
-                  <div className="w-3/4  h-fit flex gap-4 flex-wrap">
+                <div className="flex justify-start items-center flex-col w-full h-full">
+                  <div className="w-3/4  h-full flex gap-4 flex-wrap">
                     {suggestedFriends && suggestedFriends.length > 0 ? (
                       suggestedFriends.map((friend, index) => {
                         return (
@@ -273,11 +273,11 @@ lg:rounded-lg h-screen overflow-hidden"
                         );
                       })
                     ) : (
-                      <div>
+                      <div className="w-full h-1/2">
                         <div className="w-full h-full bg-primary rounded-2xl ">
                           <Loading />
                         </div>
-                        <div className="w-full h-fit flex gap-2 flex-wrap">
+                        {/* <div className="w-full h-fit flex gap-2 flex-wrap">
                           {(() => {
                             const items = [];
                             for (let i = 0; i < 10; i++) {
@@ -293,7 +293,7 @@ lg:rounded-lg h-screen overflow-hidden"
                             }
                             return items;
                           })()}
-                        </div>
+                        </div> */}
                       </div>
                     )}
                   </div>

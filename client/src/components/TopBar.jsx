@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import TextInput from "./TextInput";
 import CustomButton from "./CustomButton";
-import { PiSignOut } from "react-icons/pi";
+
 import { useForm } from "react-hook-form";
 
 import { MdDarkMode } from "react-icons/md";
@@ -14,12 +14,12 @@ import { IoNotifications } from "react-icons/io5";
 import { TfiAngleRight } from "react-icons/tfi";
 import { setTheme } from "../redux/theme";
 import { Logout, Setnotification, UserLogin } from "../redux/userSlice";
-import { fetchNotifications, fetchPosts } from "../until";
+
 import Notification from "./Notification";
 import { MdOutlineGTranslate } from "react-icons/md";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { UpdateProfile } from "../redux/userSlice";
-import { GoSun } from "react-icons/go";
+
 import { IoMdSettings } from "react-icons/io";
 import { NoProfile } from "../assets";
 import { notifetchNotifications } from "../until/noti";
@@ -32,7 +32,7 @@ import {
   userapiRequest,
   usergetlistUserInfo,
 } from "../until/user";
-import { TbChevronRight } from "react-icons/tb";
+import { PiSunDimFill } from "react-icons/pi";
 import { useSocket } from "../context/SocketContext";
 const TopBar = ({ user, setKey }) => {
   const { theme } = useSelector((state) => state.theme);
@@ -378,7 +378,11 @@ const TopBar = ({ user, setKey }) => {
             className="px-3 py-3 text-ascent-1 rounded-full bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
             onClick={() => handleTheme()}
           >
-            {theme == "dark" ? <GoSun size={25} /> : <MdDarkMode size={25} />}
+            {theme == "dark" ? (
+              <PiSunDimFill size={25} />
+            ) : (
+              <MdDarkMode size={25} />
+            )}
           </button>
           <div
             className=" px-3 py-3 text-ascent-1 rounded-full hidden lg:flex bg-ascent-3/30 cursor-pointer hover:bg-ascent-3/70"
