@@ -184,3 +184,20 @@ export const postfetchId = async (token, dispatch, postId, data) => {
     console.log(error);
   }
 };
+
+export const likecomment = async (token, url, data) => {
+  console.log(data);
+  try {
+    const res = await postapiRequest({
+      url: url,
+      token: token,
+      method: "PUT",
+      data: data || {},
+    });
+
+    // dispatch(SetPosts(res?.posts));
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

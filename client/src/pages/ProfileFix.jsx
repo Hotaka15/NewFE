@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EditProfile, Hobby, Loading, PostCard, TopBar } from "../components";
-import { NoProfile } from "../assets";
+import { CoverPhot, NoProfile } from "../assets";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { CiLocationOn } from "react-icons/ci";
@@ -27,33 +27,47 @@ import { handFileUpload } from "../until";
 import { useTranslation } from "react-i18next";
 import Login from "./Login";
 
-const UserCard = ({ token, user }) => {
+const UserCard = ({ token, userid, isFriend }) => {
   const [idAdd, setIsAdd] = useState(false);
   const { t } = useTranslation();
-  const handleFriendRequest = async (id) => {
+  const [userinfor, setUserinfo] = useState();
+  console.log(isFriend);
+
+  const handleFriendRequest = async (userid) => {
     try {
-      const res = await usersendFriendRequest(token, id);
+      const res = await usersendFriendRequest(token, userid);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getUser = async () => {
+    const res = await usergetUserInfo(token, userid);
+
+    console.log(res);
+    setUserinfo(res);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
-    <div className="rounded-xl shadow-lg bg-primary w-[375px] h-full px-5 border border-[#66666645]">
+    <div className="rounded-xl shadow-lg bg-primary w-full h-full px-5 border border-[#66666645]">
       <div
         className="my-4 flex gap-5 w-full h-full justify-between cursor-pointer"
         onClick={() => {}}
       >
-        <Link to={"/profile/" + user?._id} className="">
+        <Link to={"/profile/" + userinfor?._id} className="">
           <img
             className="h-20 w-20 object-cover rounded-full"
-            src={user?.profileUrl ?? NoProfile}
+            src={userinfor?.profileUrl ?? NoProfile}
             alt="Avatar"
           />
         </Link>
 
         <div className="w-2/3 overflow-hidden">
-          <Link to={"/profile/" + user?._id} className="">
+          <Link to={"/profile/" + userinfor?._id} className="">
             {" "}
             <div className="flex w-full gap-4">
               <div className="flex flex-col text-right">
@@ -61,26 +75,32 @@ const UserCard = ({ token, user }) => {
               </div>
               <div className="w-full text-ascent-1 text-base flex flex-col items-start">
                 <span className="max-h-6 overflow-hidden">
-                  {user?.firstName ? user?.firstName : "?"}{" "}
-                  {user?.lastName ? user?.lastName : "?"}
+                  {userinfor?.firstName ? userinfor?.firstName : "?"}{" "}
+                  {userinfor?.lastName ? userinfor?.lastName : "?"}
                 </span>
               </div>
             </div>
           </Link>
 
-          {!idAdd ? (
-            <div
-              onClick={() => {
-                setIsAdd(true);
-                handleFriendRequest(user?._id);
-              }}
-              className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
-            >
-              {t("Add")}
-            </div>
+          {!isFriend ? (
+            !idAdd ? (
+              <div
+                onClick={() => {
+                  setIsAdd(true);
+                  handleFriendRequest(user);
+                }}
+                className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
+              >
+                {t("Add")}
+              </div>
+            ) : (
+              <div className="mt-5 text-ascent-2  bg-ascent-3/30 w-full py-2 rounded-lg flex items-center justify-center">
+                {t("Added")}
+              </div>
+            )
           ) : (
             <div className="mt-5 text-ascent-2  bg-ascent-3/30 w-full py-2 rounded-lg flex items-center justify-center">
-              {t("Added")}
+              {t("Friend")}
             </div>
           )}
         </div>
@@ -118,14 +138,16 @@ const ProfileFix = () => {
   };
   const getUser = async () => {
     const res = await usergetUserInfo(user?.token, id);
+    console.log(res);
 
     getPosts(res);
+
     if (res?.cover_photo) {
       setBanner(res.cover_photo);
     } else if (res?.profileUrl) {
       setBanner(res.profileUrl);
     } else {
-      setBanner(NoProfile);
+      setBanner(CoverPhot);
     }
     // setBanner(res.cover_photo || res.profileUrl || NoProfile);
     setUserInfor(res);
@@ -196,8 +218,8 @@ const ProfileFix = () => {
         {loading ? (
           <Loading />
         ) : (
-          <div className="flex flex-col  h-screen w-8/12 items-center ">
-            <div className="flex w-full h-1/4 bg-secondary relative select-none items-center justify-center">
+          <div className="flex shrink-0 flex-col  h-full  w-8/12 items-center ">
+            <div className="flex w-full min-h-[25%] h-1/4 bg-secondary relative select-none items-center justify-center">
               <img
                 src={banner ?? NoProfile}
                 alt="Banner Image"
@@ -224,7 +246,7 @@ const ProfileFix = () => {
               className="select-none relative text-ascent-1 w-full rounded-xl mb-3 text-center 
             bg-primary border-b-2 border-[#66666645] flex flex-col items-start h-1/5"
             >
-              <div className="flex items-center relative bottom-14 left-7 gap-3">
+              <div className="flex items-center relative bottom-16 left-7 gap-3">
                 <label htmlFor="imgUpload" className="cursor-pointer">
                   <img
                     src={userInfor?.profileUrl ?? NoProfile}
@@ -251,7 +273,7 @@ const ProfileFix = () => {
                   }}
                   className={`${
                     isPost ? "border-b border-blue text-blue" : "text-ascent-1"
-                  } px-4  h-full flex justify-center items-center rounded-lg  font-medium cursor-pointer`}
+                  } px-4  h-full flex justify-center items-center  font-medium cursor-pointer`}
                 >
                   {t("Posts")}
                 </div>
@@ -261,7 +283,7 @@ const ProfileFix = () => {
                   }}
                   className={`${
                     !isPost ? "border-b border-blue text-blue" : "text-ascent-1"
-                  } text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg cursor-pointer`}
+                  } text-ascent-1 px-4 h-full flex justify-center items-center cursor-pointer`}
                 >
                   {t("Friends")}
                 </div>
@@ -311,7 +333,7 @@ const ProfileFix = () => {
             {/* <div className="flex overflow-auto"> */}
             <div className="w-full flex gap-2 ">
               <div className="w-2/3 h-full pb-32">
-                <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl  items-center">
+                <div className="w-full h-full bg-primary px-4 flex flex-col gap-6  rounded-xl  items-center">
                   {/* <div className="w-full mx-10">
                   <Loading />
                 </div> */}
@@ -345,10 +367,15 @@ const ProfileFix = () => {
 
                   {!isPost && !loading && (
                     <div className="w-full grid grid-cols-2 gap-4 py-4">
-                      {posts?.length > 0 &&
-                        posts?.map((post) => (
-                          <div className="w-full" key={post._id}>
-                            <UserCard token={user?.token} user={user} />
+                      {userInfor?.friends?.length > 0 &&
+                        userInfor?.friends?.map((users) => (
+                          <div className="w-full" key={users}>
+                            <UserCard
+                              user={user}
+                              token={user?.token}
+                              userid={users}
+                              isFriend={user?.friends?.includes(users)}
+                            />
                           </div>
                         ))}
                     </div>

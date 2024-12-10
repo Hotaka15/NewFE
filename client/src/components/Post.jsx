@@ -673,7 +673,7 @@ const Post = ({ setPage }) => {
                               setAudience(false);
                               setWrite(true);
                             }}
-                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                            containerStyles={`inline-flex justify-center rounded-full whitespace-nowrap underline underline-offset-2 px-8
                     py-3 text-sm font-medium text-ascent-1 outline-none`}
                             tittle={t("Back")}
                           />
@@ -795,11 +795,11 @@ dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
                               setLists([]);
                               setSpecific(!specific);
                             }}
-                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                            containerStyles={`inline-flex justify-center rounded-full whitespace-nowrap underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
                             tittle={t("Back")}
                           />
-                          <div className="w-full h-full flex-col-reverse gap-80">
+                          <div className="w-full h-full flex-col-reverse gap-80 ">
                             <div className="w-full flex justify-end">
                               <CustomButton
                                 type=""

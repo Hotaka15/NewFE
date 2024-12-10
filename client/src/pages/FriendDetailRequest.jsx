@@ -7,7 +7,7 @@ import {
   PostCard,
   TopBar,
 } from "../components";
-import { NoProfile } from "../assets";
+import { CoverPhot, NoProfile } from "../assets";
 import { useNavigate, useParams } from "react-router-dom";
 import { deletePost, likePost, apiRequest } from "../until";
 import { Link } from "react-router-dom";
@@ -130,7 +130,7 @@ const FriendDetailRequest = ({ title }) => {
       } else if (res?.profileUrl) {
         setBanner(res.profileUrl);
       } else {
-        setBanner(NoProfile);
+        setBanner(CoverPhot);
       }
       setUserInfor(res);
     } catch (error) {

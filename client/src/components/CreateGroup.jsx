@@ -120,43 +120,80 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
             </span>
           </div>
 
-          <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1 whitespace-nowraps">
-              {t("Name")}{" "}
-            </span>
-            <input
-              type="text"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
-              placeholder={t("Name")}
-            />
-          </div>
-          <div className="flex w-full justify-start items-center gap-3">
-            <span className="text-ascent-1 whitespace-nowraps w-[100px]">
-              {t("Description")}
-            </span>
-            <input
-              type="text"
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
-              placeholder={t("Description")}
-            />
-          </div>
-          <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1 w-[150px]">{t("Member")}</span>
+          <div className="w-full flex h-fit ">
+            <div className="w-1/3 px-2 justify-between py-2 items-end h-full flex flex-col">
+              <span className="text-ascent-1 whitespace-nowraps ">
+                {t("Name")}{" "}
+              </span>
+              <span className="text-ascent-1 whitespace-nowraps ">
+                {t("Description")}
+              </span>
+              <span className="text-ascent-1 ">{t("Member")}</span>
+            </div>
+            <div className="flex flex-col gap-2 w-full">
+              <input
+                type="text"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                placeholder={t("Name")}
+              />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                placeholder={t("Description")}
+              />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1  "
+                placeholder={t("Search")}
+              />
+            </div>
+            {/* <div className="flex w-full justify-start items-center gap-3">
+              <span className="text-ascent-1 whitespace-nowraps">
+                {t("Name")}{" "}
+              </span>
+              <input
+                type="text"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                placeholder={t("Name")}
+              />
+            </div>
+            <div className="flex w-full justify-start items-center gap-3">
+              <span className="text-ascent-1 whitespace-nowraps w-[100px]">
+                {t("Description")}
+              </span>
+              <input
+                type="text"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                placeholder={t("Description")}
+              />
+            </div>
+            <div className="flex w-full justify-start items-center gap-3 ">
+              <span className="text-ascent-1 w-[150px]">{t("Member")}</span>
 
-            <input
-              type="text"
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1  "
-              placeholder={t("Search")}
-            />
+              <input
+                type="text"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1  "
+                placeholder={t("Search")}
+              />
+            </div> */}
           </div>
 
           <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap justify-center ">

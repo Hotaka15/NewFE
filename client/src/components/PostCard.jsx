@@ -16,7 +16,12 @@ import { SlOptions } from "react-icons/sl";
 import { GoBookmarkSlashFill } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import Editpost from "./Editpost";
-import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
+import {
+  likecomment,
+  postapiRequest,
+  postdeletePost,
+  postlikePost,
+} from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import ReportCard from "./ReportCard";
 
@@ -215,7 +220,7 @@ const ReplyCard = ({ reply, user, handleLike }) => {
           <p
             className="flex gap-2 items-center text-base text-ascent-2
             cursor-pointer"
-            // onClick={handleLike}
+            onClick={handleLike}
           >
             {reply?.likes?.includes(user?._id) ? (
               <BiSolidLike size={20} color="blue" />
@@ -368,6 +373,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
         url: `/${id}/comments`,
         token: user?.token,
       });
+      console.log(result);
 
       setComments(result?.comments);
       setLoading(false);
@@ -375,6 +381,25 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
       console.log(error);
     }
   };
+
+  const handlelikecommentreply = async (url, commentId, repliesId) => {
+    const data = { commentId: commentId, replyId: repliesId };
+    console.log(repliesId);
+
+    const res = await likecomment(user?.token, url, data);
+    console.log(res);
+    await getComments(post?._id);
+    await getPost();
+  };
+
+  const handlelikecomment = async (url, commentId) => {
+    const data = { commentId: commentId };
+    const res = await likecomment(user?.token, url, data);
+    console.log(res);
+    await getComments(post?._id);
+    await getPost();
+  };
+
   const handleLike = async (uri) => {
     try {
       if (isLiking) return;
@@ -616,7 +641,10 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                           className="flex gap-2 items-center text-base
                     text-ascent-2 cursor-pointer"
                           onClick={() =>
-                            handleLike("/posts/like-comment/" + comment?._id)
+                            handlelikecomment(
+                              `${post?._id}/likecomment`,
+                              comment?._id
+                            )
                           }
                         >
                           {" "}
@@ -670,7 +698,15 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                             user={user}
                             key={reply?._id}
                             handleLike={
-                              () => {}
+                              () => {
+                                console.log(reply);
+
+                                handlelikecommentreply(
+                                  `${post?._id}/likecomment`,
+                                  comment?._id,
+                                  reply?._id
+                                );
+                              }
                               // handleLike(
                               //   "/posts/like-comment/" +
                               //     comment?._id +

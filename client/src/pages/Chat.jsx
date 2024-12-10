@@ -23,7 +23,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import { IoIosContact } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { CiCircleCheck } from "react-icons/ci";
 import { RiSendPlane2Fill } from "react-icons/ri";
@@ -387,7 +387,6 @@ const RangeChat = forwardRef(
         } else {
           const uri = file && (await handFileUpload(file));
           const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
-          console.log(res);
 
           handlesend(id_2, chat);
           setPage(2);
@@ -656,18 +655,20 @@ const RangeChat = forwardRef(
         <div className="flex w-full justify-between mt-3 border-b border-[#66666645] pb-3 select-none ">
           <div className="text-ascent-1 font-bold text-3xl">
             {type == "inbox" ? (
-              <div className="flex text-ascent-1 text-sm items-center gap-1">
-                <img
-                  src={userinfo?.profileUrl ?? NoProfile}
-                  alt="post image"
-                  className="w-14 h-14 shrink-0 object-cover rounded-full "
-                ></img>
-                <div className="flex items-center w-full h-full">
-                  <span className="align-middle">
-                    {userinfo?.firstName} {userinfo?.lastName}
-                  </span>
+              <Link to={"/profile/" + id_2}>
+                <div className="flex text-ascent-1 text-sm items-center gap-1">
+                  <img
+                    src={userinfo?.profileUrl ?? NoProfile}
+                    alt="post image"
+                    className="w-14 h-14 shrink-0 object-cover rounded-full "
+                  ></img>
+                  <div className="flex items-center w-full h-full">
+                    <span className="align-middle">
+                      {userinfo?.firstName} {userinfo?.lastName}
+                    </span>
+                  </div>{" "}
                 </div>
-              </div>
+              </Link>
             ) : (
               <div className=" flex text-ascent-1 text-sm items-center gap-1">
                 <img

@@ -110,15 +110,17 @@ const AddNewMember = ({ idroom, setAddu }) => {
               </div>
             </span>
           </div>
-          <div className="flex w-full justify-start items-center gap-3 ">
-            <span className="text-ascent-1 w-[150px]">{t("Member")}</span>
+          <div className="flex w-full justify-end items-center gap-3 ">
+            <span className="text-ascent-1 whitespace-nowrap">
+              {t("Member")}
+            </span>
 
             <input
               type="text"
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
-              className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1"
+              className="bg-bgColor outline-none px-4 py-2 rounded-full w-full text-ascent-1"
               placeholder={t("Search")}
             />
           </div>

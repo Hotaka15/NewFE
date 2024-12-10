@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NoProfile } from "../assets";
 import moment from "moment";
 import { Logout, Setnotification } from "../redux/userSlice";
@@ -19,9 +19,7 @@ const Notification = ({ notify, fetchNotification }) => {
   const { user } = useSelector((state) => state.user);
   // const [bg, setBG] = useState();
   const [isAll, setIsAll] = useState(true);
-  const [listNotification, setListNotifications] = useState(
-    notify && [...notify]
-  );
+  const [listNotification, setListNotifications] = useState();
   // const check = () => {
   //   all ? setBG("bg-blue") : setBG(" hover:bg-ascent-3");
   // };
@@ -56,6 +54,10 @@ const Notification = ({ notify, fetchNotification }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    setListNotifications(notify && [...notify]);
+  }, [notify]);
 
   return (
     <div className="relative w-full shadow-sm rounded-xl bg-primary h-fit py-3">
