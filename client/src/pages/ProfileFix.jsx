@@ -27,16 +27,80 @@ import { handFileUpload } from "../until";
 import { useTranslation } from "react-i18next";
 import Login from "./Login";
 
+const UserCard = ({ token, user }) => {
+  const [idAdd, setIsAdd] = useState(false);
+  const { t } = useTranslation();
+  const handleFriendRequest = async (id) => {
+    try {
+      const res = await usersendFriendRequest(token, id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="rounded-xl shadow-lg bg-primary w-[375px] h-full px-5 border border-[#66666645]">
+      <div
+        className="my-4 flex gap-5 w-full h-full justify-between cursor-pointer"
+        onClick={() => {}}
+      >
+        <Link to={"/profile/" + user?._id} className="">
+          <img
+            className="h-20 w-20 object-cover rounded-full"
+            src={user?.profileUrl ?? NoProfile}
+            alt="Avatar"
+          />
+        </Link>
+
+        <div className="w-2/3 overflow-hidden">
+          <Link to={"/profile/" + user?._id} className="">
+            {" "}
+            <div className="flex w-full gap-4">
+              <div className="flex flex-col text-right">
+                <span className="text-ascent-2">{t("Name")}: </span>
+              </div>
+              <div className="w-full text-ascent-1 text-base flex flex-col items-start">
+                <span className="max-h-6 overflow-hidden">
+                  {user?.firstName ? user?.firstName : "?"}{" "}
+                  {user?.lastName ? user?.lastName : "?"}
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {!idAdd ? (
+            <div
+              onClick={() => {
+                setIsAdd(true);
+                handleFriendRequest(user?._id);
+              }}
+              className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
+            >
+              {t("Add")}
+            </div>
+          ) : (
+            <div className="mt-5 text-ascent-2  bg-ascent-3/30 w-full py-2 rounded-lg flex items-center justify-center">
+              {t("Added")}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfileFix = () => {
   const { id } = useParams();
   const { user, edit } = useSelector((state) => state.user);
   const { posts } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [isPost, setIsPost] = useState(true);
   const uri = "" + id;
   const [userInfor, setUserInfor] = useState(user);
   const [banner, setBanner] = useState(user?.profileUrl ?? NoProfile);
   const navigate = useNavigate();
+  const [isAdded, setIsAdded] = useState(false);
   const { t } = useTranslation();
   const handleLikePost = async (uri) => {
     await postlikePost({ uri: uri, token: user?.token });
@@ -70,6 +134,7 @@ const ProfileFix = () => {
   const handleFriendRequest = async (id) => {
     try {
       const res = await usersendFriendRequest(user.token, id);
+      setIsAdded(true);
       // await fetchSuggestFriends();
       if (res?.status === "failed") {
         Cookies.set("message", res?.message, { expires: 7 });
@@ -156,10 +221,10 @@ const ProfileFix = () => {
             </div>
 
             <div
-              className="select-none relative text-ascent-1 w-full rounded-xl mb-5 text-center 
-            bg-primary border-b-2 border-[#66666645] flex flex-col items-center"
+              className="select-none relative text-ascent-1 w-full rounded-xl mb-3 text-center 
+            bg-primary border-b-2 border-[#66666645] flex flex-col items-start h-1/5"
             >
-              <div className="flex flex-col items-center relative bottom-14">
+              <div className="flex items-center relative bottom-14 left-7 gap-3">
                 <label htmlFor="imgUpload" className="cursor-pointer">
                   <img
                     src={userInfor?.profileUrl ?? NoProfile}
@@ -179,32 +244,48 @@ const ProfileFix = () => {
                   {userInfor?.firstName} {userInfor?.lastName}
                 </div>
               </div>
-              <div className=" items-center h-14 shrink-0 w-full flex justify-start px-5 gap-2 border-t border-[#66666645]">
-                <div className=" px-4 border-b border-blue h-full flex justify-center items-center rounded-lg text-blue font-medium">
+              <div className="absolute bottom-0 items-center h-10 shrink-0 w-full flex justify-start px-5 gap-2 border-t border-[#66666645]">
+                <div
+                  onClick={() => {
+                    setIsPost(true);
+                  }}
+                  className={`${
+                    isPost ? "border-b border-blue text-blue" : "text-ascent-1"
+                  } px-4  h-full flex justify-center items-center rounded-lg  font-medium cursor-pointer`}
+                >
                   {t("Posts")}
                 </div>
-                {/* <div className="text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg">
+                <div
+                  onClick={() => {
+                    setIsPost(false);
+                  }}
+                  className={`${
+                    !isPost ? "border-b border-blue text-blue" : "text-ascent-1"
+                  } text-ascent-1 px-4  h-full flex justify-center items-center rounded-lg cursor-pointer`}
+                >
                   {t("Friends")}
-                </div> */}
+                </div>
               </div>
 
               {id == user?._id ? (
                 <div
                   onClick={() => handleedit()}
-                  className="absolute right-4 bottom-2 z-30 bg-primary px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                  className="absolute right-4 bottom-12 z-30 bg-primary px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
                 >
                   {t("Edit Profile")}
                 </div>
               ) : (
-                <div className="absolute right-4 bottom-2 flex gap-4">
+                <div className="absolute right-4 bottom-12 flex gap-4">
                   {!user?.friends.includes(id) && (
                     <div
                       onClick={() => {
                         handleFriendRequest(id);
                       }}
-                      className="text-white z-30 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                      className={`text-white z-30 ${
+                        isAdded ? "bg-secondary" : "bg-blue"
+                      } px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer`}
                     >
-                      {t("Add Friend")}
+                      {isAdded ? t("Added") : t("Add Friend")}
                     </div>
                   )}
                   <Link to={`/chat/${id}`}>
@@ -212,7 +293,7 @@ const ProfileFix = () => {
                       onClick={() => {
                         handleFriendRequest(id);
                       }}
-                      className="text-ascent-1 z-30 flex gap-2 bg-ascent-3/30 px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
+                      className="text-white z-30 flex gap-2 bg-blue px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer"
                     >
                       <FaFacebookMessenger size={25} /> Chat
                     </div>
@@ -226,15 +307,53 @@ const ProfileFix = () => {
                 </div>
               )}
             </div>
+
             {/* <div className="flex overflow-auto"> */}
-            <div className="w-full flex gap-6 ">
+            <div className="w-full flex gap-2 ">
               <div className="w-2/3 h-full pb-32">
                 <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl  items-center">
                   {/* <div className="w-full mx-10">
                   <Loading />
                 </div> */}
+                  {loading && (
+                    <div className="w-full justify-center h-full flex">
+                      <Loading />
+                    </div>
+                  )}
+                  {isPost &&
+                    !loading &&
+                    posts?.length > 0 &&
+                    posts?.map((post) => (
+                      <div className="w-full" key={post._id}>
+                        <PostCard
+                          // key={post._id}
+                          posts={post}
+                          user={user}
+                          deletePost={handleDelete}
+                          likePost={handleLikePost}
+                        />
+                      </div>
+                    ))}
 
-                  {loading ? (
+                  {isPost && !loading && posts?.length == 0 && (
+                    <div className="flex w-full h-full items-center justify-center">
+                      <p className="text-lg text-ascent-2 ">
+                        {t("No Post Available")}
+                      </p>
+                    </div>
+                  )}
+
+                  {!isPost && !loading && (
+                    <div className="w-full grid grid-cols-2 gap-4 py-4">
+                      {posts?.length > 0 &&
+                        posts?.map((post) => (
+                          <div className="w-full" key={post._id}>
+                            <UserCard token={user?.token} user={user} />
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                  {/* {loading ? (
                     <div className="w-full justify-center h-full flex">
                       <Loading />
                     </div>
@@ -256,7 +375,7 @@ const ProfileFix = () => {
                         {t("No Post Available")}
                       </p>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="text-ascent-1 rounded-xl bg-primary h-fit w-1/3 px-7">

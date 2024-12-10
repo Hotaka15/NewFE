@@ -68,7 +68,14 @@ const FriendDetailSuggest = ({ title }) => {
       const res = await usergetUserInfo(user?.token, userid);
       getPosts(userid, res);
       const newData = { token: user?.token, ...res };
-      setBanner(res?.profileUrl);
+      // setBanner(res?.profileUrl);
+      if (res?.cover_photo) {
+        setBanner(res.cover_photo);
+      } else if (res?.profileUrl) {
+        setBanner(res.profileUrl);
+      } else {
+        setBanner(NoProfile);
+      }
       setUserInfor(res);
     } catch (error) {
       console.log(error);
