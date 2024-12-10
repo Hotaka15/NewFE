@@ -370,8 +370,9 @@ const RangeChat = forwardRef(
         e.preventDefault();
         // console.log(file);
         // console.log(chat);
+        console.log(chat);
 
-        const res = await aichecktext(chat);
+        const res = chat ? await aichecktext(chat) : false;
 
         if (res) {
           setFald((pre) => [
@@ -383,11 +384,10 @@ const RangeChat = forwardRef(
               createdAt: new Date(),
             },
           ]);
-
-          // console.log(faild);
         } else {
           const uri = file && (await handFileUpload(file));
           const res = await sendMessage(user?.token, idroom, id_1, chat, uri);
+          console.log(res);
 
           handlesend(id_2, chat);
           setPage(2);
@@ -805,6 +805,7 @@ const RangeChat = forwardRef(
                 <IoAddCircleSharp size={35} />
                 <input
                   type="file"
+                  key={file ? "1" : ""}
                   className="hidden"
                   accept=".jpg, .png, .jpeg"
                   onInput={(e) => {

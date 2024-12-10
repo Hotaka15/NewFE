@@ -100,7 +100,7 @@ export const sendMessage = async (token, idroom, id_1, chat, uri) => {
       data: {
         conversationId: idroom,
         senderId: id_1,
-        text: chat,
+        text: chat ?? "",
         fileUrl: uri || "",
       },
       method: "POST",
