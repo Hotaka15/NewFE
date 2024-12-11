@@ -193,7 +193,7 @@ lg:rounded-lg h-screen overflow-hidden"
                           setCategori(e.target.value);
                           setPage(1);
                         }}
-                        className="bg-secondary text-ascent-1 px-4 py-2 outline-none rounded-lg"
+                        className="bg-bgColor text-ascent-1 px-4 py-2 outline-none rounded-lg"
                       >
                         <option value="News and Events">
                           {t("News and Events")}
@@ -247,7 +247,7 @@ lg:rounded-lg h-screen overflow-hidden"
                               setFrom(e.target.value);
                               setPage(1);
                             }}
-                            className="datepicker-input bg-secondary rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
+                            className="datepicker-input bg-bgColor rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
                           />
                         </div>
                         <div>
@@ -258,7 +258,7 @@ lg:rounded-lg h-screen overflow-hidden"
                               setTo(e.target.value);
                               setPage(1);
                             }}
-                            className="datepicker-input bg-secondary rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
+                            className="datepicker-input bg-bgColor rounded-lg border border-[#66666690] text-ascent-1 px-4 py-2"
                           />
                         </div>
                       </div>

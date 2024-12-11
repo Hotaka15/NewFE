@@ -136,7 +136,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
-                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                className="bg-bgColor px-2 py-2 rounded-2xl w-full text-ascent-1 "
                 placeholder={t("Name")}
               />
               <input
@@ -144,7 +144,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
                 onChange={(e) => {
                   setDescription(e.target.value);
                 }}
-                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1 "
+                className="bg-bgColor px-2 py-2 rounded-2xl w-full text-ascent-1 "
                 placeholder={t("Description")}
               />
               <input
@@ -152,7 +152,7 @@ const CreateGroup = ({ fetchList, setCreatg }) => {
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
-                className="bg-secondary px-2 py-2 rounded-2xl w-full text-ascent-1  "
+                className="bg-bgColor px-2 py-2 rounded-2xl w-full text-ascent-1  "
                 placeholder={t("Search")}
               />
             </div>

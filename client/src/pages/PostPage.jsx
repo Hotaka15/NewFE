@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import {
   CustomButton,
   ImageCheck,
+  LinkPr,
   Loading,
   TextInput,
   TopBar,
@@ -14,7 +15,12 @@ import { useForm } from "react-hook-form";
 import { NoProfile } from "../assets";
 import { BiComment, BiLike, BiSolidLike } from "react-icons/bi";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { postapiRequest, postdeletePost, postlikePost } from "../until/post";
+import {
+  likecomment,
+  postapiRequest,
+  postdeletePost,
+  postlikePost,
+} from "../until/post";
 import { usergetUserInfo, usergetUserpInfo } from "../until/user";
 import { io } from "socket.io-client";
 import { useTranslation } from "react-i18next";
@@ -146,6 +152,12 @@ const ReplyCard = ({ reply, user, handleLike }) => {
       console.log(error);
     }
   };
+
+  const checkurl = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/gi;
+    return urlRegex.test(text); // Trả về true nếu tồn tại URL
+  };
+
   useEffect(() => {
     getUser();
   }, []);
@@ -173,6 +185,12 @@ const ReplyCard = ({ reply, user, handleLike }) => {
       </div>
       <div className="ml-12">
         <p className="text-ascent-2">{reply?.comment}</p>
+        {checkurl(reply?.comment) && (
+          <div className="max-w-xs rounded-xl overflow-hidden">
+            <LinkPr text={reply?.comment} />
+          </div>
+        )}
+
         <div className="mt-2 flex gap-6">
           <p
             className="flex gap-2 items-center text-base text-ascent-2
@@ -265,6 +283,27 @@ const PostPage = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const checkurl = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/gi;
+    return urlRegex.test(text); // Trả về true nếu tồn tại URL
+  };
+
+  const handlelikecommentreply = async (url, commentId, repliesId) => {
+    const data = { commentId: commentId, replyId: repliesId };
+
+    const res = await likecomment(user?.token, url, data);
+
+    await getComments(post?._id);
+    await getPost();
+  };
+
+  const handlelikecomment = async (url, commentId) => {
+    const data = { commentId: commentId };
+    const res = await likecomment(user?.token, url, data);
+
+    await getComments(post?._id);
+    await getPost();
   };
 
   const getComments = async (id) => {
@@ -429,13 +468,19 @@ lg:rounded-lg h-screen overflow-hidden"
 
                         <div className="ml-12">
                           <p className="text-ascent-2">{comment?.comment}</p>
+                          {checkurl(comment?.comment) && (
+                            <div className="max-w-xs rounded-xl overflow-hidden">
+                              <LinkPr text={comment?.comment} />
+                            </div>
+                          )}
                           <div className="mt-2 flex gap-6">
                             <p
                               className="flex gap-2 items-center text-base
                     text-ascent-2 cursor-pointer"
                               onClick={() =>
-                                handleLike(
-                                  "/posts/like-comment/" + comment?._id
+                                handlelikecomment(
+                                  `${id}/likecomment`,
+                                  comment?._id
                                 )
                               }
                             >
@@ -488,11 +533,10 @@ lg:rounded-lg h-screen overflow-hidden"
                                 user={user}
                                 key={reply?._id}
                                 handleLike={() =>
-                                  handleLike(
-                                    "/posts/like-comment/" +
-                                      comment?._id +
-                                      "/" +
-                                      reply?._id
+                                  handlelikecommentreply(
+                                    `${id}/likecomment`,
+                                    comment?._id,
+                                    reply?._id
                                   )
                                 }
                               />

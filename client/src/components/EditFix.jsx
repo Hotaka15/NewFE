@@ -536,7 +536,7 @@ const EditFix = () => {
                     <TextInput
                       name="newpassword"
                       label={t("New Password")}
-                      placeholder={t("NewPassword")}
+                      placeholder={t("New Password")}
                       type="password"
                       styles="w-full"
                       register={register("newpassword", {
