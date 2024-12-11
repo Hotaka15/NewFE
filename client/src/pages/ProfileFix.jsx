@@ -87,7 +87,7 @@ const UserCard = ({ token, userid, isFriend }) => {
               <div
                 onClick={() => {
                   setIsAdd(true);
-                  handleFriendRequest(user);
+                  handleFriendRequest(userid);
                 }}
                 className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
               >

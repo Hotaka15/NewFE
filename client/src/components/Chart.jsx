@@ -77,7 +77,7 @@ const Chart = () => {
       <div className="w-full h-full flex gap-4 mb-4">
         <div className="relative w-full ">
           <div className="absolute right-1 top-1 bg-primary flex rounded-lg">
-            <div
+            {/* <div
               className={` text-ascent-2 cursor-pointer py-1 px-2 ${
                 filter == "year" && "bg-bgColor"
               } rounded-lg`}
@@ -86,7 +86,7 @@ const Chart = () => {
               }}
             >
               {t("Year")}
-            </div>
+            </div> */}
             <div
               className={`${
                 filter == "month" && "bg-bgColor"
