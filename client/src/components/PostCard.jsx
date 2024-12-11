@@ -373,7 +373,6 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
         url: `/${id}/comments`,
         token: user?.token,
       });
-      console.log(result);
 
       setComments(result?.comments);
       setLoading(false);
@@ -384,10 +383,9 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
 
   const handlelikecommentreply = async (url, commentId, repliesId) => {
     const data = { commentId: commentId, replyId: repliesId };
-    console.log(repliesId);
 
     const res = await likecomment(user?.token, url, data);
-    console.log(res);
+
     await getComments(post?._id);
     await getPost();
   };
@@ -395,7 +393,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
   const handlelikecomment = async (url, commentId) => {
     const data = { commentId: commentId };
     const res = await likecomment(user?.token, url, data);
-    console.log(res);
+
     await getComments(post?._id);
     await getPost();
   };
@@ -699,8 +697,6 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                             key={reply?._id}
                             handleLike={
                               () => {
-                                console.log(reply);
-
                                 handlelikecommentreply(
                                   `${post?._id}/likecomment`,
                                   comment?._id,

@@ -298,6 +298,12 @@ const TopBar = ({ user, setKey }) => {
                             .includes(inputValue.slice(1).toLowerCase())) ||
                         item.lastName
                           .toLowerCase()
+                          .includes(inputValue.slice(1).toLowerCase()) ||
+                        (item.firstName + " " + item.lastName)
+                          .toLowerCase()
+                          .includes(inputValue.slice(1).toLowerCase()) ||
+                        (item.lastName + " " + item.firstName)
+                          .toLowerCase()
                           .includes(inputValue.slice(1).toLowerCase())
                     )
                     .map((item) => {

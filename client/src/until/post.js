@@ -186,7 +186,6 @@ export const postfetchId = async (token, dispatch, postId, data) => {
 };
 
 export const likecomment = async (token, url, data) => {
-  console.log(data);
   try {
     const res = await postapiRequest({
       url: url,

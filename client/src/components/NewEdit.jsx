@@ -55,6 +55,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
   const [posting, setPosting] = useState(false);
   const [review, setReview] = useState(post?.image ? post?.image : null);
   const [tem, setTem] = useState();
+  const [searchkey, setSearchkey] = useState();
   const [lists, setLists] = useState(
     post?.specifiedUsers ? post.specifiedUsers : []
   );
@@ -683,7 +684,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               setAudience(false);
                               setWrite(true);
                             }}
-                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                            containerStyles={`inline-flex justify-center whitespace-nowrap rounded-full underline underline-offset-2 px-8
                     py-3 text-sm font-medium text-ascent-1 outline-none`}
                             tittle={t("Back")}
                           />
@@ -716,8 +717,12 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                         >
                           <input
                             type="text"
+                            value={searchkey}
+                            onChange={(e) => {
+                              setSearchkey(e.target.value);
+                            }}
                             className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
-                            placeholder="Search"
+                            placeholder={t("Search")}
                           />
                           <div className="w-full flex items-center justify-center">
                             <div className="flex flex-wrap gap-2 justify-center mb-2 items-center">
@@ -738,7 +743,8 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                             </div>
                           </div>
                           <div className="w-full h-full ">
-                            {friends &&
+                            {!searchkey &&
+                              friends &&
                               friends.map((friend) => {
                                 var check = lists.includes(friend?._id);
 
@@ -768,6 +774,53 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                                   </div>
                                 );
                               })}
+                            {searchkey &&
+                              friends &&
+                              friends
+                                .filter(
+                                  (item) =>
+                                    item.firstName
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    item.lastName
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    (item.firstName + " " + item.lastName)
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    (item.lastName + " " + item.firstName)
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase())
+                                )
+                                .map((friend) => {
+                                  var check = lists.includes(friend?._id);
+
+                                  return (
+                                    <div
+                                      onClick={() => {
+                                        pushList(friend?._id);
+                                      }}
+                                      className={`${
+                                        check ? "bg-ascent-3/10" : ""
+                                      }  items-center mb-4 select-none w-full flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl`}
+                                    >
+                                      <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
+                                        <img
+                                          src={friend?.profileUrl || NoProfile}
+                                          alt=""
+                                          className="h-12 w-12 object-cover rounded-full mr-3"
+                                        />
+                                        <div
+                                          id={friend._id}
+                                          className="h-full flex justify-center items-center"
+                                        >
+                                          {friend.firstName} {friend.lastName}
+                                          <br />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                           </div>
                         </div>
                       </div>
@@ -780,7 +833,7 @@ const NewEdit = ({ setPage, post, onClick, setPost }) => {
                               setLists([]);
                               setSpecific(!specific);
                             }}
-                            containerStyles={`inline-flex justify-center rounded-full underline underline-offset-2 px-8
+                            containerStyles={`inline-flex justify-center rounded-full whitespace-nowrap underline underline-offset-2 px-8
                   py-3 text-sm font-medium text-ascent-1 outline-none`}
                             tittle={t("Back")}
                           />

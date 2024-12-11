@@ -63,6 +63,7 @@ const Post = ({ setPage }) => {
   const [resText, setResText] = useState("");
   const [loading, setLoading] = useState(false);
   const [resImg, setResImg] = useState(null);
+  const [searchkey, setSearchkey] = useState();
   const { t } = useTranslation();
   const handleTextsp = (e) => {
     const inputText = e.target.value;
@@ -706,6 +707,10 @@ const Post = ({ setPage }) => {
                         >
                           <input
                             type="text"
+                            value={searchkey}
+                            onChange={(e) => {
+                              setSearchkey(e.target.value);
+                            }}
                             className="w-full my-2 bg-secondary outline-none px-5 py-2 rounded-full "
                             placeholder={t("Search")}
                           />
@@ -728,7 +733,8 @@ const Post = ({ setPage }) => {
                             </div>
                           </div>
                           <div className="w-full h-full ">
-                            {friends &&
+                            {!searchkey &&
+                              friends &&
                               friends.map((friend) => {
                                 var check = lists.includes(friend?._id);
 
@@ -753,36 +759,58 @@ const Post = ({ setPage }) => {
                                       >
                                         {friend.firstName} {friend.lastName}
                                         <br />
-                                        {/* <span className="text-ascent-2 text-base">
-      Anyone can see
-    </span> */}
                                       </div>
                                     </div>
-                                    {/* <input
-      id={friend._id}
-      type="radio"
-      value="public"
-      name="auth"
-      onClick={(e) => {
-        // setOption(e.target.value);
-        pushList(friend._id);
-      }}
-      className={`${}w-5 h-5 text-blue-600  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 
-dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600`}
-    /> */}
                                   </div>
-                                  // <ListCard
-                                  //   friend={friend}
-                                  //   onClick={() => {
-                                  //     pushList(friend);
-                                  //     console.log(lists);
-                                  //     // handleCheck(friend._id, check);
-                                  //   }}
-                                  //   check={check}
-                                  //   lists={lists}
-                                  // />
                                 );
                               })}
+                            {searchkey &&
+                              friends &&
+                              friends
+                                .filter(
+                                  (item) =>
+                                    item.firstName
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    item.lastName
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    (item.firstName + " " + item.lastName)
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase()) ||
+                                    (item.lastName + " " + item.firstName)
+                                      .toLowerCase()
+                                      .includes(searchkey.toLowerCase())
+                                )
+                                .map((friend) => {
+                                  var check = lists.includes(friend?._id);
+
+                                  return (
+                                    <div
+                                      onClick={() => {
+                                        pushList(friend?._id);
+                                      }}
+                                      className={`${
+                                        check ? "bg-ascent-3/10" : ""
+                                      }  items-center mb-4 select-none w-full flex px-5 py-2 justify-between hover:bg-ascent-3/30 rounded-xl`}
+                                    >
+                                      <div className="ms-2 text-gray-900 dark:text-gray-300 font-medium flex">
+                                        <img
+                                          src={friend?.profileUrl || NoProfile}
+                                          alt=""
+                                          className="h-12 w-12 object-cover rounded-full mr-3"
+                                        />
+                                        <div
+                                          id={friend._id}
+                                          className="h-full flex justify-center items-center"
+                                        >
+                                          {friend.firstName} {friend.lastName}
+                                          <br />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                           </div>
                         </div>
                       </div>
