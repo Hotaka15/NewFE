@@ -140,8 +140,8 @@ const Reportlist = ({ user, sl }) => {
               <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
                 {t("Action")}
               </th>
-              <th className="border border-ascent-1 bg-[#66666645] py-1 px-4">
-                {t("Block")}
+              <th className="border border-ascent-1 bg-[#66666645] w-[10%] py-1 px-4">
+                {t("Block User")}
               </th>
             </tr>
           </thead>

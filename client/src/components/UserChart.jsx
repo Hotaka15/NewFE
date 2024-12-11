@@ -31,6 +31,7 @@ const UserChart = () => {
     setGenders(gender);
 
     const getuser = await userDashboard();
+
     setTotal(getuser?.data);
   };
   const handlefill = async (filter) => {
@@ -45,7 +46,7 @@ const UserChart = () => {
   }, [filter]);
   return (
     <div className="w-full h-full bg-primary py-1 flex flex-col">
-      <div className="grid grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-3 gap-4 mb-4">
         <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <IoPeople size={35} />
           <div>
@@ -69,7 +70,7 @@ const UserChart = () => {
             <div className="text-ascent-1 text-xl">{total?.totalAdmins}</div>
           </div>
         </div>
-        <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
+        {/* <div className="flex justify-center items-center h-20 text-ascent-1 rounded-2xl bg-ascent-3/10 gap-2">
           <FaCheckCircle size={35} />
           <div>
             <div className="text-ascent-2 text-sm">{t("Verified Users")}</div>
@@ -77,7 +78,7 @@ const UserChart = () => {
               {total?.totalVerifiedUsers}
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="w-full flex gap-4 mb-4 h-full">
         <div className="relative w-full h-full flex">

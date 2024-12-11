@@ -11,6 +11,7 @@ export default function LinkPr({ text }) {
   const { user } = useSelector((state) => state.user);
   const fetchurl = async (url) => {
     const res = await checklink(url);
+    console.log(res);
 
     setPr(res);
     // await fetch(`${res?.url}`)
@@ -19,12 +20,12 @@ export default function LinkPr({ text }) {
     //     setImageUrl(data.imageUrl);
     //   })
     //   .catch((error) => console.error("Error fetching image:", error));
-    await fetch(`${res?.url}`)
-      .then((response) => console.log(response))
-      // .then((data) => {
-      //   setImageUrl(data.imageUrl);
-      // })
-      .catch((error) => console.error("Error fetching image:", error));
+    // await fetch(`${res?.url}`)
+    //   .then((response) => console.log(response))
+    //   .then((data) => {
+    //     setImageUrl(data.imageUrl);
+    //   })
+    //   .catch((error) => console.error("Error fetching image:", error));
   };
 
   const geturl = async (text) => {

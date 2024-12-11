@@ -279,7 +279,7 @@ lg:rounded-lg h-screen overflow-hidden"
                   <div className="w-full h-full flex gap-2 flex-wrap justify-center ">
                     <div
                       id="post_range"
-                      className=" max-w-2xl h-full overflow-y-auto flex flex-col"
+                      className=" max-w-4xl h-full overflow-y-auto flex flex-col"
                     >
                       {loading && searchPost ? (
                         <Loading />

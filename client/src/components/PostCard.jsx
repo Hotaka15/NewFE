@@ -31,6 +31,7 @@ import VideoPlayer from "./VideoPlayer";
 import NewEdit from "./NewEdit";
 import { useSocket } from "../context/SocketContext";
 import { useTranslation } from "react-i18next";
+import LinkPr from "./LinkPr";
 const getPostComments = async (id, user) => {
   // console.log(user?.token);
 
@@ -189,6 +190,11 @@ const ReplyCard = ({ reply, user, handleLike }) => {
       console.log(error);
     }
   };
+
+  const checkurl = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/gi;
+    return urlRegex.test(text); // Trả về true nếu tồn tại URL
+  };
   useEffect(() => {
     getUser();
   }, []);
@@ -216,6 +222,11 @@ const ReplyCard = ({ reply, user, handleLike }) => {
       </div>
       <div className="ml-12">
         <p className="text-ascent-2">{reply?.comment}</p>
+        {checkurl(reply?.comment) && (
+          <div className="max-w-xs rounded-xl overflow-hidden">
+            <LinkPr text={reply?.comment} />
+          </div>
+        )}
         <div className="mt-2 flex gap-6">
           <p
             className="flex gap-2 items-center text-base text-ascent-2
@@ -351,6 +362,11 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
     }
 
     // await fetchPost();
+  };
+
+  const checkurl = (text) => {
+    const urlRegex = /https?:\/\/[^\s]+/gi;
+    return urlRegex.test(text); // Trả về true nếu tồn tại URL
   };
 
   const handlerpdetail = () => {
@@ -634,6 +650,11 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
 
                     <div className="ml-12">
                       <p className="text-ascent-2">{comment?.comment}</p>
+                      {checkurl(comment?.comment) && (
+                        <div className="max-w-xs rounded-xl overflow-hidden">
+                          <LinkPr text={comment?.comment} />
+                        </div>
+                      )}
                       <div className="mt-2 flex gap-6">
                         <p
                           className="flex gap-2 items-center text-base
@@ -651,7 +672,7 @@ const PostCard = ({ posts, user, deletePost, likePost, isCheck }) => {
                           ) : (
                             <BiLike size={20} />
                           )}
-                          {comment?.likes?.length} Likes
+                          {comment?.likes?.length} {t("Likes")}
                         </p>
                         <span
                           onClick={() => setReplyComments(comment?._id)}
