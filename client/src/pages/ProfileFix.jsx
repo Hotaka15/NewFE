@@ -14,6 +14,7 @@ import { UpdateProfile, UserLogin } from "../redux/userSlice";
 import {
   userapiRequest,
   usergetUserInfo,
+  usergetUserpInfo,
   usersendFriendRequest,
 } from "../until/user";
 import {
@@ -31,7 +32,7 @@ const UserCard = ({ token, userid, isFriend }) => {
   const [idAdd, setIsAdd] = useState(false);
   const { t } = useTranslation();
   const [userinfor, setUserinfo] = useState();
-  console.log(isFriend);
+  // console.log(isFriend);
 
   const handleFriendRequest = async (userid) => {
     try {
@@ -44,7 +45,7 @@ const UserCard = ({ token, userid, isFriend }) => {
   const getUser = async () => {
     const res = await usergetUserInfo(token, userid);
 
-    console.log(res);
+    // console.log(res);
     setUserinfo(res);
   };
 
@@ -120,6 +121,7 @@ const ProfileFix = () => {
   const [userInfor, setUserInfor] = useState(user);
   const [banner, setBanner] = useState(user?.profileUrl ?? NoProfile);
   const navigate = useNavigate();
+  const [arrfriend, setArrfriend] = useState([]);
   const [isAdded, setIsAdded] = useState(false);
   const { t } = useTranslation();
   const handleLikePost = async (uri) => {
@@ -135,6 +137,16 @@ const ProfileFix = () => {
     const data = { user: { userId: res?._id } };
     await postfetchuserPosts(user.token, res, dispatch, uri, data);
     setLoading(false);
+  };
+
+  const getFriend = async () => {
+    try {
+      const res = await usergetUserpInfo(user?.token, user?._id);
+      console.log(res);
+      setArrfriend(res?.friends);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const getUser = async () => {
     const res = await usergetUserInfo(user?.token, id);
@@ -206,6 +218,10 @@ const ProfileFix = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getFriend();
+  }, []);
   useEffect(() => {
     setLoading(true);
     getUser();
@@ -374,7 +390,7 @@ const ProfileFix = () => {
                               user={user}
                               token={user?.token}
                               userid={users}
-                              isFriend={user?.friends?.includes(users)}
+                              isFriend={arrfriend?.includes(users)}
                             />
                           </div>
                         ))}

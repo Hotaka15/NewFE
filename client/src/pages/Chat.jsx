@@ -128,22 +128,22 @@ const RangeChat = forwardRef(
       try {
         const res = await fetchChat(user?.token, idroom, 1);
 
-        console.log(faild);
+        // console.log(faild);
         try {
-          console.log(res?.data?.messages[0]);
-          console.log(user?._id);
+          // console.log(res?.data?.messages[0]);
+          // console.log(user?._id);
           try {
             for (let message of res?.data?.messages || []) {
-              console.log(message);
+              // console.log(message);
 
               let check = false;
               if (message.senderId === user?._id) {
                 for (let obj of message?.readStatus) {
-                  console.log(obj);
+                  // console.log(obj);
 
                   if (obj.status === "read" && obj.userId != user?._id) {
-                    console.log(obj);
-                    console.log(user?._id);
+                    // console.log(obj);
+                    // console.log(user?._id);
 
                     message.checked
                       ? message.checked.push(obj?.userId)
@@ -199,24 +199,20 @@ const RangeChat = forwardRef(
 
     const fetchchatSeen = async (idroom) => {
       try {
-        console.log(listchat);
+        // console.log(listchat);
 
         const res = await fetchChat(user?.token, idroom, 1);
-        console.log(res);
-        console.log(faild);
+        // console.log(res);
+        // console.log(faild);
         try {
-          console.log(res?.data?.messages[0]);
-          console.log(user?._id);
+          // console.log(res?.data?.messages[0]);
+          // console.log(user?._id);
           try {
             for (let message of res?.data?.messages || []) {
-              console.log(message);
-
               let check = false;
               if (message.senderId === user?._id) {
                 for (let obj of message?.readStatus) {
                   if (obj.status === "read") {
-                    console.log(message);
-
                     message.checked
                       ? message.checked.push(obj?._id)
                       : (message.checked = [obj?._id]);
@@ -234,9 +230,9 @@ const RangeChat = forwardRef(
           }
 
           const listChat = [...listchat];
-          console.log(listChat);
+          // console.log(listChat);
 
-          console.log(res);
+          // console.log(res);
 
           const updatechat = listChat.map((itemA) => {
             const itemB = res?.data?.messages.find(
@@ -245,7 +241,7 @@ const RangeChat = forwardRef(
             return itemB ? { ...itemA, ...itemB } : itemA;
           });
 
-          console.log(updatechat);
+          // console.log(updatechat);
 
           // setListchat(res?.data?.messages);
         } catch (error) {
@@ -263,22 +259,22 @@ const RangeChat = forwardRef(
     useEffect(() => {
       socket.on("receiveMessage", (data) => {
         if (data?.message && data?.message == "seen") {
-          console.log(data?.message);
+          // console.log(data?.message);
           const seenList = [...after];
           try {
-            console.log(user?._id);
+            // console.log(user?._id);
             try {
               for (let message of seenList || []) {
-                console.log(message);
+                // console.log(message);
 
                 let check = false;
                 if (message.senderId === user?._id) {
                   for (let obj of message?.readStatus) {
-                    console.log(obj);
+                    // console.log(obj);
 
                     if (obj.userId != user?._id && message.checked) {
-                      console.log(obj);
-                      console.log(user?._id);
+                      // console.log(obj);
+                      // console.log(user?._id);
 
                       message.checked = [];
                       check = true;
@@ -294,7 +290,7 @@ const RangeChat = forwardRef(
               console.log(error);
             }
 
-            console.log(seenList);
+            // console.log(seenList);
 
             // setListchat(res?.data?.messages);
           } catch (error) {
@@ -302,19 +298,19 @@ const RangeChat = forwardRef(
           }
 
           try {
-            console.log(user?._id);
+            // console.log(user?._id);
             try {
               for (let message of seenList || []) {
-                console.log(message);
+                // console.log(message);
 
                 let check = false;
                 if (message.senderId === user?._id) {
                   for (let obj of message?.readStatus) {
-                    console.log(obj);
+                    // console.log(obj);
 
                     if (obj.userId != user?._id) {
-                      console.log(obj);
-                      console.log(user?._id);
+                      // console.log(obj);
+                      // console.log(user?._id);
 
                       message.checked
                         ? message.checked.push(obj?.userId)
@@ -332,14 +328,14 @@ const RangeChat = forwardRef(
               console.log(error);
             }
 
-            console.log(seenList);
+            // console.log(seenList);
 
             // setListchat(res?.data?.messages);
           } catch (error) {
             console.log(error);
           }
         }
-        console.log(after);
+        // console.log(after);
       });
     }, [after]);
 
@@ -370,7 +366,7 @@ const RangeChat = forwardRef(
         e.preventDefault();
         // console.log(file);
         // console.log(chat);
-        console.log(chat);
+        // console.log(chat);
 
         const res = chat ? await aichecktext(chat) : false;
 
@@ -591,12 +587,12 @@ const RangeChat = forwardRef(
       if (socket && idroom) {
         socket.on("receiveMessage", (data) => {
           if (data?.message && data?.message != "seen") {
-            console.log(data);
+            // console.log(data);
             fetchList();
             fetchchat(idroom);
             setPage(1);
           } else {
-            console.log(after);
+            // console.log(after);
 
             // console.log(data);
             // fetchchatSeen(idroom);
@@ -1075,7 +1071,7 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
   const handleSeen = async (id_1, id_2) => {
     // const check = listchat.find((item) => item?._id == id_2);
     // !check && (await seenMessage(id_1, id_2));
-    console.log(id_1, id_2);
+    // console.log(id_1, id_2);
 
     await seenMessage(user?.token, id_1, id_2);
   };
@@ -1098,14 +1094,14 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
               setVisibleChats((prev) => [...prev, chatId]);
               const id_2 = chatId; // Thêm ID vào danh sách visibleChats
               // handleSeen(id_1, id_2);
-              console.log(id_1);
+              // console.log(id_1);
 
               const privateMessage = "seen";
               const result = listchat.find(
                 (listchat) => listchat._id === chatId
               );
-              console.log(result);
-              console.log(user?._id);
+              // console.log(result);
+              // console.log(user?._id);
 
               if (socket) {
                 if (idroom) {
@@ -1113,11 +1109,11 @@ const PageChat = ({ listchat, socket, userinfo, idroom, type }) => {
                     (item) => item.userId === id_1 && item.status != "read"
                   );
 
-                  console.log(found);
+                  // console.log(found);
 
                   // if (result?.readStatus?.status !== "read" || "sent")
                   if (found) {
-                    console.log(result);
+                    // console.log(result);
                     handleSeen(id_1, id_2);
                     socket.emit("sendMessage", {
                       idConversation: idroom,
@@ -1348,6 +1344,7 @@ const Chat = () => {
   const [userinfo, setUserinfo] = useState();
   const navigate = useNavigate();
   const [fetchchats, setFetchchats] = useState();
+  const [arrfriend, setArrfriend] = useState([]);
   const [search, setSearch] = useState("");
   const [newChat, setNewChat] = useState(false);
   const [idroom, setIdroom] = useState();
@@ -1374,7 +1371,7 @@ const Chat = () => {
     try {
       const userId = user?._id;
       const res = await chatfetchListpersonal(user?.token, userId);
-      console.log(res);
+      // console.log(res);
 
       if (res?.message == "Conversation not found") {
         setListchat([]);
@@ -1465,6 +1462,21 @@ const Chat = () => {
       console.log(error);
     }
   };
+
+  const getFriend = async () => {
+    try {
+      const res = await usergetUserpInfo(user?.token, user?._id);
+      console.log(res);
+      setArrfriend(res?.friends);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getFriend();
+  }, []);
+
   const fetchchatforchild = async (idroom) => {
     await childRef.current.fetchchat(idroom);
 
@@ -1666,29 +1678,8 @@ const Chat = () => {
               </div>
 
               <div className="w-full h-2/3 gap-3 flex flex-col pt-2">
-                {/* {type == "inbox" &&
-                  listchat &&
-                  listchat.length > 0 &&
-                  listchat.map((itemchat) => {
-                    return (
-                      <UserCard
-                        key={itemchat?._id}
-                        user={user}
-                        socket={socket}
-                        itemchat={itemchat}
-                        conversationId={itemchat?._id}
-                        fetchList={fetchList}
-                        ref={childRef}
-                        type={type}
-
-                        hanldeUserchat={hanldeUserchat}
-
-                      />
-                    );
-                  })} */}
-
-                {user?.friends &&
-                  user.friends.map((friend) => {
+                {arrfriend &&
+                  arrfriend.map((friend) => {
                     return (
                       <div
                         className="w-full px-4"
@@ -1748,249 +1739,9 @@ const Chat = () => {
       {/* CREATGROUP */}
       {createg && <CreateGroup fetchList={fetchList} setCreatg={setCreatg} />}
       {/* ADD member */}
-      {
-        addu && <AddNewMember idroom={idroom} setAddu={setAddu} />
-        // <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-        //   <div className="w-full h-full flex justify-center items-center">
-        //     <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-[40%] rounded-2xl">
-        //       <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-        //         <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-        //           Add member
-        //           <div
-        //             className="text-ascent-1 h-full flex items-center cursor-pointer"
-        //             onClick={() => {
-        //               setAddu(!addu);
-        //             }}
-        //           >
-        //             <MdClose size={25} />
-        //           </div>
-        //         </span>
-        //       </div>
-
-        //       <input
-        //         type="text"
-        //         className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
-        //         placeholder="Search"
-        //       />
-        //       <div className="content-start border-b border-[#66666645] pb-2 h-1/4 bg-primary gap-2 overflow-y-auto flex flex-wrap ">
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //         <div className="w-fit h-fit bg-secondary px-2 py-1 text-ascent-1 flex gap-2 justify-center items-center rounded-3xl">
-        //           <img
-        //             src={user?.profileUrl}
-        //             alt=""
-        //             className="h-5 w-5 rounded-full object-cover"
-        //           />
-        //           {user?.firstName}
-        //           <IoIosAddCircle />
-        //         </div>
-        //       </div>
-        //       <div className="h-1/4 flex flex-wrap items-start gap-2 overflow-y-auto content-start">
-        //         <UserTiitle />
-        //         <UserTiitle />
-        //         <UserTiitle />
-        //         <UserTiitle />
-        //         <UserTiitle />
-        //       </div>
-
-        //       <div className="w-full flex justify-end items-end">
-        //         <CustomButton
-        //           tittle="Submit"
-        //           containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-        //         />
-        //       </div>
-        //     </div>
-        //   </div>
-        // </div>
-      }
+      {addu && <AddNewMember idroom={idroom} setAddu={setAddu} />}
       {/* Manager member */}
-      {/* <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-        <div className="w-full h-full flex justify-center items-center">
-          <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/2 rounded-2xl">
-            <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-              <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-                Manager member
-                <div className="text-ascent-1 h-full flex items-center cursor-pointer">
-                  <MdClose size={25} />
-                </div>
-              </span>
-            </div>
 
-            <input
-              type="text"
-              className="bg-secondary px-4 py-2 rounded-2xl outline-none text-ascent-1"
-              placeholder="Search"
-            />
-            <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
-              <div className="w-full relative h-fit bg-secondary px-2 py-2 text-ascent-1 flex gap-2 justify-between items-center rounded-3xl">
-                <div className="flex justify-center items-center gap-3">
-                  <img
-                    src={user?.profileUrl ? user?.profileUrl : NoProfile}
-                    alt=""
-                    className="h-16 w-16 rounded-full object-cover"
-                  />
-                  {user?.firstName} {user?.lastName}
-                </div>
-
-                <SlOptionsVertical className="mr-2" />
-                <div className="absolute w-40 h-20 top-[80%] right-6 z-50 select-none">
-                  <div className="w-full h-full bg-secondary border border-[#66666645] overflow-hidden rounded-2xl shadow-md top-[100%] right-0">
-                    <div
-                      onClick={() => {}}
-                      className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30"
-                    >
-                      Change Role
-                    </div>
-                    <div className="w-full h-1/2 text-ascent-1 flex justify-center items-center py-3 hover:bg-ascent-3/30">
-                      Delete
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="w-full flex justify-end">
-              <CustomButton
-                tittle="Close"
-                containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-              />
-            </div>
-          </div>
-        </div>
-      </div> */}
       {/*ROLE*/}
       {roleo && (
         <div className="absolute w-full h-full bg-secondary/30 z-50 ">
@@ -1999,57 +1750,6 @@ const Chat = () => {
       )}
       {edit && <EditFix />}
       {/* Ratio */}
-      {/* {addu && (
-        <div className="absolute w-full h-full bg-secondary/30 z-50 ">
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-primary px-3 py-3 flex flex-col gap-4 w-1/6 h-1/3 rounded-2xl">
-              <div className="w-full flex px-3 pb-3 border-b border-[#66666645]">
-                <span className="text-ascent-1 w-full flex items-center justify-between text-xl font-medium ">
-                  Role
-                  <div
-                    className="text-ascent-1 h-full flex items-center cursor-pointer"
-                    onClick={() => {
-                      setAddu(!addu);
-                    }}
-                  >
-                    <MdClose size={25} />
-                  </div>
-                </span>
-              </div>
-
-              <div className=" border-b content-start border-[#66666645] pb-2 h-3/4 bg-primary gap-2 overflow-y-auto flex flex-col ">
-                <label
-                  htmlFor="admin"
-                  className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
-                >
-                  <input
-                    type="radio"
-                    id="admin"
-                    name="role"
-                    value="Admin"
-                    checked
-                  />
-                  <label htmlFor="admin">Admin</label>
-                </label>
-                <label
-                  htmlFor="member"
-                  className="w-full text-ascent-1 flex gap-3  px-4 py-4 hover:bg-ascent-3/30 rounded-xl "
-                >
-                  <input type="radio" id="member" name="role" value="Member" />
-                  <label htmlFor="member">Member</label>
-                </label>
-              </div>
-
-              <div className="w-full flex justify-end">
-                <CustomButton
-                  tittle="Close"
-                  containerStyles="bg-blue w-fit px-2 py-2 rounded-xl text-white"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };

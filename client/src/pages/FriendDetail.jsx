@@ -209,7 +209,7 @@ const ProfileDetail = ({ title }) => {
             <Loading />
           ) : (
             userInfor && (
-              <div className="flex flex-col h-screen w-8/12 items-center overflow-y-auto rounded-xl">
+              <div className="flex flex-col h-screen w-3/4 items-center overflow-y-auto rounded-xl">
                 <div className="flex w-full h-1/4 bg-secondary relative select-none">
                   <img
                     src={banner ?? NoProfile}
