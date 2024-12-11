@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_AI_PORT}`;
+const API_URL = process.env.REACT_APP_UR_AI_PORT;
 
 export const API = axios.create({
   baseURL: API_URL,

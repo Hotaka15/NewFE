@@ -201,7 +201,7 @@ const ProfileDetail = ({ title }) => {
             })()} */}
           </div>
         </div>
-        <div className="h-full w-3/4 flex flex-col items-center overflow-auto rounded-xl">
+        <div className="h-full w-4/5 flex flex-col items-center overflow-auto rounded-xl">
           {/* <div className="flex flex-col h-screen w-8/12 items-center overflow-hidden bg-primary">
             <Loading />
           </div> */}

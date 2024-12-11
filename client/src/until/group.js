@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_CHAT_PORT}/group`;
+const API_URL = process.env.REACT_APP_UR_GROUP_PORT;
+console.log(API_URL);
 
 export const API = axios.create({
   baseURL: API_URL,

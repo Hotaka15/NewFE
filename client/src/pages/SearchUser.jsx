@@ -9,10 +9,10 @@ import { useDispatch } from "react-redux";
 import { postdeletePost, postfetchPosts, postlikePost } from "../until/post";
 import { io } from "socket.io-client";
 import { botsuggestsearchRequest } from "../until/bot";
-import { usersendFriendRequest } from "../until/user";
+import { usergetUserInfo, usersendFriendRequest } from "../until/user";
 import { useTranslation } from "react-i18next";
 
-const UserCard = ({ token, user }) => {
+const UserCard = ({ token, user, isFriend }) => {
   const [idAdd, setIsAdd] = useState(false);
   const { t } = useTranslation();
   const handleFriendRequest = async (id) => {
@@ -53,16 +53,22 @@ const UserCard = ({ token, user }) => {
             </div>
           </Link>
 
-          {!idAdd ? (
-            <div
-              onClick={() => {
-                setIsAdd(true);
-                handleFriendRequest(user?._id);
-              }}
-              className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
-            >
-              {t("Add")}
-            </div>
+          {!isFriend ? (
+            !idAdd ? (
+              <div
+                onClick={() => {
+                  setIsAdd(true);
+                  handleFriendRequest(user?._id);
+                }}
+                className="mt-5 text-white bg-blue w-full py-2 rounded-lg flex items-center justify-center"
+              >
+                {t("Add")}
+              </div>
+            ) : (
+              <div className="mt-5 text-ascent-2  bg-ascent-3/30 w-full py-2 rounded-lg flex items-center justify-center">
+                {t("Added")}
+              </div>
+            )
           ) : (
             <div className="mt-5 text-ascent-2  bg-ascent-3/30 w-full py-2 rounded-lg flex items-center justify-center">
               {t("Added")}
@@ -82,6 +88,13 @@ const SearchUser = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [listUser, setListUser] = useState([]);
+  const [friends, setFriends] = useState([]);
+
+  const getFriend = async () => {
+    const res = await usergetUserInfo(user?.token, user?._id);
+    console.log(res);
+    setFriends(res?.friends);
+  };
   const handleSearch = async (keyword) => {
     try {
       const prompt = keyword;
@@ -100,7 +113,7 @@ const SearchUser = () => {
   };
   useEffect(() => {
     setLoading(true);
-
+    getFriend();
     handleSearch(keyword);
     // let timeoutId;
     // timeoutId = setTimeout(() => {
@@ -139,6 +152,7 @@ lg:rounded-lg h-screen overflow-hidden"
                                   key={users?._id}
                                   token={user?.token}
                                   user={users}
+                                  isFriend={friends?.includes(users?._id)}
                                 />
                               );
                             })}

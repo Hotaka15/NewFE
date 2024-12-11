@@ -1,7 +1,8 @@
 import axios from "axios";
 import { SetPosts, UpdatePosts } from "../redux/postSlice";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_POST_PORT}/api/posts`;
+const API_URL = process.env.REACT_APP_UR_POST_PORT;
+console.log(API_URL);
 
 export const API = axios.create({
   baseURL: API_URL,

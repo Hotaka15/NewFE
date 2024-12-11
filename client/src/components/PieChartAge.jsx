@@ -46,7 +46,6 @@ export default function PieChartAge({ age }) {
     { name: "other", value: 27 },
     { name: "prefer_not_to_say", value: 43 },
   ];
-  console.log(age);
 
   // const updatedData =
   //   age &&
@@ -71,7 +70,6 @@ export default function PieChartAge({ age }) {
     }
     return { ...item, name: newAgeGroup, value: item.count };
   });
-  console.log(updatedData);
 
   return (
     <div className="w-[20rem] h-[22rem] bg-ascent-3/10 p-4 rounded-sm flex flex-col">

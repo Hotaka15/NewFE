@@ -36,6 +36,8 @@ const UserChart = () => {
   };
   const handlefill = async (filter) => {
     const monthly = await monthregisterDashboard(filter);
+    console.log(monthly);
+
     setMonthlys(monthly);
   };
   useEffect(() => {
@@ -93,7 +95,7 @@ const UserChart = () => {
             >
               {t("Month")}
             </div>
-            <div
+            {/* <div
               className={` text-ascent-2 cursor-pointer py-1 px-2 ${
                 filter == "week" && "bg-bgColor"
               } rounded-lg`}
@@ -102,7 +104,7 @@ const UserChart = () => {
               }}
             >
               {t("Week")}
-            </div>
+            </div> */}
             <div
               className={` text-ascent-2 cursor-pointer py-1 px-2  ${
                 filter == "day" && "bg-bgColor"

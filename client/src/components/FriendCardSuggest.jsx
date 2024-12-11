@@ -41,7 +41,7 @@ const FriendCardSuggest = ({ user, fetchSuggestFriends, friend }) => {
   };
   return (
     <div>
-      <div className="bg-primary overflow-hidden border h-fit w-fit rounded-lg border-[#66666645]">
+      <div className="bg-primary overflow-hidden border h-fit w-full rounded-lg border-[#66666645]">
         <img
           src={friend?.profileUrl ?? NoProfile}
           alt="Error"

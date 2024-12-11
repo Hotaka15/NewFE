@@ -347,7 +347,7 @@ const FriendDetailRequest = ({ title }) => {
                   </div>
                 </div>
                 <div className="w-full flex gap-2 ">
-                  <div className="w-2/3 h-full">
+                  <div className="w-4/5 h-full">
                     <div className="w-full h-full bg-primary px-4 flex flex-col gap-6 overflow-y-auto rounded-xl  items-center">
                       {loading ? (
                         <div className="w-full justify-center h-full flex">

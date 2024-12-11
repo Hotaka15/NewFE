@@ -49,7 +49,6 @@ const renderCustomizedLabel = ({
 };
 
 export default function PieChartRpP({ resaon }) {
-  console.log(resaon);
   const updatedData =
     resaon &&
     resaon.map((item) => ({

@@ -1,7 +1,8 @@
 // /ai-assist/ai-process?prompt=thiết kế banber quảng cáo điện thoại
 import axios from "axios";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_BOT_PORT}/api`;
+const API_URL = process.env.REACT_APP_UR_BOT_PORT;
+console.log(API_URL);
 
 export const API = axios.create({
   baseURL: API_URL,

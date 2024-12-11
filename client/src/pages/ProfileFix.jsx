@@ -319,8 +319,10 @@ const ProfileFix = () => {
                       onClick={() => {
                         handleFriendRequest(id);
                       }}
-                      className={`text-ascent-1 z-30 ${
-                        isAdded ? "bg-secondary" : "bg-blue"
+                      className={`z-30 ${
+                        isAdded
+                          ? "bg-secondary text-ascent-1 "
+                          : "bg-blue text-white"
                       } px-3 py-2 rounded-xl border border-[#66666690] cursor-pointer`}
                     >
                       {isAdded ? t("Added") : t("Add Friend")}

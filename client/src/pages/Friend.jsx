@@ -258,26 +258,27 @@ lg:rounded-lg h-screen overflow-hidden"
                   </Link>
                 </div>
 
-                <div className="flex justify-start items-center flex-col w-full h-full">
-                  <div className="w-3/4  h-full flex gap-4 flex-wrap">
-                    {suggestedFriends && suggestedFriends.length > 0 ? (
-                      suggestedFriends.map((friend, index) => {
-                        return (
-                          <div key={index} className="w-44 h-fit">
-                            <FriendCardSuggest
-                              user={user}
-                              fetchSuggestFriends={fetchSuggestFriends}
-                              friend={friend}
-                            />
+                <div className="flex justify-center items-center flex-col w-full h-full">
+                  <div className="w-[90%] h-full ">
+                    <div className="w-full h-full flex gap-2 flex-wrap">
+                      {suggestedFriends && suggestedFriends.length > 0 ? (
+                        suggestedFriends.map((friend, index) => {
+                          return (
+                            <div key={index} className="w-44 h-fit">
+                              <FriendCardSuggest
+                                user={user}
+                                fetchSuggestFriends={fetchSuggestFriends}
+                                friend={friend}
+                              />
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <div className="w-full h-1/2">
+                          <div className="w-full h-full bg-primary rounded-2xl ">
+                            <Loading />
                           </div>
-                        );
-                      })
-                    ) : (
-                      <div className="w-full h-1/2">
-                        <div className="w-full h-full bg-primary rounded-2xl ">
-                          <Loading />
-                        </div>
-                        {/* <div className="w-full h-fit flex gap-2 flex-wrap">
+                          {/* <div className="w-full h-fit flex gap-2 flex-wrap">
                           {(() => {
                             const items = [];
                             for (let i = 0; i < 10; i++) {
@@ -294,8 +295,9 @@ lg:rounded-lg h-screen overflow-hidden"
                             return items;
                           })()}
                         </div> */}
-                      </div>
-                    )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

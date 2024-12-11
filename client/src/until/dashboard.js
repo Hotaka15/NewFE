@@ -1,13 +1,15 @@
 import axios from "axios";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_USER_PORT}/api`;
+const API_URL = process.env.REACT_APP_UR_STAT_PORT;
+console.log(API_URL);
 
 export const API = axios.create({
   baseURL: API_URL,
   responseType: "json",
 });
 
-const API_URLP = `http://localhost:${process.env.REACT_APP_POST_PORT}/api`;
+const API_URLP = process.env.REACT_APP_UR_STAT_POST_PORT;
+console.log(API_URLP);
 
 export const APIp = axios.create({
   baseURL: API_URLP,

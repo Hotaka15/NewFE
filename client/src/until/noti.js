@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = `http://localhost:${process.env.REACT_APP_NOTI_PORT}/api/notifi`;
+const API_URL = process.env.REACT_APP_UR_NOTI_PORT;
+console.log(API_URL);
 
 export const API = axios.create({
   baseURL: API_URL,
